@@ -28,6 +28,7 @@ namespace FiveRivers.EditorTools
                 return;
             }
 
+            MapBuilder.Build();
             SetupSystems();
 
             EditorSceneManager.MarkSceneDirty(scene);
