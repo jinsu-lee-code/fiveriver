@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfc33001f657c3644870ec1bfac11919, type: 3}
+  m_Name: GameText
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.GameText
+  gameTitle: "\uB2E4\uC12F \uAC1C\uC758 \uAC15"
+  gameSubtitle: "1950\uB144 8\uC6D4 \xB7 \uB2E4\uBD80\uB3D9"
+  startPrompt: "\uC2DC\uC791\uD558\uB824\uBA74 Enter"
+  operatorHint: "\uC6B4\uC601\uC790 \uC7AC\uC2DC\uC791  Ctrl + Shift + R"
+  pauseTitle: "\uC77C\uC2DC\uC815\uC9C0"
+  resumeLabel: "\uACC4\uC18D\uD558\uAE30"
+  restartLabel: "\uCC98\uC74C\uC73C\uB85C (\uC6B4\uC601\uC790)"
+  tutorialSteps:
+  - prompt: "\uC8FC\uBCC0\uC744 \uB458\uB7EC\uBCF8\uB2E4"
+    hint: "\uB9C8\uC6B0\uC2A4\uB97C \uC6C0\uC9C1\uC774\uBA74 \uC2DC\uC810\uC774 \uB3CC\uC544\uAC11\uB2C8\uB2E4."
+  - prompt: "\uC774\uB3D9\uD55C\uB2E4"
+    hint: "W A S D \uD0A4\uB85C \uCC38\uD638 \uC548\uC744 \uAC78\uC5B4 \uBCF4\uC138\uC694."
+  - prompt: "\uC790\uC138\uB97C \uB0AE\uCD98\uB2E4"
+    hint: "\uC790\uC138\uB97C \uB0AE\uCD94\uBA74 \uBAA8\uB798\uC8FC\uBA38\uB2C8 \uB4A4\uC5D0
+      \uBAB8\uC774 \uC228\uC2B5\uB2C8\uB2E4. \uD55C \uBC88 \uB354 \uB204\uB974\uBA74
+      \uC77C\uC5B4\uC12D\uB2C8\uB2E4."
+  - prompt: "\uC870\uC900\uD574\uC11C \uD45C\uC801\uC744 \uB9DE\uD78C\uB2E4"
+    hint: "\uC624\uB978\uCABD \uBC84\uD2BC\uC744 \uB204\uB978 \uCC44 \uAC00\uB2A0\uC1E0\uB97C
+      \uCC38\uD638 \uC55E \uD45C\uC801\uC5D0 \uB9DE\uCD94\uACE0, \uC67C\uCABD \uBC84\uD2BC\uC73C\uB85C
+      \uC3D8\uC138\uC694."
+  - prompt: "\uC7A5\uC804\uD55C\uB2E4"
+    hint: "M1\uC740 8\uBC1C\uC744 \uB2E4 \uC3D8\uBA74 \uD074\uB9BD\uC774 \uD280\uC5B4\uB098\uC635\uB2C8\uB2E4.
+      \uB0A8\uC740 \uD0C4\uC774 \uC788\uC5B4\uB3C4 \uC7A5\uC804\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+  tutorialRemainingHeader: "\uC775\uD600 \uB458 \uC870\uC791"
+  mouseKeyLabel: "\uB9C8\uC6B0\uC2A4"
+  objectiveLabel: "\uBAA9\uD45C"
+  objectiveTutorial: "\uC870\uC791\uC744 \uC775\uD600\uB77C"
+  objectiveScout: "\uC815\uCC30\uBCD1\uC744 \uB9C9\uC544\uB77C"
+  objectiveAssault: "\uC9C4\uC9C0\uB97C \uC9C0\uCF1C\uB77C \xB7 \uBC1D\uC744 \uB54C
+    \uC5C4\uD3D0\uD574\uC11C \uC3F4\uB77C"
+  objectiveSilence: "\uD0C4\uC57D \uC0C1\uC790\uC5D0\uC11C \uD0C4\uC57D\uC744 \uBCF4\uCDA9\uD558\uB77C"
+  objectiveTankMove: "\uC67C\uCABD \uB454\uB355\uC73C\uB85C \uC774\uB3D9\uD558\uB77C"
+  objectiveTankFire: "\uBC14\uC8FC\uCE74\uB85C \uC804\uCC28 \uC606\uBA74\uC744 \uB178\uB824\uB77C"
+  objectiveAllySupport: "\uC5CE\uB4DC\uB824\uB77C"
+  resupplyPrompt: "\uD0C4\uC57D \uBCF4\uCDA9"
+  bazookaPrompt: "\uBC14\uC8FC\uCE74 \uAEBC\uB0B4\uAE30"
+  m1Name: "M1 \uAC1C\uB7F0\uB4DC"
+  bazookaName: "M20 \uBC14\uC8FC\uCE74"
+  scoutSpotted:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uC55E\uC5D0 \uC6C0\uC9C1\uC784 \uC788\uB2E4! \uC3F4!"
+    duration: 2.5
+    voice: VO_SQD_Scout_01
+  flareUp:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uC870\uBA85\uD0C4\uC774\uB2E4! \uC5C4\uD3D0\uD558\uACE0 \uC3F4!"
+    duration: 2.8
+    voice: VO_SQD_Flare_01
+  flareDown:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uC5B4\uB450\uC6CC\uC9C4\uB2E4. \uC9C0\uAE08 \uC6C0\uC9C1\uC5EC!"
+    duration: 2.8
+    voice: VO_SQD_Flare_02
+  retreat:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uBB3C\uB7EC\uAC04\uB2E4\u2026 \uD0C4\uC57D \uCC59\uACA8!"
+    duration: 3
+    voice: VO_SQD_Retreat_01
+  parkCall1:
+    speaker: "\uBC15\uC6A9\uD314"
+    text: "\uB9CC\uC218\uC57C."
+    duration: 2.5
+    voice: VO_PARK_Call_01
+  parkCall2:
+    speaker: "\uBC15\uC6A9\uD314"
+    text: "\uCD5C\uB9CC\uC218! \u2026\uB9CC\uC218 \uBABB \uBD24\uC5B4?"
+    duration: 3.5
+    voice: VO_PARK_Call_02
+  tankArrives:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uC804\uCC28\uB2E4! \uC815\uBA74\uC740 \uC548 \uB3FC, \uC606\uC73C\uB85C
+      \uB3CC\uC544!"
+    duration: 3.5
+    voice: VO_SQD_Tank_01
+  tankRicochet:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uC606\uAD6C\uB9AC! \uC606\uAD6C\uB9AC\uB97C \uB178\uB824!"
+    duration: 2.5
+    voice: VO_SQD_Tank_02
+  allySupport:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uC5CE\uB4DC\uB824! \uC9C0\uC6D0 \uC628\uB2E4!"
+    duration: 3
+    voice: VO_SQD_Ally_01
+  resultDate: "1950\uB144 8\uC6D4 \xB7 \uB2E4\uBD80\uB3D9"
+  resultName: "\uCD5C\uB9CC\uC218"
+  resultLetter: "\uC5B4\uBA38\uB2C8\uAED8.\n\uC800\uB294 \uC798 \uC788\uC2B5\uB2C8\uB2E4.
+    \uBC24\uC774 \uAE38\uC5B4\uB3C4 \uC544\uCE68\uC740 \uAF2D \uC635\uB2C8\uB2E4.\n\uCD94\uC11D\uC5D0\uB294
+    \uC9D1\uC5D0 \uAC00\uC11C \uC5B4\uBA38\uB2C8\uAC00 \uBE5A\uC740 \uC1A1\uD3B8\uC744
+    \uBA39\uACE0 \uC2F6\uC2B5\uB2C8\uB2E4.\n\uADF8\uB54C\uAE4C\uC9C0 \uC544\uD504\uC9C0
+    \uB9C8\uC2ED\uC2DC\uC624.\n\n\uB9CC\uC218 \uC62C\uB9BC"
+  resultTitle: "\uB2E4\uC12F \uAC1C\uC758 \uAC15"

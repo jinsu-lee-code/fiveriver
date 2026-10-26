@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a995b9aaa32cef54bb55fa212019108f, type: 3}
+  m_Name: WeaponConfig
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.WeaponConfig
+  m1ClipSize: 8
+  m1StartReserve: 40
+  m1MaxReserve: 64
+  m1FireInterval: 0.22
+  m1Damage: 100
+  m1Range: 250
+  m1HipSpread: 1.6
+  m1AimSpread: 0.15
+  m1RecoilPitch: 1.8
+  m1ReloadEmptyTime: 2.5
+  m1ReloadPartialTime: 3.2
+  m1EquipTime: 0.5
+  m1UnequipTime: 0.4
+  hipFov: 70
+  m1AimFov: 50
+  aimBlendTime: 0.18
+  bazookaRockets: 5
+  bazookaReloadTime: 2.2
+  bazookaEquipTime: 0.7
+  bazookaAimFov: 55
+  bazookaRecoilPitch: 4
+  rocketSpeed: 60
+  rocketLifetime: 3
+  rocketBlastRadius: 3
+  rocketBlastDamage: 150
+  resupplyDistance: 2.2
