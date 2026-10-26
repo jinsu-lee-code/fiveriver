@@ -29,6 +29,7 @@
 
 ## 작업 원칙
 - 한 번에 하나의 기능 단위만. TASKS.md의 현재 항목만 구현한다.
+- 측정 봇은 만들지 않는다 (2026-10-26). 빠른 확인은 디버그 창(TASKS 1-1b)으로 한다.
 - 요청받지 않은 시스템은 미리 만들지 않는다. 특히 GDD 9번 "범위 제외" 항목(최만수 생전 대화 · 서쪽 2차 공세 · 새 무기 · 새 맵 · 혹한 · 분대 명령 · 복잡한 자동 시연)은 이번 데모에서 만들지 않는다.
 - ~~기존 제작물을 재사용한다~~ → 2026-10-26 폐기 (새 프로젝트로 새로 만든다). 요청서의 "기존 재사용 우선"은 그다음 방법(VARCO · Blender)으로 바로 간다. 새로 만든 코드도 동작하면 요청 없이 구조를 바꾸지 않는다.
 - 구현 후 확인 방법(어느 씬에서 · 무엇을 눌러 · 무엇이 보이면 정상)을 함께 설명한다.
@@ -71,14 +72,15 @@ Assets/
       Debug/           개발 빌드 전용 (구간 이동 · 시간 강제 · 회차 기록기)
     Data/              수치 에셋 (BALANCE.md와 1:1)
     Prefabs/
-    Scenes/
+    Scenes/            Dabudong.unity (유일한 빌드 씬: 타이틀 ~ 결과 화면)
     Art/
     Audio/
   Tests/EditMode/      순수 로직 단위 테스트
 ```
 
 ## 코딩 규칙
-- 네임스페이스: ⬜ (예: `FiveRivers.Core`, `FiveRivers.Combat`)
+- 네임스페이스: `FiveRivers.Core` · `FiveRivers.Combat` · `FiveRivers.Tutorial` · `FiveRivers.Narrative` · `FiveRivers.UI` · `FiveRivers.Data` · `FiveRivers.DebugTools`, 테스트 `FiveRivers.Tests` (결정 2026-10-26). `Debug` 대신 `DebugTools`를 쓴다(`UnityEngine.Debug`와 이름 충돌 방지)
+- 어셈블리: 게임 코드 `FiveRivers`(1-1에서 생성), 테스트 `FiveRivers.Tests.EditMode`(`Assets/Tests/EditMode/`, Editor 전용)
 - **새로 만드는 진행 · 시간 상한 로직은 순수 C#**(MonoBehaviour 의존 없음)으로 쓰고 단위 테스트를 붙인다. 엔진 컴포넌트는 이벤트를 구독해 표시만 하는 얇은 어댑터로 둔다.
 - 시간 상한 · 구간 상한 · 실패 보조 계수 · 전차 재시도 시간 · 결과 화면 배분 · 힌트 시간은 모두 데이터 에셋(ScriptableObject)에 둔다.
 - 회차 시간은 실시간 누적이다. 시작 버튼부터 사망 · 재시도 · 일시정지를 모두 포함한다. `Time.timeScale`을 바꿔도 회차 시계가 멈추지 않게 unscaled 시간으로 잰다.
