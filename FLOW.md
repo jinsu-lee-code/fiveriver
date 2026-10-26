@@ -111,13 +111,14 @@ RunResetter (MonoBehaviour)   새 회차 초기화 목록 실행
 | 문서 전제 | 실제 구현 (클래스 · 씬 · 오브젝트) | 변수 · 에셋 위치 | 상태 |
 |---|---|---|---|
 | 구간 진행 관리 | `FiveRivers.Core.DemoFlow` · `RunClock` (씬 연결 `FlowDirector`는 아직 없음) | `Assets/_Project/Data/FlowConfig.asset` | 로직 · 테스트 완료 (1-1, 2026-10-27) |
-| 체크포인트 저장 · 복구 | ⬜ | ⬜ | ⬜ |
-| 적 스폰 · 동시 5명 제한 | ⬜ | ⬜ | ⬜ |
-| 조명탄 | ⬜ | ⬜ | ⬜ |
-| 전차 판정 (정면 · 측면) | ⬜ | ⬜ | ⬜ |
-| 튜토리얼 행동 판정 | ⬜ | ⬜ | ⬜ |
-| 새벽 · 결과 화면 | 시간만 `DemoFlow` (Dawn · Result), 화면은 ⬜ | `FlowConfig.asset`, `ResultConfig.asset` | 시간 로직만 완료 |
-| 회차 초기화 | ⬜ | ⬜ | ⬜ |
+| 체크포인트 저장 · 복구 | `DemoFlow.ReportPlayerDied` → `RetryRequested` · `CheckpointState`, 플레이어 복구 `RunCoordinator` | `LevelPoints.playerSpawn` · `tankCheckpoint`, `AssistConfig.asset` | 구현 · 에디터 확인 (2026-10-27) |
+| 적 스폰 · 동시 5명 제한 | `EnemyDirector` · `WavePlan` · `EnemyAgent` | `WaveConfig.asset`, `LevelPoints.enemySpawns` 등 | 구현 · 에디터 확인 |
+| 조명탄 | `FlareDirector` · `Flare` (`Illumination`) | `FlareConfig.asset`, `VFX_Flare.prefab` | 구현 · 에디터 확인 |
+| 전차 판정 (정면 · 측면) | `TankHitJudge` · `TankController` | `TankConfig.asset`, `PF_VH_T34_85.prefab` | 구현 · 에디터 확인 |
+| 튜토리얼 행동 판정 | `TutorialTracker` · `TutorialDirector` | `TutorialConfig.asset`, `GameText.asset` | 구현 |
+| 새벽 · 결과 화면 | `DawnDirector` · `ResultScreen` | `FlowConfig.asset`, `ResultConfig.asset`, `GameText.asset` | 구현 · 에디터 확인 |
+| 회차 초기화 | 시스템마다 `SectionChanged`(RunStart · Title) 구독 (TASKS 2-6 목록) | — | 실행 빌드 3회 자동 확인 (2026-10-27) |
+| 회차 기록 | `RunRecorder` | `persistentDataPath/runs.csv` | 구현 · 확인 |
 
 ## 9. 착수 때 정할 질문
 GDD.md 14번 1~10 중 1 · 2 · 3 · 4 · 5 · 6 · 7 · 9 · 10번이 이 문서에 해당한다. 1~7 · 9는 2026-10-27 결정 (3번 표에 반영). 남은 것: 10 운영자 재시작 방법.

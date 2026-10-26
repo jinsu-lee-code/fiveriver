@@ -118,6 +118,12 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(dawn, "view", player.GetComponentInChildren<Camera>());
             SetupUtil.SetRef(dawn, "reinforcementPrefab", MapBuilder.RokPrefab());
 
+            var recorder = SetupUtil.Ensure<FiveRivers.Recording.RunRecorder>(systems.director.gameObject);
+            SetupUtil.SetRef(recorder, "director", systems.director);
+            SetupUtil.SetRef(recorder, "player", player);
+            SetupUtil.SetRef(recorder, "health", player.GetComponent<PlayerHealth>());
+            SetupUtil.SetRef(recorder, "tank", Object.FindFirstObjectByType<TankController>());
+
             AudioGraybox.Run();
             var audioGo = GameObject.Find("/[Audio]") ?? new GameObject("[Audio]");
             var audio = SetupUtil.Ensure<FiveRivers.Audio.AudioDirector>(audioGo);
