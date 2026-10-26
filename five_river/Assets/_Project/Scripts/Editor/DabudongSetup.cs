@@ -1,3 +1,4 @@
+using FiveRivers.Combat;
 using FiveRivers.Core;
 using FiveRivers.Data;
 using FiveRivers.DebugTools;
@@ -7,7 +8,8 @@ using UnityEngine;
 
 namespace FiveRivers.EditorTools
 {
-    // Dabudong 씬의 시스템 오브젝트를 만들고 연결한다. 편집 모드에서만, 몇 번 실행해도 같은 결과.
+    // Dabudong 씬을 만들고 연결한다. 편집 모드에서만, 몇 번 실행해도 같은 결과.
+    // 순서: 수치 에셋 → 맵 → 시스템 → 플레이어 → 전투 · 연출 (뒤의 것이 앞의 것을 참조)
     static class DabudongSetup
     {
         public const string ScenePath = "Assets/_Project/Scenes/Dabudong.unity";
@@ -28,26 +30,52 @@ namespace FiveRivers.EditorTools
                 return;
             }
 
-            MapBuilder.Build();
-            SetupSystems();
+            DataAssetsSetup.Run();
+            var points = MapBuilder.Build();
+            var systems = SetupSystems();
+            var player = PlayerBuilder.Build(points, systems.gate, systems.director, systems.effects);
+            SetupDebug(systems.debug, player);
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
+            AssetDatabase.SaveAssets();
             Debug.Log("[Setup] Dabudong 씬 구성 완료");
         }
 
-        static void SetupSystems()
+        struct Systems
         {
-            var systems = SetupUtil.Root("[Systems]");
-            var gate = SetupUtil.Ensure<InputGate>(systems);
-            var director = SetupUtil.Ensure<FlowDirector>(systems);
-            SetupUtil.SetRef(director, "config", SetupUtil.LoadAsset<FlowConfig>(DataDir + "FlowConfig.asset"));
-            SetupUtil.SetRef(director, "tankConfig", SetupUtil.LoadAsset<TankConfig>(DataDir + "TankConfig.asset"));
-            SetupUtil.SetRef(director, "assistConfig", SetupUtil.LoadAsset<AssistConfig>(DataDir + "AssistConfig.asset"));
-            SetupUtil.SetRef(director, "inputGate", gate);
+            public InputGate gate;
+            public FlowDirector director;
+            public Effects effects;
+            public DebugWindow debug;
+        }
 
-            var debug = SetupUtil.Ensure<DebugWindow>(systems);
-            SetupUtil.SetRef(debug, "director", director);
+        static Systems SetupSystems()
+        {
+            var go = SetupUtil.Root("[Systems]");
+            var s = new Systems
+            {
+                gate = SetupUtil.Ensure<InputGate>(go),
+                director = SetupUtil.Ensure<FlowDirector>(go),
+                effects = SetupUtil.Ensure<Effects>(go),
+                debug = SetupUtil.Ensure<DebugWindow>(go),
+            };
+            SetupUtil.SetRef(s.director, "config", SetupUtil.LoadAsset<FlowConfig>(DataDir + "FlowConfig.asset"));
+            SetupUtil.SetRef(s.director, "tankConfig", SetupUtil.LoadAsset<TankConfig>(DataDir + "TankConfig.asset"));
+            SetupUtil.SetRef(s.director, "assistConfig", SetupUtil.LoadAsset<AssistConfig>(DataDir + "AssistConfig.asset"));
+            SetupUtil.SetRef(s.director, "inputGate", s.gate);
+            SetupUtil.SetRef(s.debug, "director", s.director);
+            PlayerBuilder.SetupEffects(s.effects);
+
+            GrayboxAssets.EnsureComponent<AmmoCrate>(MapBuilder.CratePrefab());
+            GrayboxAssets.EnsureComponent<TutorialTarget>(MapBuilder.TargetPrefab());
+            return s;
+        }
+
+        static void SetupDebug(DebugWindow debug, PlayerController player)
+        {
+            var panel = SetupUtil.Ensure<PlayerDebugPanel>(debug.gameObject);
+            SetupUtil.SetRef(panel, "player", player);
         }
     }
 }

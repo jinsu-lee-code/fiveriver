@@ -5,6 +5,9 @@
         "FiveRivers",
         "Unity.AI.Navigation",
         "Unity.InputSystem",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.TextMeshPro",
+        "UnityEngine.UI",
         "UnityEditor.TestRunner",
         "UnityEngine.TestRunner"
     ],

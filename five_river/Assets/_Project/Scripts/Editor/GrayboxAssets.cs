@@ -96,5 +96,24 @@ namespace FiveRivers.EditorTools
         public static Material Tank => Mat("Tank", new Color(0.20f, 0.24f, 0.18f));
         public static Material Track => Mat("Track", new Color(0.12f, 0.12f, 0.11f));
         public static Material Target => Mat("Target", new Color(0.78f, 0.74f, 0.62f));
+        public static Material Metal => Mat("Metal", new Color(0.16f, 0.16f, 0.17f));
+        public static Material RifleWood => Mat("RifleWood", new Color(0.33f, 0.20f, 0.11f));
+        public static Material Olive => Mat("Olive", new Color(0.26f, 0.29f, 0.18f));
+        public static Material FxYellow => Mat("FxYellow", new Color(1f, 0.8f, 0.4f), 4f);
+        public static Material FxOrange => Mat("FxOrange", new Color(1f, 0.45f, 0.12f), 3f);
+        public static Material FxWhite => Mat("FxWhite", new Color(0.85f, 0.85f, 0.82f), 1.5f);
+        public static Material FxBrown => Mat("FxBrown", new Color(0.35f, 0.27f, 0.18f));
+        public static Material FxSmoke => Mat("FxSmoke", new Color(0.18f, 0.18f, 0.18f));
+
+        // 프리팹에 컴포넌트가 없으면 붙인다 (이미 있는 프리팹에 새 기능을 연결할 때)
+        public static void EnsureComponent<T>(GameObject prefabAsset) where T : Component
+        {
+            if (prefabAsset.GetComponent<T>() != null) return;
+            string path = AssetDatabase.GetAssetPath(prefabAsset);
+            var root = PrefabUtility.LoadPrefabContents(path);
+            root.AddComponent<T>();
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+            PrefabUtility.UnloadPrefabContents(root);
+        }
     }
 }

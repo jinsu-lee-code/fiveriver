@@ -223,6 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7087455446541753648}
   - component: {fileID: 4054192802363740825}
+  - component: {fileID: 6479283703513305015}
   m_Layer: 0
   m_Name: PF_PR_AmmoCrate
   m_TagString: Untagged
@@ -267,3 +268,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.3, z: 0.4}
   m_Center: {x: 0, y: 0.15, z: 0}
+--- !u!114 &6479283703513305015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8270518561111247167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0da5eacc90ff87d45aed7618e0e772e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Combat.AmmoCrate

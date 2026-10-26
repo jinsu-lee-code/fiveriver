@@ -23,6 +23,24 @@ namespace FiveRivers.EditorTools
             {
                 a.failThreshold = 2; a.enemyAccuracy = 0.7f; a.enemyDamage = 0.8f;
             });
+            Ensure<PlayerConfig>("PlayerConfig", p =>
+            {
+                p.walkSpeed = 3.2f; p.sprintSpeed = 5.6f; p.crouchSpeed = 1.7f; p.aimSpeedScale = 0.6f; p.gravity = 18f;
+                p.standEyeHeight = 1.6f; p.crouchEyeHeight = 0.95f; p.stanceChangeSpeed = 4f;
+                p.lookSensitivity = 0.09f; p.aimLookScale = 0.6f; p.pitchLimit = 80f; p.recoilRecovery = 10f;
+                p.maxHealth = 100f; p.regenDelay = 4f; p.regenPerSecond = 25f;
+            });
+            Ensure<WeaponConfig>("WeaponConfig", w =>
+            {
+                w.m1ClipSize = 8; w.m1StartReserve = 40; w.m1MaxReserve = 64;
+                w.m1FireInterval = 0.22f; w.m1Damage = 100f; w.m1Range = 250f;
+                w.m1HipSpread = 1.6f; w.m1AimSpread = 0.15f; w.m1RecoilPitch = 1.8f;
+                w.m1ReloadEmptyTime = 2.5f; w.m1ReloadPartialTime = 3.2f; w.m1EquipTime = 0.5f; w.m1UnequipTime = 0.4f;
+                w.hipFov = 70f; w.m1AimFov = 50f; w.aimBlendTime = 0.18f;
+                w.bazookaRockets = 5; w.bazookaReloadTime = 2.2f; w.bazookaEquipTime = 0.7f; w.bazookaAimFov = 55f; w.bazookaRecoilPitch = 4f;
+                w.rocketSpeed = 60f; w.rocketLifetime = 3f; w.rocketBlastRadius = 3f; w.rocketBlastDamage = 150f;
+                w.resupplyDistance = 2.2f;
+            });
             AssetDatabase.SaveAssets();
         }
 

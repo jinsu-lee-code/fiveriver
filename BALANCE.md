@@ -62,12 +62,28 @@
 | 동시 활동 적 상한 | 5명 | `WaveConfig.maxActive` |
 | 적 명중률 · 피해 기본값 | ⬜ 첫 구현 때 정함 (기존 프로토타입 미사용, 2026-10-26) | ⬜ |
 
-### 2-2. 무기
+### 2-2. 무기 (2026-10-27 1차 값, 그레이박스 기준 · 관찰 테스트로 조정)
+| 항목 | 값 | 데이터 키 (`WeaponConfig.asset`) |
+|---|---|---|
+| M1 클립 | 8발 → 마지막 발에 클립 배출(핑) → 예비탄 있으면 자동 장전 | `m1ClipSize` |
+| M1 시작 예비탄 · 최대 예비탄 | 40 · 64 (F 보충 = 최대까지) | `m1StartReserve` · `m1MaxReserve` |
+| M1 발사 간격 · 피해 · 사거리 | 0.22초 · 100(적 한 발) · 250 m | `m1FireInterval` · `m1Damage` · `m1Range` |
+| M1 퍼짐 (허리 / 조준) · 반동 | 1.6° / 0.15° · 1.8° | `m1HipSpread` · `m1AimSpread` · `m1RecoilPitch` |
+| M1 장전 (빈 클립 / 잔탄) | 2.5초 / 3.2초 (ANIM_SPEC) | `m1ReloadEmptyTime` · `m1ReloadPartialTime` |
+| M1 꺼내기 · 집어넣기 | 0.5초 · 0.4초 | `m1EquipTime` · `m1UnequipTime` |
+| 시야각 (허리 / M1 조준 / 바주카 조준) · 조준 전환 | 70 / 50 / 55 · 0.18초 | `hipFov` · `m1AimFov` · `bazookaAimFov` · `aimBlendTime` |
+| 바주카 탄 수 (S5) | 5 (장전 1 + 예비 4: 2회 시도 × 2발 + 여유 1) | `bazookaRockets` |
+| 바주카 재장전 · 꺼내기 · 반동 | 2.2초 · 0.7초 · 4° | `bazookaReloadTime` · `bazookaEquipTime` · `bazookaRecoilPitch` |
+| 로켓 속도 · 수명 · 폭발 반경 · 폭발 피해(보병) | 60 m/s · 3초 · 3 m · 150 | `rocketSpeed` · `rocketLifetime` · `rocketBlastRadius` · `rocketBlastDamage` |
+| 탄약 보충 거리 | 2.2 m | `resupplyDistance` |
+
+### 2-4. 플레이어 (2026-10-27 1차 값, `PlayerConfig.asset`)
 | 항목 | 값 | 데이터 키 |
 |---|---|---|
-| M1 클립 | 8발 → 클립 배출 | ⬜ 첫 구현 때 정함 |
-| M1 예비탄 · 보충량 (F) | ⬜ | ⬜ |
-| 바주카 탄 수 (S5) | ⬜ (최소: 2회 시도 × 2발 + 여유) | ⬜ |
+| 걷기 · 달리기 · 앉아 이동 · 조준 중 배율 | 3.2 · 5.6 · 1.7 m/s · ×0.6 | `walkSpeed` · `sprintSpeed` · `crouchSpeed` · `aimSpeedScale` |
+| 눈높이 (서기 / Z 자세) · 전환 속도 | 1.6 / 0.95 m · 4 m/s (참호 모래주머니 1.0 m 뒤에 숨음) | `standEyeHeight` · `crouchEyeHeight` · `stanceChangeSpeed` |
+| 마우스 감도 · 조준 중 배율 · 상하 한계 · 반동 회복 | 0.09°/px · ×0.6 · 80° · 10°/초 | `lookSensitivity` · `aimLookScale` · `pitchLimit` · `recoilRecovery` |
+| 체력 · 회복 시작 · 회복 속도 | 100 · 맞지 않고 4초 뒤 · 25/초 (초보 완주 우선) | `maxHealth` · `regenDelay` · `regenPerSecond` |
 
 ### 2-3. 전차 판정
 | 공격 | 반응 | 진행 |
