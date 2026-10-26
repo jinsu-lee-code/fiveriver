@@ -40,7 +40,8 @@
   - 결정 (2026-10-26): 기존 프로토타입 미사용, 새 Unity 프로젝트 `five_river/`(Unity 6000.3.25f1 · URP)에서 시작. 에셋은 `art` · `animator` · `sound` 브랜치로 받는다 (CLAUDE.md "브랜치 운영")
   - 구현: `.gitignore`를 루트 기준 경로(`/five_river/Library/` 등)로 수정, 문서 5종 + Unity 프로젝트를 `main`에 커밋, 파트 브랜치 3개에 요청서 커밋
   - 기록: CLAUDE.md "기술 스택" 채움
-  - 참고: 원격 저장소 없음 → GitHub Desktop에서 Publish 필요. 템플릿 `TutorialInfo/` · `Readme.asset` · `SampleScene`은 0-5에서 정리. Windows 빌드 확인은 1-7 관문으로 넘김
+  - 원격: GitHub Desktop Publish 후 `main` · `art` · `animator` · `sound` push 완료 (2026-10-26)
+  - 참고: 템플릿 `TutorialInfo/` · `Readme.asset` · `SampleScene`은 0-5에서 정리. Windows 빌드 확인은 1-7 관문으로 넘김
 - ~~0-2. 필수 결함 목록~~ · ~~0-3. 화면 오류 조사~~ → 2026-10-26 폐기 (기존 프로토타입 미사용). 결함은 아래 "결함 목록"에 새로 쌓는다.
 - [ ] **0-4. 팀 · 장비 · 제출 조건 확정** — D — ❓ 상태 확인 필요
   - 완료 조건: 실명 담당자 · 코딩 가능 인원 · 날짜별 가능 시간 · 주말 여부 / 시연 PC 사양 · 화면 · 헤드폰 / 11/5 마감 시각 · 제출 경로 · 실행 환경 · 납품 형태

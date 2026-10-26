@@ -53,7 +53,7 @@
 - UI: uGUI 2.0.0, 텍스트: TextMeshPro (uGUI 2.0 포함), 글꼴은 OFL 무료 글꼴만 (ART_SPEC `FONT_`)
 - 기타: AI Navigation 2.0.14 (적 이동 NavMesh), Test Framework 1.6.0, Timeline 1.8.13
 - 기준 해상도: 1920×1080, 목표 평균 60fps (실제 시연 PC 기준)
-- 버전 관리: 저장소 루트 = `five river/fiveriver/`, Unity 프로젝트 = `five_river/`, 브랜치는 아래 "브랜치 운영". 원격: ⬜ GitHub Desktop에서 Publish 전
+- 버전 관리: 저장소 루트 = `five river/fiveriver/`, Unity 프로젝트 = `five_river/`, 브랜치는 아래 "브랜치 운영". 원격: `origin` = https://github.com/jinsu-lee-code/fiveriver (2026-10-26 Publish, 네 브랜치 모두 추적)
 - git: PATH에 없음 → GitHub Desktop 내장 `%LOCALAPPDATA%\GitHubDesktop\app-3.6.6\resources\app\git\cmd\git.exe`
 
 ## 폴더 구조
