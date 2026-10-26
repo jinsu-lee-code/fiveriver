@@ -332,8 +332,8 @@ namespace FiveRivers.EditorTools
             var col = root.AddComponent<BoxCollider>();
             col.size = new Vector3(2f, 1f, 0.6f);
             col.center = new Vector3(0, 0.5f, 0);
-            var model = GrayboxAssets.ModelRoot(root);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Bags", new Vector3(0, 0.5f, 0), new Vector3(2f, 1f, 0.6f), GrayboxAssets.Sandbag);
+            GrayboxModels.Model(root, "Props/Sandbag/SM_PR_SandbagWall.fbx", model =>
+                GrayboxAssets.Part(model, PrimitiveType.Cube, "Bags", new Vector3(0, 0.5f, 0), new Vector3(2f, 1f, 0.6f), GrayboxAssets.Sandbag));
             return root;
         });
 
@@ -343,9 +343,10 @@ namespace FiveRivers.EditorTools
             var col = root.AddComponent<BoxCollider>();
             col.size = new Vector3(0.7f, 0.3f, 0.4f);
             col.center = new Vector3(0, 0.15f, 0);
-            var model = GrayboxAssets.ModelRoot(root);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Box", new Vector3(0, 0.15f, 0), new Vector3(0.7f, 0.3f, 0.4f), GrayboxAssets.CratePale);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Band", new Vector3(0, 0.305f, 0), new Vector3(0.72f, 0.02f, 0.12f), GrayboxAssets.Marker);
+            GrayboxModels.Model(root, "Props/AmmoCrate/SM_PR_AmmoCrate.fbx", model =>
+                GrayboxAssets.Part(model, PrimitiveType.Cube, "Box", new Vector3(0, 0.15f, 0), new Vector3(0.7f, 0.3f, 0.4f), GrayboxAssets.CratePale));
+            // 어두운 구간에서 찾기 쉽게 하는 흰 띠 (ART_SPEC 3-4 "밝은 나무색 또는 흰 띠") — 최종 모델이 띠를 갖추면 지운다
+            GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Band", new Vector3(0, 0.305f, 0), new Vector3(0.72f, 0.02f, 0.12f), GrayboxAssets.Marker);
             return root;
         });
 
@@ -355,45 +356,53 @@ namespace FiveRivers.EditorTools
             var col = root.AddComponent<BoxCollider>();
             col.size = new Vector3(0.5f, 1.2f, 0.1f);
             col.center = new Vector3(0, 1.1f, 0);
-            var model = GrayboxAssets.ModelRoot(root);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Stake", new Vector3(0, 0.6f, 0.04f), new Vector3(0.08f, 1.2f, 0.06f), GrayboxAssets.Wood);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Board", new Vector3(0, 1.1f, 0), new Vector3(0.5f, 1.2f, 0.05f), GrayboxAssets.Target);
+            GrayboxModels.Model(root, "Props/Target/SM_PR_Target.fbx", model =>
+            {
+                GrayboxAssets.Part(model, PrimitiveType.Cube, "Stake", new Vector3(0, 0.6f, 0.04f), new Vector3(0.08f, 1.2f, 0.06f), GrayboxAssets.Wood);
+                GrayboxAssets.Part(model, PrimitiveType.Cube, "Board", new Vector3(0, 1.1f, 0), new Vector3(0.5f, 1.2f, 0.05f), GrayboxAssets.Target);
+            });
             return root;
         });
 
         public static GameObject BlanketPrefab() => GrayboxAssets.Prefab("PF_PR_BlanketBody", () =>
         {
             var root = new GameObject();
-            var model = GrayboxAssets.ModelRoot(root);
-            GrayboxAssets.Part(model, PrimitiveType.Capsule, "Blanket", new Vector3(0, 0.17f, 0), new Vector3(0.6f, 0.9f, 0.34f), GrayboxAssets.Blanket, new Vector3(90, 0, 0));
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Boot", new Vector3(0.08f, 0.1f, -0.92f), new Vector3(0.12f, 0.16f, 0.26f), GrayboxAssets.Boot);
+            GrayboxModels.Model(root, "Props/BlanketBody/SM_PR_BlanketBody.fbx", model =>
+            {
+                GrayboxAssets.Part(model, PrimitiveType.Capsule, "Blanket", new Vector3(0, 0.17f, 0), new Vector3(0.6f, 0.9f, 0.34f), GrayboxAssets.Blanket, new Vector3(90, 0, 0));
+                GrayboxAssets.Part(model, PrimitiveType.Cube, "Boot", new Vector3(0.08f, 0.1f, -0.92f), new Vector3(0.12f, 0.16f, 0.26f), GrayboxAssets.Boot);
+            });
             return root;
         });
 
-        public static GameObject RokPrefab() => GrayboxAssets.Prefab("PF_CH_ROK_Soldier", () => Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.70f, false));
+        public static GameObject RokPrefab() => GrayboxAssets.Prefab("PF_CH_ROK_Soldier", () =>
+            Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.70f, false, "Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx"));
 
         public static GameObject ParkPrefab() => GrayboxAssets.Prefab("PF_CH_ROK_ParkYongpal", () =>
         {
-            var root = Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.72f, false);
-            GrayboxAssets.Part(root.transform.Find("Model"), PrimitiveType.Cube, "Towel", new Vector3(0, 1.42f, 0.02f), new Vector3(0.36f, 0.08f, 0.3f), GrayboxAssets.Towel);
+            var root = Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.72f, false, "Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx");
+            // 그레이박스 구분: 목의 수건 (ART_SPEC 구분 체크 "국군 병사 ↔ 박용팔") — 최종 모델에 수건이 있으면 지운다
+            GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Towel", new Vector3(0, 1.42f, 0.02f), new Vector3(0.36f, 0.08f, 0.3f), GrayboxAssets.Towel);
             return root;
         });
 
         // 키에 맞춘 캡슐 + 머리 위 모양: 국군 = 둥근 철모, 북한군 = 납작한 군모 (ART_SPEC 구분 체크)
-        public static GameObject Person(Material body, Material head, float height, bool softCap)
+        public static GameObject Person(Material body, Material head, float height, bool softCap, string fbx)
         {
             var root = new GameObject();
             var col = root.AddComponent<CapsuleCollider>();
             col.height = height;
             col.radius = 0.3f;
             col.center = new Vector3(0, height / 2f, 0);
-            var model = GrayboxAssets.ModelRoot(root);
-            float bodyHeight = height - 0.2f;
-            GrayboxAssets.Part(model, PrimitiveType.Capsule, "Body", new Vector3(0, bodyHeight / 2f, 0), new Vector3(0.55f, bodyHeight / 2f, 0.4f), body);
-            if (softCap)
-                GrayboxAssets.Part(model, PrimitiveType.Cube, "Cap", new Vector3(0, height - 0.12f, 0.02f), new Vector3(0.24f, 0.1f, 0.3f), head);
-            else
-                GrayboxAssets.Part(model, PrimitiveType.Sphere, "Helmet", new Vector3(0, height - 0.16f, 0), new Vector3(0.34f, 0.22f, 0.36f), head);
+            GrayboxModels.Model(root, fbx, model =>
+            {
+                float bodyHeight = height - 0.2f;
+                GrayboxAssets.Part(model, PrimitiveType.Capsule, "Body", new Vector3(0, bodyHeight / 2f, 0), new Vector3(0.55f, bodyHeight / 2f, 0.4f), body);
+                if (softCap)
+                    GrayboxAssets.Part(model, PrimitiveType.Cube, "Cap", new Vector3(0, height - 0.12f, 0.02f), new Vector3(0.24f, 0.1f, 0.3f), head);
+                else
+                    GrayboxAssets.Part(model, PrimitiveType.Sphere, "Helmet", new Vector3(0, height - 0.16f, 0), new Vector3(0.34f, 0.22f, 0.36f), head);
+            });
             return root;
         }
     }

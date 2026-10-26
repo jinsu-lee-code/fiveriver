@@ -121,7 +121,11 @@
   - 확인 (2026-10-27, MCP 캡처): 시작 화면 · S1 HUD · S4 자막 · S7 편지 한글 표시 정상
 - [ ] **1-6b. 그레이박스 임시 에셋을 최종 파일명으로 배치** — C — 🔄 소리 완료 · 모델/애니메이션은 프리팹까지
   - 소리 (2026-10-27): SOUND_LIST A · B 전부를 표의 파일명 · 폴더 그대로 79개 WAV(48kHz · 16bit, 효과음 모노 · 환경음/음악 스테레오, 피크 −1 dBFS 이하)로 넣음 — 효과음 · 환경음은 `AudioGraybox`가 합성(Setup 메뉴 `FiveRivers/Setup/Audio Graybox + Sound Library`), 음성은 `tools/make_graybox_vo.ps1`(Windows 기본 한국어 음성 Heami를 낮춘 임시본), 음악은 무음(요청서 임시본 그대로). **이미 있는 파일은 다시 만들지 않는다** → sound 브랜치 최종본을 덮어쓰면 그대로 교체됨
-  - 아트: 프리팹(`PF_PR_SandbagWall` · `PF_PR_AmmoCrate` · `PF_PR_Target` · `PF_PR_BlanketBody` · `PF_CH_ROK_Soldier` · `PF_CH_ROK_ParkYongpal` · `PF_CH_KPA_Rifleman` · `PF_VH_T34_85` · `PF_WP_BazookaRocket`)과 VFX_ 프리팹은 최종 이름으로 있음. 각 프리팹의 눈에 보이는 모양은 `Model` 자식(기본 도형) → FBX가 오면 `Model` 자식만 바꾼다. **같은 이름 FBX 임시 파일은 아직 없음** (FBX 내보내기 도구 필요 — Blender로 만들지 다음에 결정)
+  - 아트 (2026-10-27): ART_SPEC A · B 모델 14개를 **최종 파일명 · 폴더 그대로 그레이박스 FBX**로 넣음 (`tools/make_graybox_fbx.py`, 백그라운드 Blender 5.2: 실측 크기 · 부품 이름 Hull/Turret/Gun/TrackL/TrackR · Body/Bolt/ClipSlot · Body/RocketSlot · 재질 슬롯 이름 · 피벗(캐릭터 · 소품 바닥 중앙, 무기 손잡이) · 앞 +Z, 내보내기 ART_SPEC 1-4 값. 없는 파일만 만듦). 캐릭터는 뼈대 없는 캡슐(최종은 VARCO 자동 리깅 Humanoid)
+  - 프리팹(`PF_` 9종)의 `Model` 자식 = FBX 인스턴스. FBX 재질 슬롯은 같은 이름의 `Art/Materials/M_*.mat`에 자동 연결(`GrayboxModels`) → **art 브랜치에서 같은 이름 FBX로 덮어쓰면 프리팹 · 재질 연결이 그대로 유지**. 1인칭 M1 · 바주카 · 로켓도 FBX 사용. 코드가 붙는 위치(Socket_Muzzle 등)는 프리팹 쪽 빈 오브젝트
+  - 축 확인: Blender 좌우 부호(`SX = -1`)를 Unity에서 TrackL이 -X인지로 확인해 정함
+  - 테스트: `ArtSpecTests` 15개 (전차 부품 · Gun이 Turret 밑 · 슬롯 · 폭 3.0 m · 포 +Z · TrackL 왼쪽, M1 Bolt · ClipSlot · 길이 1.10 m, 바주카 RocketSlot · 1.52 m, 캐릭터 키 ±5% · 피벗 · 슬롯, 소품 바닥 피벗, 프리팹 Missing 참조 0) — **최종 FBX가 들어오면 이 테스트로 요청서 규칙을 자동 검사**
+  - 메뉴: `FiveRivers/Setup/Rebuild Graybox Prefabs (FBX)` (FBX가 새로 생겼을 때만. 최종 에셋 이후에는 FBX 덮어쓰기만으로 충분)
   - 애니메이션: `EnemyAgent`가 Animator가 있으면 ANIM_SPEC 1-5 매개변수(Speed · Crouch · Aim · Fire · Hit · Die · DieIndex · Retreat)를 채운다. `AC_KPA` 등 Animator Controller · 임시 클립은 아직 없음
   - ⚠ 파트 브랜치 규칙: art · animator · sound 브랜치는 에셋을 넣기 전에 `main`을 먼저 병합해야 그레이박스 파일 · .meta를 받는다 (CLAUDE.md "브랜치 운영")
   - 완료 조건: ART_SPEC · ANIM_SPEC · SOUND_LIST 표의 A 항목이 같은 이름 임시 파일로 들어가 있고 프리팹 · Animator · 사운드 라이브러리가 그 파일에 연결됨 (임시 사운드: graybox_audio.zip)

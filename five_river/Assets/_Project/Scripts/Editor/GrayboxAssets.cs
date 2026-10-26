@@ -35,19 +35,32 @@ namespace FiveRivers.EditorTools
             return mat;
         }
 
+        // true면 이미 있는 프리팹도 다시 만든다 (같은 경로에 덮어써서 GUID 유지). FiveRivers/Setup/Rebuild Graybox Prefabs
+        public static bool Rebuild;
+        static readonly System.Collections.Generic.HashSet<string> rebuiltThisRun = new System.Collections.Generic.HashSet<string>();
+
         public static GameObject Prefab(string name, Func<GameObject> build)
         {
             string path = PrefabDir + name + ".prefab";
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-            if (existing != null) return existing;
+            if (existing != null && (!Rebuild || rebuiltThisRun.Contains(path))) return existing;
+            rebuiltThisRun.Add(path);
             EnsureFolder(PrefabDir);
             var go = build();
             go.name = name;
             var prefab = PrefabUtility.SaveAsPrefabAsset(go, path);
             Object.DestroyImmediate(go);
-            Debug.Log("[Setup] 그레이박스 프리팹 생성: " + path);
+            Debug.Log("[Setup] 그레이박스 프리팹 " + (existing != null ? "다시 만듦: " : "생성: ") + path);
             return prefab;
         }
+
+        public static void BeginRebuild()
+        {
+            Rebuild = true;
+            rebuiltThisRun.Clear();
+        }
+
+        public static void EndRebuild() => Rebuild = false;
 
         // 콜라이더 없는 보이는 조각
         public static GameObject Part(Transform parent, PrimitiveType type, string name, Vector3 localPos, Vector3 scale, Material mat, Vector3 euler = default)

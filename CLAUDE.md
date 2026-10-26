@@ -24,6 +24,22 @@
 - 그레이박스가 아직 `main`에 없는 에셋은 파트 브랜치에서 새로 추가해도 된다. 이 경우 `main`에서 같은 파일을 따로 만들지 않고 파트 브랜치를 먼저 병합한다.
 - 파트 브랜치에서는 코드 · 씬 · 프리팹을 고치지 않는다 (연결은 `main`에서).
 - 커밋 메시지: 파트 브랜치는 `MM.DD/Art|Anim|Sound/파일명Swap`, `main` 병합은 `MM.DD/Merge/Art|Anim|Sound`.
+- 그레이박스 에셋 (2026-10-27): 모델은 `tools/make_graybox_fbx.py`(백그라운드 Blender), 음성은 `tools/make_graybox_vo.ps1`(Windows 한국어 음성), 효과음 · 환경음 · 음악은 Setup 메뉴 `Audio Graybox + Sound Library`가 만든다. 셋 다 **없는 파일만** 만들므로 최종본을 덮어쓰지 않는다.
+- 최종 FBX를 넣은 뒤에는 EditMode 테스트 `ArtSpecTests`(부품 이름 · 슬롯 · 크기 · 축)와 `SoundAndTextTests`(소리 연결)를 돌려 요청서 규칙을 확인한다.
+
+## 에디터 메뉴 (FiveRivers)
+| 메뉴 | 하는 일 |
+|---|---|
+| Setup/Dabudong Scene | 수치 에셋(없을 때만) → 맵 → 시스템 → 플레이어 → 적 · 조명탄 → 전차 → UI · 연출 → 소리를 다시 만들고 연결 (멱등, 편집 모드에서만) |
+| Setup/Rebuild Graybox Prefabs (FBX) | 그레이박스 프리팹을 FBX 기반으로 다시 만든 뒤 위 메뉴 실행 |
+| Setup/Import TMP Essentials | TextMeshPro 필수 리소스를 창 없이 가져오기 (처음 한 번) |
+| Setup/Audio Graybox + Sound Library | 없는 그레이박스 소리 합성 + SoundLibrary 채우기 |
+| Setup/Create Missing Data Assets | 없는 수치 에셋만 BALANCE 1차 값으로 만들기 |
+| Dev/Run EditMode Tests | 테스트 → `Temp/fiveriver_tests.txt` |
+| Dev/Capture Map Views | 맵 확인 캡처 → `Temp/captures/` |
+| Build/Windows Development · Release | 실행 빌드 → `five_river/Builds/`, 요약 `Temp/fiveriver_build.txt` |
+- 개발 빌드 점검: `FiveRivers.exe -fiverivers-smoke` → 3회 자동 완주 후 `smoke_report.txt`
+- 디버그 창: 에디터 · 개발 빌드에서 F1
 
 수치는 BALANCE.md와 데이터 에셋 기준이며 코드에 임의로 넣지 않는다.
 

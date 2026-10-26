@@ -47,6 +47,33 @@ namespace FiveRivers.EditorTools
             Debug.Log("[Setup] Dabudong 씬 구성 완료");
         }
 
+        // 그레이박스 프리팹을 다시 만든다 (FBX가 새로 생겼을 때). 같은 경로에 덮어써서 GUID는 유지된다.
+        // 손으로 고친 프리팹 내용은 사라지므로, 최종 에셋이 들어온 뒤에는 쓰지 않는다 (FBX 교체만으로 충분).
+        [MenuItem("FiveRivers/Setup/Rebuild Graybox Prefabs (FBX)")]
+        public static void RebuildPrefabs()
+        {
+            GrayboxAssets.BeginRebuild();
+            try
+            {
+                MapBuilder.SandbagPrefab();
+                MapBuilder.CratePrefab();
+                MapBuilder.TargetPrefab();
+                MapBuilder.BlanketPrefab();
+                MapBuilder.RokPrefab();
+                MapBuilder.ParkPrefab();
+                CombatBuilder.EnemyPrefab();
+                TankBuilder.TankPrefab();
+                PlayerBuilder.RocketPrefab();
+            }
+            finally
+            {
+                GrayboxAssets.EndRebuild();
+            }
+            GrayboxAssets.EnsureComponent<AmmoCrate>(MapBuilder.CratePrefab());
+            GrayboxAssets.EnsureComponent<TutorialTarget>(MapBuilder.TargetPrefab());
+            Run();
+        }
+
         struct Systems
         {
             public InputGate gate;

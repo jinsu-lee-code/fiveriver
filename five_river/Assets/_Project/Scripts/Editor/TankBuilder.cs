@@ -34,13 +34,15 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(tank, "body", body.transform);
             var turret = body.transform.Find("Model/Turret");
             SetupUtil.SetRef(tank, "turret", turret);
-            SetupUtil.SetRef(tank, "gunMuzzle", body.transform.Find("Model/Turret/Gun/Socket_Muzzle"));
+            SetupUtil.SetRef(tank, "gunMuzzle", turret.GetComponentsInChildren<Transform>().First(t => t.name == "Socket_Muzzle"));
             SetupUtil.SetRef(tank, "smoke", body.transform.Find("Socket_Smoke/VFX_Tank_Smoke").gameObject);
             SetupUtil.SetRef(tank, "fire", body.transform.Find("Socket_Fire/VFX_Tank_Fire").gameObject);
-            SetupUtil.SetRef(tank, "burntMaterial", GrayboxAssets.Mat("VH_T34_Burnt", new Color(0.08f, 0.08f, 0.07f)));
+            // 불탄 상태 재질 (ART_SPEC 3-3 M_VH_T34_Burnt)
+            SetupUtil.SetRef(tank, "burntMaterial", GrayboxModels.SlotMaterial("M_VH_T34_Burnt"));
 
-            var renderers = new[] { "Model/Hull", "Model/Turret/TurretBody", "Model/Turret/Gun/Barrel" }
-                .Select(p => body.transform.Find(p).GetComponent<Renderer>()).ToArray();
+            // 궤도(재질 M_VH_T34_Track)를 뺀 차체 · 포탑 · 포
+            var renderers = body.transform.Find("Model").GetComponentsInChildren<Renderer>()
+                .Where(r => !r.name.StartsWith("Track")).ToArray();
             var so = new SerializedObject(tank);
             var list = so.FindProperty("bodyRenderers");
             list.arraySize = renderers.Length;
@@ -54,23 +56,27 @@ namespace FiveRivers.EditorTools
             var col = root.AddComponent<BoxCollider>();
             col.size = new Vector3(3.0f, 2.7f, 6.4f);
             col.center = new Vector3(0, 1.35f, 0);
-            var model = GrayboxAssets.ModelRoot(root);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Hull", new Vector3(0, 0.95f, 0), new Vector3(3.0f, 1.0f, 6.0f), GrayboxAssets.Tank);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "TrackL", new Vector3(-1.35f, 0.5f, 0), new Vector3(0.5f, 1.0f, 6.4f), GrayboxAssets.Track);
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "TrackR", new Vector3(1.35f, 0.5f, 0), new Vector3(0.5f, 1.0f, 6.4f), GrayboxAssets.Track);
-            // 정면 경사 장갑 (튕긴다로 읽히게)
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Glacis", new Vector3(0, 0.95f, 3.25f), new Vector3(2.9f, 0.9f, 0.9f), GrayboxAssets.Tank, new Vector3(-35f, 0, 0));
-            var turret = new GameObject("Turret").transform;
-            turret.SetParent(model, false);
-            turret.localPosition = new Vector3(0, 1.45f, -0.3f);
-            GrayboxAssets.Part(turret, PrimitiveType.Cube, "TurretBody", new Vector3(0, 0.4f, 0), new Vector3(2.1f, 0.8f, 2.6f), GrayboxAssets.Tank);
-            var gun = new GameObject("Gun").transform;
-            gun.SetParent(turret, false);
-            gun.localPosition = new Vector3(0, 0.45f, 1.3f);
-            GrayboxAssets.Part(gun, PrimitiveType.Cylinder, "Barrel", new Vector3(0, 0, 2.2f), new Vector3(0.18f, 2.2f, 0.18f), GrayboxAssets.Tank, new Vector3(90, 0, 0));
+            var model = GrayboxModels.Model(root, "Vehicles/T34_85/SM_VH_T34_85.fbx", m =>
+            {
+                GrayboxAssets.Part(m, PrimitiveType.Cube, "Hull", new Vector3(0, 0.95f, 0), new Vector3(3.0f, 1.0f, 6.0f), GrayboxAssets.Tank);
+                GrayboxAssets.Part(m, PrimitiveType.Cube, "TrackL", new Vector3(-1.35f, 0.5f, 0), new Vector3(0.5f, 1.0f, 6.4f), GrayboxAssets.Track);
+                GrayboxAssets.Part(m, PrimitiveType.Cube, "TrackR", new Vector3(1.35f, 0.5f, 0), new Vector3(0.5f, 1.0f, 6.4f), GrayboxAssets.Track);
+                var t = new GameObject("Turret").transform;
+                t.SetParent(m, false);
+                t.localPosition = new Vector3(0, 1.45f, -0.3f);
+                GrayboxAssets.Part(t, PrimitiveType.Cube, "TurretBody", new Vector3(0, 0.4f, 0), new Vector3(2.1f, 0.8f, 2.6f), GrayboxAssets.Tank);
+                var g = new GameObject("Gun").transform;
+                g.SetParent(t, false);
+                g.localPosition = new Vector3(0, 0.45f, 1.3f);
+                GrayboxAssets.Part(g, PrimitiveType.Cylinder, "Barrel", new Vector3(0, 0, 2.2f), new Vector3(0.18f, 2.2f, 0.18f), GrayboxAssets.Tank, new Vector3(90, 0, 0));
+            });
+            // 정면 경사 장갑 표시 (그레이박스: "비스듬해서 튕긴다"로 읽히게) — 최종 모델이 오면 지운다
+            GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Glacis", new Vector3(0, 0.95f, 3.25f), new Vector3(2.9f, 0.9f, 0.9f), GrayboxModels.SlotMaterial("M_VH_T34_Body"), new Vector3(-35f, 0, 0));
+            // 코드가 붙는 위치는 프리팹 안 빈 오브젝트 (ART_SPEC 1-1): 포구
+            var gun = model.GetComponentsInChildren<Transform>().First(t => t.name == "Gun");
             var muzzle = new GameObject("Socket_Muzzle").transform;
             muzzle.SetParent(gun, false);
-            muzzle.localPosition = new Vector3(0, 0, 4.5f);
+            muzzle.localPosition = new Vector3(0, 0, gun.name == "Gun" && gun.GetComponent<Renderer>() != null ? 4.4f : 4.5f);
 
             var smokeSocket = new GameObject("Socket_Smoke").transform;
             smokeSocket.SetParent(root.transform, false);

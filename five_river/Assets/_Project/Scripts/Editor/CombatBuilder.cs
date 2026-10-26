@@ -34,10 +34,18 @@ namespace FiveRivers.EditorTools
         public static GameObject EnemyPrefab() => GrayboxAssets.Prefab("PF_CH_KPA_Rifleman", () =>
         {
             var kpaCap = GrayboxAssets.Mat("KPACap", new Color(0.42f, 0.38f, 0.22f));
-            var root = MapBuilder.Person(GrayboxAssets.Kpa, kpaCap, 1.68f, true);
+            var root = MapBuilder.Person(GrayboxAssets.Kpa, kpaCap, 1.68f, true, "Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx");
             var model = root.transform.Find("Model");
-            // 적 소총 (SM_WP_Mosin 자리)
-            GrayboxAssets.Part(model, PrimitiveType.Cube, "Rifle", new Vector3(0.2f, 1.25f, 0.35f), new Vector3(0.05f, 0.06f, 1.1f), GrayboxAssets.RifleWood);
+            // 적 소총 SM_WP_Mosin (손 소켓이 생기면 그쪽으로 옮긴다)
+            var rifleHolder = new GameObject("Socket_Rifle").transform;
+            rifleHolder.SetParent(model, false);
+            rifleHolder.localPosition = new Vector3(0.2f, 1.25f, 0.05f);
+            if (GrayboxModels.Exists("Weapons/Mosin/SM_WP_Mosin.fbx"))
+            {
+                var rifle = (GameObject)PrefabUtility.InstantiatePrefab(GrayboxModels.LoadFbx("Weapons/Mosin/SM_WP_Mosin.fbx"), rifleHolder);
+                rifle.name = "Rifle";
+            }
+            else GrayboxAssets.Part(rifleHolder, PrimitiveType.Cube, "Rifle", new Vector3(0, 0, 0.3f), new Vector3(0.05f, 0.06f, 1.1f), GrayboxAssets.RifleWood);
             var muzzle = new GameObject("Socket_Muzzle").transform;
             muzzle.SetParent(root.transform, false);
             muzzle.localPosition = new Vector3(0.2f, 1.3f, 0.95f);
