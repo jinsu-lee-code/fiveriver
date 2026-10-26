@@ -2,6 +2,7 @@
     "name": "FiveRivers.Tests.EditMode",
     "rootNamespace": "FiveRivers.Tests",
     "references": [
+        "FiveRivers",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Unity.RenderPipelines.Core.Runtime",

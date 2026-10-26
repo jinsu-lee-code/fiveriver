@@ -57,9 +57,16 @@
   - 참고: 게임 코드용 런타임 어셈블리(`FiveRivers`)는 첫 코드(1-1)와 함께 만든다. MCP `RunCommand`에서 에셋 · 파일 삭제는 승인 창이 떠서 막힌다 → 탐색기(PowerShell)에서 지우고 `AssetDatabase.Refresh`
 
 ## Phase 1. 전체 흐름 연결 (10/22~24) — 그레이박스 원칙: 임시 화면이어도 끝까지 이어지게
-- [ ] **1-1. 회차 시계 · 구간 진행 (순수 로직)** — A — ❓
-  - 구현: `RunClock`, `DemoFlow`, `FlowConfig`(SO) — FLOW.md 2 · 3번
-  - 테스트: BALANCE.md 1-2 T1~T7
+- [x] **1-1. 회차 시계 · 구간 진행 (순수 로직)** (2026-10-27) — A — 플레이 확인 대기 (씬 연결 전, 테스트로만 확인)
+  - 결정 (2026-10-27): GDD 14번 1~7 · 9 모두 추천안 (FLOW.md 3번 표에 반영)
+  - 구현: 런타임 어셈블리 `FiveRivers`(`Assets/_Project/Scripts/`). `RunClock`(회차 시간, 앞으로만), `DemoFlow`(구간 상태 · 상한 · 7:00/8:15/7:25/9:00 · 결말 1회 · 일시정지 해제), `FlowSection` · `TransitionReason` · `FlowTransition`, `FlowConfig` · `ResultConfig`(SO)
+  - 구현: 씬 쪽 보고는 `ReportGoalMet(구간)` 하나 (다른 구간 이름의 늦은 보고는 무시). 이벤트 `SectionChanged` · `EnemiesRetreatRequested` · `PauseReleased`. 디버그용 `DebugSetRunTime`(에디터 · 개발 빌드 전용, 1-1b에서 사용)
+  - 구현: 전환 시각은 규칙이 정한 정확한 시각으로 기록하고, 한 Tick 안의 여러 전환을 차례로 처리 (프레임 길이와 무관하게 9:00 이하)
+  - 수치: BALANCE.md 1-1 · 1-3 · 1-4 → `Assets/_Project/Data/FlowConfig.asset`, `ResultConfig.asset`
+  - 테스트 14개 추가(T1~T7 + T3b, S4 최소 20초 대기, 늦은 보고 무시, 결말 1회, 새 회차 초기화, 운영자 재시작, 무작위 300회 불변 조건) — 전체 16개 통과, 콘솔 오류 · 경고 0
+  - 확인 방법: Window > General > Test Runner → EditMode → Run All → `DemoFlowTests` 14개 · `ProjectSetupTests` 2개 초록
+  - 피드백: T2 첫 실행 실패 → S4 기준 길이 40초 = 상한 40초라서 완료 보고보다 상한이 먼저 걸림 (로직 정상) → 테스트 기대값을 `SectionCap`으로 수정
+  - 참고: 사망 · 체크포인트 재시도는 1-2, 전차 시도 75/45초 · 실패 횟수는 2-4에서 `DemoFlow`에 붙인다. S5 재시도 때 구간 시간을 초기화하지 않는다(140초 "재시도 포함"). 씬 연결(`FlowDirector`)은 1-1b 디버그 창 · 1-7 관문에서
 - [ ] **1-1b. 디버그 창 (빠른 테스트용)** — A — ⬜
   - 결정 (2026-10-26): 측정 봇 대신 제작 중 빠르게 확인하는 디버그 창을 만든다 (사용자 요청). 1-1 직후 만들고, 시스템이 생길 때마다 기능을 붙인다.
   - 범위: 에디터 · 개발 빌드에서만 동작 (`#if UNITY_EDITOR || DEVELOPMENT_BUILD`, `Scripts/Debug/`). 릴리스 빌드에서는 열리지 않는다

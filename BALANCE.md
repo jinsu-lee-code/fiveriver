@@ -22,7 +22,7 @@
 | # | 케이스 | 계산 | 기대 |
 |---|---|---|---|
 | T1 | 모든 구간이 상한까지 걸림 | S5 시작 105+60+150+40 = 355초(5:55) → 140초 상한 = 495초(8:15) → 지원 5 + 새벽 20 + 결과 20 | 9:00 Title 복귀, 결말 1회 |
-| T2 | 기준 흐름 | 75+45+120+40+100+20+20 = 420초 | 7:00 Title 복귀, 강제 전환 없음 |
+| T2 | 기준 흐름 | 75+45+120+40+100+20+20 = 420초 | 7:00 Title 복귀, 강제 전환 없음 (S4 기준 40초 = 상한이라 S4는 상한으로 끝남) |
 | T3 | 7:00에 S3 진행 중 | 7:00 공세 종료 → 정적 20초 → 7:20 S5 | S5 진입 ≤ 7:25 |
 | T4 | 8:15에 S5 진행 중 | 8:15 + 지원 5 + 새벽 20 + 결과 20 = 9:00 | 9:00 Title, 결말 1회 |
 | T5 | 8:15에 이미 S6 진행 중 | 아무 변화 없음 | 결말 중복 0 |
@@ -44,10 +44,12 @@
 ### 1-4. 결과 화면
 | 요소 | 시간 | 데이터 키 |
 |---|---|---|
-| 날짜 | 4초 | `ResultConfig.date` |
-| 이름 | 5초 | `ResultConfig.name` |
-| 편지 | 8초 | `ResultConfig.letter` |
-| 제목 | 3초 | `ResultConfig.title` |
+| 날짜 | 4초 | `ResultConfig.dateDuration` |
+| 이름 | 5초 | `ResultConfig.nameDuration` |
+| 편지 | 8초 | `ResultConfig.letterDuration` |
+| 제목 | 3초 | `ResultConfig.titleDuration` |
+
+데이터 위치: `Assets/_Project/Data/FlowConfig.asset` (1-1 · 1-3번), `Assets/_Project/Data/ResultConfig.asset` (1-4번). 키 이름은 `ResultConfig.name`이 Unity `Object.name`과 겹쳐 `…Duration`으로 정함 (2026-10-27).
 
 ## 2. 전투
 
@@ -80,6 +82,7 @@
 | 보조 발동 조건 | 같은 체크포인트 2회 실패 | `AssistConfig.failThreshold` |
 | 적 명중률 배율 | ×0.7 (1회만) | `AssistConfig.enemyAccuracy` |
 | 적 피해 배율 | ×0.8 (1회만) | `AssistConfig.enemyDamage` |
+| 전차 시도 실패 | 시도 제한 시간 초과 또는 사망 (결정 2026-10-27) | — |
 | 전차 1차 시도 제한 | 75초 | `TankConfig.attempt1` |
 | 전차 2차 시도 제한 | 45초 | `TankConfig.attempt2` |
 | 전차 아군 지원 조건 | 2회 실패 또는 구간 140초 초과 | `TankConfig.supportAfterFails`, `FlowConfig.s5Cap` |
