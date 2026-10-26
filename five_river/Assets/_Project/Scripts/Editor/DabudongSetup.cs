@@ -37,6 +37,8 @@ namespace FiveRivers.EditorTools
             CombatBuilder.Build(systems.director.gameObject, systems.director, points, player, systems.effects);
             TankBuilder.Build(systems.director, points, player, systems.effects);
             SetupRunCoordinator(systems, points, player);
+            if (TmpEssentials.Present) SetupUiAndNarrative(systems, points, player);
+            else Debug.LogError("[Setup] TMP 필수 리소스가 없다 → FiveRivers/Setup/Import TMP Essentials 먼저");
             SetupDebug(systems.debug, player);
 
             EditorSceneManager.MarkSceneDirty(scene);
@@ -85,6 +87,35 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(run, "health", player.GetComponent<PlayerHealth>());
             SetupUtil.SetRef(run, "weapons", player.GetComponent<WeaponHolder>());
             SetupUtil.SetRef(run, "effects", systems.effects);
+        }
+
+        static void SetupUiAndNarrative(Systems systems, LevelPoints points, PlayerController player)
+        {
+            var text = SetupUtil.LoadAsset<GameText>(DataDir + "GameText.asset");
+            var target = Object.FindFirstObjectByType<TutorialTarget>();
+            var ui = UiBuilder.Build(systems.director, player, text,
+                SetupUtil.LoadAsset<ResultConfig>(DataDir + "ResultConfig.asset"),
+                SetupUtil.LoadAsset<TutorialConfig>(DataDir + "TutorialConfig.asset"), target);
+
+            var narrativeGo = GameObject.Find("/[Narrative]") ?? new GameObject("[Narrative]");
+            var narrative = SetupUtil.Ensure<FiveRivers.Narrative.NarrativeDirector>(narrativeGo);
+            SetupUtil.SetRef(narrative, "director", systems.director);
+            SetupUtil.SetRef(narrative, "text", text);
+            SetupUtil.SetRef(narrative, "objective", ui.objective);
+            SetupUtil.SetRef(narrative, "subtitles", ui.subtitles);
+            SetupUtil.SetRef(narrative, "points", points);
+            SetupUtil.SetRef(narrative, "player", player);
+            SetupUtil.SetRef(narrative, "resupplier", player.GetComponent<Resupplier>());
+            SetupUtil.SetRef(narrative, "flares", Object.FindFirstObjectByType<FlareDirector>());
+            SetupUtil.SetRef(narrative, "tank", Object.FindFirstObjectByType<TankController>());
+            SetupUtil.SetRef(narrative, "blanketBody", GameObject.Find("/[Map]/Generated/People/BlanketBody"));
+
+            var dawn = SetupUtil.Ensure<FiveRivers.Narrative.DawnDirector>(narrativeGo);
+            SetupUtil.SetRef(dawn, "director", systems.director);
+            SetupUtil.SetRef(dawn, "points", points);
+            SetupUtil.SetRef(dawn, "moon", GameObject.Find("/Moon").GetComponent<Light>());
+            SetupUtil.SetRef(dawn, "view", player.GetComponentInChildren<Camera>());
+            SetupUtil.SetRef(dawn, "reinforcementPrefab", MapBuilder.RokPrefab());
         }
 
         static void SetupDebug(DebugWindow debug, PlayerController player)

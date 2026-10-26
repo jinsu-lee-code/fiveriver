@@ -20,6 +20,7 @@ namespace FiveRivers.Combat
         [SerializeField] Bazooka bazooka;
 
         WeaponSlot pending;
+        WeaponSlot shown;
         float switchEnd;
         float hideAt;
 
@@ -59,6 +60,7 @@ namespace FiveRivers.Combat
                 }
             }
 
+            ApplyVisibility();
             bool aim = canAct && !Switching && controls.Aim.IsPressed() && !player.Sprinting;
             player.Aiming = aim;
             bool weaponCanAct = canAct && !Switching;
@@ -85,8 +87,16 @@ namespace FiveRivers.Combat
 
         void ShowOnly(WeaponSlot slot)
         {
-            m1.Model.gameObject.SetActive(slot == WeaponSlot.M1);
-            bazooka.Model.gameObject.SetActive(slot == WeaponSlot.Bazooka);
+            shown = slot;
+            ApplyVisibility();
+        }
+
+        // 시작 화면 · 결과 화면(조작 없음)에서는 총을 숨긴다
+        void ApplyVisibility()
+        {
+            bool visible = player.Gate.Mode != Core.ControlMode.None;
+            m1.Model.gameObject.SetActive(visible && shown == WeaponSlot.M1);
+            bazooka.Model.gameObject.SetActive(visible && shown == WeaponSlot.Bazooka);
         }
 
         // 전차전(S5) 시작 때 바주카를 받는다. 조작 안내는 HUD가 한다.

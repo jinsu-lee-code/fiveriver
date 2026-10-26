@@ -54,8 +54,68 @@ namespace FiveRivers.EditorTools
                 f.burnTime = 16f; f.fadeTime = 3f; f.launchHeight = 45f; f.fallSpeed = 1.6f; f.swayAmplitude = 1.5f;
                 f.lightIntensity = 1500f; f.lightRange = 110f;
             });
+            Ensure<TutorialConfig>("TutorialConfig", t =>
+            {
+                t.highlightAfter = 15f; t.hintAfter = 30f; t.lookDegrees = 90f; t.moveMeters = 2f;
+            });
+            Ensure<GameText>("GameText", SeedText);
             AssetDatabase.SaveAssets();
         }
+
+        // 화면 문구 1차본 (2026-10-27). 자막은 SOUND_LIST "D 확정 전 제안 문구" 그대로. D가 확정한다 (TASKS 1-6).
+        static void SeedText(GameText g)
+        {
+            g.gameTitle = "다섯 개의 강";
+            g.gameSubtitle = "1950년 8월 · 다부동";
+            g.startPrompt = "시작하려면 Enter";
+            g.operatorHint = "운영자 재시작  Ctrl + Shift + R";
+            g.pauseTitle = "일시정지";
+            g.resumeLabel = "계속하기";
+            g.restartLabel = "처음으로 (운영자)";
+
+            g.tutorialSteps = new[]
+            {
+                new GameText.Step { prompt = "주변을 둘러본다", hint = "마우스를 움직이면 시점이 돌아갑니다." },
+                new GameText.Step { prompt = "이동한다", hint = "W A S D 키로 참호 안을 걸어 보세요." },
+                new GameText.Step { prompt = "자세를 낮춘다", hint = "자세를 낮추면 모래주머니 뒤에 몸이 숨습니다. 한 번 더 누르면 일어섭니다." },
+                new GameText.Step { prompt = "조준해서 표적을 맞힌다", hint = "오른쪽 버튼을 누른 채 가늠쇠를 참호 앞 표적에 맞추고, 왼쪽 버튼으로 쏘세요." },
+                new GameText.Step { prompt = "장전한다", hint = "M1은 8발을 다 쏘면 클립이 튀어나옵니다. 남은 탄이 있어도 장전할 수 있습니다." },
+            };
+            g.tutorialRemainingHeader = "익혀 둘 조작";
+            g.mouseKeyLabel = "마우스";
+
+            g.objectiveLabel = "목표";
+            g.objectiveTutorial = "조작을 익혀라";
+            g.objectiveScout = "정찰병을 막아라";
+            g.objectiveAssault = "진지를 지켜라 · 밝을 때 엄폐해서 쏴라";
+            g.objectiveSilence = "탄약 상자에서 탄약을 보충하라";
+            g.objectiveTankMove = "왼쪽 둔덕으로 이동하라";
+            g.objectiveTankFire = "바주카로 전차 옆면을 노려라";
+            g.objectiveAllySupport = "엎드려라";
+
+            g.resupplyPrompt = "탄약 보충";
+            g.bazookaPrompt = "바주카 꺼내기";
+            g.m1Name = "M1 개런드";
+            g.bazookaName = "M20 바주카";
+
+            g.scoutSpotted = Line("분대장", "앞에 움직임 있다! 쏴!", 2.5f, "VO_SQD_Scout_01");
+            g.flareUp = Line("분대장", "조명탄이다! 엄폐하고 쏴!", 2.8f, "VO_SQD_Flare_01");
+            g.flareDown = Line("분대장", "어두워진다. 지금 움직여!", 2.8f, "VO_SQD_Flare_02");
+            g.retreat = Line("분대장", "물러간다… 탄약 챙겨!", 3f, "VO_SQD_Retreat_01");
+            g.parkCall1 = Line("박용팔", "만수야.", 2.5f, "VO_PARK_Call_01");
+            g.parkCall2 = Line("박용팔", "최만수! …만수 못 봤어?", 3.5f, "VO_PARK_Call_02");
+            g.tankArrives = Line("분대장", "전차다! 정면은 안 돼, 옆으로 돌아!", 3.5f, "VO_SQD_Tank_01");
+            g.tankRicochet = Line("분대장", "옆구리! 옆구리를 노려!", 2.5f, "VO_SQD_Tank_02");
+            g.allySupport = Line("분대장", "엎드려! 지원 온다!", 3f, "VO_SQD_Ally_01");
+
+            g.resultDate = "1950년 8월 · 다부동";
+            g.resultName = "최만수";
+            g.resultLetter = "어머니께.\n저는 잘 있습니다. 밤이 길어도 아침은 꼭 옵니다.\n추석에는 집에 가서 어머니가 빚은 송편을 먹고 싶습니다.\n그때까지 아프지 마십시오.\n\n만수 올림";
+            g.resultTitle = "다섯 개의 강";
+        }
+
+        static GameText.Line Line(string speaker, string text, float duration, string voice) =>
+            new GameText.Line { speaker = speaker, text = text, duration = duration, voice = voice };
 
         static void Ensure<T>(string name, Action<T> seed) where T : ScriptableObject
         {
