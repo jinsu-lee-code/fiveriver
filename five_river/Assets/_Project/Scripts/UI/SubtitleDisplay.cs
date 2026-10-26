@@ -34,6 +34,12 @@ namespace FiveRivers.UI
             if (!showing) Next();
         }
 
+        // 음성이 자막 시간보다 길면 음성이 끝날 때까지 남긴다
+        public void ExtendCurrent(float seconds)
+        {
+            if (showing) endTime = Mathf.Max(endTime, Time.unscaledTime + seconds);
+        }
+
         public void Clear()
         {
             queue.Clear();

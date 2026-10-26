@@ -117,6 +117,23 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(dawn, "moon", GameObject.Find("/Moon").GetComponent<Light>());
             SetupUtil.SetRef(dawn, "view", player.GetComponentInChildren<Camera>());
             SetupUtil.SetRef(dawn, "reinforcementPrefab", MapBuilder.RokPrefab());
+
+            AudioGraybox.Run();
+            var audioGo = GameObject.Find("/[Audio]") ?? new GameObject("[Audio]");
+            var audio = SetupUtil.Ensure<FiveRivers.Audio.AudioDirector>(audioGo);
+            SetupUtil.SetRef(audio, "library", SetupUtil.LoadAsset<SoundLibrary>(DataDir + "SoundLibrary.asset"));
+            SetupUtil.SetRef(audio, "config", SetupUtil.LoadAsset<AudioConfig>(DataDir + "AudioConfig.asset"));
+            SetupUtil.SetRef(audio, "director", systems.director);
+            SetupUtil.SetRef(audio, "player", player);
+            SetupUtil.SetRef(audio, "health", player.GetComponent<PlayerHealth>());
+            SetupUtil.SetRef(audio, "weapons", player.GetComponent<WeaponHolder>());
+            SetupUtil.SetRef(audio, "resupplier", player.GetComponent<Resupplier>());
+            SetupUtil.SetRef(audio, "effects", systems.effects);
+            SetupUtil.SetRef(audio, "enemies", Object.FindFirstObjectByType<EnemyDirector>());
+            SetupUtil.SetRef(audio, "tank", Object.FindFirstObjectByType<TankController>());
+            SetupUtil.SetRef(audio, "flares", Object.FindFirstObjectByType<FlareDirector>());
+            SetupUtil.SetRef(audio, "subtitles", ui.subtitles);
+            SetupUtil.SetRef(audio, "objective", ui.objective);
         }
 
         static void SetupDebug(DebugWindow debug, PlayerController player)

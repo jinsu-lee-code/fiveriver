@@ -31,6 +31,7 @@ namespace FiveRivers.Combat
 
         public event System.Action<Vector3> ShotMissedNearPlayer; // 총알 스침 소리 위치
         public event System.Action<Vector3> EnemyFired;
+        public event System.Action<Vector3> EnemySpawned;
 
         void Start()
         {
@@ -127,6 +128,7 @@ namespace FiveRivers.Combat
             e.Init(this, config, cover);
             usedCovers.Add(cover);
             alive.Add(e);
+            EnemySpawned?.Invoke(spawn.position);
             return e;
         }
 

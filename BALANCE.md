@@ -126,7 +126,10 @@
 | 튜토리얼 상한 | 105초 (이후 미완료 행동은 힌트로 유지) | `FlowConfig.s1Cap` |
 | 자막 크기 | 28~32px @1920×1080 (시작값, 실제 장비로 조정) | `SubtitleConfig.fontSize` |
 | 서사 자막 줄 수 | 최대 2줄 | `SubtitleConfig.maxLines` |
-| 대사 중 효과음 덕킹 | ⬜ dB (실제 헤드폰으로 조정) | `AudioConfig.duckDb` |
+| 대사 중 효과음 덕킹 | ⬜ dB (실제 헤드폰으로 조정) → 2026-10-27 1차 −8 dB, 0.25초에 걸쳐 | `AudioConfig.duckDb` · `duckFade` |
+| 버스 볼륨 (전체 · 효과음 · 환경음 · 음악 · 음성 · UI) | 1 · 0.9 · 0.6 · 0.6 · 1 · 0.6 (2026-10-27 1차) | `AudioConfig.master` 등 |
+| 발걸음 간격 · 먼 포격 간격 | 걷기 1.6 m · 달리기 2.2 m · 12~25초 | `AudioConfig.walkStride` · `runStride` · `artilleryMin/Max` |
+| 튜토리얼 행동 판정 | 둘러보기 90° · 이동 2 m | `TutorialConfig.lookDegrees` · `moveMeters` |
 
 ## 5. 측정 기준선과 목표
 

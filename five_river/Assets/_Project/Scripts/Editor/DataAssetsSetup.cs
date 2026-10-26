@@ -59,6 +59,13 @@ namespace FiveRivers.EditorTools
                 t.highlightAfter = 15f; t.hintAfter = 30f; t.lookDegrees = 90f; t.moveMeters = 2f;
             });
             Ensure<GameText>("GameText", SeedText);
+            Ensure<AudioConfig>("AudioConfig", a =>
+            {
+                a.master = 1f; a.sfx = 0.9f; a.amb = 0.6f; a.bgm = 0.6f; a.vo = 1f; a.ui = 0.6f;
+                a.duckDb = -8f; a.duckFade = 0.25f;
+                a.walkStride = 1.6f; a.runStride = 2.2f;
+                a.artilleryMin = 12f; a.artilleryMax = 25f;
+            });
             AssetDatabase.SaveAssets();
         }
 

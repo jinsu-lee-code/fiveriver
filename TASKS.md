@@ -119,7 +119,11 @@
   - 결정 (2026-10-27): 운영자 재시작 = **Ctrl + Shift + R** (어디서든 시작 화면, 실수로 누르기 어려운 조합, GDD 14번 10) — 시작 화면 왼쪽 아래에 표시
   - 구현: Setup 메뉴가 `[UI]` 캔버스(1920×1080 기준)를 매번 다시 만든다 (`UiBuilder`). TMP 필수 리소스는 `FiveRivers/Setup/Import TMP Essentials`로 창 없이 가져옴
   - 확인 (2026-10-27, MCP 캡처): 시작 화면 · S1 HUD · S4 자막 · S7 편지 한글 표시 정상
-- [ ] **1-6b. 그레이박스 임시 에셋을 최종 파일명으로 배치** — C — ⬜
+- [ ] **1-6b. 그레이박스 임시 에셋을 최종 파일명으로 배치** — C — 🔄 소리 완료 · 모델/애니메이션은 프리팹까지
+  - 소리 (2026-10-27): SOUND_LIST A · B 전부를 표의 파일명 · 폴더 그대로 79개 WAV(48kHz · 16bit, 효과음 모노 · 환경음/음악 스테레오, 피크 −1 dBFS 이하)로 넣음 — 효과음 · 환경음은 `AudioGraybox`가 합성(Setup 메뉴 `FiveRivers/Setup/Audio Graybox + Sound Library`), 음성은 `tools/make_graybox_vo.ps1`(Windows 기본 한국어 음성 Heami를 낮춘 임시본), 음악은 무음(요청서 임시본 그대로). **이미 있는 파일은 다시 만들지 않는다** → sound 브랜치 최종본을 덮어쓰면 그대로 교체됨
+  - 아트: 프리팹(`PF_PR_SandbagWall` · `PF_PR_AmmoCrate` · `PF_PR_Target` · `PF_PR_BlanketBody` · `PF_CH_ROK_Soldier` · `PF_CH_ROK_ParkYongpal` · `PF_CH_KPA_Rifleman` · `PF_VH_T34_85` · `PF_WP_BazookaRocket`)과 VFX_ 프리팹은 최종 이름으로 있음. 각 프리팹의 눈에 보이는 모양은 `Model` 자식(기본 도형) → FBX가 오면 `Model` 자식만 바꾼다. **같은 이름 FBX 임시 파일은 아직 없음** (FBX 내보내기 도구 필요 — Blender로 만들지 다음에 결정)
+  - 애니메이션: `EnemyAgent`가 Animator가 있으면 ANIM_SPEC 1-5 매개변수(Speed · Crouch · Aim · Fire · Hit · Die · DieIndex · Retreat)를 채운다. `AC_KPA` 등 Animator Controller · 임시 클립은 아직 없음
+  - ⚠ 파트 브랜치 규칙: art · animator · sound 브랜치는 에셋을 넣기 전에 `main`을 먼저 병합해야 그레이박스 파일 · .meta를 받는다 (CLAUDE.md "브랜치 운영")
   - 완료 조건: ART_SPEC · ANIM_SPEC · SOUND_LIST 표의 A 항목이 같은 이름 임시 파일로 들어가 있고 프리팹 · Animator · 사운드 라이브러리가 그 파일에 연결됨 (임시 사운드: graybox_audio.zip)
   - 이후 에셋 교체는 같은 경로 덮어쓰기 → 검수판 체크 → `MM.DD/Art|Anim|Sound/파일명Swap` 커밋
 - [ ] **1-7. 관문: 수동 3회 연속 완주** — A — 자동 점검 통과 · 사람 3회 완주 대기
@@ -158,7 +162,11 @@
 - [ ] **2-8. 길찾기 정체 해결 (어둠 속 바닥 · 탄약 상자 · 둔덕 길)** — C — ⬜
 - [ ] **2-9. 가까운 화면 품질 (조준 가림 · 손 위치 · 뜬 발 · 막힌 길 · 자막 누락)** — C — ⬜
   - 기준: GDD.md 7번 "눈으로 확인할 결과"
-- [ ] **2-10. 자막 · 음향 1차 (28~32px, 2줄, 대사 덕킹)** — D — ⬜
+- [ ] **2-10. 자막 · 음향 1차 (28~32px, 2줄, 대사 덕킹)** — D — 구현 완료 · 실제 헤드폰 확인 대기
+  - 구현 (2026-10-27): 자막 30px · 2줄(`SubtitleDisplay`, 음성이 더 길면 음성 끝까지 남음), `AudioDirector`(사건 → 소리: M1 사격 · 핑 · 장전 · 빈 방아쇠, 바주카 발사 · 장전, 무기 전환, 보충, 자세, 피격 + 신음, 탄착 · 총알 스침 · 적 사격(3D), 로켓 명중 · 도탄 · 주포 · 전차 이동/연기/화재 루프 · 엔진 멈춤(3D), 조명탄 발사 · 타는 소리, 발걸음(걷기 1.6 m · 달리기 2.2 m), 먼 포격(S1~S4 12~25초), 적 외침(S3 출현), 구간별 환경음 · 음악(S4 음악 없음, S6~S7 BGM_Ending 40초), 목표 표시음), 대사 중 SFX · AMB −8 dB 덕킹, 변형 무작위 · 같은 변형 연속 금지 · 음높이 ±5%
+  - 수치: `AudioConfig.asset` (버스 볼륨 · 덕킹 −8 dB · 발걸음 · 먼 포격 간격) → BALANCE 4번
+  - 테스트: `SoundAndTextTests` 4개 (라이브러리 항목마다 클립 · 자막마다 음성 · 튜토리얼 문구 · 보상음 없음) — 전체 50개 통과
+  - 확인 (2026-10-27, MCP): S2 진입 → 환경음(덕킹 0.24) · 분대장 음성 재생 중. 실제 소리 크기 · 섞임은 사람이 들어 봐야 함
 
 ## Phase 3. 1차 관찰 테스트 — 재미 · 이해 검증 (10/28) — 새 기능 금지
 - [ ] **3-1. 신규 이용자 5명 관찰** — D — ⬜

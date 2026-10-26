@@ -31,6 +31,9 @@ namespace FiveRivers.Combat
 
         Transform container;
 
+        // 소리 연결용 (AudioDirector가 효과 종류별 소리를 같은 위치에서 낸다)
+        public event Action<EffectKind, Vector3> Spawned;
+
         public Transform Container
         {
             get
@@ -46,6 +49,7 @@ namespace FiveRivers.Combat
 
         public GameObject Spawn(EffectKind kind, Vector3 position, Quaternion rotation)
         {
+            Spawned?.Invoke(kind, position);
             foreach (var e in entries)
             {
                 if (e.kind != kind || e.prefab == null) continue;
