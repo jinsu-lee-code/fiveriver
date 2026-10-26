@@ -17,7 +17,7 @@ MonoBehaviour:
   attempt1: 75
   attempt2: 45
   supportAfterFails: 2
-  approachSpeed: 2.5
+  approachSpeed: 3.5
   turretTurnSpeed: 25
   fireInterval: 9
   cannonDamage: 35

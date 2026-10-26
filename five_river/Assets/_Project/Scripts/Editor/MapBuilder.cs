@@ -50,7 +50,7 @@ namespace FiveRivers.EditorTools
         static readonly Vector2[] MoundPath = { new(-20, -0.5f), new(-21, 8), new(-24, 20), new(-28, 32), new(-30, 40) };
         const float RoadX = 14f;
         const float TankHoldZ = 48f;
-        const float TankStartZ = 150f;
+        const float TankStartZ = 110f; // 능선 바로 뒤에서 넘어온다 (정지 위치까지 62 m)
 
         public static LevelPoints Build()
         {

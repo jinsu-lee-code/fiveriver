@@ -16,7 +16,7 @@ namespace FiveRivers.EditorTools
             {
                 t.sideAngle = 50; t.hitsToStop = 2;
                 t.attempt1 = 75; t.attempt2 = 45; t.supportAfterFails = 2;
-                t.approachSpeed = 2.5f; t.turretTurnSpeed = 25; t.fireInterval = 9;
+                t.approachSpeed = 3.5f; t.turretTurnSpeed = 25; t.fireInterval = 9;
                 t.cannonDamage = 35; t.cannonRadius = 5; t.nearMissOffset = 6;
             });
             Ensure<AssistConfig>("AssistConfig", a =>

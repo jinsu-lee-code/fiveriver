@@ -104,7 +104,7 @@
 | 측면 2발 | 정지 · 화재 | 구간 완료 |
 | 측면 판정 각도 | 50° — 전차 정면 방향과 "전차 → 쏜 사람" 방향의 수평 각도가 50° 이상이면 측면 (2026-10-27 1차 값, 맵에서 참호는 정면 · 왼쪽 둔덕은 측면이 되도록 배치) | `TankConfig.sideAngle` |
 | 정지까지 측면 명중 | 2 | `TankConfig.hitsToStop` |
-| 접근 속도 · 포탑 회전 | 2.5 m/s · 25 °/s | `TankConfig.approachSpeed` · `turretTurnSpeed` |
+| 접근 속도 · 포탑 회전 | 2.5 m/s → 2026-10-27 3.5 m/s (출발 z=150 → 110으로 당김: 정지 위치까지 40초 → 약 18초, 1차 시도 75초 안에 둔덕 이동 · 2발 여유) · 25 °/s | `TankConfig.approachSpeed` · `turretTurnSpeed` |
 | 주포 간격 · 피해 · 반경 · 빗나감 거리 | 9초 · 35 · 5 m · 6 m (플레이어 근처에 떨어지는 위협 사격) | `TankConfig.fireInterval` · `cannonDamage` · `cannonRadius` · `nearMissOffset` |
 
 ## 3. 실패 보조 · 재시도

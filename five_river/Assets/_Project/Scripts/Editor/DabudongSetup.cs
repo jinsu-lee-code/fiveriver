@@ -35,6 +35,8 @@ namespace FiveRivers.EditorTools
             var systems = SetupSystems();
             var player = PlayerBuilder.Build(points, systems.gate, systems.director, systems.effects);
             CombatBuilder.Build(systems.director.gameObject, systems.director, points, player, systems.effects);
+            TankBuilder.Build(systems.director, points, player, systems.effects);
+            SetupRunCoordinator(systems, points, player);
             SetupDebug(systems.debug, player);
 
             EditorSceneManager.MarkSceneDirty(scene);
@@ -72,6 +74,17 @@ namespace FiveRivers.EditorTools
             GrayboxAssets.EnsureComponent<AmmoCrate>(MapBuilder.CratePrefab());
             GrayboxAssets.EnsureComponent<TutorialTarget>(MapBuilder.TargetPrefab());
             return s;
+        }
+
+        static void SetupRunCoordinator(Systems systems, LevelPoints points, PlayerController player)
+        {
+            var run = SetupUtil.Ensure<RunCoordinator>(systems.director.gameObject);
+            SetupUtil.SetRef(run, "director", systems.director);
+            SetupUtil.SetRef(run, "points", points);
+            SetupUtil.SetRef(run, "player", player);
+            SetupUtil.SetRef(run, "health", player.GetComponent<PlayerHealth>());
+            SetupUtil.SetRef(run, "weapons", player.GetComponent<WeaponHolder>());
+            SetupUtil.SetRef(run, "effects", systems.effects);
         }
 
         static void SetupDebug(DebugWindow debug, PlayerController player)
