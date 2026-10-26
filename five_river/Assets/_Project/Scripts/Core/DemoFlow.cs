@@ -8,19 +8,29 @@ namespace FiveRivers.Core
     public sealed class DemoFlow
     {
         // 같은 시각에 걸리면 위쪽이 먼저 (FLOW.md 3-2)
-        enum Boundary { None, ForcedEnding, ForcedTank, SectionEnd, TankDeadline, HardCap }
+        enum Boundary { None, ForcedEnding, ForcedTank, SectionEnd, TankAttempt, TankDeadline, HardCap }
 
         readonly FlowConfig config;
+        readonly TankConfig tank;
         readonly RunClock clock = new RunClock();
 
         double sectionStart;
         double silenceGoalAt = -1; // S4 완료 보고 시각, 미보고면 음수
         bool forcedSilence;        // 7:00 강제 전환으로 들어온 정적
+        double tankAttemptStart;
 
-        public DemoFlow(FlowConfig config)
+        public DemoFlow(FlowConfig config, TankConfig tank, AssistConfig assist)
         {
             this.config = config ? config : throw new ArgumentNullException(nameof(config));
+            this.tank = tank ? tank : throw new ArgumentNullException(nameof(tank));
+            if (!assist) throw new ArgumentNullException(nameof(assist));
+            Checkpoints = new CheckpointState(assist.failThreshold);
         }
+
+        public CheckpointState Checkpoints { get; }
+        public int TankFailures { get; private set; }
+        public double TankAttemptTime => clock.Elapsed - tankAttemptStart;
+        public double TankAttemptLimit => TankFailures == 0 ? tank.attempt1 : tank.attempt2;
 
         public FlowSection Section { get; private set; } = FlowSection.Title;
         public bool IsRunning => Section != FlowSection.Title;
@@ -38,6 +48,8 @@ namespace FiveRivers.Core
         public event Action<FlowTransition> SectionChanged;
         public event Action EnemiesRetreatRequested;
         public event Action PauseReleased;
+        // 체크포인트에서 다시 시작하라 (FLOW.md 4번). 체력 · 탄약 복구, 적 · 투사체 · 효과 · 대사 정리는 씬이 한다.
+        public event Action<FlowCheckpoint> RetryRequested;
 
         public bool StartRun()
         {
@@ -48,8 +60,27 @@ namespace FiveRivers.Core
             ForcedTankTriggered = false;
             ForcedEndingTriggered = false;
             EndingStarted = false;
+            Checkpoints.Reset();
+            TankFailures = 0;
             Enter(FlowSection.Tutorial, TransitionReason.RunStart);
             return true;
+        }
+
+        // 플레이어 사망. 회차 시간 · 실패 횟수는 유지하고 체크포인트로 돌아간다.
+        // S2 · S3는 공세를 처음부터 다시 하므로 구간 시간도 다시 잰다. S5는 140초 상한이 재시도를 포함한다.
+        public void ReportPlayerDied()
+        {
+            if (!IsRunning || CombatLocked) return;
+            var checkpoint = CheckpointState.For(Section);
+            if (checkpoint == FlowCheckpoint.None) return;
+            Checkpoints.RecordFailure(checkpoint);
+            if (Section == FlowSection.Tank)
+            {
+                FailTankAttempt();
+                return;
+            }
+            sectionStart = clock.Elapsed;
+            RetryRequested?.Invoke(checkpoint);
         }
 
         public void AbortToTitle()
@@ -97,6 +128,7 @@ namespace FiveRivers.Core
             double delta = Math.Max(0, runTime) - clock.Elapsed;
             clock.DebugSet(runTime);
             sectionStart += delta;
+            tankAttemptStart += delta;
             if (silenceGoalAt >= 0) silenceGoalAt += delta;
         }
 
@@ -168,6 +200,11 @@ namespace FiveRivers.Core
                 best = Boundary.SectionEnd;
                 at = end;
             }
+            if (Section == FlowSection.Tank && tankAttemptStart + TankAttemptLimit < at)
+            {
+                best = Boundary.TankAttempt;
+                at = tankAttemptStart + TankAttemptLimit;
+            }
             if (Section == FlowSection.Silence && ForcedTankTriggered && config.tankEntryDeadline < at)
             {
                 best = Boundary.TankDeadline;
@@ -226,6 +263,10 @@ namespace FiveRivers.Core
                 case Boundary.SectionEnd:
                     EndSection();
                     break;
+                case Boundary.TankAttempt:
+                    Checkpoints.RecordFailure(FlowCheckpoint.Tank);
+                    FailTankAttempt();
+                    break;
                 case Boundary.TankDeadline:
                     Enter(FlowSection.Tank, TransitionReason.TankDeadline);
                     break;
@@ -273,11 +314,29 @@ namespace FiveRivers.Core
             }
         }
 
+        // 전차 시도 실패 (시간 초과 · 사망). 기준 횟수면 아군 지원으로 끝내고, 아니면 CP3에서 다시 시도한다.
+        void FailTankAttempt()
+        {
+            TankFailures++;
+            if (TankFailures >= tank.supportAfterFails)
+            {
+                Enter(FlowSection.AllySupport, TransitionReason.TankFailed);
+                return;
+            }
+            tankAttemptStart = clock.Elapsed;
+            RetryRequested?.Invoke(FlowCheckpoint.Tank);
+        }
+
         void Enter(FlowSection to, TransitionReason reason)
         {
             var from = Section;
             Section = to;
             sectionStart = clock.Elapsed;
+            if (to == FlowSection.Tank && from != FlowSection.Tank)
+            {
+                tankAttemptStart = clock.Elapsed;
+                TankFailures = 0;
+            }
             if (to == FlowSection.Silence)
             {
                 silenceGoalAt = -1;

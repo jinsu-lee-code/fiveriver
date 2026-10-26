@@ -26,6 +26,7 @@ namespace FiveRivers.Core
         HardCap = 7,      // 9:00 절대 상한 (안전장치)
         Abort = 8,        // 운영자 재시작
         DebugJump = 9,    // 디버그 창 구간 바로가기 (에디터 · 개발 빌드)
+        TankFailed = 10,  // 전차 시도 기준 횟수 실패 → 아군 지원
     }
 
     public readonly struct FlowTransition

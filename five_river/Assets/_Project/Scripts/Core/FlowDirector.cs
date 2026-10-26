@@ -8,15 +8,22 @@ namespace FiveRivers.Core
     public sealed class FlowDirector : MonoBehaviour
     {
         [SerializeField] FlowConfig config;
+        [SerializeField] TankConfig tankConfig;
+        [SerializeField] AssistConfig assistConfig;
         [SerializeField] InputGate inputGate;
 
         public DemoFlow Flow { get; private set; }
         public FlowConfig Config => config;
+        public AssistConfig Assist => assistConfig;
         public InputGate InputGate => inputGate;
+
+        // 실패 보조 배율 (GDD 5-4). 원본 데이터는 그대로 두고 쓰는 쪽이 곱한다.
+        public float EnemyAccuracyScale => Flow.Checkpoints.AssistApplied ? assistConfig.enemyAccuracy : 1f;
+        public float EnemyDamageScale => Flow.Checkpoints.AssistApplied ? assistConfig.enemyDamage : 1f;
 
         void Awake()
         {
-            Flow = new DemoFlow(config);
+            Flow = new DemoFlow(config, tankConfig, assistConfig);
             Flow.PauseReleased += ResumeTime;
             Flow.SectionChanged += OnSectionChanged;
             inputGate.Mode = InputGate.ModeFor(Flow.Section);

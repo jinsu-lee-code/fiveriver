@@ -477,6 +477,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: FiveRivers::FiveRivers.Core.FlowDirector
   config: {fileID: 11400000, guid: 9c0937eecf3cc2d47b0cf098b78f377b, type: 2}
+  tankConfig: {fileID: 11400000, guid: 2ba54b60feff3254187282c7cc160fe8, type: 2}
+  assistConfig: {fileID: 11400000, guid: e75471f9b7d9b604eb721c2abe63237b, type: 2}
   inputGate: {fileID: 1197750677}
 --- !u!114 &1197750677
 MonoBehaviour:

@@ -41,6 +41,8 @@ namespace FiveRivers.EditorTools
             var gate = SetupUtil.Ensure<InputGate>(systems);
             var director = SetupUtil.Ensure<FlowDirector>(systems);
             SetupUtil.SetRef(director, "config", SetupUtil.LoadAsset<FlowConfig>(DataDir + "FlowConfig.asset"));
+            SetupUtil.SetRef(director, "tankConfig", SetupUtil.LoadAsset<TankConfig>(DataDir + "TankConfig.asset"));
+            SetupUtil.SetRef(director, "assistConfig", SetupUtil.LoadAsset<AssistConfig>(DataDir + "AssistConfig.asset"));
             SetupUtil.SetRef(director, "inputGate", gate);
 
             var debug = SetupUtil.Ensure<DebugWindow>(systems);

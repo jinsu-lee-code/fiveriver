@@ -13,27 +13,40 @@ namespace FiveRivers.Tests
     {
         const string FlowConfigPath = "Assets/_Project/Data/FlowConfig.asset";
         const string ResultConfigPath = "Assets/_Project/Data/ResultConfig.asset";
+        const string TankConfigPath = "Assets/_Project/Data/TankConfig.asset";
+        const string AssistConfigPath = "Assets/_Project/Data/AssistConfig.asset";
         const double Step = 0.1;
         const double Eps = 1e-6;
 
         FlowConfig config;
+        TankConfig tank;
         DemoFlow flow;
         List<FlowTransition> log;
+        List<FlowCheckpoint> retries;
         int retreats;
         int pauseReleases;
+        int assistActivations;
 
         [SetUp]
         public void SetUp()
         {
             config = AssetDatabase.LoadAssetAtPath<FlowConfig>(FlowConfigPath);
+            tank = AssetDatabase.LoadAssetAtPath<TankConfig>(TankConfigPath);
+            var assist = AssetDatabase.LoadAssetAtPath<AssistConfig>(AssistConfigPath);
             Assert.IsNotNull(config, FlowConfigPath);
-            flow = new DemoFlow(config);
+            Assert.IsNotNull(tank, TankConfigPath);
+            Assert.IsNotNull(assist, AssistConfigPath);
+            flow = new DemoFlow(config, tank, assist);
             log = new List<FlowTransition>();
+            retries = new List<FlowCheckpoint>();
             retreats = 0;
             pauseReleases = 0;
+            assistActivations = 0;
             flow.SectionChanged += t => log.Add(t);
             flow.EnemiesRetreatRequested += () => retreats++;
             flow.PauseReleased += () => pauseReleases++;
+            flow.RetryRequested += cp => retries.Add(cp);
+            flow.Checkpoints.AssistActivated += () => assistActivations++;
         }
 
         void AdvanceTo(double time)
@@ -80,7 +93,7 @@ namespace FiveRivers.Tests
         }
 
         [Test]
-        public void T1_AllCapsReached_ReturnsAtNineMinutesWithOneEnding()
+        public void T1_AllCapsReached_TankAttemptsEndBeforeEightFifteen()
         {
             flow.StartRun();
             RunToEnd();
@@ -89,15 +102,107 @@ namespace FiveRivers.Tests
             AssertTransition(Entry(FlowSection.Assault), TransitionReason.SectionCap, 165);
             AssertTransition(Entry(FlowSection.Silence), TransitionReason.SectionCap, 315);
             AssertTransition(Entry(FlowSection.Tank), TransitionReason.SectionCap, 355);
-            // S5 140초 상한과 8:15가 495초에 겹친다 → 8:15가 먼저, 아군 지원은 한 번
-            AssertTransition(Entry(FlowSection.AllySupport), TransitionReason.ForcedEnding, 495);
-            AssertTransition(Entry(FlowSection.Dawn), TransitionReason.Timer, 500);
-            AssertTransition(Entry(FlowSection.Result), TransitionReason.Timer, 520);
-            AssertTransition(log.Last(), TransitionReason.Timer, 540);
+            // 전차 1차 75초 + 2차 45초 = 120초 < S5 상한 140초 → 2회 실패로 아군 지원
+            AssertTransition(Entry(FlowSection.AllySupport), TransitionReason.TankFailed, 475);
+            AssertTransition(Entry(FlowSection.Dawn), TransitionReason.Timer, 480);
+            AssertTransition(Entry(FlowSection.Result), TransitionReason.Timer, 500);
+            AssertTransition(log.Last(), TransitionReason.Timer, 520);
             Assert.AreEqual(FlowSection.Title, flow.Section);
             Assert.IsTrue(flow.TutorialTimedOut);
             Assert.IsFalse(flow.ForcedTankTriggered);
+            Assert.IsFalse(flow.ForcedEndingTriggered);
             Assert.AreEqual(1, retreats);
+            CollectionAssert.AreEqual(new[] { FlowCheckpoint.Tank }, retries);
+        }
+
+        [Test]
+        public void T1b_SectionCapAndEightFifteenTie_EightFifteenFirst()
+        {
+            // 전차 시도 제한이 없다고 보면 S5 140초 상한과 8:15가 495초에 겹친다 → 8:15가 먼저, 아군 지원 한 번
+            var noAttemptLimit = UnityEngine.Object.Instantiate(tank);
+            noAttemptLimit.attempt1 = noAttemptLimit.attempt2 = 1000;
+            flow = new DemoFlow(config, noAttemptLimit, AssetDatabase.LoadAssetAtPath<AssistConfig>(AssistConfigPath));
+            log.Clear();
+            flow.SectionChanged += t => log.Add(t);
+            flow.StartRun();
+            RunToEnd();
+            AssertTransition(Entry(FlowSection.AllySupport), TransitionReason.ForcedEnding, 495);
+            AssertTransition(log.Last(), TransitionReason.Timer, 540);
+            UnityEngine.Object.DestroyImmediate(noAttemptLimit);
+        }
+
+        [Test]
+        public void DeathInScout_RetriesCheckpointAndKeepsRunTime()
+        {
+            flow.StartRun();
+            AdvanceTo(75);
+            flow.ReportGoalMet(FlowSection.Tutorial);
+            AdvanceTo(100);
+            flow.ReportPlayerDied();
+            Assert.AreEqual(FlowSection.Scout, flow.Section);
+            Assert.AreEqual(100, flow.RunTime, Eps);
+            Assert.AreEqual(0, flow.SectionTime, Eps);
+            CollectionAssert.AreEqual(new[] { FlowCheckpoint.FirstContact }, retries);
+            Assert.AreEqual(1, flow.Checkpoints.Failures(FlowCheckpoint.FirstContact));
+            Assert.IsFalse(flow.Checkpoints.AssistApplied);
+        }
+
+        [Test]
+        public void TwoDeathsAtSameCheckpoint_ActivatesAssistOnce()
+        {
+            ReachSilenceAt240();
+            flow.DebugJumpTo(FlowSection.Assault);
+            flow.ReportPlayerDied();
+            flow.ReportPlayerDied();
+            flow.ReportPlayerDied();
+            Assert.IsTrue(flow.Checkpoints.AssistApplied);
+            Assert.AreEqual(1, assistActivations);
+            Assert.AreEqual(3, flow.Checkpoints.Failures(FlowCheckpoint.MainAssault));
+        }
+
+        [Test]
+        public void DeathsAtDifferentCheckpoints_NoAssist()
+        {
+            flow.DebugJumpTo(FlowSection.Scout);
+            flow.ReportPlayerDied();
+            flow.DebugJumpTo(FlowSection.Assault);
+            flow.ReportPlayerDied();
+            Assert.IsFalse(flow.Checkpoints.AssistApplied);
+        }
+
+        [Test]
+        public void DeathWhileCombatLocked_IsIgnored()
+        {
+            ReachTankAt260();
+            flow.DebugSetRunTime(494);
+            RunUntil(496);
+            Assert.IsTrue(flow.CombatLocked);
+            flow.ReportPlayerDied();
+            Assert.IsEmpty(retries);
+            Assert.AreEqual(0, flow.Checkpoints.Failures(FlowCheckpoint.Tank));
+        }
+
+        [Test]
+        public void TankAttemptsTimeOutTwice_AllySupport()
+        {
+            ReachTankAt260();
+            RunUntil(400);
+            CollectionAssert.AreEqual(new[] { FlowCheckpoint.Tank }, retries);
+            AssertTransition(Entry(FlowSection.AllySupport), TransitionReason.TankFailed, 380); // 260 + 75 + 45
+            Assert.AreEqual(2, flow.TankFailures);
+            Assert.IsTrue(flow.Checkpoints.AssistApplied);
+        }
+
+        [Test]
+        public void TankDeathThenTimeout_SecondAttemptIsShort()
+        {
+            ReachTankAt260();
+            AdvanceTo(300);
+            flow.ReportPlayerDied();
+            Assert.AreEqual(FlowSection.Tank, flow.Section);
+            Assert.AreEqual(tank.attempt2, flow.TankAttemptLimit, Eps);
+            RunUntil(360);
+            AssertTransition(Entry(FlowSection.AllySupport), TransitionReason.TankFailed, 345);
         }
 
         [Test]
@@ -246,8 +351,11 @@ namespace FiveRivers.Tests
             flow.StartRun();
             flow.SetPaused(true);
             RunToEnd();
+            Assert.IsTrue(flow.Checkpoints.AssistApplied); // 전차 2회 실패
 
             Assert.IsTrue(flow.StartRun());
+            Assert.IsFalse(flow.Checkpoints.AssistApplied);
+            Assert.AreEqual(0, flow.TankFailures);
             Assert.AreEqual(FlowSection.Tutorial, flow.Section);
             Assert.AreEqual(0, flow.RunTime, Eps);
             Assert.IsFalse(flow.Paused);
@@ -319,6 +427,7 @@ namespace FiveRivers.Tests
                 {
                     flow.Tick(0.016 + rng.NextDouble() * 0.5);
                     if (rng.NextDouble() < 0.01) flow.SetPaused(!flow.Paused);
+                    if (rng.NextDouble() < 0.003) flow.ReportPlayerDied();
                     if (flow.IsRunning && flow.SectionTime >= goalAt[flow.Section]) flow.ReportGoalMet(flow.Section);
                 }
 
