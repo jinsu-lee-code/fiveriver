@@ -34,6 +34,7 @@ namespace FiveRivers.EditorTools
             var points = MapBuilder.Build();
             var systems = SetupSystems();
             var player = PlayerBuilder.Build(points, systems.gate, systems.director, systems.effects);
+            CombatBuilder.Build(systems.director.gameObject, systems.director, points, player, systems.effects);
             SetupDebug(systems.debug, player);
 
             EditorSceneManager.MarkSceneDirty(scene);
@@ -60,6 +61,7 @@ namespace FiveRivers.EditorTools
                 effects = SetupUtil.Ensure<Effects>(go),
                 debug = SetupUtil.Ensure<DebugWindow>(go),
             };
+            SetupUtil.Ensure<RuntimeErrorLog>(go);
             SetupUtil.SetRef(s.director, "config", SetupUtil.LoadAsset<FlowConfig>(DataDir + "FlowConfig.asset"));
             SetupUtil.SetRef(s.director, "tankConfig", SetupUtil.LoadAsset<TankConfig>(DataDir + "TankConfig.asset"));
             SetupUtil.SetRef(s.director, "assistConfig", SetupUtil.LoadAsset<AssistConfig>(DataDir + "AssistConfig.asset"));

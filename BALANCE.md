@@ -60,7 +60,18 @@
 | 정찰병 (S2) | 2명 | `WaveConfig.scouts` |
 | 주 공세 신규 적 (S3) | 7명 + 생존 정찰병 | `WaveConfig.mainAssault` |
 | 동시 활동 적 상한 | 5명 | `WaveConfig.maxActive` |
-| 적 명중률 · 피해 기본값 | ⬜ 첫 구현 때 정함 (기존 프로토타입 미사용, 2026-10-26) | ⬜ |
+| 적 명중률 · 피해 기본값 | → 2026-10-27 1차 값: 어둠 0.10 / 조명탄 아래 0.35, Z 자세 ×0.25, 시야가 막히면(모래주머니 뒤) 무조건 빗나감, 피해 18 | `WaveConfig.accuracyDark` · `accuracyLit` · `crouchedFactor` · `damage` |
+| 출현 간격 · 체력 · 이동 · 철수 속도 | 3초 · 100(M1 한 발) · 3.4 · 4.8 m/s | `WaveConfig.spawnInterval` · `health` · `moveSpeed` · `retreatSpeed` |
+| 엄폐 유지 · 사격 간격 · 시야 거리 | 5~9초 뒤 더 가까운 엄폐물로(60%) · 2.6~4.2초 · 140 m | `WaveConfig.coverHoldMin/Max` · `fireIntervalMin/Max` · `sightRange` |
+
+### 2-5. 조명탄 (2026-10-27 1차 값, `FlareConfig.asset`)
+| 항목 | 값 | 데이터 키 |
+|---|---|---|
+| S2 첫 조명탄 | 시작 8초 뒤 1발 | `scoutFlareDelay` |
+| S3 첫 조명탄 · 간격 | 5초 뒤 · 24초마다 | `assaultFirstDelay` · `assaultInterval` |
+| 타는 시간 · 꺼지는 시간 | 16초 · 3초 (어두운 구간 약 5초 → 이동 · 보충 기회) | `burnTime` · `fadeTime` |
+| 높이 · 낙하 속도 · 흔들림 | 45 m · 1.6 m/s · 1.5 m | `launchHeight` · `fallSpeed` · `swayAmplitude` |
+| 밝기 · 범위 | 1500 · 110 m (URP 점광원, 화면으로 맞춤) | `lightIntensity` · `lightRange` |
 
 ### 2-2. 무기 (2026-10-27 1차 값, 그레이박스 기준 · 관찰 테스트로 조정)
 | 항목 | 값 | 데이터 키 (`WeaponConfig.asset`) |

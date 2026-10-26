@@ -41,6 +41,19 @@ namespace FiveRivers.EditorTools
                 w.rocketSpeed = 60f; w.rocketLifetime = 3f; w.rocketBlastRadius = 3f; w.rocketBlastDamage = 150f;
                 w.resupplyDistance = 2.2f;
             });
+            Ensure<WaveConfig>("WaveConfig", w =>
+            {
+                w.scouts = 2; w.mainAssault = 7; w.maxActive = 5; w.spawnInterval = 3f;
+                w.health = 100f; w.moveSpeed = 3.4f; w.retreatSpeed = 4.8f; w.coverHoldMin = 5f; w.coverHoldMax = 9f;
+                w.fireIntervalMin = 2.6f; w.fireIntervalMax = 4.2f;
+                w.accuracyDark = 0.1f; w.accuracyLit = 0.35f; w.crouchedFactor = 0.25f; w.damage = 18f; w.sightRange = 140f;
+            });
+            Ensure<FlareConfig>("FlareConfig", f =>
+            {
+                f.scoutFlareDelay = 8f; f.assaultFirstDelay = 5f; f.assaultInterval = 24f;
+                f.burnTime = 16f; f.fadeTime = 3f; f.launchHeight = 45f; f.fallSpeed = 1.6f; f.swayAmplitude = 1.5f;
+                f.lightIntensity = 1500f; f.lightRange = 110f;
+            });
             AssetDatabase.SaveAssets();
         }
 
