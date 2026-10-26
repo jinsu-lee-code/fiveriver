@@ -49,7 +49,8 @@ namespace FiveRivers.Narrative
         void OnSectionChanged(FlowTransition t)
         {
             if (t.To == FlowSection.Dawn) SpawnWalkers();
-            if (t.To == FlowSection.Tutorial || t.To == FlowSection.Title)
+            // 새 회차 · 시작 화면 · (디버그) 새벽 이전 구간으로 돌아가면 밤으로
+            if (t.To < FlowSection.Dawn && (blend > 0f || walkers.Count > 0))
             {
                 ClearWalkers();
                 blend = 0f;
