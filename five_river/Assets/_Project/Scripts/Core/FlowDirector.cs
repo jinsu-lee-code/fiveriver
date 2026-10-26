@@ -29,9 +29,14 @@ namespace FiveRivers.Core
             inputGate.Mode = InputGate.ModeFor(Flow.Section);
         }
 
+        // 평소 게임 시간 배율. 점검 모드(SmokeRunner)만 바꾼다.
+        public float BaseTimeScale { get; set; } = 1f;
+        // 회차 시계 배율. 점검 모드만 바꾼다 (실제 회차는 항상 1).
+        public float ClockScale { get; set; } = 1f;
+
         void Update()
         {
-            Flow.Tick(Time.unscaledDeltaTime);
+            Flow.Tick(Time.unscaledDeltaTime * ClockScale);
         }
 
         void OnDestroy()
@@ -43,14 +48,14 @@ namespace FiveRivers.Core
         public void SetPaused(bool paused)
         {
             Flow.SetPaused(paused);
-            Time.timeScale = Flow.Paused ? 0f : 1f;
+            Time.timeScale = Flow.Paused ? 0f : BaseTimeScale;
         }
 
-        void ResumeTime() => Time.timeScale = 1f;
+        void ResumeTime() => Time.timeScale = BaseTimeScale;
 
         void OnSectionChanged(FlowTransition t)
         {
-            if (!Flow.Paused) Time.timeScale = 1f;
+            if (!Flow.Paused) Time.timeScale = BaseTimeScale;
             inputGate.Mode = InputGate.ModeFor(t.To);
         }
     }
