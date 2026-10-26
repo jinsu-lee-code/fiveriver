@@ -14,6 +14,7 @@ namespace FiveRivers.Combat
         TankHitExplosion = 5,
         CannonBlast = 6,
         EnemyMuzzle = 7,
+        ClipEject = 8, // M1 빈 클립이 튀어나감 (8발째, ANIM_SPEC 3-3 "사격 이벤트 ClipEject로 코드에서 처리")
     }
 
     // 일회성 효과(VFX_ 프리팹)를 만들고, 체크포인트 복구 · 새 회차 때 한꺼번에 지운다 (ART_SPEC 공통 체크 V5).

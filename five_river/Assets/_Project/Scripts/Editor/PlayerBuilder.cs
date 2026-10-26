@@ -72,6 +72,9 @@ namespace FiveRivers.EditorTools
             var m1Muzzle = new GameObject("Socket_Muzzle").transform;
             m1Muzzle.SetParent(m1Model, false);
             m1Muzzle.localPosition = new Vector3(0, 0.03f, m1Fbx ? 0.8f : 0.68f);
+            var m1Eject = new GameObject("Socket_ClipEject").transform;
+            m1Eject.SetParent(m1Model, false);
+            m1Eject.localPosition = new Vector3(0, 0.07f, 0.08f); // ClipSlot 위
 
             var m1 = player.AddComponent<M1Rifle>();
             SetupUtil.SetRef(m1, "config", weaponConfig);
@@ -79,6 +82,7 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(m1, "view", cam);
             SetupUtil.SetRef(m1, "effects", effects);
             SetupUtil.SetRef(m1, "muzzle", m1Muzzle);
+            SetupUtil.SetRef(m1, "clipEject", m1Eject);
             SetupUtil.SetRef(m1, "model", m1Model);
             SetVector(m1, "hipPosition", new Vector3(0.2f, -0.22f, 0.45f));
             SetVector(m1, "aimPosition", new Vector3(0f, -0.068f, 0.22f)); // 가늠자 · 가늠쇠가 화면 중앙에 오도록
@@ -165,6 +169,7 @@ namespace FiveRivers.EditorTools
                 Entry(EffectKind.TankHitExplosion, hitExplosion, 1.2f),
                 Entry(EffectKind.CannonBlast, hitExplosion, 1.2f),
                 Entry(EffectKind.EnemyMuzzle, Flash("VFX_MuzzleFlash_Enemy", GrayboxAssets.FxYellow, 0.1f, 1.3f, 0.05f, new Color(1f, 0.7f, 0.35f), 2.5f, 5f), 0.15f),
+                Entry(EffectKind.ClipEject, ClipEjectPrefab(), 4f),
             };
             var so = new SerializedObject(effects);
             var list = so.FindProperty("entries");
@@ -208,6 +213,21 @@ namespace FiveRivers.EditorTools
                 return root;
             });
         }
+
+        // 튀어나가는 빈 클립 (SM_WP_M1Garand_ClipEmpty). 4초 뒤 사라진다
+        public static GameObject ClipEjectPrefab() => GrayboxAssets.Prefab("PF_WP_M1Garand_ClipEmpty", () =>
+        {
+            var root = new GameObject();
+            GrayboxModels.Model(root, "Weapons/M1Garand/SM_WP_M1Garand_ClipEmpty.fbx", model =>
+                GrayboxAssets.Part(model, PrimitiveType.Cube, "ClipEmpty", new Vector3(0, 0.025f, 0), new Vector3(0.02f, 0.05f, 0.06f), GrayboxAssets.Metal));
+            var col = root.AddComponent<BoxCollider>();
+            col.size = new Vector3(0.02f, 0.05f, 0.06f);
+            col.center = new Vector3(0, 0.025f, 0);
+            var body = root.AddComponent<Rigidbody>();
+            body.mass = 0.05f;
+            body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            return root;
+        });
 
         public static GameObject RocketPrefab() => GrayboxAssets.Prefab("PF_WP_BazookaRocket", () =>
         {
