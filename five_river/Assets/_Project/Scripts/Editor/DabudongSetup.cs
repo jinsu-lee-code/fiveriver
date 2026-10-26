@@ -31,6 +31,7 @@ namespace FiveRivers.EditorTools
             }
 
             DataAssetsSetup.Run();
+            AnimationGraybox.Run();
             var points = MapBuilder.Build();
             var systems = SetupSystems();
             var player = PlayerBuilder.Build(points, systems.gate, systems.director, systems.effects);

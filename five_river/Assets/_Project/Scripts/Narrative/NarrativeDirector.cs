@@ -21,6 +21,7 @@ namespace FiveRivers.Narrative
         [SerializeField] FlareDirector flares;
         [SerializeField] TankController tank;
         [SerializeField] GameObject blanketBody;
+        [SerializeField] Animator parkAnimator; // AC_ROK "Call" (박용팔 리그가 오면 연결)
         [SerializeField] float moundRadius = 9f;
         [Header("S4 정적 연출 (초, 구간 시작 기준)")]
         [SerializeField] float parkCall1At = 4f;
@@ -122,6 +123,7 @@ namespace FiveRivers.Narrative
             callsDone = false;
             float start = Time.time;
             yield return new WaitUntil(() => Time.time - start >= parkCall1At);
+            if (parkAnimator != null) parkAnimator.SetTrigger("Call");
             subtitles.Say(text.parkCall1);
             yield return new WaitUntil(() => Time.time - start >= parkCall2At);
             subtitles.Say(text.parkCall2);

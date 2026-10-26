@@ -126,7 +126,9 @@
   - 축 확인: Blender 좌우 부호(`SX = -1`)를 Unity에서 TrackL이 -X인지로 확인해 정함
   - 테스트: `ArtSpecTests` 15개 (전차 부품 · Gun이 Turret 밑 · 슬롯 · 폭 3.0 m · 포 +Z · TrackL 왼쪽, M1 Bolt · ClipSlot · 길이 1.10 m, 바주카 RocketSlot · 1.52 m, 캐릭터 키 ±5% · 피벗 · 슬롯, 소품 바닥 피벗, 프리팹 Missing 참조 0) — **최종 FBX가 들어오면 이 테스트로 요청서 규칙을 자동 검사**
   - 메뉴: `FiveRivers/Setup/Rebuild Graybox Prefabs (FBX)` (FBX가 새로 생겼을 때만. 최종 에셋 이후에는 FBX 덮어쓰기만으로 충분)
-  - 애니메이션: `EnemyAgent`가 Animator가 있으면 ANIM_SPEC 1-5 매개변수(Speed · Crouch · Aim · Fire · Hit · Die · DieIndex · Retreat)를 채운다. `AC_KPA` 등 Animator Controller · 임시 클립은 아직 없음
+  - 애니메이션 (2026-10-27): ANIM_SPEC 클립 27개를 **최종 파일명 · 폴더 그대로 그레이박스 FBX**로 넣음 (`tools/make_graybox_anim.py`: 뼈 3개 뼈대 · 제자리 · 요청서 길이 · 30fps). Unity 가져오기 설정: 클립 이름 = 파일명 · Loop Time · 이벤트(ANIM_SPEC 1-6 이름만: Fire · ClipInsert · BoltRelease · ReloadDone · RocketInsert · EquipDone · UnequipDone · AmmoAdded · VoiceStart · Footstep · ClipRemove)를 `.meta`에 → 최종 FBX로 덮어써도 남음 (메뉴 `FiveRivers/Setup/Animation Graybox + Controllers`, 처음 한 번만 설정 · 이후 손댄 것 보존)
+  - Animator Controller 4종 `AC_KPA` · `AC_ROK` · `AC_FP_M1` · `AC_FP_Bazooka` (ANIM_SPEC 1-5 매개변수 그대로, 상태 · 전이 포함, 없을 때만 생성). 코드: `EnemyAgent`(AC_KPA), `FirstPersonAnimatorBridge`(AC_FP_M1 · AC_FP_Bazooka, 사격 · 장전 · 전환 · 보충 · 달리기), `NarrativeDirector.parkAnimator`(AC_ROK Call) — **지금은 Animator를 프리팹에 붙이지 않음**(그레이박스 뼈대에 메시가 없어서). VARCO Humanoid 캐릭터 · 1인칭 팔 리그가 오면 Animator 컴포넌트를 붙이고 위 필드에 연결
+  - 테스트: `AnimSpecTests` 6개 (파일 하나에 클립 하나 · 클립 이름 = 파일명 · 루프 여부 · 이벤트 이름 · 컨트롤러 매개변수가 요청서와 정확히 같음 · 상태 Motion 연결) — 전체 71개 통과
   - ⚠ 파트 브랜치 규칙: art · animator · sound 브랜치는 에셋을 넣기 전에 `main`을 먼저 병합해야 그레이박스 파일 · .meta를 받는다 (CLAUDE.md "브랜치 운영")
   - 완료 조건: ART_SPEC · ANIM_SPEC · SOUND_LIST 표의 A 항목이 같은 이름 임시 파일로 들어가 있고 프리팹 · Animator · 사운드 라이브러리가 그 파일에 연결됨 (임시 사운드: graybox_audio.zip)
   - 이후 에셋 교체는 같은 경로 덮어쓰기 → 검수판 체크 → `MM.DD/Art|Anim|Sound/파일명Swap` 커밋

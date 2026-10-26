@@ -125,6 +125,12 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(resupplier, "player", controller);
             SetupUtil.SetRef(resupplier, "weapons", holder);
 
+            // 1인칭 Animator 연결 (팔 · 무기 리그가 오면 m1Animator · bazookaAnimator를 채운다)
+            var fpAnim = player.AddComponent<FirstPersonAnimatorBridge>();
+            SetupUtil.SetRef(fpAnim, "player", controller);
+            SetupUtil.SetRef(fpAnim, "weapons", holder);
+            SetupUtil.SetRef(fpAnim, "resupplier", resupplier);
+
             return controller;
         }
 
