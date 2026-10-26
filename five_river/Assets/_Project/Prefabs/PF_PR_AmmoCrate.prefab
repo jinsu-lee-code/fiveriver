@@ -100,7 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7087455446541753648}
   - component: {fileID: 4054192802363740825}
-  - component: {fileID: 1541463774398973363}
+  - component: {fileID: 6658316106084337885}
   m_Layer: 0
   m_Name: PF_PR_AmmoCrate
   m_TagString: Untagged
@@ -146,7 +146,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.3, z: 0.4}
   m_Center: {x: 0, y: 0.15, z: 0}
---- !u!114 &1541463774398973363
+--- !u!114 &6658316106084337885
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -361,6 +361,8 @@ namespace FiveRivers.EditorTools
                 GrayboxAssets.Part(model, PrimitiveType.Cube, "Stake", new Vector3(0, 0.6f, 0.04f), new Vector3(0.08f, 1.2f, 0.06f), GrayboxAssets.Wood);
                 GrayboxAssets.Part(model, PrimitiveType.Cube, "Board", new Vector3(0, 1.1f, 0), new Vector3(0.5f, 1.2f, 0.05f), GrayboxAssets.Target);
             });
+            // 밤에도 찾을 수 있는 흰 표식 (GDD 7번 "어둠에도 구분") — 앞면(+Z)
+            GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Mark", new Vector3(0, 1.35f, 0.03f), new Vector3(0.18f, 0.18f, 0.01f), GrayboxAssets.Marker);
             return root;
         });
 

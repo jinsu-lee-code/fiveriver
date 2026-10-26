@@ -21,10 +21,15 @@ namespace FiveRivers.DebugTools
 
         readonly StringBuilder report = new StringBuilder();
         int failures;
+        Color nightFog;
 
         void Start()
         {
-            if (!System.Environment.GetCommandLineArgs().Contains(Arg)) return;
+            var args = System.Environment.GetCommandLineArgs();
+            if (!args.Contains(Arg)) return;
+            // -fiverivers-smoke-runs 10 : 회차 수 (2-6 합격 기준 10회)
+            int i = System.Array.IndexOf(args, "-fiverivers-smoke-runs");
+            if (i >= 0 && i + 1 < args.Length && int.TryParse(args[i + 1], out int n)) runs = n;
             StartCoroutine(Run());
         }
 
@@ -40,7 +45,9 @@ namespace FiveRivers.DebugTools
             var weapons = FindFirstObjectByType<WeaponHolder>();
             var player = FindFirstObjectByType<PlayerController>();
             var points = FindFirstObjectByType<LevelPoints>();
-            Log($"smoke start {System.DateTime.Now:yyyy-MM-dd HH:mm:ss} version {Application.version} speed x{speed}");
+            Log($"smoke start {System.DateTime.Now:yyyy-MM-dd HH:mm:ss} version {Application.version} speed x{speed} runs {runs}");
+            nightFog = RenderSettings.fogColor;
+            long memoryStart = System.GC.GetTotalMemory(true);
             yield return new WaitForSecondsRealtime(2f);
 
             for (int run = 1; run <= runs; run++)
@@ -54,6 +61,9 @@ namespace FiveRivers.DebugTools
                 Check(run, "no enemies", enemies.AliveCount == 0);
                 Check(run, "tank hidden", !tank.Visible);
                 Check(run, "assist off", !flow.Checkpoints.AssistApplied);
+                Check(run, "effects cleared", FindFirstObjectByType<Effects>().Container.childCount == 0);
+                Check(run, "night lighting", RenderSettings.fogColor == nightFog);
+                Check(run, "time scale", Time.timeScale == speed);
 
                 flow.ReportGoalMet(FlowSection.Tutorial);
                 while (flow.Section == FlowSection.Scout || flow.Section == FlowSection.Assault)
@@ -77,6 +87,8 @@ namespace FiveRivers.DebugTools
                 Log($"run {run} done: run time {flow.RunTime:0.0}s");
             }
 
+            long memoryEnd = System.GC.GetTotalMemory(true);
+            Log($"managed memory {memoryStart / 1048576f:0.0}MB -> {memoryEnd / 1048576f:0.0}MB, objects {FindObjectsByType<GameObject>(FindObjectsSortMode.None).Length}");
             Log(failures == 0 ? "RESULT PASS" : $"RESULT FAIL ({failures})");
             File.WriteAllText(Path.Combine(Path.GetDirectoryName(Application.dataPath) ?? ".", "smoke_report.txt"), report.ToString());
             Application.Quit();
