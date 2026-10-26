@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f1f510ac0af8c4f8efccb23be61d21, type: 3}
+  m_Name: FlareConfig
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.FlareConfig
+  scoutFlareDelay: 8
+  assaultFirstDelay: 5
+  assaultInterval: 24
+  burnTime: 16
+  fadeTime: 3
+  launchHeight: 45
+  fallSpeed: 1.6
+  swayAmplitude: 1.5
+  lightIntensity: 1500
+  lightRange: 110

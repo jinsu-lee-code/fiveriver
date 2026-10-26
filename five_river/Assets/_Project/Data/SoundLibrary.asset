@@ -1,0 +1,553 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beea1082806cad1448644698ad049aba, type: 3}
+  m_Name: SoundLibrary
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.SoundLibrary
+  entries:
+  - id: SFX_M1_Fire
+    clips:
+    - {fileID: 8300000, guid: 58037d8e88cf0e843b544e06e91ec06c, type: 3}
+    - {fileID: 8300000, guid: 17e3aa86d52344c4b8fe984a0b76b0c8, type: 3}
+    - {fileID: 8300000, guid: c6d7d11420a892141b826e70d94e56cd, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_M1_Ping
+    clips:
+    - {fileID: 8300000, guid: 263b5ba0e0ef6d6498df11697612d6fb, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_M1_ClipInsert
+    clips:
+    - {fileID: 8300000, guid: 532cd079bbceee540a61ece9d88e3c5c, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_M1_ClipRemove
+    clips:
+    - {fileID: 8300000, guid: 3f461de4aefac9a4f9d5c84a47edbbdb, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_M1_DryFire
+    clips:
+    - {fileID: 8300000, guid: 1fd295dca9d67b94ab8c4925ccf8bcdc, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Weapon_Switch
+    clips:
+    - {fileID: 8300000, guid: 61abcbf184c42c24488f74fbb646f7be, type: 3}
+    - {fileID: 8300000, guid: 3cdeceab3bef94849ae791840ca96488, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Bazooka_Fire
+    clips:
+    - {fileID: 8300000, guid: 316af7e216db0aa4ea946bed894588f5, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Bazooka_Load
+    clips:
+    - {fileID: 8300000, guid: e2fd8362975bfdb45b8385b04c683057, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Rocket_HitSide
+    clips:
+    - {fileID: 8300000, guid: c7a60972debacb7409ada552467e1408, type: 3}
+    - {fileID: 8300000, guid: ec9bf4e578b542f41bb337a61c71f38f, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 250
+    loop: 0
+    cooldown: 0
+  - id: SFX_Tank_Ricochet
+    clips:
+    - {fileID: 8300000, guid: d6085079c6a42924d83029b818a51e1b, type: 3}
+    - {fileID: 8300000, guid: 85bb6416199b1654ebd7f1cc6f90bd1d, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 250
+    loop: 0
+    cooldown: 0
+  - id: SFX_Enemy_RifleFire
+    clips:
+    - {fileID: 8300000, guid: eb3b4196004cb634dabbb513c2f656e6, type: 3}
+    - {fileID: 8300000, guid: 2bfcf74fc0ea3814a8ef08af295c5259, type: 3}
+    - {fileID: 8300000, guid: 9a7f4a5023fd8754181abf1753afd8c5, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 200
+    loop: 0
+    cooldown: 0
+  - id: SFX_Enemy_SMG
+    clips:
+    - {fileID: 8300000, guid: 7d185fa09500d8340b605781bdf85862, type: 3}
+    - {fileID: 8300000, guid: fc4e9636ba99b584a9acbc94d524b1b7, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 200
+    loop: 0
+    cooldown: 0
+  - id: SFX_Bullet_Whiz
+    clips:
+    - {fileID: 8300000, guid: d99b6df0e404ac44da5ac424be9a02e8, type: 3}
+    - {fileID: 8300000, guid: 99feaf48e305ade48955376ec27c46ed, type: 3}
+    - {fileID: 8300000, guid: 9e86e19a905be944cb2700bffd9f05ed, type: 3}
+    - {fileID: 8300000, guid: 956bcaa6a38182248980ab70cac955f6, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0.15
+  - id: SFX_Impact_Dirt
+    clips:
+    - {fileID: 8300000, guid: ece797a1c0fbed748a38ce6a05fb5364, type: 3}
+    - {fileID: 8300000, guid: 298793441da07f544bd4aaef52ab8783, type: 3}
+    - {fileID: 8300000, guid: ae7c6fd412ad2b142a913c507afd9518, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 60
+    loop: 0
+    cooldown: 0.05
+  - id: SFX_Player_Hit
+    clips:
+    - {fileID: 8300000, guid: ef1a463c7815df74eace8616ff753f33, type: 3}
+    - {fileID: 8300000, guid: 4e36f4fd1f0f6574684789a9af4f8790, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Tank_EngineIdle_Loop
+    clips:
+    - {fileID: 8300000, guid: 9c7b552181533f54f9290122d6cc70c5, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 180
+    loop: 1
+    cooldown: 0
+  - id: SFX_Tank_Move_Loop
+    clips:
+    - {fileID: 8300000, guid: 4401598ee1e83ce4c87fff4c93d77b8e, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 180
+    loop: 1
+    cooldown: 0
+  - id: SFX_Tank_Turret_Loop
+    clips:
+    - {fileID: 8300000, guid: d54fabbf8c75d004a8eef755e4fe5096, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 80
+    loop: 1
+    cooldown: 0
+  - id: SFX_Tank_Cannon
+    clips:
+    - {fileID: 8300000, guid: 87613885d83d626498a58ad03015e382, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 300
+    loop: 0
+    cooldown: 0
+  - id: SFX_Tank_MG
+    clips:
+    - {fileID: 8300000, guid: 27e8113478477d343bbf9e8a6c82194b, type: 3}
+    - {fileID: 8300000, guid: bcbf0890077138541a7e51bfe7490857, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 200
+    loop: 0
+    cooldown: 0
+  - id: SFX_Tank_Smoke_Loop
+    clips:
+    - {fileID: 8300000, guid: a5d1ab7486520604996e831a3573e956, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 60
+    loop: 1
+    cooldown: 0
+  - id: SFX_Tank_Fire_Loop
+    clips:
+    - {fileID: 8300000, guid: 6da89f4834d3a544f99c86e57c799f47, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 100
+    loop: 1
+    cooldown: 0
+  - id: SFX_Tank_EngineStall
+    clips:
+    - {fileID: 8300000, guid: f7c5b036f55e4894cb75aeceb98ee992, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 180
+    loop: 0
+    cooldown: 0
+  - id: SFX_Flare_Launch
+    clips:
+    - {fileID: 8300000, guid: 935876e020c727345ba1e6a2a9f02a0e, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Flare_Burn_Loop
+    clips:
+    - {fileID: 8300000, guid: 6347d0d4d48e67d4fba50a13a9ef3cc5, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0
+  - id: SFX_Artillery_Distant
+    clips:
+    - {fileID: 8300000, guid: f72350dd7731393459410cc403958a48, type: 3}
+    - {fileID: 8300000, guid: 550d88d601118ba41b0741b59e49826a, type: 3}
+    - {fileID: 8300000, guid: ed07d5c65a0474f409cd383a2f83a82e, type: 3}
+    bus: 0
+    volume: 0.6
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Foot_Dirt
+    clips:
+    - {fileID: 8300000, guid: ff873de79794d4f429a3ed4083417aff, type: 3}
+    - {fileID: 8300000, guid: 38c6b8faf85039543b8a8d8952f300bd, type: 3}
+    - {fileID: 8300000, guid: a09e3d8dba94ffb4b8661cc0b4bd776d, type: 3}
+    - {fileID: 8300000, guid: cb2566f025515ca4db0d40a14db8e6bb, type: 3}
+    bus: 0
+    volume: 0.5
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Foot_Dirt_Run
+    clips:
+    - {fileID: 8300000, guid: 16804f7536bee6f45a6ff0af83ff7029, type: 3}
+    - {fileID: 8300000, guid: 113bae22461b52949b1b88657171d88b, type: 3}
+    - {fileID: 8300000, guid: 4cc377d88eab1694bb567a3ba317c5ca, type: 3}
+    - {fileID: 8300000, guid: 57a4f8e3cdfbdbd4bb8872868f633498, type: 3}
+    bus: 0
+    volume: 0.6
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Stance_Change
+    clips:
+    - {fileID: 8300000, guid: 8f334b79ddd642143b22a5a4ae716395, type: 3}
+    - {fileID: 8300000, guid: f2f250b8c353469419d22bd51a4af1ae, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Ammo_Pickup
+    clips:
+    - {fileID: 8300000, guid: e82e6a9c7952d674a992337b19254bde, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: AMB_Night_Hills_Loop
+    clips:
+    - {fileID: 8300000, guid: d9e12572f7b18d1478183bb7d7d2b785, type: 3}
+    bus: 1
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0
+  - id: AMB_Battle_Distant_Loop
+    clips:
+    - {fileID: 8300000, guid: 98cd780b919a2274a9ec0b31025e0030, type: 3}
+    bus: 1
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0
+  - id: AMB_Silence_Loop
+    clips:
+    - {fileID: 8300000, guid: ad3d848e91f28874789077f75ab76900, type: 3}
+    bus: 1
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0
+  - id: AMB_Dawn_Loop
+    clips:
+    - {fileID: 8300000, guid: 209e139cf47d40b43b5e2bdd2a2a7b72, type: 3}
+    bus: 1
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0
+  - id: BGM_Title_Loop
+    clips:
+    - {fileID: 8300000, guid: 4e20834f088d8954a8bd7c5f91600428, type: 3}
+    bus: 2
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0
+  - id: BGM_Combat_Bed_Loop
+    clips:
+    - {fileID: 8300000, guid: 6c17e5a2434b59f47a7b24f2512bf677, type: 3}
+    bus: 2
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0
+  - id: BGM_Ending
+    clips:
+    - {fileID: 8300000, guid: 3f55aa58040be7a4ba253a678ec3e03a, type: 3}
+    bus: 2
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: UI_Objective_Show
+    clips:
+    - {fileID: 8300000, guid: 3bbe98e253aa2494f9f49af065d205f8, type: 3}
+    bus: 4
+    volume: 0.5
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: UI_Hint_Show
+    clips:
+    - {fileID: 8300000, guid: af2e22afdf821d24f8594f55ec2a9754, type: 3}
+    bus: 4
+    volume: 0.5
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: UI_Menu_Click
+    clips:
+    - {fileID: 8300000, guid: bfdd3ce1824b1274e9bd03553499401e, type: 3}
+    bus: 4
+    volume: 0.5
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_OSG_Hurt
+    clips:
+    - {fileID: 8300000, guid: ec137e161d601ed4ea84c5c8d56b7dcb, type: 3}
+    - {fileID: 8300000, guid: 45352797f3ef2854b96c093bc82a47d3, type: 3}
+    - {fileID: 8300000, guid: 1cb46555c302bf64e97bdb90a9f7429a, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0.5
+  - id: VO_SQD_Scout_01
+    clips:
+    - {fileID: 8300000, guid: 03dac4babd73832498ba49143d6c8acd, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_SQD_Flare_01
+    clips:
+    - {fileID: 8300000, guid: 51d530884052ccc47b53242c3186afe9, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_SQD_Flare_02
+    clips:
+    - {fileID: 8300000, guid: ef619185d5892ab41aa6f93aa675a074, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_SQD_Retreat_01
+    clips:
+    - {fileID: 8300000, guid: 1365781d91efaf545b8b106cd4604f33, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_PARK_Call_01
+    clips:
+    - {fileID: 8300000, guid: 58fe61e1920084b45ba2070edca85e75, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_PARK_Call_02
+    clips:
+    - {fileID: 8300000, guid: f807c5eaaeeafd244b27c0784785fd01, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_SQD_Tank_01
+    clips:
+    - {fileID: 8300000, guid: 463c70b1156029145af13864409c6272, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_SQD_Tank_02
+    clips:
+    - {fileID: 8300000, guid: 495ac394fa38b9447a90052fd8a6cc9e, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_SQD_Ally_01
+    clips:
+    - {fileID: 8300000, guid: d3d3827fa570e7840b663e25c4087337, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: VO_KPA_Shout
+    clips:
+    - {fileID: 8300000, guid: 7344b43a87b3aa048b0bb2ecab2ddd11, type: 3}
+    - {fileID: 8300000, guid: d2860199ab6fce04e9b634359504fb70, type: 3}
+    - {fileID: 8300000, guid: 2eb2d952275fbef4e88165c9b83b0f21, type: 3}
+    bus: 3
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 150
+    loop: 0
+    cooldown: 4

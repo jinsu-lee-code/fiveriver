@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3737c78c4c645924a8bf4a337811e1b1, type: 3}
+  m_Name: AudioConfig
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.AudioConfig
+  master: 1
+  sfx: 0.9
+  amb: 0.6
+  bgm: 0.6
+  vo: 1
+  ui: 0.6
+  duckDb: -8
+  duckFade: 0.25
+  walkStride: 1.6
+  runStride: 2.2
+  artilleryMin: 12
+  artilleryMax: 25

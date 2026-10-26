@@ -24,11 +24,28 @@
 - 그레이박스가 아직 `main`에 없는 에셋은 파트 브랜치에서 새로 추가해도 된다. 이 경우 `main`에서 같은 파일을 따로 만들지 않고 파트 브랜치를 먼저 병합한다.
 - 파트 브랜치에서는 코드 · 씬 · 프리팹을 고치지 않는다 (연결은 `main`에서).
 - 커밋 메시지: 파트 브랜치는 `MM.DD/Art|Anim|Sound/파일명Swap`, `main` 병합은 `MM.DD/Merge/Art|Anim|Sound`.
+- 그레이박스 에셋 (2026-10-27): 모델은 `tools/make_graybox_fbx.py`(백그라운드 Blender), 음성은 `tools/make_graybox_vo.ps1`(Windows 한국어 음성), 효과음 · 환경음 · 음악은 Setup 메뉴 `Audio Graybox + Sound Library`가 만든다. 셋 다 **없는 파일만** 만들므로 최종본을 덮어쓰지 않는다.
+- 최종 FBX를 넣은 뒤에는 EditMode 테스트 `ArtSpecTests`(부품 이름 · 슬롯 · 크기 · 축)와 `SoundAndTextTests`(소리 연결)를 돌려 요청서 규칙을 확인한다.
+
+## 에디터 메뉴 (FiveRivers)
+| 메뉴 | 하는 일 |
+|---|---|
+| Setup/Dabudong Scene | 수치 에셋(없을 때만) → 맵 → 시스템 → 플레이어 → 적 · 조명탄 → 전차 → UI · 연출 → 소리를 다시 만들고 연결 (멱등, 편집 모드에서만) |
+| Setup/Rebuild Graybox Prefabs (FBX) | 그레이박스 프리팹을 FBX 기반으로 다시 만든 뒤 위 메뉴 실행 |
+| Setup/Import TMP Essentials | TextMeshPro 필수 리소스를 창 없이 가져오기 (처음 한 번) |
+| Setup/Audio Graybox + Sound Library | 없는 그레이박스 소리 합성 + SoundLibrary 채우기 |
+| Setup/Create Missing Data Assets | 없는 수치 에셋만 BALANCE 1차 값으로 만들기 |
+| Dev/Run EditMode Tests | 테스트 → `Temp/fiveriver_tests.txt` |
+| Dev/Capture Map Views | 맵 확인 캡처 → `Temp/captures/` |
+| Build/Windows Development · Release | 실행 빌드 → `five_river/Builds/`, 요약 `Temp/fiveriver_build.txt` |
+- 개발 빌드 점검: `FiveRivers.exe -fiverivers-smoke` → 3회 자동 완주 후 `smoke_report.txt`
+- 디버그 창: 에디터 · 개발 빌드에서 F1
 
 수치는 BALANCE.md와 데이터 에셋 기준이며 코드에 임의로 넣지 않는다.
 
 ## 작업 원칙
 - 한 번에 하나의 기능 단위만. TASKS.md의 현재 항목만 구현한다.
+- 측정 봇은 만들지 않는다 (2026-10-26). 빠른 확인은 디버그 창(TASKS 1-1b)으로 한다.
 - 요청받지 않은 시스템은 미리 만들지 않는다. 특히 GDD 9번 "범위 제외" 항목(최만수 생전 대화 · 서쪽 2차 공세 · 새 무기 · 새 맵 · 혹한 · 분대 명령 · 복잡한 자동 시연)은 이번 데모에서 만들지 않는다.
 - ~~기존 제작물을 재사용한다~~ → 2026-10-26 폐기 (새 프로젝트로 새로 만든다). 요청서의 "기존 재사용 우선"은 그다음 방법(VARCO · Blender)으로 바로 간다. 새로 만든 코드도 동작하면 요청 없이 구조를 바꾸지 않는다.
 - 구현 후 확인 방법(어느 씬에서 · 무엇을 눌러 · 무엇이 보이면 정상)을 함께 설명한다.
@@ -53,7 +70,7 @@
 - UI: uGUI 2.0.0, 텍스트: TextMeshPro (uGUI 2.0 포함), 글꼴은 OFL 무료 글꼴만 (ART_SPEC `FONT_`)
 - 기타: AI Navigation 2.0.14 (적 이동 NavMesh), Test Framework 1.6.0, Timeline 1.8.13
 - 기준 해상도: 1920×1080, 목표 평균 60fps (실제 시연 PC 기준)
-- 버전 관리: 저장소 루트 = `five river/fiveriver/`, Unity 프로젝트 = `five_river/`, 브랜치는 아래 "브랜치 운영". 원격: ⬜ GitHub Desktop에서 Publish 전
+- 버전 관리: 저장소 루트 = `five river/fiveriver/`, Unity 프로젝트 = `five_river/`, 브랜치는 아래 "브랜치 운영". 원격: `origin` = https://github.com/jinsu-lee-code/fiveriver (2026-10-26 Publish, 네 브랜치 모두 추적)
 - git: PATH에 없음 → GitHub Desktop 내장 `%LOCALAPPDATA%\GitHubDesktop\app-3.6.6\resources\app\git\cmd\git.exe`
 
 ## 폴더 구조
@@ -71,14 +88,15 @@ Assets/
       Debug/           개발 빌드 전용 (구간 이동 · 시간 강제 · 회차 기록기)
     Data/              수치 에셋 (BALANCE.md와 1:1)
     Prefabs/
-    Scenes/
+    Scenes/            Dabudong.unity (유일한 빌드 씬: 타이틀 ~ 결과 화면)
     Art/
     Audio/
   Tests/EditMode/      순수 로직 단위 테스트
 ```
 
 ## 코딩 규칙
-- 네임스페이스: ⬜ (예: `FiveRivers.Core`, `FiveRivers.Combat`)
+- 네임스페이스: `FiveRivers.Core` · `FiveRivers.Combat` · `FiveRivers.Tutorial` · `FiveRivers.Narrative` · `FiveRivers.UI` · `FiveRivers.Data` · `FiveRivers.DebugTools`, 테스트 `FiveRivers.Tests` (결정 2026-10-26). `Debug` 대신 `DebugTools`를 쓴다(`UnityEngine.Debug`와 이름 충돌 방지)
+- 어셈블리: 게임 코드 `FiveRivers`(1-1에서 생성), 테스트 `FiveRivers.Tests.EditMode`(`Assets/Tests/EditMode/`, Editor 전용)
 - **새로 만드는 진행 · 시간 상한 로직은 순수 C#**(MonoBehaviour 의존 없음)으로 쓰고 단위 테스트를 붙인다. 엔진 컴포넌트는 이벤트를 구독해 표시만 하는 얇은 어댑터로 둔다.
 - 시간 상한 · 구간 상한 · 실패 보조 계수 · 전차 재시도 시간 · 결과 화면 배분 · 힌트 시간은 모두 데이터 에셋(ScriptableObject)에 둔다.
 - 회차 시간은 실시간 누적이다. 시작 버튼부터 사망 · 재시도 · 일시정지를 모두 포함한다. `Time.timeScale`을 바꿔도 회차 시계가 멈추지 않게 unscaled 시간으로 잰다.
@@ -105,6 +123,8 @@ Assets/
 - 자막: 1920×1080 기준 28~32px로 시작, 2줄 이내, 행동 목표와 서사 자막은 위치를 분리한다.
 - 대사 중 효과음을 낮춘다. 최종 음량은 실제 시연 장비(헤드폰)로 조정한다.
 - 성능 확인 구간: 조명탄 · 최대 적 수 · 전차 화재.
+- **UI 레퍼런스 (결정 2026-10-27, 사용자 지시)**: 콜 오브 듀티 모던 워페어 최신작의 HUD 방식 — 흰 글자 · 얇은 선 · 구석 배치 · 반투명 띠 · 강조색 한 가지(`UiStyle`). 화면 구성 · 스타일만 참고하고 로고 · 아이콘 · 글꼴 등 에셋은 쓰지 않는다. 점수 · 킬 카운트 · 히트마커 금지(핵심 설계 규칙 6)가 우선.
+- 화면 문구는 `Data/GameText.asset`에만 둔다. 안내 키 표시는 `GameControls.KeyLabel`로 실제 바인딩을 읽는다.
 
 ## 커밋 규칙
 - 한 항목 = 한 커밋, 수정은 `…Fix`.
