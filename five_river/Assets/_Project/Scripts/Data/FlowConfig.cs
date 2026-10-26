@@ -16,6 +16,13 @@ namespace FiveRivers.Data
         public float dawnDuration;
         public float resultDuration;
 
+        [Header("기준 길이 (초) : BALANCE 1-1, 디버그 구간 바로가기의 기준 시각")]
+        public float s1Base;
+        public float s2Base;
+        public float s3Base;
+        public float s4Base;
+        public float s5Base;
+
         [Header("전체 상한 · 강제 전환 (회차 시각, 초) : BALANCE 1-3")]
         public float forceTankAt;
         public float forcedSilence;

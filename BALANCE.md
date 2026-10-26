@@ -8,13 +8,13 @@
 ## 1. 시간
 
 ### 1-1. 구간 시간
-| 구간 | 기준 시각 | 기준 길이 | 구간 상한 | 데이터 키 |
+| 구간 | 기준 시각 | 기준 길이 | 구간 상한 | 데이터 키 (상한 / 기준 길이) |
 |---|---|---|---|---|
-| S1 조작 학습 | 0:00~1:15 | 75초 | 105초 | `FlowConfig.s1Cap` |
-| S2 첫 교전 | 1:15~2:00 | 45초 | 60초 | `FlowConfig.s2Cap` |
-| S3 주 공세 | 2:00~4:00 | 120초 | 150초 | `FlowConfig.s3Cap` |
-| S4 재정비 · 정적 | 4:00~4:40 | 40초 | 20~40초 | `FlowConfig.s4Min / s4Max` |
-| S5 전차 | 4:40~6:20 | 100초 | 140초 (재시도 포함) | `FlowConfig.s5Cap` |
+| S1 조작 학습 | 0:00~1:15 | 75초 | 105초 | `FlowConfig.s1Cap` / `s1Base` |
+| S2 첫 교전 | 1:15~2:00 | 45초 | 60초 | `FlowConfig.s2Cap` / `s2Base` |
+| S3 주 공세 | 2:00~4:00 | 120초 | 150초 | `FlowConfig.s3Cap` / `s3Base` |
+| S4 재정비 · 정적 | 4:00~4:40 | 40초 | 20~40초 | `FlowConfig.s4Min / s4Max` / `s4Base` |
+| S5 전차 | 4:40~6:20 | 100초 | 140초 (재시도 포함) | `FlowConfig.s5Cap` / `s5Base` |
 | S6 새벽 | 6:20~6:40 | 20초 | 20초 | `FlowConfig.dawnDuration` |
 | S7 결과 | 6:40~7:00 | 20초 | 20초 | `FlowConfig.resultDuration` |
 

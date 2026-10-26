@@ -20,6 +20,11 @@ MonoBehaviour:
   s5Cap: 140
   dawnDuration: 20
   resultDuration: 20
+  s1Base: 75
+  s2Base: 45
+  s3Base: 120
+  s4Base: 40
+  s5Base: 100
   forceTankAt: 420
   forcedSilence: 20
   tankEntryDeadline: 445

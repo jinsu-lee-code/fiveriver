@@ -25,6 +25,7 @@ namespace FiveRivers.Core
         ForcedEnding = 6, // 8:15 강제 전환
         HardCap = 7,      // 9:00 절대 상한 (안전장치)
         Abort = 8,        // 운영자 재시작
+        DebugJump = 9,    // 디버그 창 구간 바로가기 (에디터 · 개발 빌드)
     }
 
     public readonly struct FlowTransition

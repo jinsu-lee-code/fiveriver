@@ -1,7 +1,9 @@
 {
     "name": "FiveRivers",
     "rootNamespace": "FiveRivers",
-    "references": [],
+    "references": [
+        "Unity.InputSystem"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

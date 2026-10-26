@@ -268,6 +268,33 @@ namespace FiveRivers.Tests
             AssertTransition(log.Last(), TransitionReason.Abort, 30);
         }
 
+        [Test]
+        public void DebugJumpToTank_MovesClockToBaselineStart()
+        {
+            flow.DebugJumpTo(FlowSection.Tank);
+            Assert.AreEqual(FlowSection.Tank, flow.Section);
+            Assert.AreEqual(280, flow.RunTime, Eps);
+            AssertTransition(log.Last(), TransitionReason.DebugJump, 280);
+            flow.ReportGoalMet(FlowSection.Tank); // 280초에 바로 정지 → 새벽 20 + 결과 20
+            RunToEnd();
+            AssertTransition(log.Last(), TransitionReason.Timer, 320);
+        }
+
+        [Test]
+        public void DebugJumpBackwards_ClearsEndingState()
+        {
+            flow.StartRun();
+            flow.DebugJumpTo(FlowSection.Dawn);
+            Assert.IsTrue(flow.EndingStarted);
+            Assert.AreEqual(380, flow.RunTime, Eps);
+            flow.DebugJumpTo(FlowSection.Scout);
+            Assert.IsFalse(flow.EndingStarted);
+            Assert.IsFalse(flow.CombatLocked);
+            Assert.AreEqual(75, flow.RunTime, Eps);
+            RunToEnd();
+            Assert.AreEqual(2, Count(FlowSection.Dawn)); // 바로가기 1 + 실제 진행 1
+        }
+
         // 무작위 플레이(보고 시각 · 미보고 · 일시정지 · 프레임 길이) 300회에서 불변 조건이 지켜지는지
         [Test]
         public void RandomRuns_KeepInvariants()

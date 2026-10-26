@@ -99,6 +99,40 @@ namespace FiveRivers.Core
             sectionStart += delta;
             if (silenceGoalAt >= 0) silenceGoalAt += delta;
         }
+
+        // 구간 바로가기. 회차 시계를 기준 흐름의 그 구간 시작 시각으로 옮긴다 (BALANCE 1-1 기준 길이).
+        public void DebugJumpTo(FlowSection section)
+        {
+            if (section == FlowSection.Title)
+            {
+                AbortToTitle();
+                return;
+            }
+            if (!IsRunning) StartRun();
+            double time = BaselineStart(section);
+            clock.DebugSet(time);
+            Paused = false;
+            TutorialTimedOut = false;
+            ForcedTankTriggered = time >= config.forceTankAt;
+            ForcedEndingTriggered = false;
+            EndingStarted = false;
+            Enter(section, TransitionReason.DebugJump);
+            AdvanceTo(time);
+        }
+
+        public double BaselineStart(FlowSection section)
+        {
+            double t = 0;
+            if (section > FlowSection.Tutorial) t += config.s1Base;
+            if (section > FlowSection.Scout) t += config.s2Base;
+            if (section > FlowSection.Assault) t += config.s3Base;
+            if (section > FlowSection.Silence) t += config.s4Base;
+            // 아군 지원은 전차 상한까지 간 경우
+            if (section == FlowSection.AllySupport) t += config.s5Cap;
+            else if (section > FlowSection.Tank) t += config.s5Base;
+            if (section > FlowSection.Dawn) t += config.dawnDuration;
+            return t;
+        }
 #endif
 
         void AdvanceTo(double target)
