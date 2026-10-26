@@ -8,13 +8,13 @@
 ## 1. 시간
 
 ### 1-1. 구간 시간
-| 구간 | 기준 시각 | 기준 길이 | 구간 상한 | 데이터 키 |
+| 구간 | 기준 시각 | 기준 길이 | 구간 상한 | 데이터 키 (상한 / 기준 길이) |
 |---|---|---|---|---|
-| S1 조작 학습 | 0:00~1:15 | 75초 | 105초 | `FlowConfig.s1Cap` |
-| S2 첫 교전 | 1:15~2:00 | 45초 | 60초 | `FlowConfig.s2Cap` |
-| S3 주 공세 | 2:00~4:00 | 120초 | 150초 | `FlowConfig.s3Cap` |
-| S4 재정비 · 정적 | 4:00~4:40 | 40초 | 20~40초 | `FlowConfig.s4Min / s4Max` |
-| S5 전차 | 4:40~6:20 | 100초 | 140초 (재시도 포함) | `FlowConfig.s5Cap` |
+| S1 조작 학습 | 0:00~1:15 | 75초 | 105초 | `FlowConfig.s1Cap` / `s1Base` |
+| S2 첫 교전 | 1:15~2:00 | 45초 | 60초 | `FlowConfig.s2Cap` / `s2Base` |
+| S3 주 공세 | 2:00~4:00 | 120초 | 150초 | `FlowConfig.s3Cap` / `s3Base` |
+| S4 재정비 · 정적 | 4:00~4:40 | 40초 | 20~40초 | `FlowConfig.s4Min / s4Max` / `s4Base` |
+| S5 전차 | 4:40~6:20 | 100초 | 140초 (재시도 포함) | `FlowConfig.s5Cap` / `s5Base` |
 | S6 새벽 | 6:20~6:40 | 20초 | 20초 | `FlowConfig.dawnDuration` |
 | S7 결과 | 6:40~7:00 | 20초 | 20초 | `FlowConfig.resultDuration` |
 
@@ -22,14 +22,15 @@
 | # | 케이스 | 계산 | 기대 |
 |---|---|---|---|
 | T1 | 모든 구간이 상한까지 걸림 | S5 시작 105+60+150+40 = 355초(5:55) → 140초 상한 = 495초(8:15) → 지원 5 + 새벽 20 + 결과 20 | 9:00 Title 복귀, 결말 1회 |
-| T2 | 기준 흐름 | 75+45+120+40+100+20+20 = 420초 | 7:00 Title 복귀, 강제 전환 없음 |
+| T2 | 기준 흐름 | 75+45+120+40+100+20+20 = 420초 | 7:00 Title 복귀, 강제 전환 없음 (S4 기준 40초 = 상한이라 S4는 상한으로 끝남) |
 | T3 | 7:00에 S3 진행 중 | 7:00 공세 종료 → 정적 20초 → 7:20 S5 | S5 진입 ≤ 7:25 |
 | T4 | 8:15에 S5 진행 중 | 8:15 + 지원 5 + 새벽 20 + 결과 20 = 9:00 | 9:00 Title, 결말 1회 |
 | T5 | 8:15에 이미 S6 진행 중 | 아무 변화 없음 | 결말 중복 0 |
 | T6 | 6:50에 일시정지, 3분 방치 | 시계는 계속 흐름 | 7:00 · 8:15 전환 발생, 일시정지 해제 |
 | T7 | 결과 화면 배분 | 4+5+8+3 = 20초 | `resultDuration`과 일치 |
 
-> T1 참고: 모든 구간이 상한까지 걸리면 **S5 140초 상한과 8:15 강제 전환이 정확히 같은 시각(495초)에 만난다.** 두 규칙이 동시에 걸려도 아군 지원 · 결말이 한 번만 시작되는지를 T1에서 확인한다. 여유가 0초이므로 구간 상한을 늘리면 반드시 8:15 전환이 먼저 걸린다.
+> T1 → 2026-10-27 변경: 전차 시도 제한(1차 75 + 2차 45 = 120초)이 S5 상한 140초보다 먼저 걸린다. 모든 구간이 상한까지 걸리면 5:55 S5 → 7:10 재시도 → 7:55 아군 지원(2회 실패) → **8:40 Title**. 140초 상한과 8:15가 겹치는 경우는 시도 제한을 없앤 T1b로 검사한다. 9:00에 닿는 길은 S3 재시도로 7:00 강제 전환이 걸린 뒤 전차가 8:15를 넘기는 경우다.
+> (이전 T1 참고) 모든 구간이 상한까지 걸리면 **S5 140초 상한과 8:15 강제 전환이 정확히 같은 시각(495초)에 만난다.** 두 규칙이 동시에 걸려도 아군 지원 · 결말이 한 번만 시작되는지를 T1에서 확인한다. 여유가 0초이므로 구간 상한을 늘리면 반드시 8:15 전환이 먼저 걸린다.
 
 ### 1-3. 전체 상한 · 강제 전환
 | 항목 | 값 | 데이터 키 |
@@ -44,10 +45,12 @@
 ### 1-4. 결과 화면
 | 요소 | 시간 | 데이터 키 |
 |---|---|---|
-| 날짜 | 4초 | `ResultConfig.date` |
-| 이름 | 5초 | `ResultConfig.name` |
-| 편지 | 8초 | `ResultConfig.letter` |
-| 제목 | 3초 | `ResultConfig.title` |
+| 날짜 | 4초 | `ResultConfig.dateDuration` |
+| 이름 | 5초 | `ResultConfig.nameDuration` |
+| 편지 | 8초 | `ResultConfig.letterDuration` |
+| 제목 | 3초 | `ResultConfig.titleDuration` |
+
+데이터 위치: `Assets/_Project/Data/FlowConfig.asset` (1-1 · 1-3번), `Assets/_Project/Data/ResultConfig.asset` (1-4번). 키 이름은 `ResultConfig.name`이 Unity `Object.name`과 겹쳐 `…Duration`으로 정함 (2026-10-27).
 
 ## 2. 전투
 
@@ -57,14 +60,41 @@
 | 정찰병 (S2) | 2명 | `WaveConfig.scouts` |
 | 주 공세 신규 적 (S3) | 7명 + 생존 정찰병 | `WaveConfig.mainAssault` |
 | 동시 활동 적 상한 | 5명 | `WaveConfig.maxActive` |
-| 적 명중률 · 피해 기본값 | ⬜ 첫 구현 때 정함 (기존 프로토타입 미사용, 2026-10-26) | ⬜ |
+| 적 명중률 · 피해 기본값 | → 2026-10-27 1차 값: 어둠 0.10 / 조명탄 아래 0.35, Z 자세 ×0.25, 시야가 막히면(모래주머니 뒤) 무조건 빗나감, 피해 18 | `WaveConfig.accuracyDark` · `accuracyLit` · `crouchedFactor` · `damage` |
+| 출현 간격 · 체력 · 이동 · 철수 속도 | 3초 · 100(M1 한 발) · 3.4 · 4.8 m/s | `WaveConfig.spawnInterval` · `health` · `moveSpeed` · `retreatSpeed` |
+| 엄폐 유지 · 사격 간격 · 시야 거리 | 5~9초 뒤 더 가까운 엄폐물로(60%) · 2.6~4.2초 · 140 m | `WaveConfig.coverHoldMin/Max` · `fireIntervalMin/Max` · `sightRange` |
 
-### 2-2. 무기
+### 2-5. 조명탄 (2026-10-27 1차 값, `FlareConfig.asset`)
 | 항목 | 값 | 데이터 키 |
 |---|---|---|
-| M1 클립 | 8발 → 클립 배출 | ⬜ 첫 구현 때 정함 |
-| M1 예비탄 · 보충량 (F) | ⬜ | ⬜ |
-| 바주카 탄 수 (S5) | ⬜ (최소: 2회 시도 × 2발 + 여유) | ⬜ |
+| S2 첫 조명탄 | 시작 8초 뒤 1발 | `scoutFlareDelay` |
+| S3 첫 조명탄 · 간격 | 5초 뒤 · 24초마다 | `assaultFirstDelay` · `assaultInterval` |
+| 타는 시간 · 꺼지는 시간 | 16초 · 3초 (어두운 구간 약 5초 → 이동 · 보충 기회) | `burnTime` · `fadeTime` |
+| 높이 · 낙하 속도 · 흔들림 | 45 m · 1.6 m/s · 1.5 m | `launchHeight` · `fallSpeed` · `swayAmplitude` |
+| 밝기 · 범위 | 1500 · 110 m (URP 점광원, 화면으로 맞춤) | `lightIntensity` · `lightRange` |
+
+### 2-2. 무기 (2026-10-27 1차 값, 그레이박스 기준 · 관찰 테스트로 조정)
+| 항목 | 값 | 데이터 키 (`WeaponConfig.asset`) |
+|---|---|---|
+| M1 클립 | 8발 → 마지막 발에 클립 배출(핑) → 예비탄 있으면 자동 장전 | `m1ClipSize` |
+| M1 시작 예비탄 · 최대 예비탄 | 40 · 64 (F 보충 = 최대까지) | `m1StartReserve` · `m1MaxReserve` |
+| M1 발사 간격 · 피해 · 사거리 | 0.22초 · 100(적 한 발) · 250 m | `m1FireInterval` · `m1Damage` · `m1Range` |
+| M1 퍼짐 (허리 / 조준) · 반동 | 1.6° / 0.15° · 1.8° | `m1HipSpread` · `m1AimSpread` · `m1RecoilPitch` |
+| M1 장전 (빈 클립 / 잔탄) | 2.5초 / 3.2초 (ANIM_SPEC) | `m1ReloadEmptyTime` · `m1ReloadPartialTime` |
+| M1 꺼내기 · 집어넣기 | 0.5초 · 0.4초 | `m1EquipTime` · `m1UnequipTime` |
+| 시야각 (허리 / M1 조준 / 바주카 조준) · 조준 전환 | 70 / 50 / 55 · 0.18초 | `hipFov` · `m1AimFov` · `bazookaAimFov` · `aimBlendTime` |
+| 바주카 탄 수 (S5) | 5 (장전 1 + 예비 4: 2회 시도 × 2발 + 여유 1) | `bazookaRockets` |
+| 바주카 재장전 · 꺼내기 · 반동 | 2.2초 · 0.7초 · 4° | `bazookaReloadTime` · `bazookaEquipTime` · `bazookaRecoilPitch` |
+| 로켓 속도 · 수명 · 폭발 반경 · 폭발 피해(보병) | 60 m/s · 3초 · 3 m · 150 | `rocketSpeed` · `rocketLifetime` · `rocketBlastRadius` · `rocketBlastDamage` |
+| 탄약 보충 거리 | 2.2 m | `resupplyDistance` |
+
+### 2-4. 플레이어 (2026-10-27 1차 값, `PlayerConfig.asset`)
+| 항목 | 값 | 데이터 키 |
+|---|---|---|
+| 걷기 · 달리기 · 앉아 이동 · 조준 중 배율 | 3.2 · 5.6 · 1.7 m/s · ×0.6 | `walkSpeed` · `sprintSpeed` · `crouchSpeed` · `aimSpeedScale` |
+| 눈높이 (서기 / Z 자세) · 전환 속도 | 1.6 / 0.95 m · 4 m/s (참호 모래주머니 1.0 m 뒤에 숨음) | `standEyeHeight` · `crouchEyeHeight` · `stanceChangeSpeed` |
+| 마우스 감도 · 조준 중 배율 · 상하 한계 · 반동 회복 | 0.09°/px · ×0.6 · 80° · 10°/초 | `lookSensitivity` · `aimLookScale` · `pitchLimit` · `recoilRecovery` |
+| 체력 · 회복 시작 · 회복 속도 | 100 · 맞지 않고 4초 뒤 · 25/초 (초보 완주 우선) | `maxHealth` · `regenDelay` · `regenPerSecond` |
 
 ### 2-3. 전차 판정
 | 공격 | 반응 | 진행 |
@@ -72,7 +102,10 @@
 | 정면 | 도탄 | 효과 없음 |
 | 측면 1발 | 연기 | 1/2 |
 | 측면 2발 | 정지 · 화재 | 구간 완료 |
-| 측면 판정 각도 | ⬜ (화면상 측면과 일치하도록 정함) | `TankConfig.sideAngle` |
+| 측면 판정 각도 | 50° — 전차 정면 방향과 "전차 → 쏜 사람" 방향의 수평 각도가 50° 이상이면 측면 (2026-10-27 1차 값, 맵에서 참호는 정면 · 왼쪽 둔덕은 측면이 되도록 배치) | `TankConfig.sideAngle` |
+| 정지까지 측면 명중 | 2 | `TankConfig.hitsToStop` |
+| 접근 속도 · 포탑 회전 | 2.5 m/s → 2026-10-27 3.5 m/s (출발 z=150 → 110으로 당김: 정지 위치까지 40초 → 약 18초, 1차 시도 75초 안에 둔덕 이동 · 2발 여유) · 25 °/s | `TankConfig.approachSpeed` · `turretTurnSpeed` |
+| 주포 간격 · 피해 · 반경 · 빗나감 거리 | 9초 · 35 · 5 m · 6 m (플레이어 근처에 떨어지는 위협 사격) | `TankConfig.fireInterval` · `cannonDamage` · `cannonRadius` · `nearMissOffset` |
 
 ## 3. 실패 보조 · 재시도
 | 항목 | 값 | 데이터 키 |
@@ -80,6 +113,7 @@
 | 보조 발동 조건 | 같은 체크포인트 2회 실패 | `AssistConfig.failThreshold` |
 | 적 명중률 배율 | ×0.7 (1회만) | `AssistConfig.enemyAccuracy` |
 | 적 피해 배율 | ×0.8 (1회만) | `AssistConfig.enemyDamage` |
+| 전차 시도 실패 | 시도 제한 시간 초과 또는 사망 (결정 2026-10-27) | — |
 | 전차 1차 시도 제한 | 75초 | `TankConfig.attempt1` |
 | 전차 2차 시도 제한 | 45초 | `TankConfig.attempt2` |
 | 전차 아군 지원 조건 | 2회 실패 또는 구간 140초 초과 | `TankConfig.supportAfterFails`, `FlowConfig.s5Cap` |
@@ -92,7 +126,10 @@
 | 튜토리얼 상한 | 105초 (이후 미완료 행동은 힌트로 유지) | `FlowConfig.s1Cap` |
 | 자막 크기 | 28~32px @1920×1080 (시작값, 실제 장비로 조정) | `SubtitleConfig.fontSize` |
 | 서사 자막 줄 수 | 최대 2줄 | `SubtitleConfig.maxLines` |
-| 대사 중 효과음 덕킹 | ⬜ dB (실제 헤드폰으로 조정) | `AudioConfig.duckDb` |
+| 대사 중 효과음 덕킹 | ⬜ dB (실제 헤드폰으로 조정) → 2026-10-27 1차 −8 dB, 0.25초에 걸쳐 | `AudioConfig.duckDb` · `duckFade` |
+| 버스 볼륨 (전체 · 효과음 · 환경음 · 음악 · 음성 · UI) | 1 · 0.9 · 0.6 · 0.6 · 1 · 0.6 (2026-10-27 1차) | `AudioConfig.master` 등 |
+| 발걸음 간격 · 먼 포격 간격 | 걷기 1.6 m · 달리기 2.2 m · 12~25초 | `AudioConfig.walkStride` · `runStride` · `artilleryMin/Max` |
+| 튜토리얼 행동 판정 | 둘러보기 90° · 이동 2 m | `TutorialConfig.lookDegrees` · `moveMeters` |
 
 ## 5. 측정 기준선과 목표
 
