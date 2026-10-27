@@ -1,0 +1,14 @@
+추가 합격본 12개: AMB 환경음 / SFX 효과음, 영문과 밑줄, 단발·비루프 변형은 _01, 루프는 _Loop.
+음원 내용 변경 없음. 기존 게임 M1 파일 및 연결 변경 없음. 목록 밖 항목을 다른 소리로 임의 배정하지 않음.
+Supplemental_Approved/AMB_Dawn_Wind.wav → Supplemental_Approved/AMB_Dawn_Wind_01.wav
+Supplemental_Approved/AMB_Night.wav → Supplemental_Approved/AMB_Night_01.wav
+Supplemental_Approved/FOLEY_Footsteps_Dirt.wav → Supplemental_Approved/SFX_Foot_Dirt_Walk_01.wav
+Supplemental_Approved/SFX_Bullet_Pass.wav → Supplemental_Approved/SFX_Bullet_Pass_01.wav
+Supplemental_Approved/SFX_Click.wav → Supplemental_Approved/SFX_Click_01.wav
+Supplemental_Approved/SFX_Explosion_Field.wav → Supplemental_Approved/SFX_Explosion_Field_01.wav
+Supplemental_Approved/SFX_Flare_Ignition.wav → Supplemental_Approved/SFX_Flare_Ignition_01.wav
+Supplemental_Approved/SFX_M1_Fire.wav → Supplemental_Approved/SFX_M1_Fire_01.wav
+Supplemental_Approved/SFX_M1_Reload.wav → Supplemental_Approved/SFX_M1_Reload_01.wav
+Supplemental_Approved/SFX_Mosin_Fire.wav → Supplemental_Approved/SFX_Mosin_Fire_01.wav
+Supplemental_Approved/SFX_Player_Breath.wav → Supplemental_Approved/SFX_Player_Breath_01.wav
+Supplemental_Approved/VEH_GMC_Engine_Loop.wav → Supplemental_Approved/SFX_GMC_Engine_Loop.wav

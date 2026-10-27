@@ -9,3 +9,6 @@ Documentation: 출처·이용조건·판정 이력. 과거 이력에 포함된 �
 
 상업 사용 최신 판정: Documentation/상업이용_최종점검/상업이용_점검결과.html
 생성 요금제 증빙 대기 30개는 구독기간·생성계보 확인으로 해소. CC BY 2개의 필수 출처표기는 같은 폴더의 필수_출처표기.txt 참조. GeneralUser 음악의 원저자 유보 및 사용 범위는 보고서 참조.
+
+
+파일명 정리: Approved 폴더는 SOUND_LIST 정확한 이름만 포함합니다. 별도 합격 대안은 Approved_Alternatives, 리스트 외 합격본은 Supplemental_Approved에 있습니다. 합계49개 유지. 기존 출처 문서의 옛 이름은 Documentation/파일명_대응표.json으로 추적합니다.
