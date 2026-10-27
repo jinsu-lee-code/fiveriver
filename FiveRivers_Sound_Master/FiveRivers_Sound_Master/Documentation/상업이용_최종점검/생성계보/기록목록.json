@@ -1,0 +1,58 @@
+[
+  {
+    "document": "A_Source_Mapping.json",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_20261027\\Source_Mapping.json",
+    "sha256": "5072a0e2103e7dbc62d14d08577193cf9384db34fc0562545117e7735313ab2c",
+    "local_mtime": "2026-10-27T09:34:11.349432",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  },
+  {
+    "document": "A_생성대화.txt",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_20261027\\VARCO_Transcript.txt",
+    "sha256": "649387ff79dcde875a7d18b471ef16b1d4fbe4ba71c8f6742657d91910af73d4",
+    "local_mtime": "2026-10-27T09:34:42.036918",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  },
+  {
+    "document": "A_당시플랜기록.md",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_20261027\\README_먼저읽기.md",
+    "sha256": "bb8d7c0a1f8cff4bb72b25aab5e2a3d125fa9894cca7a860ab9d9e5117020add",
+    "local_mtime": "2026-10-27T09:36:04.512920",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  },
+  {
+    "document": "A_편집기록.json",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_20261027\\A_50_Status.json",
+    "sha256": "748ffe2ace9a314668c50f76c2970e1c5289985ce0cc29cb17a78504a0baf14f",
+    "local_mtime": "2026-10-27T09:35:28.575869",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  },
+  {
+    "document": "R3_생성대화.txt",
+    "source": "C:\\Users\\mbc\\Documents\\ChatGPT\\다섯개의강\\Sound_Transfer_20261027\\VARCO_R3_기록.txt",
+    "sha256": "19abe4f0dc0f2785ad3530d0a255571c29c3ed367a50186109104aa5d6d91c0b",
+    "local_mtime": "2026-10-27T10:13:18.332349",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  },
+  {
+    "document": "R3_편집기록.json",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\재제작_R3\\검사결과.json",
+    "sha256": "e6ff10615e3ab31d87a064f663613a32042e9fa3be2fe6e56a657c428fb05e0a",
+    "local_mtime": "2026-10-27T10:11:55.865353",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  },
+  {
+    "document": "R5_편집기록.json",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\추가수정_R5\\수정검사결과.json",
+    "sha256": "3954106e60716529cd03d708a14cba6a173d4f628dfd5a77addfa738c63d9db6",
+    "local_mtime": "2026-10-27T10:48:53.848488",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  },
+  {
+    "document": "R6_편집기록.json",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\게임용편집_R6\\편집검사결과.json",
+    "sha256": "c99e8041c4d9c41c5f8ce156c4b024fb6278f76f70c0e1dc32e1fc1e7b2eb932",
+    "local_mtime": "2026-10-27T11:36:39.777428",
+    "note": "로컬 파일 시간은 보조증거이며 서버 생성시각으로 간주하지 않음"
+  }
+]

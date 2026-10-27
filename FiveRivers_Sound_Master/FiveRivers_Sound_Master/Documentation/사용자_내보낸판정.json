@@ -1,0 +1,54 @@
+{
+  "SFX_Foot_Dirt_R16.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Tank_Fire_Loop_R16.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "BGM_Ending_R16.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Foot_Dirt_03.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Rocket_HitSide_01.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Enemy_RifleFire_02.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Impact_Dirt_02.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Player_Hit_01.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Tank_EngineStall.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Flare_Launch.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "SFX_Ammo_Pickup.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "AMB_Dawn_Loop.wav": {
+    "choice": "합격",
+    "note": ""
+  },
+  "UI_Objective_Show.wav": {
+    "choice": "합격",
+    "note": ""
+  }
+}

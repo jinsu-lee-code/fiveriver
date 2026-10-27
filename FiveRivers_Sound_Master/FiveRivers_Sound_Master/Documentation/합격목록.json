@@ -1,0 +1,384 @@
+[
+  {
+    "file": "AMB_Dawn_Wind.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\AMB_Dawn_Wind.wav",
+    "sha256": "1a7f4461305d740ab9bb9c7ed81c9afbe50bab2fa6fedb1653fa6a038c8e299b",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "AMB_Night.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\AMB_Night.wav",
+    "sha256": "2fb0659e7e1e2d5827d710d37c3d50d0d761c7967eeeae81f37066ef90e7d853",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "AMB_Silence_Loop.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\AMB_Silence_Loop.wav",
+    "sha256": "fffd4c43c46f730ccfe3eb9fd62bbf6d3a86b172ca43c56479ef2408ba19c54f",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "FOLEY_Footsteps_Dirt.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\FOLEY_Footsteps_Dirt.wav",
+    "sha256": "60a461f3d44a9dd369110c95f84349203fc212e35c7a69ab986de0a15e8c7fb5",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Bazooka_Fire.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Bazooka_Fire.wav",
+    "sha256": "9b1c6a7d4daae1ff9551776f4e03a090e180fa6635ac95a25b9923819a2069f0",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Bazooka_Load.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Bazooka_Load.wav",
+    "sha256": "b6067fcd8f870ae8f55f76725a13e25f50e16c72811c3128126b9543f46c8301",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Bullet_Pass.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Bullet_Pass.wav",
+    "sha256": "7d46599634b3677fac864af9b19b4565a06d0bf3c7b78a6b0eb1061906600587",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Click.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Click.wav",
+    "sha256": "5ef6d461b858190ea6b421f60e44a26e7fccd51594baaaa87b2ed6b84752b0bc",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Enemy_RifleFire_01.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Enemy_RifleFire_01.wav",
+    "sha256": "fd5da777b5761dc8e00805faadce0835b1a474faee06f6622aa90c0720104202",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Explosion_Field.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Explosion_Field.wav",
+    "sha256": "a38b30ef2c297f1394480226c702a08206e4deb10e06ca54b8161c88bce0fecd",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Flare_Launch.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Flare_Launch.wav",
+    "sha256": "ded760d272b8c04babea07b5da103a1dbfda2ca88d2a3bcce65fbdb0252a6343",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_M1_Fire.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_M1_Fire.wav",
+    "sha256": "087413c9020bd2c2739d1894824d5b18a24b979f3d3fbf827b30f9a58479abae",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_M1_Ping.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_M1_Ping.wav",
+    "sha256": "f5b7b56bb9667f19eee34750412090c721e14a67151be41ac4623e1c8112c625",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_M1_Reload.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_M1_Reload.wav",
+    "sha256": "18e856dce9513a5ad541040263ed23880ad498966dbe3250e8a0a813ff6f6fcc",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Mosin_Fire.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Mosin_Fire.wav",
+    "sha256": "33462981d6ea29b2061b61bbe804950aca2d0d74b35201e4d2bfa88eca8a8f88",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Player_Breath.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Player_Breath.wav",
+    "sha256": "4d25b81451bb75e5edfcd4288173c40c237a3134419f76c392fc841ffc8c3e58",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "SFX_Tank_Move_Loop.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\SFX_Tank_Move_Loop.wav",
+    "sha256": "44da4114f6bb19bf5c2ad8832dea42d76623147df77b5535b8770d6e30c3c108",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "VEH_GMC_Engine_Loop.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\VEH_GMC_Engine_Loop.wav",
+    "sha256": "bab4ba5a213a36f6d9b07a10b22182d3ccf4df06f8de9afaeff03309d325106b",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "file": "VEH_T34_Engine_Loop.wav",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Delivery\\Assets\\FiveRivers_ApprovedAudio\\VEH_T34_Engine_Loop.wav",
+    "sha256": "5dfe413145f2c9c63bf9ffd8b8334c408c18774bafb7e4075469a15ba6b7064c",
+    "approval": "既存19 / 기존 합격",
+    "rights": "Previous19 문서 참조"
+  },
+  {
+    "version": "R13",
+    "choice": "합격",
+    "file": "AMB_Battle_Distant_Loop.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\AMB_Battle_Distant_Loop.wav",
+    "sha256": "488af6cd12852ae60d1185a81993b6fbec3ffad9ad136a389eea4b7ffa7b9d11",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R13",
+    "choice": "합격",
+    "file": "AMB_Night_Hills_Loop.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\AMB_Night_Hills_Loop.wav",
+    "sha256": "0abd190e003cb033fa5c170f86c656b8d77243f9e2cb59a9eaa813e33f38df24",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R13",
+    "choice": "합격",
+    "file": "SFX_Bullet_Whiz_02.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Bullet_Whiz_02.wav",
+    "sha256": "60ef2cbe145547933a4cfd7283e2b63a28205bfd648e953c1b2b01c55abffeb1",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R13",
+    "choice": "합격",
+    "file": "SFX_Flare_Burn_Loop.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Flare_Burn_Loop.wav",
+    "sha256": "9eb0ea0e989780e0d11befb20113a426c7e8b3f302be949e8e39c79e5ca462c6",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R13",
+    "choice": "합격",
+    "file": "SFX_Flare_Ignition.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Flare_Ignition.wav",
+    "sha256": "16b05088724d210906253c2c56c784036a264935553255990972c851f39efb3b",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R13",
+    "choice": "합격",
+    "file": "SFX_Tank_Ricochet_01.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Tank_Ricochet_01.wav",
+    "sha256": "74ed4107e3e4ed86efa36feedb42c4d770c9b06d5c1ae70af6a20c81de4fbb65",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R13",
+    "choice": "합격",
+    "file": "VO_OSG_Hurt_Candidate.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\VO_OSG_Hurt_Candidate.wav",
+    "sha256": "69c03ca23cab4b9fab18824da645115f6b68adf30b708a354fc2e66659e147bf",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R14",
+    "choice": "합격",
+    "file": "SFX_Tank_Cannon_R14.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\주포_도탄_엔딩_R14\\Audio\\SFX_Tank_Cannon_R14.wav",
+    "sha256": "aa81b8eeae50b2e3d50cd7510a71a5d6c9fd211ee393b88c38c93a2b0338fe11",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "version": "R14",
+    "choice": "합격",
+    "file": "SFX_Tank_Ricochet_R14.wav",
+    "note": "",
+    "path": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\주포_도탄_엔딩_R14\\Audio\\SFX_Tank_Ricochet_R14.wav",
+    "sha256": "73c82092c426e4325727baf3f7ee4b66a35e1b893692d6c4c497dfdd54753c3f",
+    "rights": "출처_이용조건.txt 및 원출처 기록 참조"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Bazooka_Fire_R13.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Bazooka_Fire.wav",
+    "sha256": "a03b46bba7ee5fb7c16dfc5e55dffeb19cd9dec0dc00ce490f81f6b4ea01e3ce",
+    "approval": "R15 최신 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Rocket_HitSide_02.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Rocket_HitSide_02.wav",
+    "sha256": "1bf8816d1317412b83efb013778e9154a71c58e01914f39d5b9704165b8e1fb1",
+    "approval": "R15 최신 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Tank_Ricochet_02.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Tank_Ricochet_02.wav",
+    "sha256": "6165c95a2403c1fd9fa26e46f744f4cfda43e0b9da76d0c63791631ca96335dc",
+    "approval": "R15 최신 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Bullet_Whiz_03.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Bullet_Whiz_03.wav",
+    "sha256": "a8a6b07ca17380ce26516280a3753046a58a5061a001a8da37ba453c112ea0eb",
+    "approval": "R15 최신 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Bullet_Whiz_04.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Bullet_Whiz_04.wav",
+    "sha256": "19e04e3620f30793d60db65fd0aaa6f4fe905e3cd65e5a8576c4c48aff770a64",
+    "approval": "R15 최신 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Impact_Dirt_03.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\최종19_후보비교_R13\\Candidates\\After\\SFX_Impact_Dirt_03.wav",
+    "sha256": "11412edb13bddc9003e8056aafa26555f61007691fcf2e6bfc79bcd9bc64d3c1",
+    "approval": "R15 최신 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Foot_Dirt_R16.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\After\\SFX_Foot_Dirt_R16.wav",
+    "sha256": "bc294254507891553a0c6c7c3cc29c435bdb7258966d5ad34a5385707b37ff15",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Tank_Fire_Loop_R16.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\After\\SFX_Tank_Fire_Loop_R16.wav",
+    "sha256": "4bdcef1ff3520c14968edc9cbc491a9f126a5f2477f0c8d1793618c128fffe06",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "BGM_Ending_R16.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\After\\BGM_Ending_R16.wav",
+    "sha256": "8ea85236dc77b8a4f94148a045923e7e2770392870139025652d61d16ff65089",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Foot_Dirt_03.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Foot_Dirt_03.wav",
+    "sha256": "dc683076c8d39b76c2d8661ee08afe14b1845e18fd187bb6e095483a18f21fbf",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Rocket_HitSide_01.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Rocket_HitSide_01.wav",
+    "sha256": "56a7560efa9f132d33767d703d66280ad06d0c4135278cf5905129b89b110135",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Enemy_RifleFire_02.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Enemy_RifleFire_02.wav",
+    "sha256": "c93798096655336399db01ffd98ab5f0157086adcc4a8472c6c4ff9679ec9f52",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Impact_Dirt_02.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Impact_Dirt_02.wav",
+    "sha256": "ea2062cef0a8676be7a959c2fbc3e7ec1c8f339e54e009334c65059a0e16e0ea",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Player_Hit_01.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Player_Hit_01.wav",
+    "sha256": "4096657beb2f890b3696c4cdd9f8f3d204f75114c8fb2ffcf0bd248511e58ab3",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Tank_EngineStall.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Tank_EngineStall.wav",
+    "sha256": "e93c267b51d4c8d1c2ce495de503bb7f7ec2635fcd700a2b2c2e4c2b52d9f535",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Flare_Launch_R13.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Flare_Launch.wav",
+    "sha256": "f21521511b8b256bc5ceaed835b2f20c8487b544aad412e93528c8a39f46451c",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Ammo_Pickup.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Ammo_Pickup.wav",
+    "sha256": "33a286c75f6ef9ef572d897744615c269b452ce559d08595a5a6161f5b5f305e",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "AMB_Dawn_Loop.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\AMB_Dawn_Loop.wav",
+    "sha256": "04579f34e1726b7619f1964a81ea85b263a4813eb229e882bcf7e159bd7826f4",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "UI_Objective_Show.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\UI_Objective_Show.wav",
+    "sha256": "44df59cd623a769fc15d4b6b26a1aa417093c6e35b9a9f7e77807bd87ae51d23",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Enemy_RifleFire_03.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Enemy_RifleFire_03.wav",
+    "sha256": "9090a90e4a51b5d96b82432f6a5bea9ed8f9ca6c81c44326d463191464c1415d",
+    "approval": "통합 페이지 사용자 합격"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Impact_Dirt_01.wav",
+    "note": "",
+    "source": "C:\\Users\\mbc\\Desktop\\FiveRivers_Sound_A_Repair_v2_20261027\\FiveRivers_Sound_Master\\Review\\Unjudged\\SFX_Impact_Dirt_01.wav",
+    "sha256": "a5d3a38c5b63efcb1bd5dc90bc025c8c35c3cb45950aa699a299d6e0ec664be3",
+    "approval": "통합 페이지 사용자 합격"
+  }
+]

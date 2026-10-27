@@ -1,0 +1,167 @@
+[
+  {
+    "choice": "합격",
+    "file": "AMB_Battle_Distant_Loop.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "AMB_Night_Hills_Loop.wav",
+    "note": ""
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "BGM_Ending.wav",
+    "note": "다부동전투 상황이랑 비교해서 끝나고나서의 음악으로 적합한 걸로 다시만들어와"
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Bullet_Whiz_02.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Flare_Burn_Loop.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Flare_Ignition.wav",
+    "note": ""
+  },
+  {
+    "choice": "부적합",
+    "file": "SFX_Foot_Dirt_01.wav",
+    "note": ""
+  },
+  {
+    "choice": "부적합",
+    "file": "SFX_Foot_Dirt_02.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Foot_Dirt_03.wav",
+    "note": ""
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_Foot_Dirt_04.wav",
+    "note": "흙위걷는소리 로 보정"
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_Tank_Fire_Loop.wav",
+    "note": "끝에 빨려들어가는 거빼고 불계속나는걸로 수정해"
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Tank_Cannon.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Tank_Ricochet_01.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "VO_OSG_Hurt_Candidate.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Bazooka_Fire.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Rocket_HitSide_01.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Rocket_HitSide_02.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Tank_Ricochet_02.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Enemy_RifleFire_02.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Enemy_RifleFire_03.wav",
+    "note": ""
+  },
+  {
+    "choice": "부적합",
+    "file": "SFX_Bullet_Whiz_01.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Bullet_Whiz_03.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Bullet_Whiz_04.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Impact_Dirt_01.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Impact_Dirt_02.wav",
+    "note": ""
+  },
+  {
+    "choice": "합격",
+    "file": "SFX_Impact_Dirt_03.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Player_Hit_01.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Player_Hit_02.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Tank_EngineStall.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Flare_Launch.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "SFX_Ammo_Pickup.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "AMB_Dawn_Loop.wav",
+    "note": ""
+  },
+  {
+    "choice": "청취 미확인",
+    "file": "UI_Objective_Show.wav",
+    "note": ""
+  }
+]

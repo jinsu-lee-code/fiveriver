@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "before": "SFX_Foot_Dirt_04.wav",
+      "after": "SFX_Foot_Dirt_R16.wav",
+      "title": "흙 위 걷기",
+      "user_note": "흙위걷는소리 로 보정",
+      "edit": "합격한 흙 발걸음을 복사해 3걸음으로 구성. 피치·속도 변형 없음."
+    },
+    {
+      "before": "SFX_Tank_Fire_Loop.wav",
+      "after": "SFX_Tank_Fire_Loop_R16.wav",
+      "title": "전차 화재",
+      "user_note": "끝에 빨려들어가는 거빼고 불계속나는걸로 수정해",
+      "edit": "원본 앞·중간 구간만 사용하고 후반부 제외. 역재생 없이 교차 연결한 지속 화재 루프."
+    },
+    {
+      "before": "BGM_Ending_R14.wav",
+      "after": "BGM_Ending_R16.wav",
+      "title": "전투 후 엔딩",
+      "user_note": "전쟁의 비극적인 느낌을 살려서 살아남았다는 느낌이 드는 엔딩곡으로 만들어",
+      "edit": "48 BPM 새 피아노·저음 첼로 편곡. 낮은 음역, 불협화음과 긴 쉼 뒤 작은 선율이 돌아오는 구성. 고역 조절만 한 버전이 아님."
+    }
+  ],
+  "metrics": [
+    {
+      "file": "BGM_Ending_R16.wav",
+      "seconds": 40.0,
+      "sample_rate": 48000,
+      "channels": 2,
+      "subtype": "PCM_16",
+      "true_peak_db": -3.5878965479538842,
+      "loop_boundary_jump": null,
+      "status": "측정 검증 / 사용자 청취 판정 대기"
+    },
+    {
+      "file": "SFX_Foot_Dirt_R16.wav",
+      "seconds": 2.0,
+      "sample_rate": 48000,
+      "channels": 1,
+      "subtype": "PCM_16",
+      "true_peak_db": -4.408744393457486,
+      "loop_boundary_jump": null,
+      "status": "측정 검증 / 사용자 청취 판정 대기"
+    },
+    {
+      "file": "SFX_Tank_Fire_Loop_R16.wav",
+      "seconds": 8.33,
+      "sample_rate": 48000,
+      "channels": 1,
+      "subtype": "PCM_16",
+      "true_peak_db": -25.859550398128892,
+      "loop_boundary_jump": 0.000274658203125,
+      "status": "측정 검증 / 사용자 청취 판정 대기"
+    }
+  ],
+  "listening_limit": "사람처럼 직접 청취해 합격 판정한 것이 아님. 새 후보는 사용자의 비교 청취 필요."
+}

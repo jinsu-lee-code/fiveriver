@@ -1,0 +1,36 @@
+﻿R14 출처·권리·수정 기록
+1. SFX_Tank_Cannon_R14.wav
+기존 R13 VARCO 파생 후보에 2kHz 이상 성분을 원신호의 20% 추가. 피치·속도·길이 유지, RMS 일치 및 피크 제한. 참고 영상의 파형은 혼합하지 않음.
+원래 VARCO 생성 당시 상업 이용 플랜 증빙 과제 유지. 이 작업으로 기존 권리 미확인 상태가 해소된 것은 아님.
+실사격 참고: DriveTanks.com, Russian T34/85 live fire at DriveTanks.com
+https://www.youtube.com/watch?v=nBNdaLbVruI (1.37–3.70초 / 39.98–41.50초 분석)
+추가 참고: https://www.youtube.com/watch?v=0v5zdE21gXU
+영상 오디오는 AnalysisOnly에만 보관하며 게임 후보 ZIP에 넣지 않음.
+CLAP 분석에서 최종 전후 평균은 약 0.677로 사실상 동일. 개선 확인이라고 해석하지 말 것. 한 영상의 두 구간 기반이며 독립 검증이 아님.
+
+2. SFX_Tank_Ricochet_R14.wav / Reference_Licensed/109958_recorded_ricochets.wav
+Incoming Ricochets.wav by rakurka
+https://freesound.org/people/rakurka/sounds/109958/
+Licensed under Creative Commons Attribution 3.0 Unported
+https://creativecommons.org/licenses/by/3.0/
+변경: 0.35–1.05초 추출, 48kHz/16bit 모노 변환, 100Hz 하이패스, 앞뒤 페이드, 약한 합성 금속 접촉층 추가.
+출처 표시·라이선스 링크·변경 표시를 유지할 것. CC BY 3.0은 상업 이용 및 편집 허용.
+제작자는 미니디스크 직접 녹음이라고 설명하지만 탄종·표적 재질·전차 장갑 여부는 확인되지 않음. 전차 장갑 실녹음으로 표기하지 말 것.
+신규 후보에 참고 녹음 일부가 들어 있으므로 높은 특징 유사도는 독립적인 실물 검증이 아님.
+추가 자료: https://therecordist.com/slow-motion-bullets/ (일부 데모는 35% 속도; 정상 속도 기준이나 전차 포탄 기준으로 오인하지 말 것).
+
+3. BGM_Ending_R14.wav
+새로 작성한 MIDI 작곡·편곡. 이전 BGM 음원·멜로디를 입력하거나 재사용하지 않음.
+D minor / 54 BPM / sparse piano and quiet solo cello / no percussion, vocals, or orchestral string bed.
+40초 스테레오. 앞뒤 3초 페이드. 20–28초는 편지 낭독을 위한 미리보기 음량 하강 구간이며 실제 게임 이벤트 시점과의 연결은 하지 않음.
+악기: GeneralUser GS v2.0.3, S. Christian Collins. 공식 라이선스는 음악 제작의 개인·상업 이용 허용. 개별 샘플 기원의 완전한 확실성을 보증하지 않는다는 저자 안내도 원문에 포함됨.
+https://github.com/mrbumpy409/GeneralUser-GS
+https://github.com/mrbumpy409/GeneralUser-GS/blob/main/documentation/LICENSE.txt
+전체 라이선스: GeneralUser_LICENSE.txt
+렌더러: FluidSynth 2.6.1 (LGPL), 프로그램·SoundFont는 후보 ZIP에 배포하지 않음.
+VARCO 신규 생성 1회(200포인트)를 시도했으나 두 결과가 0초 로딩 상태로 남고 다운로드 이벤트도 시간 초과. 그 생성 결과를 완성 음원으로 주장하지 않음. 로컬 새 작곡으로 대체함.
+
+청취·검수 한계
+파형·파일 규격과 로컬 CLAP으로 분석했으며 사람이 직접 들어 합격 판정한 결과가 아님.
+새 음악의 분위기 적합성은 미확인. 모델 점수만으로 밝음/슬픔을 확정하지 않음.
+기존 합격 19개와 R13 전체, 기존 게임 소리·메타 파일은 작업 전후 해시 비교. Unity 연결 수정 없음.

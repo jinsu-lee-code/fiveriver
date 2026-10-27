@@ -1,0 +1,110 @@
+[
+  {
+    "choice": "추가 수정 필요",
+    "file": "AMB_Distant_Artillery.wav",
+    "note": "한 10초 정도 늘려서 반복되게",
+    "seconds": 10.0,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -4.435336214907606,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "1e84c63c256e8fcf8d6b0465b95a768858365aa85ea62efdf42418637b0fcbb3"
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_Bazooka_Hit.wav",
+    "note": "유튜브에서 소리찾고 비교후에 만들기",
+    "seconds": 1.76,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -1.5654054396771022,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "29c3c3dc0315e6337439fe119f413b772441db69e705789beeb9ab5c7213eca6"
+  },
+  {
+    "choice": "보정본 사용 후보",
+    "file": "SFX_Flare_Burn.wav",
+    "note": "유튜브에서 소리찾고 비교후에 만들기",
+    "seconds": 2.285,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -17.40879277521944,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "3fb4f63c5bff835055745b3f9e519ba149e481d41842962fb3024ec896ee1c6b"
+  },
+  {
+    "choice": "보정본 사용 후보",
+    "file": "SFX_Mosin_Fire.wav",
+    "note": "유튜브에서 소리찾고 비교후에 만들기",
+    "seconds": 1.31,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -1.4998288527663084,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "86a453ae6ce9d239ce9398c27dee50f39204588d38221fe268c3e2341673d841"
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_T34_Cannon.wav",
+    "note": "유튜브에서 소리찾고 비교후에 만들기",
+    "seconds": 2.96,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -1.4998601061910728,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "64ec99554126df2d1d874b296d31ddf8e0ac31273ece91e333f2f052cbf0a8eb"
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_T34_Engine.wav",
+    "note": "유튜브에서 소리찾고 비교후에 만들기",
+    "seconds": 8.282,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -3.145155352580691,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "1a7762d8ba26a636507f88d104dcaec7c080d1d2183dd51220609068b6494b16"
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_T34_Ricochet.wav",
+    "note": "유튜브에서 소리찾고 비교후에 만들기",
+    "seconds": 2.0,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -1.49978768552429,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "f746c48977609375615a966847ad0c20d152da6350a99f05d963295872ff537f"
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_Truck_Engine.wav",
+    "note": "유튜브에서 소리찾고 비교후에 만들기",
+    "seconds": 7.28,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -7.6209909447638635,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "6f54dfd22f44413210855bdb434703b02806bdadac85dad2e97bcd37d9b2b12f"
+  },
+  {
+    "choice": "추가 수정 필요",
+    "file": "SFX_Wounded.wav",
+    "note": "두소리 다 사람이 내는 소리 같지않음",
+    "seconds": 1.17,
+    "rate": 48000,
+    "channels": 1,
+    "true_peak_estimate_dbfs": -2.6761149459323255,
+    "seam": 0.0,
+    "status": "사용자 청취 미확인",
+    "sha256": "37be17f4283f698683a37570e5eca463a13df971c5252bbf3ab0d2943fc3f4ad"
+  }
+]
