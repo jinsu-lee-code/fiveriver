@@ -39,6 +39,7 @@ namespace FiveRivers.Combat
 
         public int SideHits { get; private set; }
         public bool IsStopped => state == State.Stopped;
+        public bool IsMoving => state == State.Approach;
         public bool Visible => state != State.Hidden;
 
         public event Action Ricocheted;

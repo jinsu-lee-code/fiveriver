@@ -1257,3 +1257,12 @@ words, speech, scream, music
 - [ ] B1. 길이가 표와 같다
 - [ ] B2. 감정 방향이 장면과 맞다 (승리감·영웅적 분위기 금지)
 - [ ] B3. 대사·효과음을 덮지 않는다 (게임 안 확인)
+
+## 2026-10-28 · 사용자 음원 적용 및 출력 검수
+
+- [x] 49개 정리: 게임40개/29개 ID, 보조6개, 대안3개. 기존 .meta/GUID 보존.
+- [x] 49개 전체 Unity PCM 해독·개별 출력, 게임40개 AudioDirector API 출력 확인.
+- [x] SoundAndTextTests 4/4, 메뉴 재생성 후 연결 유지. M1·바주카·전차·환경음·메뉴 등 게임 이벤트 표본 확인.
+- [ ] Windows 빌드·전체 자연 이벤트·현장 헤드폰 믹스·루프 반복 품질 확인. 초기 NullReference 이력 원인 미확정.
+
+[적용 체크리스트와 49개 대응표](Docs/Sound/SoundIntegration_20261028/README.md)
