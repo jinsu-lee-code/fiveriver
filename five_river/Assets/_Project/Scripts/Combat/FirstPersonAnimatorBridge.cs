@@ -36,6 +36,7 @@ namespace FiveRivers.Combat
                 Trigger(lastSlot == WeaponSlot.M1 ? m1Animator : bazookaAnimator, Unequip);
                 lastSlot = slot;
             };
+            weapons.LoadoutReset += () => lastSlot = weapons.Current;
             resupplier.Resupplied += () => Trigger(m1Animator, Resupply);
         }
 

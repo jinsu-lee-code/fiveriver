@@ -88,7 +88,8 @@
   - 구현 (2026-10-27): `GameControls`(조작 키 한 곳, 안내 문구가 실제 바인딩을 읽음), `PlayerController`(이동 · 시점 · Z 자세 · Shift), `PlayerHealth`(회복, 8:15 이후 · 결말 중 피해 없음), `M1Rifle` + `M1Magazine`(순수 로직), `Bazooka` · `Rocket`, `WeaponHolder`(1 · 2, 우클릭 조준, 바주카는 S5에 받음), `Resupplier` · `AmmoCrate`(F), `TutorialTarget`, `Effects`(VFX_ 프리팹 생성 · 일괄 정리), 그레이박스 1인칭 무기 · 효과 프리팹은 Setup 메뉴가 만듦
   - 결정 (2026-10-27): 마지막 발 뒤 예비탄이 있으면 자동 장전(초보 배려, 핑 → 장전이 이어짐), 체력 자동 회복 · 수치는 BALANCE 2-2 · 2-4
   - 테스트: `M1MagazineTests` 5개 (8발 배출 · 빈/잔탄 장전 · 예비탄 부족 · 보충) — 전체 36개 통과
-  - 확인 (2026-10-27, 컴퓨터 조작): Play → W 이동 · 마우스 시점 반응 확인. 사격 · 장전 · 보충은 아직 눈으로 확인 안 함
+  - 확인 (2026-10-27, 컴퓨터 조작): Play → W 이동 · 마우스 시점 반응 확인. 실제 클릭 8번 → 탄약 0 표시 → 자동 장전 → 8/32. 보충(F) · 조준(우클릭 누르고 있기)은 사람이 확인해야 함 (자동 조작 도구가 오른쪽 버튼 누르고 있기를 못 함)
+  - 추가 (2026-10-27): 8발째 빈 클립(`PF_WP_M1Garand_ClipEmpty` = SM_WP_M1Garand_ClipEmpty FBX + 물리)이 `Socket_ClipEject`에서 위로 튀어나감 (ANIM_SPEC 3-3 "ClipEject는 코드에서")
   - 디버그 창: "플레이어" 칸 — 무적 · 탄약 채우기 · 바주카 받기 · 체력 회복
 - [ ] **1-3b. 적 · 조명탄 (S2 정찰 · S3 주 공세)** (2026-10-27) — B — 구현 완료 · 플레이 확인 대기
   - 구현: `EnemyDirector`(구간 시작 출현 · 다 쓰러지면 구간 완료 보고 · 철수 · 복구 때 정리 후 다시 출현), `EnemyAgent`(엄폐 지점으로 이동 → 숨었다 일어나 사격 → 가까운 엄폐물로 전진 · 철수, Animator가 있으면 AC_KPA 매개변수 사용), `WavePlan`(동시 5명 · 정찰병 합류 포함), `FlareDirector` · `Flare`(Illumination 0~1)
@@ -130,6 +131,7 @@
   - Animator Controller 4종 `AC_KPA` · `AC_ROK` · `AC_FP_M1` · `AC_FP_Bazooka` (ANIM_SPEC 1-5 매개변수 그대로, 상태 · 전이 포함, 없을 때만 생성). 코드: `EnemyAgent`(AC_KPA), `FirstPersonAnimatorBridge`(AC_FP_M1 · AC_FP_Bazooka, 사격 · 장전 · 전환 · 보충 · 달리기), `NarrativeDirector.parkAnimator`(AC_ROK Call) — **지금은 Animator를 프리팹에 붙이지 않음**(그레이박스 뼈대에 메시가 없어서). VARCO Humanoid 캐릭터 · 1인칭 팔 리그가 오면 Animator 컴포넌트를 붙이고 위 필드에 연결
   - 테스트: `AnimSpecTests` 6개 (파일 하나에 클립 하나 · 클립 이름 = 파일명 · 루프 여부 · 이벤트 이름 · 컨트롤러 매개변수가 요청서와 정확히 같음 · 상태 Motion 연결) — 전체 71개 통과
   - ⚠ 파트 브랜치 규칙: art · animator · sound 브랜치는 에셋을 넣기 전에 `main`을 먼저 병합해야 그레이박스 파일 · .meta를 받는다 (CLAUDE.md "브랜치 운영")
+  - → 2026-10-27: `main`(581a350)을 art · animator · sound에 병합 · push 완료 (충돌 0). 각 브랜치에 그레이박스 파일 · .meta · 검사 테스트가 들어 있다. 이후 main이 그레이박스를 더 바꾸면 다시 병합한다
   - 완료 조건: ART_SPEC · ANIM_SPEC · SOUND_LIST 표의 A 항목이 같은 이름 임시 파일로 들어가 있고 프리팹 · Animator · 사운드 라이브러리가 그 파일에 연결됨 (임시 사운드: graybox_audio.zip)
   - 이후 에셋 교체는 같은 경로 덮어쓰기 → 검수판 체크 → `MM.DD/Art|Anim|Sound/파일명Swap` 커밋
 - [ ] **1-7. 관문: 수동 3회 연속 완주** — A — 자동 점검 통과 · 사람 3회 완주 대기

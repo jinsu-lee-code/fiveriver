@@ -13,6 +13,7 @@ namespace FiveRivers.Combat
         [SerializeField] Camera view;
         [SerializeField] Effects effects;
         [SerializeField] Transform muzzle;
+        [SerializeField] Transform clipEject; // Socket_ClipEject (ART_SPEC 4)
         [SerializeField] Transform model;
         [SerializeField] Vector3 hipPosition;
         [SerializeField] Vector3 aimPosition;
@@ -87,6 +88,17 @@ namespace FiveRivers.Combat
             Fired?.Invoke();
             if (ejected)
             {
+                var clip = effects.Spawn(EffectKind.ClipEject, clipEject.position, clipEject.rotation);
+                var body = clip != null ? clip.GetComponent<Rigidbody>() : null;
+                if (body != null)
+                {
+                    // 핑: 위로 튀어 오르며 오른쪽 뒤로
+                    body.linearVelocity = view.transform.rotation * new Vector3(0.6f, 3.2f, -0.6f);
+                    body.angularVelocity = UnityEngine.Random.insideUnitSphere * 12f;
+                    var col = clip.GetComponent<Collider>();
+                    var self = player.GetComponent<CharacterController>();
+                    if (col != null && self != null) Physics.IgnoreCollision(col, self);
+                }
                 ClipEjected?.Invoke();
                 TryReload();
             }

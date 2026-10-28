@@ -31,7 +31,8 @@ namespace FiveRivers.Combat
         public Bazooka Bazooka => bazooka;
         public bool Reloading => Current == WeaponSlot.M1 ? m1.Reloading : bazooka.Reloading;
 
-        public event Action<WeaponSlot> Switched;
+        public event Action<WeaponSlot> Switched;   // 플레이어가 1 · 2로 바꿨을 때만
+        public event Action LoadoutReset;          // 체크포인트 · 새 회차 (소리 없음)
         public event Action BazookaGiven;
 
         void Start()
@@ -117,7 +118,7 @@ namespace FiveRivers.Combat
             Switching = false;
             Current = slot;
             ShowOnly(slot);
-            Switched?.Invoke(Current);
+            LoadoutReset?.Invoke();
         }
     }
 }
