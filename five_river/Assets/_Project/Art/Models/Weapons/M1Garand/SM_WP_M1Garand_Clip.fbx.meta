@@ -3,7 +3,17 @@ guid: 238f97553445b3043a1f9093f5197ab4
 ModelImporter:
   serializedVersion: 24300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_WP_M1_Brass
+    second: {fileID: 2100000, guid: e8733fd8385f2ec4c86834b44dbb9bb4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_WP_M1_Clip
+    second: {fileID: 2100000, guid: a75340a8bc933aa48833b348cb175664, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
