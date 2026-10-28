@@ -256,3 +256,10 @@
 - [ ] 확인 방법 · 에디터 수작업 목록 작성
 - [ ] **실행 빌드에서** 확인 (Editor 확인만으로 완료 처리하지 않음)
 - [ ] `git status`로 의도하지 않은 변경 되돌리기, 임시 스크립트 · 에셋 삭제
+
+
+## 아트 납품 기록 · 2026-10-28
+
+- [x] 에셋 파일 교체: `SK_CH_ROK_Arms`, `SM_WP_M1Garand`, `SM_WP_M1Garand_Clip`, `SM_WP_M1Garand_ClipEmpty` — ART_SPEC 5~8. 기존 GUID 보존, 관련 재질·텍스처 포함.
+- [ ] 이 프로젝트 재임포트 / `ArtSpecTests` / 프리팹 하위 메시·재질 매핑 / 팔·총구·클립 연결 / 실행 빌드 플레이 확인.
+- 검수 범위와 제한: [아트 납품 안내](Docs/Art/M1Arms_20261028/README.md). 전체 게임 또는 전체 ART_SPEC 완료가 아닙니다.
