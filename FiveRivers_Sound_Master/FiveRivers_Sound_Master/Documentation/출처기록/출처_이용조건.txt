@@ -1,6 +1,0 @@
-합격 음원 28개만 포함. 게임 연결 변경 없음. 기존 M1 3개만 포함하며 미판정 M1은 제외. 도탄 R13/R14는 각각 합격한 별도 버전.
-사용자 합격은 라이선스 검증 완료와 다릅니다. 기존19 이용조건은 Previous19 참조. VARCO 생성음은 생성 당시 이용 플랜/약관 증빙을 출시 전 확인해야 합니다.
-VO_OSG_Hurt_Candidate: Valerie-Vivegnis, Freesound 768185, CC BY 4.0. 편집된 음원. https://freesound.org/people/Valerie-Vivegnis/sounds/768185/ https://creativecommons.org/licenses/by/4.0/
-SFX_Tank_Ricochet_01: aust_paul, Freesound 30932, CC0. 모사 도탄.
-SFX_Tank_Ricochet_R14: rakurka, Incoming Ricochets, Freesound 109958, CC BY 3.0. 발췌·편집·합성 혼합. https://freesound.org/people/rakurka/sounds/109958/ https://creativecommons.org/licenses/by/3.0/
-참고 영상 음원은 이 묶음에 포함하지 않았습니다.
