@@ -767,11 +767,15 @@ text, logo, modern buildings, bright colors
 - [x] `SM_WP_M1Garand.fbx`: M1 개런드, 1.10m / 14,924삼각형, Body·Bolt·ClipSlot.
 - [x] `SM_WP_M1Garand_Clip.fbx`: 8발 장전 클립, 988삼각형 / 탄 포함 83.21mm.
 - [x] `SM_WP_M1Garand_ClipEmpty.fbx`: 빈 금속 클립, 44삼각형 / 48.90mm.
-- [x] 동일 파일명·경로로 교체, 기존 `.meta` 파일과 GUID 보존. 재질은 기존 `Art/Materials` 경로 사용.
+- [x] 동일 파일명·경로로 교체, 기존 GUID 보존. 장전 클립은 Unity에서 재질 remap 2개를 추가했고 나머지 기존 `.meta`는 보존. 재질은 기존 `Art/Materials` 경로 사용.
 - [x] 관련 텍스처·재질과 기존 VARCO 참고 원본 보관. 원본의 전체 제작 계보 증명은 아님.
-- [ ] 이 저장소의 Unity 6000.3.25f1 / URP 17.3.0에서 재임포트·ArtSpecTests·실행 빌드 확인.
+- [x] 이 저장소의 Unity 6000.3.25f1 / URP 17.3.0에서 재임포트·정적 렌더·ArtSpecTests 15/15 통과.
+- [x] 기존 19프리팹 및 Dabudong 씬 검사 참조 Missing 0. 장전 클립의 PBR 재질 연결 수정·재확인.
+- [ ] 실행 빌드 파지·조준·사격·장전·팔 연결 및 야간 확인. 콘솔 경고 2개는 미해결로 기록.
 - [ ] main 담당자: 기존 프리팹의 메시/재질 매핑 및 새 팔 리그·포즈 연결 확인.
 
 기존 전달본은 별도 Unity 6000.6.0f1 / URP 17.6.0에서 검수한 결과이며 이 저장소의 최종 실행 검증으로 대체하지 않습니다. 게임 코드·씬·프리팹은 아트 납품 커밋에서 변경하지 않습니다.
 
 [검수 체크리스트](Docs/Art/M1Arms_20261028/ART_SPEC_작업완료_체크리스트.md) · [통합 담당자 안내](Docs/Art/M1Arms_20261028/README.md)
+
+검증 갱신 (2026-10-28): [현재 Unity 체크리스트](Docs/Art/M1Arms_20261028/ART_SPEC_작업완료_체크리스트.md). 이번 결과는 정적 에셋 확인이며 게임 최종 통합 합격이 아닙니다.

@@ -1,7 +1,6 @@
 {
   "source_delivery_sha256": "1c88ef7bd747326bb9807bf6dd6619c6fdcf188568e0abaabdf33adf96d5d7a4",
-  "existing_meta_files_unchanged": 402,
-  "target_unity_validation": "pending",
+  "target_unity_validation": "import/static visuals/ArtSpecTests passed; final gameplay pending",
   "files": [
     {
       "path": "five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/M_CH_ROK_Body.mat",
@@ -110,13 +109,13 @@
     },
     {
       "path": "Docs/Art/M1Arms_20261028/ART_SPEC_작업완료_체크리스트.md",
-      "bytes": 2951,
-      "sha256": "54cd35d451e029b4aa7d65d60e10ff1ad4604ede0aa97fb3120a4055ccf20a00"
+      "bytes": 4155,
+      "sha256": "8f5606d89114af76ceeb75e25b2af12b85c92bd2528533f758a20a33b86636f7"
     },
     {
       "path": "Docs/Art/M1Arms_20261028/ART_SPEC_작업완료_체크리스트.html",
-      "bytes": 4365,
-      "sha256": "f1db771498309fa7e35f09a7e5736bb94b730261d9fc69d5ee835e278e5b84ac"
+      "bytes": 5959,
+      "sha256": "e1e467617e33b042e9d8c09d8c5d5fd2398e32953b621bb5a5f71401d2e6a23c"
     },
     {
       "path": "Docs/Art/M1Arms_20261028/Preview/M1_실제화면.png",
@@ -128,5 +127,8 @@
       "bytes": 302262,
       "sha256": "01df72d54819957c2178b405995f86b6abf4e090a204d32c45b6ee4cd2da1745"
     }
-  ]
+  ],
+  "existing_metadata_policy": "Existing GUIDs preserved; only loaded clip importer material remap changed in Unity.",
+  "loaded_clip_meta_sha256": "80da3834a96eacfd50fb559d0879f7d211ec5a04b33d817c39a0b4f501ee66e7",
+  "existing_meta_files_preserved_at_initial_delivery": 402
 }

@@ -261,5 +261,7 @@
 ## 아트 납품 기록 · 2026-10-28
 
 - [x] 에셋 파일 교체: `SK_CH_ROK_Arms`, `SM_WP_M1Garand`, `SM_WP_M1Garand_Clip`, `SM_WP_M1Garand_ClipEmpty` — ART_SPEC 5~8. 기존 GUID 보존, 관련 재질·텍스처 포함.
-- [ ] 이 프로젝트 재임포트 / `ArtSpecTests` / 프리팹 하위 메시·재질 매핑 / 팔·총구·클립 연결 / 실행 빌드 플레이 확인.
+- [x] 이 프로젝트 재임포트 / `ArtSpecTests` 15/15 / 검사한 19프리팹·Dabudong 씬 Missing 0 / 4모델 정적 표시·2K 텍스처 연결 확인 (2026-10-28).
+- [x] 장전 클립 금속·황동 재질 remap 수정, 기존 FBX GUID 유지 (2026-10-28).
+- [ ] 팔·임시 가늠자·총구·클립 소켓 연결 / 실제 Walk 변형 / 실행 빌드 플레이 및 야간 확인. 콘솔 경고 2개 기록.
 - 검수 범위와 제한: [아트 납품 안내](Docs/Art/M1Arms_20261028/README.md). 전체 게임 또는 전체 ART_SPEC 완료가 아닙니다.

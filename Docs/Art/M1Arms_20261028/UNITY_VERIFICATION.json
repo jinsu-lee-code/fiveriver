@@ -1,0 +1,687 @@
+{
+  "verified_date_kst": "2026-10-28",
+  "editor": "6000.3.25f1",
+  "urp": "17.3.0",
+  "scope": "asset import, static rendering, existing prefab/scene references and ArtSpecTests; not final game integration",
+  "audit": {
+    "unityVersion": "6000.3.25f1",
+    "models": [
+      {
+        "path": "Assets/_Project/Art/Models/Characters/ROK_Arms/SK_CH_ROK_Arms.fbx",
+        "missing": false,
+        "guid": "df0c233b7c6edd14a8e0c9ebad28988e",
+        "triangles": 6534,
+        "boundsSize": [
+          1.09833455,
+          0.493904084,
+          0.36983332
+        ],
+        "boundsMin": [
+          -0.5487817,
+          -0.782321334,
+          -0.271257162
+        ],
+        "boundsMax": [
+          0.549552858,
+          -0.28841722,
+          0.09857616
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "parts": [
+          "SK_CH_ROK_Arms",
+          "FP_CameraPivot",
+          "SK_CH_ROK_Arm_Left",
+          "SK_CH_ROK_Arm_Right",
+          "SK_CH_ROK_Arms_Rig",
+          "mixamorig:Hips",
+          "mixamorig:LeftUpLeg",
+          "mixamorig:LeftLeg",
+          "mixamorig:LeftFoot",
+          "mixamorig:LeftToeBase",
+          "mixamorig:LeftToe_End",
+          "mixamorig:RightUpLeg",
+          "mixamorig:RightLeg",
+          "mixamorig:RightFoot",
+          "mixamorig:RightToeBase",
+          "mixamorig:RightToe_End",
+          "mixamorig:Spine",
+          "mixamorig:Spine1",
+          "mixamorig:Spine2",
+          "mixamorig:LeftShoulder",
+          "mixamorig:LeftArm",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftHand",
+          "mixamorig:LeftHandIndex1",
+          "mixamorig:LeftHandIndex2",
+          "mixamorig:LeftHandIndex3",
+          "mixamorig:LeftHandIndex4",
+          "mixamorig:LeftHandMiddle1",
+          "mixamorig:LeftHandMiddle2",
+          "mixamorig:LeftHandMiddle3",
+          "mixamorig:LeftHandMiddle4",
+          "mixamorig:LeftHandPinky1",
+          "mixamorig:LeftHandPinky2",
+          "mixamorig:LeftHandPinky3",
+          "mixamorig:LeftHandPinky4",
+          "mixamorig:LeftHandRing1",
+          "mixamorig:LeftHandRing2",
+          "mixamorig:LeftHandRing3",
+          "mixamorig:LeftHandRing4",
+          "mixamorig:LeftHandThumb1",
+          "mixamorig:LeftHandThumb2",
+          "mixamorig:LeftHandThumb3",
+          "mixamorig:LeftHandThumb4",
+          "mixamorig:Neck",
+          "mixamorig:Head",
+          "mixamorig:HeadTop_End",
+          "mixamorig:RightShoulder",
+          "mixamorig:RightArm",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightHandIndex1",
+          "mixamorig:RightHandIndex2",
+          "mixamorig:RightHandIndex3",
+          "mixamorig:RightHandIndex4",
+          "mixamorig:RightHandMiddle1",
+          "mixamorig:RightHandMiddle2",
+          "mixamorig:RightHandMiddle3",
+          "mixamorig:RightHandMiddle4",
+          "mixamorig:RightHandPinky1",
+          "mixamorig:RightHandPinky2",
+          "mixamorig:RightHandPinky3",
+          "mixamorig:RightHandPinky4",
+          "mixamorig:RightHandRing1",
+          "mixamorig:RightHandRing2",
+          "mixamorig:RightHandRing3",
+          "mixamorig:RightHandRing4",
+          "mixamorig:RightHandThumb1",
+          "mixamorig:RightHandThumb2",
+          "mixamorig:RightHandThumb3",
+          "mixamorig:RightHandThumb4"
+        ],
+        "avatarValid": true,
+        "humanoid": true,
+        "bones": [
+          65,
+          65
+        ],
+        "importerType": "Human",
+        "clips": [
+          {
+            "name": "Walk_Validation",
+            "duration": 2.73333359,
+            "frameRate": 30
+          }
+        ],
+        "materials": [
+          {
+            "name": "M_CH_ROK_Body",
+            "path": "Assets/_Project/Art/Models/Characters/ROK_Arms/M_CH_ROK_Body.mat",
+            "shader": "Universal Render Pipeline/Lit",
+            "shaderSupported": true,
+            "textures": [
+              {
+                "slot": "_BaseMap",
+                "path": "Assets/_Project/Art/Models/Characters/ROK_Arms/Textures/T_CH_ROK_Arms_BaseColor.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_BumpMap",
+                "path": "Assets/_Project/Art/Models/Characters/ROK_Arms/Textures/T_CH_ROK_Arms_Normal.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_MetallicGlossMap",
+                "path": "Assets/_Project/Art/Models/Characters/ROK_Arms/Textures/T_CH_ROK_Arms_MetallicSmoothness.png",
+                "width": 2048,
+                "height": 2048
+              }
+            ]
+          }
+        ],
+        "missingMaterialSlots": 0
+      },
+      {
+        "path": "Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand.fbx",
+        "missing": false,
+        "guid": "fd649133b279126448cfe8ee67aeaa3a",
+        "triangles": 14924,
+        "boundsSize": [
+          0.0529411063,
+          0.201942891,
+          1.1
+        ],
+        "boundsMin": [
+          -0.02559949,
+          -0.103952453,
+          -0.249723554
+        ],
+        "boundsMax": [
+          0.0273416154,
+          0.09799044,
+          0.85027647
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "parts": [
+          "SM_WP_M1Garand",
+          "Body",
+          "Bolt",
+          "ClipSlot"
+        ],
+        "avatarValid": false,
+        "humanoid": false,
+        "bones": [],
+        "importerType": "Generic",
+        "clips": [],
+        "materials": [
+          {
+            "name": "M_WP_M1_Metal",
+            "path": "Assets/_Project/Art/Materials/M_WP_M1_Metal.mat",
+            "shader": "Universal Render Pipeline/Lit",
+            "shaderSupported": true,
+            "textures": [
+              {
+                "slot": "_BaseMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_BaseColor.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_BumpMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Normal.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_MetallicGlossMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_MetallicSmoothness.png",
+                "width": 2048,
+                "height": 2048
+              }
+            ]
+          },
+          {
+            "name": "M_WP_M1_Wood",
+            "path": "Assets/_Project/Art/Materials/M_WP_M1_Wood.mat",
+            "shader": "Universal Render Pipeline/Lit",
+            "shaderSupported": true,
+            "textures": [
+              {
+                "slot": "_BaseMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_BaseColor.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_BumpMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Normal.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_MetallicGlossMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_MetallicSmoothness.png",
+                "width": 2048,
+                "height": 2048
+              }
+            ]
+          }
+        ],
+        "missingMaterialSlots": 0
+      },
+      {
+        "path": "Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand_Clip.fbx",
+        "missing": false,
+        "guid": "238f97553445b3043a1f9093f5197ab4",
+        "triangles": 988,
+        "boundsSize": [
+          0.02424045,
+          0.0492992252,
+          0.0832148939
+        ],
+        "boundsMin": [
+          -0.0121202245,
+          -0.00014969334,
+          -0.00817579
+        ],
+        "boundsMax": [
+          0.0121202245,
+          0.0491495319,
+          0.0750391
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "parts": [
+          "SM_WP_M1Garand_Clip"
+        ],
+        "avatarValid": false,
+        "humanoid": false,
+        "bones": [],
+        "importerType": "Generic",
+        "clips": [],
+        "materials": [
+          {
+            "name": "M_WP_M1_Clip",
+            "path": "Assets/_Project/Art/Materials/M_WP_M1_Clip.mat",
+            "shader": "Universal Render Pipeline/Lit",
+            "shaderSupported": true,
+            "textures": [
+              {
+                "slot": "_BaseMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_BaseColor.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_BumpMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_Normal.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_MetallicGlossMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_MetallicSmoothness.png",
+                "width": 2048,
+                "height": 2048
+              }
+            ]
+          },
+          {
+            "name": "M_WP_M1_Brass",
+            "path": "Assets/_Project/Art/Materials/M_WP_M1_Brass.mat",
+            "shader": "Universal Render Pipeline/Lit",
+            "shaderSupported": true,
+            "textures": [
+              {
+                "slot": "_BaseMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_BaseColor.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_BumpMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_Normal.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_MetallicGlossMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_MetallicSmoothness.png",
+                "width": 2048,
+                "height": 2048
+              }
+            ]
+          }
+        ],
+        "missingMaterialSlots": 0
+      },
+      {
+        "path": "Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand_ClipEmpty.fbx",
+        "missing": false,
+        "guid": "cae1b1a45d46f7e46b68d882791e6c6a",
+        "triangles": 44,
+        "boundsSize": [
+          0.02424045,
+          0.0489000455,
+          0.0163515732
+        ],
+        "boundsMin": [
+          -0.0121202245,
+          0,
+          -0.00817578752
+        ],
+        "boundsMax": [
+          0.0121202245,
+          0.0489000455,
+          0.008175786
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ],
+        "parts": [
+          "SM_WP_M1Garand_ClipEmpty"
+        ],
+        "avatarValid": false,
+        "humanoid": false,
+        "bones": [],
+        "importerType": "Generic",
+        "clips": [],
+        "materials": [
+          {
+            "name": "M_WP_M1_Clip",
+            "path": "Assets/_Project/Art/Materials/M_WP_M1_Clip.mat",
+            "shader": "Universal Render Pipeline/Lit",
+            "shaderSupported": true,
+            "textures": [
+              {
+                "slot": "_BaseMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_BaseColor.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_BumpMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_Normal.png",
+                "width": 2048,
+                "height": 2048
+              },
+              {
+                "slot": "_MetallicGlossMap",
+                "path": "Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_MetallicSmoothness.png",
+                "width": 2048,
+                "height": 2048
+              }
+            ]
+          }
+        ],
+        "missingMaterialSlots": 0
+      }
+    ],
+    "prefabs": [
+      {
+        "path": "Assets/_Project/Prefabs/PF_CH_KPA_Rifleman.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_CH_ROK_ParkYongpal.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_CH_ROK_Soldier.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_PR_AmmoCrate.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_PR_BlanketBody.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_PR_SandbagWall.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_PR_Target.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_VH_T34_85.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_WP_BazookaRocket.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/PF_WP_M1Garand_ClipEmpty.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_Bazooka_Backblast.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_Flare.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_Impact_Dirt.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_MuzzleFlash_Enemy.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_MuzzleFlash_M1.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_Tank_Fire.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_Tank_HitExplosion.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_Tank_Ricochet.prefab",
+        "missing": []
+      },
+      {
+        "path": "Assets/_Project/Prefabs/VFX_Tank_Smoke.prefab",
+        "missing": []
+      }
+    ],
+    "scene": {
+      "path": "Assets/_Project/Scenes/Dabudong.unity",
+      "missing": [],
+      "dirtyAfterAudit": false
+    }
+  },
+  "tests": {
+    "status": "completed",
+    "duration": 0.45,
+    "summary": {
+      "total": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "results": [
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Bazooka_HasRocketSlot",
+        "Status": "Passed",
+        "Duration": 0.0243121,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Characters_HeightAndSlots(\"Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx\",1.7f,\"M_CH_ROK_Body\",\"M_CH_ROK_Gear\")",
+        "Status": "Passed",
+        "Duration": 0.006581,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Characters_HeightAndSlots(\"Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx\",1.72f,\"M_CH_ROK_Body\",\"M_CH_ROK_Gear\")",
+        "Status": "Passed",
+        "Duration": 0.0015297,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Characters_HeightAndSlots(\"Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx\",1.68f,\"M_CH_KPA_Body\",\"M_CH_KPA_Gear\")",
+        "Status": "Passed",
+        "Duration": 0.0028384,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.M1_HasBoltAndClipSlot_PointsForward",
+        "Status": "Passed",
+        "Duration": 0.0093249,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Prefabs_HaveNoMissingReferences",
+        "Status": "Passed",
+        "Duration": 0.0549795,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Props/Sandbag/SM_PR_SandbagWall.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0033651,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Props/AmmoCrate/SM_PR_AmmoCrate.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0002676,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Props/Target/SM_PR_Target.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0002157,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Props/BlanketBody/SM_PR_BlanketBody.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0002866,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Weapons/M1Garand/SM_WP_M1Garand_Clip.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0010716,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Weapons/M1Garand/SM_WP_M1Garand_ClipEmpty.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0002481,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Weapons/Bazooka/SM_WP_BazookaRocket.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0001786,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Props_ExistAndSitOnGround(\"Weapons/Mosin/SM_WP_Mosin.fbx\")",
+        "Status": "Passed",
+        "Duration": 0.0004842,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.ArtSpecTests.Tank_HasPartsSlotsAndSize",
+        "Status": "Passed",
+        "Duration": 0.0023661,
+        "Message": null,
+        "StackTrace": null
+      }
+    ]
+  },
+  "clip_material_fix": {
+    "path": "Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand_Clip.fbx",
+    "before": "238f97553445b3043a1f9093f5197ab4",
+    "after": "238f97553445b3043a1f9093f5197ab4",
+    "mappings": [
+      {
+        "slot": "M_WP_M1_Brass",
+        "material": "Assets/_Project/Art/Materials/M_WP_M1_Brass.mat"
+      },
+      {
+        "slot": "M_WP_M1_Clip",
+        "material": "Assets/_Project/Art/Materials/M_WP_M1_Clip.mat"
+      }
+    ]
+  },
+  "scene_integration": {
+    "scene": "Assets/_Project/Scenes/Dabudong.unity",
+    "dirty": false,
+    "armsRendererCount": 0,
+    "m1Objects": [
+      {
+        "name": "VM_M1",
+        "parent": "PlayerCamera",
+        "position": "(0.20, -0.22, 0.45)"
+      },
+      {
+        "name": "RearSight",
+        "parent": "VM_M1",
+        "position": "(0.00, 0.06, 0.05)"
+      },
+      {
+        "name": "FrontSight",
+        "parent": "VM_M1",
+        "position": "(0.00, 0.05, 0.62)"
+      },
+      {
+        "name": "Socket_Muzzle",
+        "parent": "VM_M1",
+        "position": "(0.00, 0.03, 0.80)"
+      },
+      {
+        "name": "Socket_ClipEject",
+        "parent": "VM_M1",
+        "position": "(0.00, 0.07, 0.08)"
+      },
+      {
+        "name": "Socket_Muzzle",
+        "parent": "Gun",
+        "position": "(0.00, 0.00, 4.40)"
+      }
+    ]
+  },
+  "console": {
+    "groundTruth": {
+      "sampledUtc": "2026-10-28T11:33:29.3588657Z",
+      "ageMs": 28,
+      "compilationFailed": false,
+      "compiling": false,
+      "consoleErrors": 0,
+      "consoleWarnings": 2,
+      "consoleLogs": 5,
+      "seeded": true
+    },
+    "counts": {
+      "error": 0,
+      "warn": 2,
+      "log": 5
+    },
+    "warnings": [
+      {
+        "message": "File 'SK_CH_ROK_Arms' has animation import warnings. See Import Messages in Animation Import Settings for more details.\n",
+        "timestampUtc": "2026-10-28T11:27:25.3848282Z"
+      },
+      {
+        "message": "Account API did not become accessible within 30 seconds. This may be due to network issues or editor focus.",
+        "timestampUtc": "2026-10-28T11:28:56.4389719Z"
+      }
+    ]
+  },
+  "independent_visual_review": {
+    "reviewer": "Astra",
+    "accepted": "4 imported models static rendering, materials and textures; arms preview uses original SMR with offscreen updates enabled on preview clone and animator disabled, no asset setting saved",
+    "not_verified": [
+      "game arms/grip/ADS/reload integration",
+      "Walk deformation in this project",
+      "Configure Avatar green UI",
+      "night gameplay",
+      "soldier sleeve match"
+    ]
+  }
+}
