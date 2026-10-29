@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_Fire_Stand_Mixamo.fbx",
+  "bytes": 338896,
+  "sha256": "01ef9e120c8966faa5e0065c56a087ff7b26d7226bddb6a3783291add3600043",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Firing A Rifle While Standing",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}
