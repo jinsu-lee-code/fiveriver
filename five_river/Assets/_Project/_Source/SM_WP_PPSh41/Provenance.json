@@ -1,0 +1,16 @@
+{
+  "file": "SM_WP_PPSh41_Varco.fbx",
+  "bytes": 6233276,
+  "sha256": "13d2866d2c08653e97d7cdb705bafdaba90eea8ce840ebecdb26940d21212aa4",
+  "varcoTaskId": "30fb756f-23b5-4a9f-b908-0135c4e53d20",
+  "sourceImage": "SM_WP_PPSh41_Concept_02.png",
+  "sourceImageObject": "5833b45d8afbe9b4c597ce3c0f5ec04f",
+  "polygonCount": 6000,
+  "topology": "tri",
+  "textureSize": 1024,
+  "pbr": true,
+  "flow": "FiveRiver f2f774fa-5369-49ca-b1d2-1b901245d770",
+  "date": "2026-10-29",
+  "newVarcoGeneration": true,
+  "originalModified": false
+}
