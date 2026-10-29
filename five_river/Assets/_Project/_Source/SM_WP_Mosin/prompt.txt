@@ -1,0 +1,11 @@
+asset: SM_WP_Mosin
+step: concept image (VARCO GenerateImage, model gpt-image-2.5-flare, 3 images, 16:9)
+date: 2026-10-29
+flow: FiveRiver (f2f774fa-5369-49ca-b1d2-1b901245d770)
+chosen: SM_WP_Mosin_Concept_02.png
+
+prompt:
+Mosin-Nagant M1891/30 bolt-action rifle, exact side view, worn wooden stock, dark steel barrel and bolt handle, no bayonet, realistic, Korean War 1950 summer, worn and dusty, muted earth tones, game-ready 3D asset, PBR materials, neutral even studio lighting, plain light grey background, single object centered, whole object visible, no text, no logo, no watermark
+
+negative (appended to prompt as 'Avoid: ...'):
+scope, sling, bayonet, modern, text
