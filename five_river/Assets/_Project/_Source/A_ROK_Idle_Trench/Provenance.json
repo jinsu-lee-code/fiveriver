@@ -1,0 +1,17 @@
+{
+  "file": "A_ROK_Idle_Trench_Mixamo.fbx",
+  "bytes": 426704,
+  "sha256": "e8c3849804804f34bda732fb5b29a4c0dd0260a1cd271bd498645e24a337dee7",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Rifle Crouched Idle",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}
