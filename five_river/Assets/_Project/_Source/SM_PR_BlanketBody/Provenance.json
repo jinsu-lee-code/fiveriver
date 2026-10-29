@@ -1,0 +1,16 @@
+{
+  "file": "SM_PR_BlanketBody_Varco.fbx",
+  "bytes": 6534924,
+  "sha256": "e379c21ea36deb1a589e5414de0a6ee1805cd98dda85f073df5634b35b11101b",
+  "varcoTaskId": "b032351b-6ac9-40df-b60f-dca95e975576",
+  "sourceImage": "SM_PR_BlanketBody_Concept_03.png",
+  "sourceImageObject": "8d6facb054a7137322df6c07c069041d",
+  "polygonCount": 3000,
+  "topology": "tri",
+  "textureSize": 1024,
+  "pbr": true,
+  "flow": "FiveRiver f2f774fa-5369-49ca-b1d2-1b901245d770",
+  "date": "2026-10-29",
+  "newVarcoGeneration": true,
+  "originalModified": false
+}
