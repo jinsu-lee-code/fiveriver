@@ -1,0 +1,17 @@
+{
+  "file": "A_ROK_Idle_Stand_Mixamo.fbx",
+  "bytes": 484512,
+  "sha256": "b31d60e5e7ceb3bfa2313f3e5fcaadc15ecb8f5a5d850aa3b3a002aa99b964d0",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Rifle Idle",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}
