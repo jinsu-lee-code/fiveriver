@@ -1,0 +1,13 @@
+{
+  "file": "NotoSansKR_Variable.ttf",
+  "originalName": "NotoSansKR[wght].ttf",
+  "source": "https://github.com/google/fonts/raw/main/ofl/notosanskr/NotoSansKR%5Bwght%5D.ttf",
+  "license": "SIL Open Font License 1.1 (OFL.txt)",
+  "bytes": 10414588,
+  "sha256": "194018e6b2b293a7964f037b25c0249ce1418bc9ab3c971060a03aa57861e252",
+  "outputs": {
+    "Assets/_Project/Art/Fonts/FONT_UI_Sans.ttf": "static instance wght=400 (fontTools 4.68.0 varLib.instancer, updateFontNames)",
+    "Assets/_Project/Art/Fonts/FONT_UI_Sans_Bold.ttf": "static instance wght=700 (fontTools 4.68.0 varLib.instancer, updateFontNames)"
+  },
+  "date": "2026-10-29"
+}
