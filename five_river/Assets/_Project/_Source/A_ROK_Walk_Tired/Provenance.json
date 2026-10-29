@@ -1,0 +1,17 @@
+{
+  "file": "A_ROK_Walk_Tired_Mixamo.fbx",
+  "bytes": 424288,
+  "sha256": "5dff935e7a752c34ecb71c25c7d53d29bb0d5b80c9a9568763670467601a949b",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Walking Forward In A Sad Disposition",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}
