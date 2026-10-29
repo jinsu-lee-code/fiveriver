@@ -1,0 +1,17 @@
+{
+  "file": "A_ROK_Call_Mixamo.fbx",
+  "bytes": 767872,
+  "sha256": "0b285ca7e52601ed89fc62acd67f8d83b3546a585753e5ad3517b594c99e3f2a",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Nervously Looking Around Left To Right -  Loop",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}
