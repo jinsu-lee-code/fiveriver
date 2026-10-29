@@ -9,6 +9,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: M_WP_Bazooka
     second: {fileID: 2100000, guid: a17d8abc42a855a40a1af6086a58e8e2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_WP_BazookaRocket
+    second: {fileID: 2100000, guid: a0fdc753c9e94a228c767722e99b0f10, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
