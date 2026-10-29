@@ -1,0 +1,17 @@
+{
+  "file": "A_ROK_Fire_Crouch_Mixamo.fbx",
+  "bytes": 374976,
+  "sha256": "1a8beb7b8989054faae797af5b1dfb5d7942c084a2bdf613082245261f3aae99",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Fire Rifle While Crouched",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}
