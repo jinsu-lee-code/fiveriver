@@ -68,11 +68,25 @@
 | **Blender MCP** | MCP | 연결 상태 확인 1회뿐 (연결 안 됨). **Blender 작업은 MCP가 아니라** 명령줄 백그라운드 실행(Blender 5.2 `--background --python`)으로 임시 모델 · 애니메이션 FBX를 만들었다 |
 | **Computer use** | Claude 데스크톱 앱 기능 (MCP) | Unity 에디터 접근 권한 요청 2회, 화면 확인 5회, 클릭 · 키 입력 묶음 5회. 게임 화면에서 W 이동 · 마우스 시점 · 실제 클릭 8번 사격 → 자동 장전 확인 |
 | `anthropic-skills:computer-use` | 스킬 | 컴퓨터 조작 시작 전 안내 1회 |
+| **Claude_All_Type_Genre** (`claude_all_type_genre.md`) | 사용자 정의 개발 지침 문서 (Claude 스킬로 설치하지 않고, 첫 요청에 첨부해 스킬처럼 사용) | 이전 프로젝트(SpaceStation)에서 정리한 장르 무관 협업 방법론. 새 프로젝트 첫 요청(10-26 23:29)에 기획안과 함께 넣어, 문서 체계 · 작업 사이클 · 코드 구조 · 품질 기준을 처음부터 이 지침대로 잡게 함 |
 | 별도 설치 플러그인 | — | 없음 |
 
-**Claude_All_Type_Genre 확인 결과: 스킬이 아니라 개발 지침 문서다.**
+### Claude_All_Type_Genre — 스킬처럼 쓴 방식
 - 파일: `C:\Users\wlstn\Desktop\unity\claude_guide\claude_all_type_genre.md` (약 38KB, "장르 무관 Claude 협업 게임 개발 가이드")
-- 10-26 23:29 첫 요청에 첨부해 Claude가 읽은 문서다. 스킬 폴더(`.claude/skills`)에 설치된 것이 없고, 스킬로 호출된 기록도 없다.
+- 정확한 분류: **설치된 Claude 스킬이 아니다.** 스킬 폴더(`.claude/skills`)에 설치된 것이 없고, 스킬로 호출된 기록도 없다. 스킬과 같은 역할("작업 시작 때 읽고 그대로 따르는 지침 묶음")을 하도록 첫 요청에 첨부해 Claude가 읽게 했다.
+- 쓰는 때: 새 게임 프로젝트를 시작할 때 / 입력: 기획안 v1.2 / 결과: 아래 표
+
+| 지침 장 | 다섯 개의 강에 적용된 결과 (확인 가능한 것만) |
+|---|---|
+| 0. 첫날 체크리스트 | CLAUDE.md 기술 스택 "변경 금지", 템플릿 정리 · 테스트 어셈블리를 첫 기능 전에(커밋 0-5), `_Project/Scripts/...` 폴더 구조, `.gitignore` 루트 기준 경로, GitHub Desktop 내장 git 경로 |
+| 1. 핵심 원칙 | 수치는 BALANCE.md ↔ ScriptableObject 데이터 에셋에만, 진행 · 판정은 순수 C#(DemoFlow · TankHitJudge · M1Magazine 등), 착수 질문은 선택지 + 추천안(GDD 14번), "플레이 확인 대기" 표시, 실패 · 미확인도 그대로 보고 |
+| 2. 문서 체계 | CLAUDE · GDD · TASKS · BALANCE + 도메인 설계 문서 FLOW.md + 제작 규격서 ART_SPEC · ANIM_SPEC · SOUND_LIST, 결정마다 날짜 · 이유 기록 |
+| 4. 작업 사이클 | 착수 질문 → 결정 기록 → 구현 → 테스트 → 확인 방법 안내 → 커밋, 커밋 메시지 `MM.DD/항목/PascalCase` (21개) |
+| 6. 코드 구조 | 이벤트로 결합 줄이기, enum은 끝에만 추가, 실패 보조는 원본 데이터가 아닌 실행 중 값에 적용, 반복 작업은 여러 번 실행해도 결과가 같은 에디터 Setup 메뉴 |
+| 9 · 10. 아트 · 사운드 파이프라인 | 규격서 파일명 그대로 임시 파일 → 최종본 덮어쓰기 교체, 규격서 자동 검사 테스트(ArtSpecTests · AnimSpecTests · SoundAndTextTests) |
+| 13. 품질 게이트 | 완료 = 테스트 통과 + 확인 방법 + 사람 플레이 확인, 테스트 71개 통과 |
+
+- 프로젝트에 맞게 바꾼 점: 지침 7번 "측정 도구(봇)를 먼저 만든다"는 개발자 결정(2026-10-26)으로 빼고, **디버그 창(F1)과 실행 빌드 자동 완주 점검**으로 대신했다.
 
 ---
 
