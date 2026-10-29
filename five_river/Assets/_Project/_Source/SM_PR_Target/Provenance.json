@@ -1,0 +1,16 @@
+{
+  "file": "SM_PR_Target_Varco.fbx",
+  "bytes": 5637724,
+  "sha256": "e27c0de9ce3bd1639eaa54b6c48b0422ddaa2c7e4db42e26dfd5818184acc8a0",
+  "varcoTaskId": "616197d1-8acd-46a5-884b-9b7643940df7",
+  "sourceImage": "SM_PR_Target_Concept_02.png",
+  "sourceImageObject": "315ddd4079c4b033b6963b2255a97742",
+  "polygonCount": 1000,
+  "topology": "tri",
+  "textureSize": 1024,
+  "pbr": true,
+  "flow": "FiveRiver f2f774fa-5369-49ca-b1d2-1b901245d770",
+  "date": "2026-10-29",
+  "newVarcoGeneration": true,
+  "originalModified": false
+}
