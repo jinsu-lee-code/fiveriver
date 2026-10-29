@@ -1,0 +1,12 @@
+{
+  "file": "NotoSerifKR_Variable.ttf",
+  "originalName": "NotoSerifKR[wght].ttf",
+  "source": "https://github.com/google/fonts/raw/main/ofl/notoserifkr/NotoSerifKR%5Bwght%5D.ttf",
+  "license": "SIL Open Font License 1.1 (OFL.txt)",
+  "bytes": 23795420,
+  "sha256": "11f8d5de6f1b79195efba3828aaa2ec95c1178f5ae976fb23c8d53250a9938f3",
+  "outputs": {
+    "Assets/_Project/Art/Fonts/FONT_Letter_Serif.ttf": "static instance wght=400 (fontTools 4.68.0 varLib.instancer, updateFontNames)"
+  },
+  "date": "2026-10-29"
+}
