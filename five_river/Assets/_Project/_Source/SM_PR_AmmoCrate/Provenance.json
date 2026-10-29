@@ -1,0 +1,16 @@
+{
+  "file": "SM_PR_AmmoCrate_Varco.fbx",
+  "bytes": 6729228,
+  "sha256": "d95cd86104135cacb8155f94168e88195eff189d45b5e5044a5a10e027bd274d",
+  "varcoTaskId": "9e49bd8d-0e2a-469d-95b5-e9077d3fdb5d",
+  "sourceImage": "SM_PR_AmmoCrate_Concept_03.png",
+  "sourceImageObject": "7fa0641e7ab223a4d0d615547c6c6871",
+  "polygonCount": 2000,
+  "topology": "tri",
+  "textureSize": 1024,
+  "pbr": true,
+  "flow": "FiveRiver f2f774fa-5369-49ca-b1d2-1b901245d770",
+  "date": "2026-10-29",
+  "newVarcoGeneration": true,
+  "originalModified": false
+}
