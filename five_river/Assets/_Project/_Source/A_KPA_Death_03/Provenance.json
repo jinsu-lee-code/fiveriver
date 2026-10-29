@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_Death_03_Mixamo.fbx",
+  "bytes": 664736,
+  "sha256": "48920d67bb14e3897f9874de9a5c1acfb2c001b5efb5b2bbfb54cb250a6c5cb5",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Dying Shot To The Chest Falling On Two Knees",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}
