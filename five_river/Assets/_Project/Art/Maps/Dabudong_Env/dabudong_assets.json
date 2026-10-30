@@ -1,0 +1,340 @@
+{
+ "assets": [
+  {
+   "name": "barbed_wire",
+   "fbx": "ENV_barbed_wire.fbx",
+   "slots": 2,
+   "base": [
+    "T_barbed_wire_0_BaseColor.jpg",
+    "T_barbed_wire_1_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_barbed_wire_0_Normal.png",
+    "T_barbed_wire_1_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 2052,
+   "lod1": ""
+  },
+  {
+   "name": "dead_pine",
+   "fbx": "ENV_dead_pine.fbx",
+   "slots": 1,
+   "base": [
+    "T_dead_pine_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_dead_pine_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 5000,
+   "lod1": "ENV_dead_pine_LOD1.fbx"
+  },
+  {
+   "name": "farm_barn",
+   "fbx": "ENV_farm_barn.fbx",
+   "slots": 1,
+   "base": [
+    "T_farm_barn_0_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": false,
+   "tris": 7998,
+   "lod1": ""
+  },
+  {
+   "name": "fighting_position",
+   "fbx": "ENV_fighting_position.fbx",
+   "slots": 1,
+   "base": [
+    "T_fighting_position_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_fighting_position_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 9000,
+   "lod1": ""
+  },
+  {
+   "name": "fuel_drums",
+   "fbx": "ENV_fuel_drums.fbx",
+   "slots": 1,
+   "base": [
+    "T_fuel_drums_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_fuel_drums_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 2500,
+   "lod1": ""
+  },
+  {
+   "name": "granite_boulder_a",
+   "fbx": "ENV_granite_boulder_a.fbx",
+   "slots": 1,
+   "base": [
+    "T_granite_boulder_a_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_granite_boulder_a_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 2200,
+   "lod1": ""
+  },
+  {
+   "name": "granite_boulder_b",
+   "fbx": "ENV_granite_boulder_b.fbx",
+   "slots": 1,
+   "base": [
+    "T_granite_boulder_b_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_granite_boulder_b_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 2200,
+   "lod1": ""
+  },
+  {
+   "name": "granite_boulder_c",
+   "fbx": "ENV_granite_boulder_c.fbx",
+   "slots": 1,
+   "base": [
+    "T_granite_boulder_c_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_granite_boulder_c_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 2200,
+   "lod1": ""
+  },
+  {
+   "name": "grass_clump",
+   "fbx": "ENV_grass_clump.fbx",
+   "slots": 1,
+   "base": [
+    "T_grass_clump_0_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": true,
+   "tris": 80,
+   "lod1": ""
+  },
+  {
+   "name": "grass_clump_dry",
+   "fbx": "ENV_grass_clump_dry.fbx",
+   "slots": 1,
+   "base": [
+    "T_grass_clump_dry_0_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": true,
+   "tris": 80,
+   "lod1": ""
+  },
+  {
+   "name": "grass_tuft",
+   "fbx": "ENV_grass_tuft.fbx",
+   "slots": 1,
+   "base": [
+    "T_grass_tuft_0_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": true,
+   "tris": 406,
+   "lod1": ""
+  },
+  {
+   "name": "onggi_jars",
+   "fbx": "ENV_onggi_jars.fbx",
+   "slots": 1,
+   "base": [
+    "T_onggi_jars_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_onggi_jars_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 2500,
+   "lod1": ""
+  },
+  {
+   "name": "ox_cart",
+   "fbx": "ENV_ox_cart.fbx",
+   "slots": 1,
+   "base": [
+    "T_ox_cart_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_ox_cart_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 6742,
+   "lod1": ""
+  },
+  {
+   "name": "pebble",
+   "lod1": "",
+   "fbx": "ENV_pebble.fbx",
+   "slots": 1,
+   "base": [
+    "T_pebble_0_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": true,
+   "tris": 20
+  },
+  {
+   "name": "red_pine",
+   "fbx": "ENV_red_pine.fbx",
+   "slots": 1,
+   "base": [
+    "T_red_pine_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_red_pine_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 7000,
+   "lod1": "ENV_red_pine_LOD1.fbx"
+  },
+  {
+   "name": "rice",
+   "fbx": "ENV_rice.fbx",
+   "slots": 1,
+   "base": [
+    "T_rice_0_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": true,
+   "tris": 140,
+   "lod1": ""
+  },
+  {
+   "name": "rock_outcrop",
+   "fbx": "ENV_rock_outcrop.fbx",
+   "slots": 1,
+   "base": [
+    "T_rock_outcrop_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_rock_outcrop_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 6000,
+   "lod1": ""
+  },
+  {
+   "name": "sandbag_row",
+   "fbx": "ENV_sandbag_row.fbx",
+   "slots": 1,
+   "base": [
+    "T_sandbag_row_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_sandbag_row_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 3000,
+   "lod1": ""
+  },
+  {
+   "name": "sandbag_wall",
+   "fbx": "ENV_sandbag_wall.fbx",
+   "slots": 1,
+   "base": [
+    "T_sandbag_wall_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_sandbag_wall_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 3500,
+   "lod1": ""
+  },
+  {
+   "name": "shrub",
+   "fbx": "ENV_shrub.fbx",
+   "slots": 2,
+   "base": [
+    "T_shrub_0_BaseColor.jpg",
+    "T_shrub_1_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": true,
+   "tris": 18768,
+   "lod1": "ENV_shrub_LOD1.fbx"
+  },
+  {
+   "name": "straw_stack",
+   "fbx": "ENV_straw_stack.fbx",
+   "slots": 1,
+   "base": [
+    "T_straw_stack_0_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": false,
+   "tris": 2500,
+   "lod1": ""
+  },
+  {
+   "name": "stump",
+   "fbx": "ENV_stump.fbx",
+   "slots": 1,
+   "base": [
+    "T_stump_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_stump_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 1500,
+   "lod1": ""
+  },
+  {
+   "name": "telegraph_pole",
+   "fbx": "ENV_telegraph_pole.fbx",
+   "slots": 1,
+   "base": [
+    "T_telegraph_pole_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_telegraph_pole_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 1500,
+   "lod1": ""
+  },
+  {
+   "name": "trench_revetment",
+   "fbx": "ENV_trench_revetment.fbx",
+   "slots": 1,
+   "base": [
+    "T_trench_revetment_0_BaseColor.jpg"
+   ],
+   "normal": [
+    "T_trench_revetment_0_Normal.png"
+   ],
+   "foliage": false,
+   "tris": 2499,
+   "lod1": ""
+  },
+  {
+   "name": "young_pine",
+   "fbx": "ENV_young_pine.fbx",
+   "slots": 2,
+   "base": [
+    "T_young_pine_0_BaseColor.jpg",
+    "T_young_pine_1_BaseColor.jpg"
+   ],
+   "normal": [],
+   "foliage": true,
+   "tris": 21820,
+   "lod1": "ENV_young_pine_LOD1.fbx"
+  }
+ ]
+}
