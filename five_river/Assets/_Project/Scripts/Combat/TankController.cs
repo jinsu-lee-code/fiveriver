@@ -188,6 +188,7 @@ namespace FiveRivers.Combat
             state = State.Stopped;
             allyBlastsLeft = 0;
             smoke.SetActive(false);
+            effects.Spawn(EffectKind.TankDestroyed, body.position + Vector3.up * 1.5f, Quaternion.identity);
             fire.SetActive(true);
             foreach (var r in bodyRenderers) r.sharedMaterial = burntMaterial;
             Stopped?.Invoke();

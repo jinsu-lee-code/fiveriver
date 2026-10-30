@@ -41,6 +41,9 @@ namespace FiveRivers.EditorTools
 
         public static GameObject Prefab(string name, Func<GameObject> build)
         {
+            // 아트 브랜치가 납품한 최종 VFX(Art/VFX/)가 있으면 그것을 쓰고 그레이박스를 만들지 않는다
+            var delivered = name.StartsWith("VFX_") ? AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Art/VFX/" + name + ".prefab") : null;
+            if (delivered != null) return delivered;
             string path = PrefabDir + name + ".prefab";
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
             if (existing != null && (!Rebuild || rebuiltThisRun.Contains(path))) return existing;
