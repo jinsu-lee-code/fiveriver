@@ -1,0 +1,1559 @@
+{
+  "source_repository": "https://github.com/alslxhrl7-web/blender-ai-game-assets-guide",
+  "source_commit": "6614ff7d66660fa7ff0e3195f755ae89a638a678",
+  "source_scene": "blender-ai-game-assets-guide/Assets/_Project/Scenes/Missions/M01_Dabudong.unity",
+  "base_art_commit": "9f28776ba98d9fc14179be00f3d401392c1c0add",
+  "export_editor": "6000.6.0f1",
+  "files": [
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/SM_ENV_Dabudong_Map.prefab",
+      "bytes": 1926757,
+      "sha256": "69bb00e6b1576aa7831ef11eec76b6350f8cfb7e6d23126a952f70cdca9a24c9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/SM_ENV_Dabudong_Map.prefab.meta",
+      "bytes": 154,
+      "sha256": "9d8501295e76ceb48dce98146b19ed43e08889851a723e61db4de5db3b2f799b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_AmmoCrates.mat",
+      "bytes": 4054,
+      "sha256": "3de75e670f80ffa4b86816a5f3ed38849ee6d820b59ca737647aa33cb1018c19"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_AmmoCrates.mat.meta",
+      "bytes": 196,
+      "sha256": "7e793c4854ef63757f62c4a050a6edf34f34fb599546141599defe25545efd8c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_BarbedWire.mat",
+      "bytes": 4053,
+      "sha256": "64f85a1b7804deda833166dc16756a89b474ef494b2744d7187793f225799f16"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_BarbedWire.mat.meta",
+      "bytes": 196,
+      "sha256": "a99af92a2a069671db3779b9241d89cfdff5cf0e6ad9d6b05ed7e952b3b3cc61"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_BurnedBarn.mat",
+      "bytes": 4055,
+      "sha256": "4edafa4b6d6ae24948401c0c16b2e9c21c439a7f35fee8858abd5a8060605be4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_BurnedBarn.mat.meta",
+      "bytes": 196,
+      "sha256": "afcb7555d64691d5206162257091dd2c82c743e1c524494442bf8dc85c7adf77"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Bush.mat",
+      "bytes": 4100,
+      "sha256": "4e1d586c576ee5e7e29684efdc5499ea388482912ccaa628dcbe242c18b106b7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Bush.mat.meta",
+      "bytes": 196,
+      "sha256": "1749ff5a10870ed8670a8c8ff41c1b47f647af9b290ca6329211d91de1cd4d9b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_CanteenShovel.mat",
+      "bytes": 4057,
+      "sha256": "a6e8e86f997d20bc8405c5ff019591af0e0e7a2da626722fe884b5905150d36e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_CanteenShovel.mat.meta",
+      "bytes": 196,
+      "sha256": "1ed85763a38e218e11ae86ad55aa1aa4f94ebd6d47b4fd742084b079506f722a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_DeadTree.mat",
+      "bytes": 4052,
+      "sha256": "d325d212bec9d74b15cbbe19b91ed827413dfa07752b68a6a2bdb414f73a97af"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_DeadTree.mat.meta",
+      "bytes": 196,
+      "sha256": "cfd8a42b7a829fb4ae87ba3d225e1b92e329ab9821f1f824485e3e39c15ca7e9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Drums.mat",
+      "bytes": 4052,
+      "sha256": "782fd531d34c87f1805352d6888854ccb352f2580a916accbd53220fb3a2b0b5"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Drums.mat.meta",
+      "bytes": 196,
+      "sha256": "1546d5900ceebafcab82f50bb1763b1a7ed99a88e683020d122e2b25426f066f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_FieldPhone.mat",
+      "bytes": 4055,
+      "sha256": "3a4b5ff38224f902beddd533fceb01aa3e46e0381181492fd2a22ff3c35ad97f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_FieldPhone.mat.meta",
+      "bytes": 196,
+      "sha256": "1489f01c7cbf432e9982c6a290f2b44df095e11c109cdbaa98500dc71eefc20e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Jige.mat",
+      "bytes": 4048,
+      "sha256": "9ec0d383e455e0b505c9317b758a0395d0604d8a89c3e54cd913f52bfe0aa543"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Jige.mat.meta",
+      "bytes": 196,
+      "sha256": "a5152ec59051272a11d4c11f4867a5db5893ef1f5e4ce7707fa8131e7a248847"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Onggi.mat",
+      "bytes": 4049,
+      "sha256": "3b8cc8ac61dacbc5a4519987893146dbd98710275e9f356c7b0f8f5da8c1c94e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Onggi.mat.meta",
+      "bytes": 196,
+      "sha256": "63710974458ddd99fcffc91a6d84bfad0946be2bcda189ccf9e8c9dd2a80d1a6"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_OxCart.mat",
+      "bytes": 4051,
+      "sha256": "0f6cc36a72474d0b3a3d69947b048063690694cb08c2627958728723c0c0438a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_OxCart.mat.meta",
+      "bytes": 196,
+      "sha256": "504f1bfd192735fb08edacd79ef0b8619b70d692e80592e3344f1265ddd82201"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Parapet.mat",
+      "bytes": 4051,
+      "sha256": "6f7b956e8cfd51538e9ebbd65c434e19aa2868356bf0cb6b7f938fe896201a24"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Parapet.mat.meta",
+      "bytes": 196,
+      "sha256": "9f1b8fd1a91ad722adbee97595a99ade24516c5a7fd41d3cff7f5968fe484940"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Pine.mat",
+      "bytes": 4100,
+      "sha256": "44f4fbf3b26e30acdc2d30df1770552f5cd41ee7ad6c7fbf97b97ac2db17c13c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Pine.mat.meta",
+      "bytes": 196,
+      "sha256": "45cb04d5bd88e73f7837a939d547f7ce524829f2aca9ac4962af002dc2f58568"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Revetment.mat",
+      "bytes": 4054,
+      "sha256": "1bc665c4641c2ba2e3381905a77e1e9405d2824ffb1f5be07d6b667654975d1d"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Revetment.mat.meta",
+      "bytes": 196,
+      "sha256": "7e2239af103426bef10e9c9a5c587cfb174fe5771ef686cad1cb6d886f75b854"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RockA.mat",
+      "bytes": 4050,
+      "sha256": "dd64715fb30b3f12be40cffe6f2fb2cc7ad72cfa430469adcda8f94748542e65"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RockA.mat.meta",
+      "bytes": 196,
+      "sha256": "16f28d38a89968337a1853f1989e88a69a5ec88a2df8ba29d24b94e144471726"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RockB.mat",
+      "bytes": 4050,
+      "sha256": "a8fa8fa2fecdea9263bbbed743a934437aa4d5081dba04b8ab082a0be0bd85a0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RockB.mat.meta",
+      "bytes": 196,
+      "sha256": "78cc4ee8e77cf41cd0537480c28423faaf2c302b287ce51ebdd84409a5385086"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RockC.mat",
+      "bytes": 4049,
+      "sha256": "7df9484ca6fef2d0434e126c0d1af34c9623c06051ed103abd003a982ce3db64"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RockC.mat.meta",
+      "bytes": 196,
+      "sha256": "c94eda0b9c7449da78338bd8f3b6ae9f4a34b3083412a930ed49e597c93f0fee"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RocketCrate.mat",
+      "bytes": 4056,
+      "sha256": "bc042fd9810f4ceb430f9ed2e146300e9ecbc24e63a0555d029320a2e471646e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_RocketCrate.mat.meta",
+      "bytes": 196,
+      "sha256": "dfc039b0d2825bf06b39dbf802c365b1ab0c7386c849f02ab1526c734f41bd34"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_SandbagWall.mat",
+      "bytes": 4056,
+      "sha256": "cf36a994aa23cb156836d8fd651f59360344a84f22ce2cab2959a8d81ecb819e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_SandbagWall.mat.meta",
+      "bytes": 196,
+      "sha256": "f985daf2f2f060a43438485a66e129d79aa71c6acdca1e954315ff0b5ee20541"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Straw.mat",
+      "bytes": 4049,
+      "sha256": "b65ab8c300deaf83f12cba0ef16233873738b3bc1e7bdbf622a1944351ec8497"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_Straw.mat.meta",
+      "bytes": 196,
+      "sha256": "2e754945de373fa9590d9d0bd8638e84164c487fe91460a44f295581b99dd9e8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_TelegraphPole.mat",
+      "bytes": 4058,
+      "sha256": "220c4e5741d30201e1b8ea8856c5d2de7879f8e69effacd7ec282f0b42b10746"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background/M_BG_TelegraphPole.mat.meta",
+      "bytes": 196,
+      "sha256": "d71f808b3ef971f576f14dae74d7677bca450a7d1f76c8f813d5dec876a5d16e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Background.meta",
+      "bytes": 172,
+      "sha256": "9523fb96aa763817459d08abd7344ddf99dafda65c425b282210a343d0d9fde0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Apron.mat",
+      "bytes": 4083,
+      "sha256": "82ba9e4c8b57a105c0d56a014bf64db97ed9af2ea749d6f15c117dd2b19d654b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Apron.mat.meta",
+      "bytes": 196,
+      "sha256": "661a4098fa53d9f7ead187b66d8a334473706265b10f972d475e1d5c1ac68f53"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Blanket.mat",
+      "bytes": 4102,
+      "sha256": "91d3a195a888bb883c1f755c27e935bf3364becac27c7cfde5de97f2694412a0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Blanket.mat.meta",
+      "bytes": 196,
+      "sha256": "208b804bcad658932a73ea15cd3f6786d656fb020a218e1bb6f8ba346be994b2"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Earth.mat",
+      "bytes": 4067,
+      "sha256": "ec6f35a7fcb51a7c8adcab19910e14eb928932f4d581053951223e87b77a84d4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Earth.mat.meta",
+      "bytes": 196,
+      "sha256": "b764d2922c1a411524ee79951f87e4191189f5273938dae18fd893d9071364e0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Rock.mat",
+      "bytes": 4095,
+      "sha256": "7073d0d656c04e194532514658e225a5466ae57b17bc53c5861a63a4824e240c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Rock.mat.meta",
+      "bytes": 196,
+      "sha256": "2ed4fceb0331df62a294036362db03137d06f630f8a7e4c2c780a2b5e68babf4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Sandbag.mat",
+      "bytes": 4086,
+      "sha256": "1edaeebd2c3d047f2828c6cd346faab367536728296531f154a9cec49f8a7caa"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Sandbag.mat.meta",
+      "bytes": 196,
+      "sha256": "8df67b9076791c9cd2cd214265dbe78f1d55972006f6ae300c947f3b286b44b0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Wood.mat",
+      "bytes": 4065,
+      "sha256": "460d2557c7c4e02d27e00896fc22cb3e390c0bb87dd2e2e1c97ef785e02fa9d4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Wood.mat.meta",
+      "bytes": 196,
+      "sha256": "ac68540dc8a3c4a1d5c7011eb4e7feb17ef6f952b715c40297da0a163be5ba5b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials.meta",
+      "bytes": 172,
+      "sha256": "9c9ef2058695f616505a4425960bfaf402f86c21fbebd1d0e1a206e23cf16b22"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Apron.asset",
+      "bytes": 1314574,
+      "sha256": "2a65704fd00b0d3c521db7303940f11c8d3193470be078e0af0bcd6623d2bffa"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Apron.asset.meta",
+      "bytes": 196,
+      "sha256": "103949905ed294f87603763a3ab9d2b35eede4aad81e97d36c44fce00c9dcea8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Berm_Long.asset",
+      "bytes": 69456,
+      "sha256": "221bdb05a5a84815463e0b9afbed146b7fc37957ca7af781e1741fce865bb931"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Berm_Long.asset.meta",
+      "bytes": 196,
+      "sha256": "b6a288f5a901c9a8d3235194e3c95d9d95414b67de61f7c44b133758c8cc419b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Berm_West.asset",
+      "bytes": 21448,
+      "sha256": "495135f7fffc9bfe454184802553f34e14dc7931e64c569d3d6f7707abee030a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Berm_West.asset.meta",
+      "bytes": 196,
+      "sha256": "3fe4f15381600125e471b56e6decbaa869dc01125d33d00c73df178e3e1bec10"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Blanket.asset",
+      "bytes": 26106,
+      "sha256": "e82d48266bb821739adfda6f9d6a14dab961c113e8ae56b988811f2e70f976bf"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Blanket.asset.meta",
+      "bytes": 196,
+      "sha256": "2fdc3cda10932aed4a3e4f863d056b15acc7fe970463e576778726f9c6742643"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Crates.asset",
+      "bytes": 13901,
+      "sha256": "d0263c30ed2c1d15ee21740aae24f861cb3977379df241c5f385e644f73d1d1a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Crates.asset.meta",
+      "bytes": 196,
+      "sha256": "ef1cafd5526f0c11c4eb1040275446d5fd4911eae643e1d7f2fdfa886d81de0f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Parapet_Sandbags.asset",
+      "bytes": 5373337,
+      "sha256": "324bfe83bea54f088d4178de3aaedd75b824bf6434d37793af84fb6cac91b15a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Parapet_Sandbags.asset.meta",
+      "bytes": 196,
+      "sha256": "9779dcb20e96cae356efb998649b08aec140378052ac3f26de29450fcacf6394"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Revetment.asset",
+      "bytes": 444167,
+      "sha256": "27edf4726f648c7f6fe6d821e90f9320e9338a3a1e5e8eb5a0984daa50674c8e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Revetment.asset.meta",
+      "bytes": 196,
+      "sha256": "157e33bfca3683cb9103c200d383b593128a1327a5ba855c5bb2958f67c1dfce"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockA.asset",
+      "bytes": 51444,
+      "sha256": "d83e2444f204b54d4c03719915edf77abf81409c48d0ef18ffe16023aeabbf20"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockA.asset.meta",
+      "bytes": 196,
+      "sha256": "d35c0cf95fe774e411558ff348dcab9269dec945e0509c5ca3e9c8b8e0791ba9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockB.asset",
+      "bytes": 51454,
+      "sha256": "96b21e8acb5717b189f36c45cac2d789c5b7898e32b8d353edb438fe50f07c31"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockB.asset.meta",
+      "bytes": 196,
+      "sha256": "d08e21eefe0f972dadfa75d6523cb5c0d572d524625e36052d97fc4e50fe4333"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockC.asset",
+      "bytes": 51454,
+      "sha256": "a77b559976fb2f945581b66265d7fc68a806d3c8a34d11e5c581e68c505e7006"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockC.asset.meta",
+      "bytes": 196,
+      "sha256": "b61368c4ca1c5ea1742b5b09e8e3a76d15c60e0bd463a65a75bcbc788ae1d658"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall0.asset",
+      "bytes": 399575,
+      "sha256": "4796a101afe12cdde00425f7d64db9e6edd650844523cbfa14590fa618c5c0fa"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall0.asset.meta",
+      "bytes": 196,
+      "sha256": "d1c1e4011d0207e18324f85d881047083e3e579493c16baa72029e7421f149fe"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall1.asset",
+      "bytes": 399575,
+      "sha256": "11fc00a13460cc19ba86f42434d8adc3ea27e4ededdb94627cc6ecdcb8ec65aa"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall1.asset.meta",
+      "bytes": 196,
+      "sha256": "e626cf36094c272fa2e82c4280bb5defe1d9a83737258c144df04e17b85defc1"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall2.asset",
+      "bytes": 399575,
+      "sha256": "846aab321d2cbf52b8b3286f9d8a861b700950c8741a727ca1b64404f37f582f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall2.asset.meta",
+      "bytes": 196,
+      "sha256": "1bd5e4609c779e861ae2a021660a93486ab110a2fa908e64a1a48603b4dbabdd"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes.meta",
+      "bytes": 172,
+      "sha256": "282830e7e4787ceae7a12f89fbd4a0a83dead5534ddb3b3272f242ba208cc7f9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/M01_TerrainData.asset",
+      "bytes": 2189260,
+      "sha256": "7eca5e6aa712f187efb8188c683a3603934b277d31865f73e5d539bf7048b393"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/M01_TerrainData.asset.meta",
+      "bytes": 197,
+      "sha256": "cf0ca1d8f996b7f3436b6d42282bb5e08733716015fe2588d5a3538f2623013a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Dirt.terrainlayer",
+      "bytes": 806,
+      "sha256": "9c7a6eff94192ba0a4e9d61a5eb2f996b5417da7295cd138196348e26dccd8fb"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Dirt.terrainlayer.meta",
+      "bytes": 208,
+      "sha256": "af1445504d5408a7cbfe9c0651d6cd78e8fb813cf60251910ca426411a79d8cb"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Grass.terrainlayer",
+      "bytes": 807,
+      "sha256": "517f2894ae1d8ea8cba6ab89a079b1104c0a21e9e560d0eb798764920330e278"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Grass.terrainlayer.meta",
+      "bytes": 208,
+      "sha256": "8b7a5abd4d05300ff8898b8467681d7bcacd724105e8e307fc0ef7d15b4f9a89"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Road.terrainlayer",
+      "bytes": 806,
+      "sha256": "65d0294ab30850f75a1becdcc44b83aca536fb64b89ef82a94f4d9a1b0ba868c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Road.terrainlayer.meta",
+      "bytes": 208,
+      "sha256": "66d20f76f4506e1cba8548503dc2b86962b1e529e81bcfc9abe61fc83b2816dd"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Rock.terrainlayer",
+      "bytes": 805,
+      "sha256": "fe3ab39e57a9b873dcc4142e79ce46e97867f28f5a61dc9fbec046f2ccebd6e7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain/TL_Rock.terrainlayer.meta",
+      "bytes": 208,
+      "sha256": "f9c4c9cdcc8d3be3c83675b4a918ab40f1aea15c0fb4f6d4ee8e3eff02c7d7b8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Terrain.meta",
+      "bytes": 172,
+      "sha256": "77f4abfd520cda43a62caf3fdda7ca8d091d42f6cade56fd423d1901e4c495cd"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/cloth_albedo.png",
+      "bytes": 323901,
+      "sha256": "d21d7c719f7178b756b45d03d6f3a114683fdbf4f55c1620507fac9a2d818cbc"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/cloth_albedo.png.meta",
+      "bytes": 3201,
+      "sha256": "862f8a66732058f86459d3550e0a0e45de8eb1a523ab28fcb1d111d0f24c9c98"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/cloth_normal.png",
+      "bytes": 456594,
+      "sha256": "5e8ee55752fa6f2f6713559e8a8e85f0dbe9a247ea8345c3ae6633c76683324c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/cloth_normal.png.meta",
+      "bytes": 3201,
+      "sha256": "1894c4eae66e35921b5d2be1106ebbc0725c31019d0ea86ed228733e408e4d23"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/dirt_albedo.png",
+      "bytes": 321169,
+      "sha256": "0ece5141224712114f91437b1ad2a8900341ac300d8939071695ba1cdedea586"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/dirt_albedo.png.meta",
+      "bytes": 3201,
+      "sha256": "7dd29f4408cfe535b66185d14773eb286391125a011681e4e9981ad14aee332b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/dirt_normal.png",
+      "bytes": 586322,
+      "sha256": "77b0b42b8dd06808b757137c90f424057b6f827ac7bd5296db3c8964937b7d8b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/dirt_normal.png.meta",
+      "bytes": 3201,
+      "sha256": "c0316009bc2f0de46b3206d7323a6ce21b0d47478e01169eaa7e922108a9da3a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_albedo.png",
+      "bytes": 317883,
+      "sha256": "9985e68dea4d7767740f26c245e48e1b3d24363a9f3314a0939397233e64b3f0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_albedo.png.meta",
+      "bytes": 3201,
+      "sha256": "5a5ea45cc0fbac1a3ceccafb9a98b8d3539ab3d77d77bbc5b27bf8b1e3e8fc21"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_blade.png",
+      "bytes": 6103,
+      "sha256": "4623f831f8bb54ce14bfe9c76f39cfddc6af260278587cbd405c6d6423583a25"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_blade.png.meta",
+      "bytes": 3201,
+      "sha256": "e9a79213be75aef9e0b631c4007bf38053278fdbe4bb75f05719e4eb11b44f99"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_normal.png",
+      "bytes": 546928,
+      "sha256": "1c2c6d5f60d7cf0e4ca8b6c9fc18b35dbf0eaa3f401e3836fc09ba8d7c6898c0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_normal.png.meta",
+      "bytes": 3201,
+      "sha256": "9f76af00517bcb847829dd5ac986ba35e1839c01daf7283a071fd84a7ed4e1cf"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/road_albedo.png",
+      "bytes": 371480,
+      "sha256": "9c6ce7d2e5024a621b55561ab1de56a3a2007e2ab427eb0b8898e3f0c5fbe121"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/road_albedo.png.meta",
+      "bytes": 3201,
+      "sha256": "5df7d4d0330a9539677141a039e250b257de16453171e7d11c7f127adc133a9c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/road_normal.png",
+      "bytes": 460391,
+      "sha256": "5af4089e309f1df13aa3ac2db1345b91b29f854d8b14cbdff581b78962b953fd"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/road_normal.png.meta",
+      "bytes": 3201,
+      "sha256": "d789c507806dabe06a39ec28d3ed52e4500f75a5a6446cb3ef8e771a51805ee9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/rock_albedo.png",
+      "bytes": 299662,
+      "sha256": "95396b3b4bef12fc7e38f7f3b1aa43d808e54d58a4da41f4706b63c8a76cfd99"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/rock_albedo.png.meta",
+      "bytes": 3201,
+      "sha256": "58bda89c3241def2ee399f1671caa24e234ae1f80f9266f3ad86e87424802c34"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/rock_normal.png",
+      "bytes": 429260,
+      "sha256": "3088678d14c85712587049189630e68dbc87a4059b97762f32ddbaa631439672"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/rock_normal.png.meta",
+      "bytes": 3201,
+      "sha256": "2168a610ac32e05a6ecba66b8ec09803ecc35dbb9a784a0ddf007f6c56f79bc7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/wood_albedo.png",
+      "bytes": 113023,
+      "sha256": "dac81bee4b1766a1b56bb687a80f2e29a3c1eae596e09c4ca36cfbc751b7cf0b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/wood_albedo.png.meta",
+      "bytes": 3201,
+      "sha256": "436bd79cb5dec8ef8f2bf68b602045de73f5c7b022aef888cdd90e254eb90ae8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/wood_normal.png",
+      "bytes": 188071,
+      "sha256": "c4b11b1cf7b435a6165186248bd384b52e97acc54828b322a0d1293c093759e7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/wood_normal.png.meta",
+      "bytes": 3201,
+      "sha256": "364eaf71866a1fa6f0d2f10c869ed8bb3df4919e42f32128b8770c21d0bd925c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures.meta",
+      "bytes": 172,
+      "sha256": "1505a4d43f9a57406103060f1dc37f7435a64ae852624fde194353316d3f3c61"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic.meta",
+      "bytes": 172,
+      "sha256": "bbfce0f513d56982c32e03812a850f5db77e0b4ae4a1b9e70484a263c0482ef3"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_Cover.mat",
+      "bytes": 3923,
+      "sha256": "134902784e2ef01a57d6200af0d124e1de89d2dece30493f9e246aa715477e5a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_Cover.mat.meta",
+      "bytes": 196,
+      "sha256": "2e52122236529216655a4fd867642af3d27ed7a2c521323d20f082b5ddc79f14"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_PlayerZone.mat",
+      "bytes": 3910,
+      "sha256": "7fb3486deec15706af675efc4b4c24c6afc23881351a944a51b58cf35beedc7c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_PlayerZone.mat.meta",
+      "bytes": 196,
+      "sha256": "f1a3cd6ced669c220caf78693476f4e63e1c9c0d2dfb455482447cb5763b6d10"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_Prop.mat",
+      "bytes": 3917,
+      "sha256": "7eecbb283422641964dedc922fe08e055e96dd7a693ab28b7e20b7d4c74349de"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_Prop.mat.meta",
+      "bytes": 196,
+      "sha256": "7137d433921d4c0d97f9f606934787a4cf5cd0da3777a096d6773d1dfa16d711"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_TrenchFloor.mat",
+      "bytes": 3929,
+      "sha256": "18b87afef62ca5b1b4e5d4fe4f060993ad125419f37c20bdd1068b8d133b84f4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_TrenchFloor.mat.meta",
+      "bytes": 196,
+      "sha256": "86e168b069f944d659a20c3ca2ef06ad75214b0864c3c697b8aac042fc3e587f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_TrenchWall.mat",
+      "bytes": 3923,
+      "sha256": "e52de2b538475f6cccea6a2332cd9771df6911e09eebe8ea1990fa8ac1200c69"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_TrenchWall.mat.meta",
+      "bytes": 196,
+      "sha256": "4b5974aab954b44e04a6018d3a7e965585b8a5984ca41d1683e48f1c30e087a4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox.meta",
+      "bytes": 172,
+      "sha256": "474220d27b61a497ade96df09ce1b375e1b29ef4f0bc6b511a71eec2021a6201"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP.meta",
+      "bytes": 172,
+      "sha256": "701d32b65dbe44782ef89ea19904e65da9a13ca07873b23eb6af36dcade5dc94"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Art.meta",
+      "bytes": 172,
+      "sha256": "f1e5fa2de5b222089ad22f6545b8360111b40e7bd2a27c6c9b11d830f785e6e0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_AmmoCrates.fbx",
+      "bytes": 95372,
+      "sha256": "0edbc37a1dda6a3304dd8a8ae9fcb57eb9b82d9adcfb212f9efa47da5830c803"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_AmmoCrates.fbx.meta",
+      "bytes": 3179,
+      "sha256": "5d4bf38b3f164cd999243809791e1cd2f7728051e7f7487d19bcc6c8ef59bf72"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_BarbedWire.fbx",
+      "bytes": 115788,
+      "sha256": "166439c4fea4e19592fffbf441fd107d7711e376d1b23025300084dd62fb64f8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_BarbedWire.fbx.meta",
+      "bytes": 3179,
+      "sha256": "36f1c0305d7025a480bf363f74849721668154be24be60995abd2d06dce196d1"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_BurnedBarn.fbx",
+      "bytes": 493644,
+      "sha256": "8b40d8638be5b8bba2df9010c8926d7d2ccd5f3a33820860362e4b5775d74d42"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_BurnedBarn.fbx.meta",
+      "bytes": 3179,
+      "sha256": "835598fabe7a546435e8b1b9fc23a23b028b306094d6261e434e6d9b061c210a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Bush.fbx",
+      "bytes": 47404,
+      "sha256": "de788155dd67fa73e8235e886e383de9686ded3432526beb7cfc157cd4496776"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Bush.fbx.meta",
+      "bytes": 3179,
+      "sha256": "58a1411b4734d528e974108f1d29f34437ee608e4dede1b084642eb61b80c2ec"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_CanteenShovel.fbx",
+      "bytes": 57868,
+      "sha256": "09016bd259658125fb2411313e803795eebca12a8b759bb51f3c1af16da51968"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_CanteenShovel.fbx.meta",
+      "bytes": 3179,
+      "sha256": "e12046ccba4b4dab80f3000ed4ef1b2207a504a963b400ae5f97af434a5351ca"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_DeadTree.fbx",
+      "bytes": 67276,
+      "sha256": "f26a90057aff66957a4e6daab5c2b7f638e3cb1bfcdbd701658764e8a2d63453"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_DeadTree.fbx.meta",
+      "bytes": 3179,
+      "sha256": "b72c3ae2d99c2f0d0b47072d3c6be17642612da8ad7a4dee4d0e79764e13d5c7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Drums.fbx",
+      "bytes": 72220,
+      "sha256": "ff00ee07ddf9ae57289a9a4fac531e0df8bbd599bf9a63cc0f04b69eec792839"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Drums.fbx.meta",
+      "bytes": 3179,
+      "sha256": "0e4e41f6741760556680764f2d70202ae55b2d7240338694800ad99dfdcbe53d"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_FieldPhone.fbx",
+      "bytes": 49244,
+      "sha256": "51832da3283fa4746f82cd67ff16553937dd0160a0865880b7385fb34af8af23"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_FieldPhone.fbx.meta",
+      "bytes": 3179,
+      "sha256": "d5c77f383883b68914a7d0538cea54fb5037d3259acf16b4ad6690890722ef14"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Jige.fbx",
+      "bytes": 66236,
+      "sha256": "ddc6d70940e98e1310ff869b5467f00d5ee6068fb20c1c1439fae03fd326fde9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Jige.fbx.meta",
+      "bytes": 3179,
+      "sha256": "82beca29507afef41131f2281ef16937edb9650219a168fe0e656fbe884b244a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Onggi.fbx",
+      "bytes": 61372,
+      "sha256": "7518e81c43a2acb5c5072f0d1dce6f0a55d7ed6501e6bafe66556b98a9bfc7aa"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Onggi.fbx.meta",
+      "bytes": 3179,
+      "sha256": "1c14c0292222f0f1eefcd55b0182c07bb83f5b82600b51783778f8d2e2f2f804"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_OxCart.fbx",
+      "bytes": 263436,
+      "sha256": "a8fb89e55b67c9ce4161a49962d0b13df92e327008c131974056a7a6c8ec54cc"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_OxCart.fbx.meta",
+      "bytes": 3179,
+      "sha256": "019a89374dfacaec4c288267bc3d1c4eb3aa87a48577606ec79d616257691537"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Parapet.fbx",
+      "bytes": 127228,
+      "sha256": "a68cf5290e29cd6b3e812fa967351f939fe3dab542afaebc94a9183b859ddba6"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Parapet.fbx.meta",
+      "bytes": 3179,
+      "sha256": "059ea8111a2bbe8c5d8c5ead091d84f295aad5b1444db9eebf4ee0140068af90"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Pine.fbx",
+      "bytes": 161244,
+      "sha256": "3dcbecfc4afd089a15d11ad74b6fa4e64317958114fea0e46d2746b18f4c4473"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Pine.fbx.meta",
+      "bytes": 3179,
+      "sha256": "c7a9a627aa588cb0cbfdcd974a127be40b4def40070e26f46c3aed2b1a405e1e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Revetment.fbx",
+      "bytes": 125900,
+      "sha256": "4db4c63dc8b9a53393dc9dca380d9479ce8d460491bb8098c6dd2dbb6bd6f556"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Revetment.fbx.meta",
+      "bytes": 3179,
+      "sha256": "bf52aac21c0b419c267fe8657055c44bf3c1f21983cd2254a9f8fa86b087a6b5"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RockA.fbx",
+      "bytes": 78860,
+      "sha256": "6136d53c58c439d1df1cfad883742b60384a135c5cc40a9092041e3e8bf50069"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RockA.fbx.meta",
+      "bytes": 3179,
+      "sha256": "344f637c14131cdf9cf58c7761ccf5af5a0a20b8fd99f61d4197d5d0461100ee"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RockB.fbx",
+      "bytes": 79964,
+      "sha256": "eb11cc5e6330a4798e5d7a8b82988f55a59e883dc309f6f0c5d6214585cfd607"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RockB.fbx.meta",
+      "bytes": 3179,
+      "sha256": "d6436c842de15788c06617abdd3920128df3f651afd4377a5681aa50b3ee9dd6"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RockC.fbx",
+      "bytes": 83500,
+      "sha256": "baed9183c84bc27c53e6c491531d0d3253db3e40fd8860e2f4be48d90d98a6fe"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RockC.fbx.meta",
+      "bytes": 3179,
+      "sha256": "d69c74af4868238c1b546534a7c2260a2c08e4ae8b5644434f5cf87e783db9e8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RocketCrate.fbx",
+      "bytes": 64748,
+      "sha256": "304764efe493b0d136b4348e84f7ade1c11a66ad9088d88d6f263b650353b200"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_RocketCrate.fbx.meta",
+      "bytes": 3179,
+      "sha256": "3a5cb9e0baa1934bb33fde787db30b9d62f9ab2d7db8c0854e97b065e12bd071"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_SandbagWall.fbx",
+      "bytes": 112300,
+      "sha256": "7ce33889ed814c2a57991daeb39dfa6ef1708484e4dd5894ab9055b647d42f07"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_SandbagWall.fbx.meta",
+      "bytes": 3179,
+      "sha256": "9e60f0a826d58f936955d7a001ed2a7ed77ae7316971ac61cc871f9621fcc9a9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Straw.fbx",
+      "bytes": 245324,
+      "sha256": "a21148608d43a6661b52fc90045e76becfaa0ff903d8f18490064319fd6fe359"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_Straw.fbx.meta",
+      "bytes": 3179,
+      "sha256": "328a83235b266e52eb94222870a51990cd193d39a5ffb6dc4d7ff83d786ede5b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_TelegraphPole.fbx",
+      "bytes": 63452,
+      "sha256": "b9001645ff6e210ea45bb4a669664dd7faefa70b556c7fd334bb945ef779d298"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/BG_TelegraphPole.fbx.meta",
+      "bytes": 3179,
+      "sha256": "0b185be9876fb35144c4bb6fa1d38e00666fdb71e696df45404c6be2a4ccd2ca"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_AmmoCrates_BaseColor.jpg",
+      "bytes": 1239017,
+      "sha256": "a5eb909953540fa42126b907701641bbf0c6e738d2d03e62ae6b63cec2e51c10"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_AmmoCrates_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "7000694bc929ddaf79f33cdc8d348bd656bdd351afe0250d21fa55b2313b2e03"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_AmmoCrates_Normal.jpg",
+      "bytes": 217132,
+      "sha256": "36d61f8067577492ce4088fbbebd39e646808a6aa00afeeea94871d733c2fc22"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_AmmoCrates_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "719cd93704917c6e2f92febc64e13829d2ecc96af247a2c0182255c7206d8622"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BarbedWire_BaseColor.jpg",
+      "bytes": 1146575,
+      "sha256": "9637cfb57e24248404bb96a07e4b2b679b807dff4aac98977dfa3d21955d7a95"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BarbedWire_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "3c2f3d6ee05706567dc37ba0a3845360b57a9844d0b941c3014c65ea88fd7873"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BarbedWire_Normal.jpg",
+      "bytes": 343325,
+      "sha256": "f38a4f8db6930dd334f37c6e618c1b7e807d3fd519a596e68338b14cdf07af30"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BarbedWire_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "c7918c2996ec5d77e41a86e6c5e599967d687a69196d987a6677f0dcbdb12843"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BurnedBarn_BaseColor.jpg",
+      "bytes": 1704371,
+      "sha256": "549d2de998277c97dd315ae9a39bfffab22be76c1766094c96e081c1c70ece58"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BurnedBarn_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "4dd8687019f8f9e43c79ac5350616464938aa3552c66ff1beb7675ba59283f55"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BurnedBarn_Normal.jpg",
+      "bytes": 475281,
+      "sha256": "b5e45e5bc416f6328cb780eeb975047b7d80388ede7fe550dda6cdc3a1c14e60"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_BurnedBarn_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "79bb9fa49a534f4fcf0e7c47e9d00a02c725da0f7fe395e804add4fd88a7dd72"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Bush_BaseColor.png",
+      "bytes": 1608605,
+      "sha256": "5ac51b94e8144096200096d6bbaca4053ca99aaf9ca418acf89d71624c5c274e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Bush_BaseColor.png.meta",
+      "bytes": 3201,
+      "sha256": "634a68f65121ed89cd0f1229805d6448a2af10fdfb541622d0c04761204e7b85"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Bush_Normal.jpg",
+      "bytes": 654333,
+      "sha256": "158b6dddb650f87d1b6605df3a526e1e5be8c216a24a3ede886b27483f97dbb7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Bush_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "87127d361b15a393fa98cd8c368c0ba3eaa1c0e377049f292e66572412723351"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_CanteenShovel_BaseColor.jpg",
+      "bytes": 1112357,
+      "sha256": "462555c6e9788ff1dfc8e1f269919f36ca8646af7c0dbe5edee2840656440425"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_CanteenShovel_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "d070b83acccca23958be18b0f8e6132ee1cd4ea75159fd121d701491e1462322"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_CanteenShovel_Normal.jpg",
+      "bytes": 220551,
+      "sha256": "84ffa7892b02841726f7dc24d3a8d177927bcbb4eaace3a6fd1321bd488b255c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_CanteenShovel_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "67b44286deadc745d536a74c5d743796f84e7410a0b1cb88c70d38c1ef7c5fc2"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_DeadTree_BaseColor.jpg",
+      "bytes": 601517,
+      "sha256": "af17b802db4aec0bf7bcbf203565054f59487ad41be92e2a269bd77f4ec027b2"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_DeadTree_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "81223ae553a3932d5687d4a203d639efbe8429e50ec8168c2bc67c8ff35fdc6c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_DeadTree_Normal.jpg",
+      "bytes": 822453,
+      "sha256": "93ed8e09bae2b7898641d4b98267cfd18dd26177ad8dd5c16d12983823aceeaf"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_DeadTree_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "6b0e7bc314c0d49190fc89d424b49ddf86a6089ac52a7291eed0dd32ca181701"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Drums_BaseColor.jpg",
+      "bytes": 1150858,
+      "sha256": "9e6d7035c253b0aef399dfd611ec0df8bf040f39ee02799ef0ddedc3c2872b81"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Drums_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "e18292e0035c797ba7a5c4608f9c31dbaded16da4bdcc096371c5987f0f5cec7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Drums_Normal.jpg",
+      "bytes": 119760,
+      "sha256": "c76422c7c4e0da6e3f96195a62abc33f9a6b114fa9ef3233b66e55815b46d67a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Drums_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "cdf5137485b6391e69f1e10bc2d765ff7de74b240ddfcc30678ae25f461ab584"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_FieldPhone_BaseColor.jpg",
+      "bytes": 1167522,
+      "sha256": "f6c444954561be2bf5c48326ecf56a89f7e28c0378d542d037555fba9696c734"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_FieldPhone_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "a2bcb31dfde938318f50c0ea79e782ac361ce472655d2ce083561cc770a79557"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_FieldPhone_Normal.jpg",
+      "bytes": 235451,
+      "sha256": "bb35ee5ee430deb0d79fbf08703ff8f6c1ec7921e5d37d8d1549e812ee94a0aa"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_FieldPhone_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "50b80ca7af6d252379b79294bccd55b870e293b72a1036f11d6d91ef378b2c68"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Jige_BaseColor.jpg",
+      "bytes": 1291595,
+      "sha256": "b4646b8b6c25e434ea55835f027ef57a8701e8ae0741dd1731d13833a83b443b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Jige_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "11406e2360764c31d7e8b11eecbc41eafeb4739f4939e52275c5ff6ea86309ca"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Jige_Normal.jpg",
+      "bytes": 323278,
+      "sha256": "6cdeb962c9f9657ec4fd0477f7fb83e7d8b12e7eeeb45010c7a7653c0cc7d72a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Jige_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "f986e1dbed4d8750d1824355a64a256c29d6c492e0ea5db0844ebc143e7fe619"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Onggi_BaseColor.jpg",
+      "bytes": 987743,
+      "sha256": "1a1df6664fee03d9e8bc0ed1056f3c6a331e5695d2deb9168f37e2c878ff3754"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Onggi_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "bb1d7a62448458fac314ecc429aee8d495243f45814ebffc3c91a1af18b00124"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Onggi_Normal.jpg",
+      "bytes": 114990,
+      "sha256": "1042c81c2ca03f477ca6de674db5ef466a14a936d79d1294e0d561f65a15502a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Onggi_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "7170c76dc1049cea6386df7706bde8a1f0caf4b49d32e3160756ed2b01c6c2f2"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_OxCart_BaseColor.jpg",
+      "bytes": 1492239,
+      "sha256": "fdb6613d705a7b2bad58b205c7a53fd37e7d9b232f74afa425a7a5bf2852e57e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_OxCart_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "7ef83b4dd5ace6e1f094206827f5b7d354b0c1ff732030b63056f0c9848870ee"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_OxCart_Normal.jpg",
+      "bytes": 415909,
+      "sha256": "c7fb6fdd7f2b2d1a369877f425e8ee482e83af64c3b6d034bdf56c30f5d36085"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_OxCart_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "f277d00f12103261291d60900092004c3e216d86157f83535ae2f82160e80105"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Parapet_BaseColor.jpg",
+      "bytes": 1134458,
+      "sha256": "a6cd37c5bea5757b4e801eac14bc139be8d1b29912b2946029eca7616d0f7fba"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Parapet_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "8bbdea69e1df051b9ddcded8d618a34bbe95454605aeadbe12cda405b4ffa9dd"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Parapet_Normal.jpg",
+      "bytes": 214236,
+      "sha256": "54a5e80b53c3e5b4d4373e6ee765606b4d67675e1602f3343a22977dbe0e95ef"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Parapet_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "4e1bec3996530ce8fa9d671eb5fed26a6f3ad3bc6d74adbd297a9b731f138422"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Pine_BaseColor.png",
+      "bytes": 4592933,
+      "sha256": "0b0874618a792f0a39fc6a5c5eaaabfe6f893bb0961bc076672349cdfd9bfec4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Pine_BaseColor.png.meta",
+      "bytes": 3201,
+      "sha256": "f311f78a47de744c95da22554e9435673cf2cc6b679ad778a0e0acfe77c0d557"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Pine_Normal.jpg",
+      "bytes": 963583,
+      "sha256": "7dd9b50b8a3e7d4d010bcc2409b11b91343c9f12d8435b88997e2728adf7a6a8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Pine_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "995c127dfac33ce115a5501b99ccde7f7e50c9a59268f99b2c30ca3caf368e43"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Revetment_BaseColor.jpg",
+      "bytes": 1369170,
+      "sha256": "11ab7672cd225e1863e9c05990df923a05eae84d7058e4b2784108d489cefd58"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Revetment_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "dd770cce6890ace2145f049f9a2338ec613657d74468c7ec133a2215dfba7b62"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Revetment_Normal.jpg",
+      "bytes": 218795,
+      "sha256": "c188bdaa594ce7f4b4dcd2312d88e7aef4d51e39e4d675bd54b526b4bdca31e3"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Revetment_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "50f608f8e497e59bee983e23a0bda0cba1f2a3f955bcd890073fb46be5710ba4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockA_BaseColor.jpg",
+      "bytes": 890314,
+      "sha256": "509b751fbc9a537e73d9de4c19338dccd37332a06e283eb6e9f37784d05a5c1e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockA_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "e643727bbd21431e0189a95f92ab1d3e86fe25e6eb40c21c63b9c2dcbc6e7d2a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockA_Normal.jpg",
+      "bytes": 782595,
+      "sha256": "0ba3fec9424b75db9c7aea606c594b145cd923447a20a1f660232443701655a4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockA_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "b11e20a8efd07b8dba56139ca41e8a5e578f0a84c2d1c0d2f4af231b841b3b26"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockB_BaseColor.jpg",
+      "bytes": 1057240,
+      "sha256": "bedf4a5b4fe934c14de18f3dc85d8a4c40c02012b7f265d3c318e3751061c95b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockB_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "610115db47b4cb99c7ed6a01a108eefa1d96612f1c37adecd12fc3777ef66343"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockB_Normal.jpg",
+      "bytes": 901750,
+      "sha256": "ba7b15affc0e18242dc4791d62591a764dc627ff755303223b59cd856cb7888a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockB_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "8f6567a7b785ff80241cddbf9af89e706744ecafcf59757fa37c2c12554c9478"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockC_BaseColor.jpg",
+      "bytes": 989353,
+      "sha256": "9cd13407b119db9b80dbcd2123a4a3a99c617dd9424362393103404d6bba5fa4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockC_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "ceac85c6c5408825c4cd3fb32895c74296088b9d600888b972cdbb0be35e40ce"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockC_Normal.jpg",
+      "bytes": 1078415,
+      "sha256": "56d932baba5d48f789d06151485a162a042374c5adfe8d708efd4cedd5b700c3"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RockC_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "b86e9bced73a4fa9424e2047ad6032c7460278a11b530864cf9dfd09a44303b2"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RocketCrate_BaseColor.jpg",
+      "bytes": 989248,
+      "sha256": "898422d40c616a8eeb904b0fa7102291c6b0649efce4cb4d2e306f49f99e370e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RocketCrate_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "42cd8d5a7e5407821b53ce85e97f969d2a92f6e110505e30d2c730adcef73762"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RocketCrate_Normal.jpg",
+      "bytes": 181624,
+      "sha256": "b82a13a40ddd69ab58da06bf2a456222eebb5f731436979d8fc95e345153b989"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_RocketCrate_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "eec49c9e9bc4e5d054a851e80f3995552073def6be07425c90630144d00341d6"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_SandbagWall_BaseColor.jpg",
+      "bytes": 1375404,
+      "sha256": "5e84092eec8542a531cb2d57be97c6c385554eb677699e3a75a97e3da5574cdb"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_SandbagWall_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "41ca35ab449869770abf5a9cea92f48eb503f06a56abf0c60e2a7f0242c2528b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_SandbagWall_Normal.jpg",
+      "bytes": 270215,
+      "sha256": "a020a37dc0f9e3aa43baafc482f4667241d21bf3a9bdfa1778c09f14b5c8cf31"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_SandbagWall_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "1c3e310823f2169c06aa5bf4d18e60bc6bcb2566f92bf89e9eea8713a8f1b124"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Straw_BaseColor.jpg",
+      "bytes": 1949311,
+      "sha256": "cdb6135204afbe779b361eac2ae52920d104e24b1af678431091203481b2ac51"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Straw_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "32beff96a7b86efebe127134829b48b85cd684136a45e8cf555994c8c299214d"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Straw_Normal.jpg",
+      "bytes": 466699,
+      "sha256": "8b2b9d2895c714209fe3b322ca6b5592a930598cfbf40f3d05fa02bcc16b3df4"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_Straw_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "f2c209d0cdb65095567663ec85573a7435e08c914c04b1ea6de7e9f1f78f2053"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_TelegraphPole_BaseColor.jpg",
+      "bytes": 700707,
+      "sha256": "ca71a6974f1f61cd4a23d8fc9819099725b931d3a303a456eec8a2983dde9100"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_TelegraphPole_BaseColor.jpg.meta",
+      "bytes": 3201,
+      "sha256": "841f28f252bfbb147fc395ac3e8ea9165305765b0ae8aaa65e738c596129aa2a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_TelegraphPole_Normal.jpg",
+      "bytes": 106008,
+      "sha256": "5fc5ef2fc2eeda9fcc25c96b0408a0dae906afcc12c3f7a0ae5215a6bd19627b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background/T_BG_TelegraphPole_Normal.jpg.meta",
+      "bytes": 3201,
+      "sha256": "b3258f6dd4bb1f2cc5e82a0b04045f5619f6d71475b0b519c3ad368daac8fcda"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Background.meta",
+      "bytes": 172,
+      "sha256": "a36a12d245994aff9146871bbf7544c3eb548ed9390076ce296f6420bfe7ff76"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_AmmoCrates.prefab",
+      "bytes": 3710,
+      "sha256": "976900178b90cf577b3ca9f5cf359bb803d4a15530ea81e6fa4f681416b3269f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_AmmoCrates.prefab.meta",
+      "bytes": 161,
+      "sha256": "c6991d64fa656ad8663145a740f44c5a0b9a1206c831cfb500ce8fc360179cfe"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_BarbedWire.prefab",
+      "bytes": 2703,
+      "sha256": "7c67682a49e48e0a622fb9ec351621dae9cefac8db233a46bade514c413a7a05"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_BarbedWire.prefab.meta",
+      "bytes": 161,
+      "sha256": "3efedfbff1fdac0f37f79b9e07e15428b22e9761ef50835e86272eee4f996475"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_BurnedBarn.prefab",
+      "bytes": 3706,
+      "sha256": "fa2b99fc413aa0cab6ff4fdba96c2fe51220f9088da4b775538c21cfe8463e0a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_BurnedBarn.prefab.meta",
+      "bytes": 161,
+      "sha256": "c59eefdd3dc7f55c8d0228e9258c954a2458e488c47b3d101920148ccf5be346"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Bush.prefab",
+      "bytes": 2697,
+      "sha256": "43b6e48c38c686c3f1fa0a646a7ebfb1de96b7616ef6624895a1c5320c148dd2"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Bush.prefab.meta",
+      "bytes": 161,
+      "sha256": "5ca2440c8512939346c22e2f2eed57167a0caa9e75b5c4c7c7202904957532c0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_CanteenShovel.prefab",
+      "bytes": 2706,
+      "sha256": "7e1f88a9604849d463ecd0e05df7974e893f0ab8638604c7e0a763b9595ffa94"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_CanteenShovel.prefab.meta",
+      "bytes": 161,
+      "sha256": "565c85749d0ea5d98b969e001b035ad4ea0f490b974577c7993ffcd1a6674c72"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_DeadTree.prefab",
+      "bytes": 3674,
+      "sha256": "362fc10248b987012108c24eb87f5a2454b99e0ecdb9629134aed1e1884ae38b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_DeadTree.prefab.meta",
+      "bytes": 161,
+      "sha256": "b5394063c72319794ba0275f8ff54d0c9fdcf4fed6e7979ecc972f94644b0b40"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Drums.prefab",
+      "bytes": 3706,
+      "sha256": "510d0b32077604f4e382e4d96834c2f15476ccc07004d5ee5e79d57c0fbfcaa2"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Drums.prefab.meta",
+      "bytes": 161,
+      "sha256": "f1bdefd8157efb50fda3e3cb8c1b6bbf671cd159258622b88f5e30a67cfde654"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_FieldPhone.prefab",
+      "bytes": 2703,
+      "sha256": "fc6488b8fb54e3b80b3b9669b42b42b21df507d33cd09314dd1c331405da2d1a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_FieldPhone.prefab.meta",
+      "bytes": 161,
+      "sha256": "24e360b1dda25fdcefac5f0e2363a37dfe6516dd08d3b5da783380932d0ec0f7"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Jige.prefab",
+      "bytes": 2697,
+      "sha256": "5c37e958197976bf334e09fb53b05dad5b77a5ce5cdbe4cde361c06ca83a5a8d"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Jige.prefab.meta",
+      "bytes": 161,
+      "sha256": "2ece6484ce71044df0bb970a0b2c3e6a69782d1d6a391a3807c192115c60f17d"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Onggi.prefab",
+      "bytes": 3707,
+      "sha256": "ec27f44c6d16e67b16cb2631c615d6ca3a134415eddaad2435f6d2ccb6ea31db"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Onggi.prefab.meta",
+      "bytes": 161,
+      "sha256": "c1860cc2f3ba690e1d7b737241b7dfe0b213c28aa0da58bb151e4f211abbff23"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_OxCart.prefab",
+      "bytes": 3707,
+      "sha256": "8284553f7fbadd9dbdb8e62146e44335da3cd20cc39a3b7d19004d8a75bb0e95"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_OxCart.prefab.meta",
+      "bytes": 161,
+      "sha256": "9fb818c849cc557185c1ba1b5efa737da2c507ea3a231d854e2f925d26d911eb"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Parapet.prefab",
+      "bytes": 2700,
+      "sha256": "ec0c106ba81dc326a7dcc74cc73cbd2368271549267d1e717a780d240e505f01"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Parapet.prefab.meta",
+      "bytes": 161,
+      "sha256": "f1534104e85d74d1c200df44f2ea3296f1d2e79bd085f843ce6483b83dbe5f89"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Pine.prefab",
+      "bytes": 3670,
+      "sha256": "b20caa6309a3a5acb1e285a0032260c229097fb4bb6320c3d3857a641910944c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Pine.prefab.meta",
+      "bytes": 161,
+      "sha256": "d5fc89a0184753d185b01c671e27685c72fb40a5f782c860f9c44c0babf1c84b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Revetment.prefab",
+      "bytes": 3708,
+      "sha256": "6e7261cbb37d232b3ac566d988f1cd41be4c652bc6941a7b84b5a07b60f8e320"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Revetment.prefab.meta",
+      "bytes": 161,
+      "sha256": "6d7e8e5afd9ac765100f6d4d3604333723cf4eeaae8caf84c38d277fdc61e623"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RockA.prefab",
+      "bytes": 2698,
+      "sha256": "fc736e954df8446603c4cdcb16be0a31e84ed9353f84c478baa7f9f8b3a7fa90"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RockA.prefab.meta",
+      "bytes": 161,
+      "sha256": "6106659de3853fa852ad5bfcaa54c32f17838123f4e9f89367e53244b25e79ad"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RockB.prefab",
+      "bytes": 2698,
+      "sha256": "c1753d68bb4536744a514ad9736f75592a23ce8a1e2f6ccec68585d342023da9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RockB.prefab.meta",
+      "bytes": 161,
+      "sha256": "37d2ca2271965e2f8405ffd05c192054f9ab6d0ebbedfa456dc739376df0f030"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RockC.prefab",
+      "bytes": 2698,
+      "sha256": "7bbd8f2ec57f84678513c98b2a7f13cae0549f62d9b9f4ce52d7f6bfdcbd167e"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RockC.prefab.meta",
+      "bytes": 161,
+      "sha256": "9ed9e2b936d96a90ef9a811cd56dd30bea5e8bbfbf019cf896002bb10bafa60a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RocketCrate.prefab",
+      "bytes": 3714,
+      "sha256": "21c9c49014f92ee7a6b5f1306d11a43ea6845c17fcee88195799ec75123ad360"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_RocketCrate.prefab.meta",
+      "bytes": 161,
+      "sha256": "415c4e2d7f36c567bdfd3533dcca833c08b552baad3bfd3d645a4740e03c0354"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_SandbagWall.prefab",
+      "bytes": 3710,
+      "sha256": "6fa7fb6271be81ea1924d16a9f86c2649434133a5064c06730e23918c3636c4c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_SandbagWall.prefab.meta",
+      "bytes": 161,
+      "sha256": "5b2c9ee2d1a1649ec7dc48b16b0473eea6f8c624a14f72772225240e84e2b01a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Straw.prefab",
+      "bytes": 3699,
+      "sha256": "545cb7a70e78c3c43d44173b1eb62e70578491813d0810a05db2d8667815ccae"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_Straw.prefab.meta",
+      "bytes": 161,
+      "sha256": "38436d6617bc939621ac93b5924271196d78800aab37e4a611269cde4d993df1"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_TelegraphPole.prefab",
+      "bytes": 3678,
+      "sha256": "4c86c513e0719a0a78f22c06aeba9f2e536c78e6afe15e6027d7254f286dc6a0"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props/BG_TelegraphPole.prefab.meta",
+      "bytes": 161,
+      "sha256": "7d1ac6f81f83cc6ae6b1adeddf0b65ddca108d980a5d0f6c70b3c77649857a32"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources/Props.meta",
+      "bytes": 172,
+      "sha256": "a81d01cc10b9801095abb74db44d4adca02a8dcbc968e0f2dc202c1ba1b178d9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source/Resources.meta",
+      "bytes": 172,
+      "sha256": "7a6df4c10f79be3839cfd07fcbc6663664c1457e12bf3142d703bad94f7d6689"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong/Source.meta",
+      "bytes": 172,
+      "sha256": "f9d724a037969f526d3939349cc6b05eb0f17edc98b0debc55cb0ad9e64733aa"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Maps/Dabudong.meta",
+      "bytes": 172,
+      "sha256": "612fd79c80e175ebf0ec5cb559414edea98b200ca7ef81c441033f0180e9022f"
+    }
+  ]
+}
