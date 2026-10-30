@@ -36,6 +36,7 @@ namespace FiveRivers.Audio
         float stepDistance;
         float lastMoved;
         float nextArtillery;
+        bool wasPaused;
 
         void Awake()
         {
@@ -98,6 +99,8 @@ namespace FiveRivers.Audio
 
         void OnSectionChanged(FlowTransition t)
         {
+            if (t.From == FlowSection.Title && t.To == FlowSection.Tutorial)
+                Play2D("UI_Menu_Click");
             switch (t.To)
             {
                 case FlowSection.Title:
@@ -139,7 +142,7 @@ namespace FiveRivers.Audio
                 tankDamage.Stop();
                 return;
             }
-            SetLoop(tankEngine, tank.IsStopped ? null : "SFX_Tank_Move_Loop");
+            SetLoop(tankEngine, tank.IsStopped ? null : tank.IsMoving ? "SFX_Tank_Move_Loop" : "SFX_Tank_EngineIdle_Loop");
             SetLoop(tankDamage, tank.IsStopped ? "SFX_Tank_Fire_Loop" : tank.SideHits > 0 ? "SFX_Tank_Smoke_Loop" : null);
         }
 
@@ -158,6 +161,13 @@ namespace FiveRivers.Audio
 
         void Update()
         {
+            if (wasPaused != director.Flow.Paused)
+            {
+                wasPaused = director.Flow.Paused;
+                Play2D("UI_Menu_Click");
+            }
+            // Approach -> Holding changes without a section transition.
+            SetTankLoops();
             // 대사 중 SFX · AMB를 낮춘다
             float target = voice.isPlaying || subtitles.Speaking ? Mathf.Pow(10f, config.duckDb / 20f) : 1f;
             duck = Mathf.MoveTowards(duck, target, Time.unscaledDeltaTime / Mathf.Max(0.01f, config.duckFade));

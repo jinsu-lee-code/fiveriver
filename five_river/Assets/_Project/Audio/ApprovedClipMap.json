@@ -1,0 +1,189 @@
+{
+  "entries": [
+    {
+      "id": "AMB_Battle_Distant_Loop",
+      "paths": [
+        "Assets/_Project/Audio/AMB/AMB_Battle_Distant_Loop.wav"
+      ]
+    },
+    {
+      "id": "AMB_Dawn_Loop",
+      "paths": [
+        "Assets/_Project/Audio/AMB/AMB_Dawn_Loop.wav"
+      ]
+    },
+    {
+      "id": "AMB_Night_Hills_Loop",
+      "paths": [
+        "Assets/_Project/Audio/AMB/AMB_Night_Hills_Loop.wav"
+      ]
+    },
+    {
+      "id": "AMB_Silence_Loop",
+      "paths": [
+        "Assets/_Project/Audio/AMB/AMB_Silence_Loop.wav"
+      ]
+    },
+    {
+      "id": "BGM_Ending",
+      "paths": [
+        "Assets/_Project/Audio/BGM/BGM_Ending.wav"
+      ]
+    },
+    {
+      "id": "SFX_Ammo_Pickup",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Ammo_Pickup.wav"
+      ]
+    },
+    {
+      "id": "SFX_Artillery_Distant",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Env/SFX_Artillery_Distant_01.wav"
+      ]
+    },
+    {
+      "id": "SFX_Bazooka_Fire",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Fire.wav"
+      ]
+    },
+    {
+      "id": "SFX_Bazooka_Load",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Load.wav"
+      ]
+    },
+    {
+      "id": "SFX_Bullet_Whiz",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_02.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_03.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_04.wav"
+      ]
+    },
+    {
+      "id": "SFX_Enemy_RifleFire",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_02.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_03.wav"
+      ]
+    },
+    {
+      "id": "SFX_Flare_Burn_Loop",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Env/SFX_Flare_Burn_Loop.wav"
+      ]
+    },
+    {
+      "id": "SFX_Flare_Launch",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Env/SFX_Flare_Launch.wav"
+      ]
+    },
+    {
+      "id": "SFX_Foot_Dirt",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_01.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_03.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_04.wav"
+      ]
+    },
+    {
+      "id": "SFX_Impact_Dirt",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_02.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_03.wav"
+      ]
+    },
+    {
+      "id": "SFX_M1_ClipInsert",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_ClipInsert.wav"
+      ]
+    },
+    {
+      "id": "SFX_M1_Fire",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Fire_01.wav"
+      ]
+    },
+    {
+      "id": "SFX_M1_Ping",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Ping.wav"
+      ]
+    },
+    {
+      "id": "SFX_Player_Hit",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Player_Hit_01.wav"
+      ]
+    },
+    {
+      "id": "SFX_Rocket_HitSide",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_02.wav"
+      ]
+    },
+    {
+      "id": "SFX_Tank_Cannon",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Cannon.wav"
+      ]
+    },
+    {
+      "id": "SFX_Tank_EngineIdle_Loop",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineIdle_Loop.wav"
+      ]
+    },
+    {
+      "id": "SFX_Tank_EngineStall",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineStall.wav"
+      ]
+    },
+    {
+      "id": "SFX_Tank_Fire_Loop",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Fire_Loop.wav"
+      ]
+    },
+    {
+      "id": "SFX_Tank_Move_Loop",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Move_Loop.wav"
+      ]
+    },
+    {
+      "id": "SFX_Tank_Ricochet",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_02.wav"
+      ]
+    },
+    {
+      "id": "UI_Menu_Click",
+      "paths": [
+        "Assets/_Project/Audio/UI/UI_Menu_Click.wav"
+      ]
+    },
+    {
+      "id": "UI_Objective_Show",
+      "paths": [
+        "Assets/_Project/Audio/UI/UI_Objective_Show.wav"
+      ]
+    },
+    {
+      "id": "VO_OSG_Hurt",
+      "paths": [
+        "Assets/_Project/Audio/VO/VO_OSG_Hurt_01.wav"
+      ]
+    }
+  ]
+}

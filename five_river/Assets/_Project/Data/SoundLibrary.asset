@@ -16,8 +16,6 @@ MonoBehaviour:
   - id: SFX_M1_Fire
     clips:
     - {fileID: 8300000, guid: 58037d8e88cf0e843b544e06e91ec06c, type: 3}
-    - {fileID: 8300000, guid: 17e3aa86d52344c4b8fe984a0b76b0c8, type: 3}
-    - {fileID: 8300000, guid: c6d7d11420a892141b826e70d94e56cd, type: 3}
     bus: 0
     volume: 1
     pitchVariance: 0.05
@@ -169,7 +167,6 @@ MonoBehaviour:
   - id: SFX_Player_Hit
     clips:
     - {fileID: 8300000, guid: ef1a463c7815df74eace8616ff753f33, type: 3}
-    - {fileID: 8300000, guid: 4e36f4fd1f0f6574684789a9af4f8790, type: 3}
     bus: 0
     volume: 1
     pitchVariance: 0.05
@@ -281,8 +278,6 @@ MonoBehaviour:
   - id: SFX_Artillery_Distant
     clips:
     - {fileID: 8300000, guid: f72350dd7731393459410cc403958a48, type: 3}
-    - {fileID: 8300000, guid: 550d88d601118ba41b0741b59e49826a, type: 3}
-    - {fileID: 8300000, guid: ed07d5c65a0474f409cd383a2f83a82e, type: 3}
     bus: 0
     volume: 0.6
     pitchVariance: 0.05
@@ -293,7 +288,6 @@ MonoBehaviour:
   - id: SFX_Foot_Dirt
     clips:
     - {fileID: 8300000, guid: ff873de79794d4f429a3ed4083417aff, type: 3}
-    - {fileID: 8300000, guid: 38c6b8faf85039543b8a8d8952f300bd, type: 3}
     - {fileID: 8300000, guid: a09e3d8dba94ffb4b8661cc0b4bd776d, type: 3}
     - {fileID: 8300000, guid: cb2566f025515ca4db0d40a14db8e6bb, type: 3}
     bus: 0
@@ -440,8 +434,6 @@ MonoBehaviour:
   - id: VO_OSG_Hurt
     clips:
     - {fileID: 8300000, guid: ec137e161d601ed4ea84c5c8d56b7dcb, type: 3}
-    - {fileID: 8300000, guid: 45352797f3ef2854b96c093bc82a47d3, type: 3}
-    - {fileID: 8300000, guid: 1cb46555c302bf64e97bdb90a9f7429a, type: 3}
     bus: 3
     volume: 1
     pitchVariance: 0.05

@@ -1,0 +1,2373 @@
+{
+  "date_kst": "2026-10-28",
+  "unity": "6000.3.25f1",
+  "urp": "17.3.0",
+  "counts": {
+    "all_imported": 49,
+    "game_clips": 40,
+    "game_library_ids": 29,
+    "supplemental": 6,
+    "alternatives": 3,
+    "individual_playback_pass": 49,
+    "game_audio_api_route_pass": 40,
+    "real_game_path_clip_outputs": 28,
+    "sound_and_text_tests_pass": 4
+  },
+  "individual_playback": {
+    "status": "completed",
+    "total": 49,
+    "results": [
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Battle_Distant_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 36864,
+        "framesAdvanced": 280,
+        "dspSeconds": 1.2586666666666702,
+        "sourcePeak": 0.049694825,
+        "listenerPeak": 0.049694825,
+        "sourceRms": 0.00837277820822449
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Dawn_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 34816,
+        "framesAdvanced": 297,
+        "dspSeconds": 1.2373333333333392,
+        "sourcePeak": 0.0106567387,
+        "listenerPeak": 0.0106567387,
+        "sourceRms": 0.0011335993729045815
+      },
+      {
+        "path": "Assets/_Project/Audio/Supplemental/AMB/AMB_Dawn_Wind_01.wav",
+        "passed": true,
+        "headTimeSamples": 36864,
+        "framesAdvanced": 312,
+        "dspSeconds": 1.3013333333333321,
+        "sourcePeak": 0.04232178,
+        "listenerPeak": 0.04232178,
+        "sourceRms": 0.010127547437704927
+      },
+      {
+        "path": "Assets/_Project/Audio/Supplemental/AMB/AMB_Night_01.wav",
+        "passed": true,
+        "headTimeSamples": 36864,
+        "framesAdvanced": 321,
+        "dspSeconds": 1.2586666666666702,
+        "sourcePeak": 0.04786377,
+        "listenerPeak": 0.04786377,
+        "sourceRms": 0.012275573609135658
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Night_Hills_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 36864,
+        "framesAdvanced": 305,
+        "dspSeconds": 1.2586666666666702,
+        "sourcePeak": 0.001953125,
+        "listenerPeak": 0.001953125,
+        "sourceRms": 0.00045044424492047267
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Silence_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 35840,
+        "framesAdvanced": 283,
+        "dspSeconds": 1.2373333333333392,
+        "sourcePeak": 0.0005615234,
+        "listenerPeak": 0.0005615234,
+        "sourceRms": 0.00012298749726355807
+      },
+      {
+        "path": "Assets/_Project/Audio/BGM/BGM_Ending.wav",
+        "passed": true,
+        "headTimeSamples": 34816,
+        "framesAdvanced": 279,
+        "dspSeconds": 1.2586666666666702,
+        "sourcePeak": 0.0239135753,
+        "listenerPeak": 0.0239135753,
+        "sourceRms": 0.002550881579110379
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_01.wav",
+        "passed": true,
+        "headTimeSamples": 24595,
+        "framesAdvanced": 131,
+        "dspSeconds": 0.6826666666667052,
+        "sourcePeak": 0.08505221,
+        "listenerPeak": 0.08505221,
+        "sourceRms": 0.0028385420148981984
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Ammo_Pickup.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 193,
+        "dspSeconds": 0.8319999999999936,
+        "sourcePeak": 0.0184502061,
+        "listenerPeak": 0.0184502061,
+        "sourceRms": 0.0009208626861058454
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Fire.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 209,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.126242563,
+        "listenerPeak": 0.126242563,
+        "sourceRms": 0.02367841291036923
+      },
+      {
+        "path": "Assets/_Project/Audio/Alternatives/R13/SFX_Bazooka_Fire.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 139,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.130869135,
+        "listenerPeak": 0.130869135,
+        "sourceRms": 0.027276224765046778
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Load.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 156,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.09034342,
+        "listenerPeak": 0.09034342,
+        "sourceRms": 0.015253671506687062
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_01.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 148,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.115707606,
+        "listenerPeak": 0.115707606,
+        "sourceRms": 0.008733779887723928
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_02.wav",
+        "passed": true,
+        "headTimeSamples": 24000,
+        "framesAdvanced": 108,
+        "dspSeconds": 0.6613333333333458,
+        "sourcePeak": 0.04929981,
+        "listenerPeak": 0.04929981,
+        "sourceRms": 0.0054869216204135336
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_03.wav",
+        "passed": true,
+        "headTimeSamples": 24000,
+        "framesAdvanced": 95,
+        "dspSeconds": 0.6399999999999864,
+        "sourcePeak": 0.125314653,
+        "listenerPeak": 0.125314653,
+        "sourceRms": 0.02163816650998418
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_04.wav",
+        "passed": true,
+        "headTimeSamples": 24000,
+        "framesAdvanced": 115,
+        "dspSeconds": 0.6613333333333458,
+        "sourcePeak": 0.102734193,
+        "listenerPeak": 0.102734193,
+        "sourceRms": 0.0071650507358825425
+      },
+      {
+        "path": "Assets/_Project/Audio/UI/UI_Menu_Click.wav",
+        "passed": true,
+        "headTimeSamples": 19453,
+        "framesAdvanced": 113,
+        "dspSeconds": 0.5546666666666624,
+        "sourcePeak": 0.110835023,
+        "listenerPeak": 0.110835023,
+        "sourceRms": 0.010401179797971775
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_01.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 186,
+        "dspSeconds": 0.8319999999999936,
+        "sourcePeak": 0.122155465,
+        "listenerPeak": 0.122155465,
+        "sourceRms": 0.01779938519152776
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_02.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 163,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.124744967,
+        "listenerPeak": 0.124744967,
+        "sourceRms": 0.019313296930653992
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_03.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 163,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.124296121,
+        "listenerPeak": 0.124296121,
+        "sourceRms": 0.023536351840598078
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Artillery_Distant_01.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 271,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.109229527,
+        "listenerPeak": 0.109229527,
+        "sourceRms": 0.015571058893338884
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Burn_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 260,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.08326977,
+        "listenerPeak": 0.08326977,
+        "sourceRms": 0.01285241509367153
+      },
+      {
+        "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_Flare_Ignition_01.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 172,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.112906627,
+        "listenerPeak": 0.112906627,
+        "sourceRms": 0.005938563165157096
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Launch.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 267,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.09811625,
+        "listenerPeak": 0.09811625,
+        "sourceRms": 0.0036725206254373606
+      },
+      {
+        "path": "Assets/_Project/Audio/Alternatives/R13/SFX_Flare_Launch.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 177,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.118707113,
+        "listenerPeak": 0.118707113,
+        "sourceRms": 0.009251101679343333
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_03.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 179,
+        "dspSeconds": 0.8533333333332962,
+        "sourcePeak": 0.005075425,
+        "listenerPeak": 0.005075425,
+        "sourceRms": 0.00040560718649650324
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_04.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 167,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.08555716,
+        "listenerPeak": 0.08555716,
+        "sourceRms": 0.0030907953377361293
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_01.wav",
+        "passed": true,
+        "headTimeSamples": 18432,
+        "framesAdvanced": 107,
+        "dspSeconds": 0.5546666666666624,
+        "sourcePeak": 0.113877691,
+        "listenerPeak": 0.113877691,
+        "sourceRms": 0.0062831486545169065
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_02.wav",
+        "passed": true,
+        "headTimeSamples": 19200,
+        "framesAdvanced": 119,
+        "dspSeconds": 0.5546666666666624,
+        "sourcePeak": 0.117239729,
+        "listenerPeak": 0.117239729,
+        "sourceRms": 0.011236634260423317
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_03.wav",
+        "passed": true,
+        "headTimeSamples": 19200,
+        "framesAdvanced": 110,
+        "dspSeconds": 0.533333333333303,
+        "sourcePeak": 0.1224921,
+        "listenerPeak": 0.1224921,
+        "sourceRms": 0.012679436157924886
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Fire_01.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 174,
+        "dspSeconds": 0.8533333333332962,
+        "sourcePeak": 0.120437764,
+        "listenerPeak": 0.120437764,
+        "sourceRms": 0.029907365340679185
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Ping.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 181,
+        "dspSeconds": 0.8319999999999936,
+        "sourcePeak": 0.116752036,
+        "listenerPeak": 0.116752036,
+        "sourceRms": 0.019548333442688547
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_ClipInsert.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 269,
+        "dspSeconds": 1.3653333333333535,
+        "sourcePeak": 0.112345569,
+        "listenerPeak": 0.112345569,
+        "sourceRms": 0.0043360769928222805
+      },
+      {
+        "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_Mosin_Fire_01.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 278,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.109656796,
+        "listenerPeak": 0.109656796,
+        "sourceRms": 0.012471193757652266
+      },
+      {
+        "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_Player_Breath_01.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 274,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.0807191059,
+        "listenerPeak": 0.0807191059,
+        "sourceRms": 0.0073370860808102
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Player_Hit_01.wav",
+        "passed": true,
+        "headTimeSamples": 24000,
+        "framesAdvanced": 132,
+        "dspSeconds": 0.6613333333333458,
+        "sourcePeak": 0.1167952,
+        "listenerPeak": 0.1167952,
+        "sourceRms": 0.010454767346540383
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_01.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 276,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.123933591,
+        "listenerPeak": 0.123933591,
+        "sourceRms": 0.036849269493278554
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_02.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 280,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.1288709,
+        "listenerPeak": 0.1288709,
+        "sourceRms": 0.04032706916393054
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Cannon.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 275,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.124688864,
+        "listenerPeak": 0.124688864,
+        "sourceRms": 0.013258385582122993
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineStall.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 278,
+        "dspSeconds": 1.3653333333333535,
+        "sourcePeak": 0.0561835729,
+        "listenerPeak": 0.0561835729,
+        "sourceRms": 0.009330459536634698
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Fire_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 292,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.00531279575,
+        "listenerPeak": 0.00531279575,
+        "sourceRms": 0.0012823225176706295
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Move_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 39936,
+        "framesAdvanced": 269,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.116682984,
+        "listenerPeak": 0.116682984,
+        "sourceRms": 0.055563371825580736
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_01.wav",
+        "passed": true,
+        "headTimeSamples": 28800,
+        "framesAdvanced": 156,
+        "dspSeconds": 0.7680000000000291,
+        "sourcePeak": 0.115547918,
+        "listenerPeak": 0.115547918,
+        "sourceRms": 0.003669933872309553
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_02.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 163,
+        "dspSeconds": 0.853333333333353,
+        "sourcePeak": 0.117373519,
+        "listenerPeak": 0.117373519,
+        "sourceRms": 0.019616054227253744
+      },
+      {
+        "path": "Assets/_Project/Audio/Alternatives/R14/SFX_Tank_Ricochet_01.wav",
+        "passed": true,
+        "headTimeSamples": 33600,
+        "framesAdvanced": 176,
+        "dspSeconds": 0.8319999999999936,
+        "sourcePeak": 0.06219122,
+        "listenerPeak": 0.06219122,
+        "sourceRms": 0.004731054701160234
+      },
+      {
+        "path": "Assets/_Project/Audio/UI/UI_Objective_Show.wav",
+        "passed": true,
+        "headTimeSamples": 19200,
+        "framesAdvanced": 116,
+        "dspSeconds": 0.5546666666666624,
+        "sourcePeak": 0.00210181274,
+        "listenerPeak": 0.00210181274,
+        "sourceRms": 0.00010157743114025393
+      },
+      {
+        "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_GMC_Engine_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 40960,
+        "framesAdvanced": 265,
+        "dspSeconds": 1.343999999999994,
+        "sourcePeak": 0.0694634,
+        "listenerPeak": 0.0694634,
+        "sourceRms": 0.018045339028142714
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineIdle_Loop.wav",
+        "passed": true,
+        "headTimeSamples": 37888,
+        "framesAdvanced": 271,
+        "dspSeconds": 1.3226666666666915,
+        "sourcePeak": 0.0554973558,
+        "listenerPeak": 0.0554973558,
+        "sourceRms": 0.012702756926397083
+      },
+      {
+        "path": "Assets/_Project/Audio/VO/VO_OSG_Hurt_01.wav",
+        "passed": true,
+        "headTimeSamples": 38912,
+        "framesAdvanced": 281,
+        "dspSeconds": 1.3226666666666915,
+        "sourcePeak": 0.07402093,
+        "listenerPeak": 0.07402093,
+        "sourceRms": 0.009886481939867967
+      }
+    ]
+  },
+  "game_audio_api_routes": {
+    "status": "completed",
+    "scope": "Actual AudioDirector.Play2D and configured volume buses; single-clip selection on a temporary library clone; not a claim of 40 natural event triggers",
+    "results": [
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Battle_Distant_Loop.wav",
+        "id": "AMB_Battle_Distant_Loop",
+        "passed": true,
+        "sourcePeak": 0.137652516,
+        "maxTimeSamples": 33124
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Dawn_Loop.wav",
+        "id": "AMB_Dawn_Loop",
+        "passed": true,
+        "sourcePeak": 0.02940025,
+        "maxTimeSamples": 28306
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Night_Hills_Loop.wav",
+        "id": "AMB_Night_Hills_Loop",
+        "passed": true,
+        "sourcePeak": 0.00571080949,
+        "maxTimeSamples": 31639
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Silence_Loop.wav",
+        "id": "AMB_Silence_Loop",
+        "passed": true,
+        "sourcePeak": 0.00168382365,
+        "maxTimeSamples": 31846
+      },
+      {
+        "path": "Assets/_Project/Audio/BGM/BGM_Ending.wav",
+        "id": "BGM_Ending",
+        "passed": true,
+        "sourcePeak": 0.05491468,
+        "maxTimeSamples": 30294
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_01.wav",
+        "id": "SFX_Foot_Dirt",
+        "passed": true,
+        "sourcePeak": 0.191115767,
+        "maxTimeSamples": 23799
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Ammo_Pickup.wav",
+        "id": "SFX_Ammo_Pickup",
+        "passed": true,
+        "sourcePeak": 0.08109486,
+        "maxTimeSamples": 34486
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Fire.wav",
+        "id": "SFX_Bazooka_Fire",
+        "passed": true,
+        "sourcePeak": 0.5679015,
+        "maxTimeSamples": 34649
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Load.wav",
+        "id": "SFX_Bazooka_Load",
+        "passed": true,
+        "sourcePeak": 0.4012682,
+        "maxTimeSamples": 35039
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_01.wav",
+        "id": "SFX_Bullet_Whiz",
+        "passed": true,
+        "sourcePeak": 0.4985189,
+        "maxTimeSamples": 36198
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_02.wav",
+        "id": "SFX_Bullet_Whiz",
+        "passed": true,
+        "sourcePeak": 0.221439421,
+        "maxTimeSamples": 23408
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_03.wav",
+        "id": "SFX_Bullet_Whiz",
+        "passed": true,
+        "sourcePeak": 0.5593608,
+        "maxTimeSamples": 23334
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_04.wav",
+        "id": "SFX_Bullet_Whiz",
+        "passed": true,
+        "sourcePeak": 0.4382116,
+        "maxTimeSamples": 23467
+      },
+      {
+        "path": "Assets/_Project/Audio/UI/UI_Menu_Click.wav",
+        "id": "UI_Menu_Click",
+        "passed": true,
+        "sourcePeak": 0.1515434,
+        "maxTimeSamples": 19181
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_01.wav",
+        "id": "SFX_Enemy_RifleFire",
+        "passed": true,
+        "sourcePeak": 0.5236037,
+        "maxTimeSamples": 34277
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_02.wav",
+        "id": "SFX_Enemy_RifleFire",
+        "passed": true,
+        "sourcePeak": 0.5528158,
+        "maxTimeSamples": 35782
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_03.wav",
+        "id": "SFX_Enemy_RifleFire",
+        "passed": true,
+        "sourcePeak": 0.558362961,
+        "maxTimeSamples": 35581
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Artillery_Distant_01.wav",
+        "id": "SFX_Artillery_Distant",
+        "passed": true,
+        "sourcePeak": 0.267211,
+        "maxTimeSamples": 36437
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Burn_Loop.wav",
+        "id": "SFX_Flare_Burn_Loop",
+        "passed": true,
+        "sourcePeak": 0.237973586,
+        "maxTimeSamples": 35182
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Launch.wav",
+        "id": "SFX_Flare_Launch",
+        "passed": true,
+        "sourcePeak": 0.433802158,
+        "maxTimeSamples": 35728
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_03.wav",
+        "id": "SFX_Foot_Dirt",
+        "passed": true,
+        "sourcePeak": 0.0219116658,
+        "maxTimeSamples": 37785
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_04.wav",
+        "id": "SFX_Foot_Dirt",
+        "passed": true,
+        "sourcePeak": 0.174299821,
+        "maxTimeSamples": 35996
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_01.wav",
+        "id": "SFX_Impact_Dirt",
+        "passed": true,
+        "sourcePeak": 0.5061029,
+        "maxTimeSamples": 18498
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_02.wav",
+        "id": "SFX_Impact_Dirt",
+        "passed": true,
+        "sourcePeak": 0.5168846,
+        "maxTimeSamples": 18670
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_03.wav",
+        "id": "SFX_Impact_Dirt",
+        "passed": true,
+        "sourcePeak": 0.5383727,
+        "maxTimeSamples": 18878
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Fire_01.wav",
+        "id": "SFX_M1_Fire",
+        "passed": true,
+        "sourcePeak": 0.5410322,
+        "maxTimeSamples": 36365
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Ping.wav",
+        "id": "SFX_M1_Ping",
+        "passed": true,
+        "sourcePeak": 0.488228172,
+        "maxTimeSamples": 35868
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_ClipInsert.wav",
+        "id": "SFX_M1_ClipInsert",
+        "passed": true,
+        "sourcePeak": 0.46894896,
+        "maxTimeSamples": 37547
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Player_Hit_01.wav",
+        "id": "SFX_Player_Hit",
+        "passed": true,
+        "sourcePeak": 0.524532139,
+        "maxTimeSamples": 23469
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_01.wav",
+        "id": "SFX_Rocket_HitSide",
+        "passed": true,
+        "sourcePeak": 0.542406559,
+        "maxTimeSamples": 37630
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_02.wav",
+        "id": "SFX_Rocket_HitSide",
+        "passed": true,
+        "sourcePeak": 0.579911,
+        "maxTimeSamples": 36751
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Cannon.wav",
+        "id": "SFX_Tank_Cannon",
+        "passed": true,
+        "sourcePeak": 0.5610535,
+        "maxTimeSamples": 35728
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineStall.wav",
+        "id": "SFX_Tank_EngineStall",
+        "passed": true,
+        "sourcePeak": 0.240379363,
+        "maxTimeSamples": 35953
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Fire_Loop.wav",
+        "id": "SFX_Tank_Fire_Loop",
+        "passed": true,
+        "sourcePeak": 0.0184765644,
+        "maxTimeSamples": 33317
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Move_Loop.wav",
+        "id": "SFX_Tank_Move_Loop",
+        "passed": true,
+        "sourcePeak": 0.5248541,
+        "maxTimeSamples": 35099
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_01.wav",
+        "id": "SFX_Tank_Ricochet",
+        "passed": true,
+        "sourcePeak": 0.521655738,
+        "maxTimeSamples": 28364
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_02.wav",
+        "id": "SFX_Tank_Ricochet",
+        "passed": true,
+        "sourcePeak": 0.5276167,
+        "maxTimeSamples": 37393
+      },
+      {
+        "path": "Assets/_Project/Audio/UI/UI_Objective_Show.wav",
+        "id": "UI_Objective_Show",
+        "passed": true,
+        "sourcePeak": 0.00314215338,
+        "maxTimeSamples": 18534
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineIdle_Loop.wav",
+        "id": "SFX_Tank_EngineIdle_Loop",
+        "passed": true,
+        "sourcePeak": 0.238758788,
+        "maxTimeSamples": 35261
+      },
+      {
+        "path": "Assets/_Project/Audio/VO/VO_OSG_Hurt_01.wav",
+        "id": "VO_OSG_Hurt",
+        "passed": true,
+        "sourcePeak": 0.367825329,
+        "maxTimeSamples": 36458
+      }
+    ]
+  },
+  "game_events": {
+    "status": "completed",
+    "m1Fired": 8,
+    "clipEjected": 1,
+    "m1Reloaded": 1,
+    "bazookaFired": 1,
+    "bazookaReloaded": 1,
+    "framesAdvanced": 4414,
+    "outputs": [
+      {
+        "path": "Assets/_Project/Audio/UI/UI_Objective_Show.wav",
+        "sourcePeak": 0.00315260072,
+        "maxTimeSamples": 18847
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Night_Hills_Loop.wav",
+        "sourcePeak": 0.00695800828,
+        "maxTimeSamples": 971776
+      },
+      {
+        "path": "Assets/_Project/Audio/UI/UI_Menu_Click.wav",
+        "sourcePeak": 0.161139876,
+        "maxTimeSamples": 19273
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_03.wav",
+        "sourcePeak": 0.102728829,
+        "maxTimeSamples": 19104
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Fire_01.wav",
+        "sourcePeak": 0.540091455,
+        "maxTimeSamples": 77793
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_01.wav",
+        "sourcePeak": 0.182988465,
+        "maxTimeSamples": 19065
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_02.wav",
+        "sourcePeak": 0.140203819,
+        "maxTimeSamples": 18997
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Ping.wav",
+        "sourcePeak": 0.516292334,
+        "maxTimeSamples": 43694
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_ClipInsert.wav",
+        "sourcePeak": 0.466236025,
+        "maxTimeSamples": 106062
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Launch.wav",
+        "sourcePeak": 0.438956171,
+        "maxTimeSamples": 120012
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Burn_Loop.wav",
+        "sourcePeak": 0.224828362,
+        "maxTimeSamples": 299296
+      },
+      {
+        "path": "Assets/_Project/Audio/VO/VO_OSG_Hurt_01.wav",
+        "sourcePeak": 0.3681858,
+        "maxTimeSamples": 267046
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Player_Hit_01.wav",
+        "sourcePeak": 0.525002062,
+        "maxTimeSamples": 23816
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Battle_Distant_Loop.wav",
+        "sourcePeak": 0.1376587,
+        "maxTimeSamples": 166912
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Silence_Loop.wav",
+        "sourcePeak": 0.00364379887,
+        "maxTimeSamples": 95232
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Move_Loop.wav",
+        "sourcePeak": 0.1323723,
+        "maxTimeSamples": 383613
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Fire.wav",
+        "sourcePeak": 0.226147667,
+        "maxTimeSamples": 106025
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_02.wav",
+        "sourcePeak": 0.20197244,
+        "maxTimeSamples": 119930
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Load.wav",
+        "sourcePeak": 0.160130247,
+        "maxTimeSamples": 57486
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Cannon.wav",
+        "sourcePeak": 0.211008579,
+        "maxTimeSamples": 118585
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_02.wav",
+        "sourcePeak": 0.1570411,
+        "maxTimeSamples": 71273
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_03.wav",
+        "sourcePeak": 0.15262194,
+        "maxTimeSamples": 71767
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineIdle_Loop.wav",
+        "sourcePeak": 0.09979903,
+        "maxTimeSamples": 120832
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_01.wav",
+        "sourcePeak": 0.136940315,
+        "maxTimeSamples": 118953
+      },
+      {
+        "path": "Assets/_Project/Audio/BGM/BGM_Ending.wav",
+        "sourcePeak": 0.160015881,
+        "maxTimeSamples": 217088
+      },
+      {
+        "path": "Assets/_Project/Audio/AMB/AMB_Dawn_Loop.wav",
+        "sourcePeak": 0.0349548347,
+        "maxTimeSamples": 217088
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineStall.wav",
+        "sourcePeak": 0.0620508827,
+        "maxTimeSamples": 143594
+      },
+      {
+        "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Fire_Loop.wav",
+        "sourcePeak": 0.00437204167,
+        "maxTimeSamples": 217087
+      }
+    ],
+    "actions": [
+      "Actual StartRun -> menu click + tutorial ambience",
+      "Pause menu open",
+      "Pause menu close",
+      "Scout checkpoint via existing debug API",
+      "M1 input down",
+      "M1 input up",
+      "M1 input down",
+      "M1 input up",
+      "M1 input down",
+      "M1 input up",
+      "M1 input down",
+      "M1 input up",
+      "M1 input down",
+      "M1 input up",
+      "M1 input down",
+      "M1 input up",
+      "M1 input down",
+      "M1 input up",
+      "M1 input down",
+      "M1 input up",
+      "Actual TakeDamage -> hit + hurt audio",
+      "Walk input down",
+      "Walk input up",
+      "Assault -> battle ambience + flare",
+      "Silence -> quiet ambience",
+      "Tank -> approach engine",
+      "Actual weapon switch input to bazooka",
+      "Weapon switch input release",
+      "Bazooka input down",
+      "Bazooka input up",
+      "Tank naturally reached Holding -> idle engine",
+      "Public actual rocket-hit handler: side hit 1",
+      "Public actual rocket-hit handler: side hit 2 -> stall/fire",
+      "Dawn -> ending music + dawn ambience"
+    ]
+  },
+  "imported_clips": [
+    {
+      "path": "Assets/_Project/Audio/AMB/AMB_Battle_Distant_Loop.wav",
+      "guid": "98cd780b919a2274a9ec0b31025e0030",
+      "length": 30,
+      "frequency": 48000,
+      "channels": 2,
+      "samples": 1440000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.253875732,
+      "rms": 0.020557970438221825,
+      "entryIds": [
+        "AMB_Battle_Distant_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/AMB/AMB_Dawn_Loop.wav",
+      "guid": "209e139cf47d40b43b5e2bdd2a2a7b72",
+      "length": 30,
+      "frequency": 48000,
+      "channels": 2,
+      "samples": 1440000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.302642822,
+      "rms": 0.01491455701976194,
+      "entryIds": [
+        "AMB_Dawn_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/Supplemental/AMB/AMB_Dawn_Wind_01.wav",
+      "guid": "c56d2e16d5678c142b05fe47ff616961",
+      "length": 23.4014168,
+      "frequency": 48000,
+      "channels": 2,
+      "samples": 1123268,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.446105957,
+      "rms": 0.048665019212400414,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/Supplemental/AMB/AMB_Night_01.wav",
+      "guid": "7dd223ca1dccda24ab5aee0cf0912150",
+      "length": 27.5075836,
+      "frequency": 48000,
+      "channels": 2,
+      "samples": 1320364,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.5072937,
+      "rms": 0.07435776155556094,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/AMB/AMB_Night_Hills_Loop.wav",
+      "guid": "d9e12572f7b18d1478183bb7d7d2b785",
+      "length": 30,
+      "frequency": 48000,
+      "channels": 2,
+      "samples": 1440000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.0116271973,
+      "rms": 0.002392164510121197,
+      "entryIds": [
+        "AMB_Night_Hills_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/AMB/AMB_Silence_Loop.wav",
+      "guid": "ad3d848e91f28874789077f75ab76900",
+      "length": 30,
+      "frequency": 48000,
+      "channels": 2,
+      "samples": 1440000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.00408935547,
+      "rms": 0.0007476848450801146,
+      "entryIds": [
+        "AMB_Silence_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/BGM/BGM_Ending.wav",
+      "guid": "3f55aa58040be7a4ba253a678ec3e03a",
+      "length": 40,
+      "frequency": 48000,
+      "channels": 2,
+      "samples": 1920000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.670166,
+      "rms": 0.060983522431123614,
+      "entryIds": [
+        "BGM_Ending"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_01.wav",
+      "guid": "ff873de79794d4f429a3ed4083417aff",
+      "length": 0.512395859,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 24595,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.6014099,
+      "rms": 0.02078814412065261,
+      "entryIds": [
+        "SFX_Foot_Dirt"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Foley/SFX_Ammo_Pickup.wav",
+      "guid": "e82e6a9c7952d674a992337b19254bde",
+      "length": 1.2,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 57600,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.130462646,
+      "rms": 0.00594579853138077,
+      "entryIds": [
+        "SFX_Ammo_Pickup"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Fire.wav",
+      "guid": "316af7e216db0aa4ea946bed894588f5",
+      "length": 2.21733332,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 106432,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8926697,
+      "rms": 0.13793304277963617,
+      "entryIds": [
+        "SFX_Bazooka_Fire"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/Alternatives/R13/SFX_Bazooka_Fire.wav",
+      "guid": "c6dce1c4a88c5ba4b9070b429f7656d5",
+      "length": 2,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 96000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.9253845,
+      "rms": 0.12579977454977984,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Load.wav",
+      "guid": "e2fd8362975bfdb45b8385b04c683057",
+      "length": 1.2,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 57600,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.638824463,
+      "rms": 0.0949591891281353,
+      "entryIds": [
+        "SFX_Bazooka_Load"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_01.wav",
+      "guid": "d99b6df0e404ac44da5ac424be9a02e8",
+      "length": 1.2157917,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 58358,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.81817627,
+      "rms": 0.05664820603616928,
+      "entryIds": [
+        "SFX_Bullet_Whiz"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_02.wav",
+      "guid": "99feaf48e305ade48955376ec27c46ed",
+      "length": 0.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 24000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.3486023,
+      "rms": 0.04175925776049834,
+      "entryIds": [
+        "SFX_Bullet_Whiz"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_03.wav",
+      "guid": "9e86e19a905be944cb2700bffd9f05ed",
+      "length": 0.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 24000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8861084,
+      "rms": 0.16684835568469367,
+      "entryIds": [
+        "SFX_Bullet_Whiz"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_04.wav",
+      "guid": "956bcaa6a38182248980ab70cac955f6",
+      "length": 0.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 24000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.7264404,
+      "rms": 0.06613531486917223,
+      "entryIds": [
+        "SFX_Bullet_Whiz"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/UI/UI_Menu_Click.wav",
+      "guid": "bfdd3ce1824b1274e9bd03553499401e",
+      "length": 0.405270845,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 19453,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.7837219,
+      "rms": 0.0958502035360806,
+      "entryIds": [
+        "UI_Menu_Click"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_01.wav",
+      "guid": "eb3b4196004cb634dabbb513c2f656e6",
+      "length": 1.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 72000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.863769531,
+      "rms": 0.09949274796869942,
+      "entryIds": [
+        "SFX_Enemy_RifleFire"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_02.wav",
+      "guid": "2bfcf74fc0ea3814a8ef08af295c5259",
+      "length": 1.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 72000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8820801,
+      "rms": 0.10782805033595518,
+      "entryIds": [
+        "SFX_Enemy_RifleFire"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_03.wav",
+      "guid": "9a7f4a5023fd8754181abf1753afd8c5",
+      "length": 1.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 72000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.87890625,
+      "rms": 0.12274926849457968,
+      "entryIds": [
+        "SFX_Enemy_RifleFire"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Env/SFX_Artillery_Distant_01.wav",
+      "guid": "f72350dd7731393459410cc403958a48",
+      "length": 2.8,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 134400,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.7723694,
+      "rms": 0.11873109151308713,
+      "entryIds": [
+        "SFX_Artillery_Distant"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Burn_Loop.wav",
+      "guid": "6347d0d4d48e67d4fba50a13a9ef3cc5",
+      "length": 6.237,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 299376,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.588806152,
+      "rms": 0.0720104221255142,
+      "entryIds": [
+        "SFX_Flare_Burn_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_Flare_Ignition_01.wav",
+      "guid": "f274938b4e2fdbe4c98e79aed5aa5e9b",
+      "length": 1,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 48000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.798370361,
+      "rms": 0.0424749486136916,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Env/SFX_Flare_Launch.wav",
+      "guid": "935876e020c727345ba1e6a2a9f02a0e",
+      "length": 2.515479,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 120743,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.6937866,
+      "rms": 0.019596865293190747,
+      "entryIds": [
+        "SFX_Flare_Launch"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/Alternatives/R13/SFX_Flare_Launch.wav",
+      "guid": "2792683b60a36d34387b58d5f72bdae1",
+      "length": 2,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 96000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.839386,
+      "rms": 0.04446545202367381,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_03.wav",
+      "guid": "a09e3d8dba94ffb4b8661cc0b4bd776d",
+      "length": 2,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 96000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.108825684,
+      "rms": 0.007593907962608104,
+      "entryIds": [
+        "SFX_Foot_Dirt"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_04.wav",
+      "guid": "cb2566f025515ca4db0d40a14db8e6bb",
+      "length": 2,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 96000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.604980469,
+      "rms": 0.01733590640937865,
+      "entryIds": [
+        "SFX_Foot_Dirt"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_01.wav",
+      "guid": "ece797a1c0fbed748a38ce6a05fb5364",
+      "length": 0.4,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 19200,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8052368,
+      "rms": 0.053653895459972935,
+      "entryIds": [
+        "SFX_Impact_Dirt"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_02.wav",
+      "guid": "298793441da07f544bd4aaef52ab8783",
+      "length": 0.4,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 19200,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.82901,
+      "rms": 0.10005719461331895,
+      "entryIds": [
+        "SFX_Impact_Dirt"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_03.wav",
+      "guid": "ae7c6fd412ad2b142a913c507afd9518",
+      "length": 0.4,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 19200,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8661499,
+      "rms": 0.10854502327412588,
+      "entryIds": [
+        "SFX_Impact_Dirt"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Fire_01.wav",
+      "guid": "58037d8e88cf0e843b544e06e91ec06c",
+      "length": 1.62106252,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 77811,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.851623535,
+      "rms": 0.14451985460206704,
+      "entryIds": [
+        "SFX_M1_Fire"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Ping.wav",
+      "guid": "263b5ba0e0ef6d6498df11697612d6fb",
+      "length": 0.9176458,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 44047,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8255615,
+      "rms": 0.13359988559490177,
+      "entryIds": [
+        "SFX_M1_Ping"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_M1_ClipInsert.wav",
+      "guid": "532cd079bbceee540a61ece9d88e3c5c",
+      "length": 2.21733332,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 106432,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.7944031,
+      "rms": 0.027827280913078525,
+      "entryIds": [
+        "SFX_M1_ClipInsert"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_Mosin_Fire_01.wav",
+      "guid": "68951d8438e6b6a4f9e8c8bca96cf048",
+      "length": 3.81,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 182880,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.7753906,
+      "rms": 0.044035414588600594,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_Player_Breath_01.wav",
+      "guid": "07a5ce5b3dbdad845a78c5e6581327fe",
+      "length": 4.684729,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 224867,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.570770264,
+      "rms": 0.04623020660188752,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Player_Hit_01.wav",
+      "guid": "ef1a463c7815df74eace8616ff753f33",
+      "length": 0.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 24000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8258667,
+      "rms": 0.08825158930410279,
+      "entryIds": [
+        "SFX_Player_Hit"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_01.wav",
+      "guid": "c7a60972debacb7409ada552467e1408",
+      "length": 2.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 120000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8763428,
+      "rms": 0.1965731815702169,
+      "entryIds": [
+        "SFX_Rocket_HitSide"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_02.wav",
+      "guid": "ec9bf4e578b542f41bb337a61c71f38f",
+      "length": 2.5,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 120000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.9112549,
+      "rms": 0.2020216914548046,
+      "entryIds": [
+        "SFX_Rocket_HitSide"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Cannon.wav",
+      "guid": "87613885d83d626498a58ad03015e382",
+      "length": 2.47804165,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 118946,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.88168335,
+      "rms": 0.062133970595245315,
+      "entryIds": [
+        "SFX_Tank_Cannon"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineStall.wav",
+      "guid": "f7c5b036f55e4894cb75aeceb98ee992",
+      "length": 3,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 144000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.447479248,
+      "rms": 0.09970168760482556,
+      "entryIds": [
+        "SFX_Tank_EngineStall"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Fire_Loop.wav",
+      "guid": "6da89f4834d3a544f99c86e57c799f47",
+      "length": 8.33,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 399840,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.0507507324,
+      "rms": 0.008242382272771789,
+      "entryIds": [
+        "SFX_Tank_Fire_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Move_Loop.wav",
+      "guid": "4401598ee1e83ce4c87fff4c93d77b8e",
+      "length": 8,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 384000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.825073242,
+      "rms": 0.3890904747635324,
+      "entryIds": [
+        "SFX_Tank_Move_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_01.wav",
+      "guid": "d6085079c6a42924d83029b818a51e1b",
+      "length": 0.6,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 28800,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.8170471,
+      "rms": 0.03052612342457262,
+      "entryIds": [
+        "SFX_Tank_Ricochet"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_02.wav",
+      "guid": "85bb6416199b1654ebd7f1cc6f90bd1d",
+      "length": 1.48885417,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 71465,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.829956055,
+      "rms": 0.10620000396486536,
+      "entryIds": [
+        "SFX_Tank_Ricochet"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/Alternatives/R14/SFX_Tank_Ricochet_01.wav",
+      "guid": "0c53f2f6b7348a743b3aa48bc07e7d87",
+      "length": 0.7,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 33600,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.4397583,
+      "rms": 0.03894947895440075,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/UI/UI_Objective_Show.wav",
+      "guid": "3bbe98e253aa2494f9f49af065d205f8",
+      "length": 0.4,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 19200,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.0148620605,
+      "rms": 0.0008720101467998759,
+      "entryIds": [
+        "UI_Objective_Show"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/Supplemental/SFX/SFX_GMC_Engine_Loop.wav",
+      "guid": "825f395497454f949a523bbeb57e893b",
+      "length": 3.42,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 164160,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.49118042,
+      "rms": 0.13159821636275942,
+      "entryIds": []
+    },
+    {
+      "path": "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineIdle_Loop.wav",
+      "guid": "9c7b552181533f54f9290122d6cc70c5",
+      "length": 48,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 2304000,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.434661865,
+      "rms": 0.09431874152064523,
+      "entryIds": [
+        "SFX_Tank_EngineIdle_Loop"
+      ]
+    },
+    {
+      "path": "Assets/_Project/Audio/VO/VO_OSG_Hurt_01.wav",
+      "guid": "ec137e161d601ed4ea84c5c8d56b7dcb",
+      "length": 5.5825,
+      "frequency": 48000,
+      "channels": 1,
+      "samples": 267960,
+      "loadState": "Loaded",
+      "decoded": true,
+      "peak": 0.523407,
+      "rms": 0.04877701807878019,
+      "entryIds": [
+        "VO_OSG_Hurt"
+      ]
+    }
+  ],
+  "library_entries": [
+    {
+      "id": "SFX_M1_Fire",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Fire_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_M1_Ping",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_Ping.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_M1_ClipInsert",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_ClipInsert.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_M1_ClipRemove",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_ClipRemove.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_M1_DryFire",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_M1_DryFire.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Weapon_Switch",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Weapon_Switch_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Weapon_Switch_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Bazooka_Fire",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Fire.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Bazooka_Load",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bazooka_Load.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Rocket_HitSide",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Rocket_HitSide_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_Ricochet",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Tank_Ricochet_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Enemy_RifleFire",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_02.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_RifleFire_03.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Enemy_SMG",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_SMG_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Enemy_SMG_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Bullet_Whiz",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_02.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_03.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Bullet_Whiz_04.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Impact_Dirt",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_01.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_02.wav",
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Impact_Dirt_03.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Player_Hit",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Weapon/SFX_Player_Hit_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_EngineIdle_Loop",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineIdle_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": true,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_Move_Loop",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Move_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": true,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_Turret_Loop",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Turret_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": true,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_Cannon",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Cannon.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_MG",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_MG_01.wav",
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_MG_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_Smoke_Loop",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Smoke_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": true,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_Fire_Loop",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_Fire_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": true,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Tank_EngineStall",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Tank/SFX_Tank_EngineStall.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Flare_Launch",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Env/SFX_Flare_Launch.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Flare_Burn_Loop",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Env/SFX_Flare_Burn_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": true,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Artillery_Distant",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Env/SFX_Artillery_Distant_01.wav"
+      ],
+      "volume": 0.6,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Foot_Dirt",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_01.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_03.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_04.wav"
+      ],
+      "volume": 0.5,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Foot_Dirt_Run",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_Run_01.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_Run_02.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_Run_03.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Dirt_Run_04.wav"
+      ],
+      "volume": 0.6,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Stance_Change",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Stance_Change_01.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Stance_Change_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "SFX_Ammo_Pickup",
+      "clips": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Ammo_Pickup.wav"
+      ],
+      "volume": 1,
+      "bus": "Sfx",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "AMB_Night_Hills_Loop",
+      "clips": [
+        "Assets/_Project/Audio/AMB/AMB_Night_Hills_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Amb",
+      "loop": true,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "AMB_Battle_Distant_Loop",
+      "clips": [
+        "Assets/_Project/Audio/AMB/AMB_Battle_Distant_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Amb",
+      "loop": true,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "AMB_Silence_Loop",
+      "clips": [
+        "Assets/_Project/Audio/AMB/AMB_Silence_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Amb",
+      "loop": true,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "AMB_Dawn_Loop",
+      "clips": [
+        "Assets/_Project/Audio/AMB/AMB_Dawn_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Amb",
+      "loop": true,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "BGM_Title_Loop",
+      "clips": [
+        "Assets/_Project/Audio/BGM/BGM_Title_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Bgm",
+      "loop": true,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "BGM_Combat_Bed_Loop",
+      "clips": [
+        "Assets/_Project/Audio/BGM/BGM_Combat_Bed_Loop.wav"
+      ],
+      "volume": 1,
+      "bus": "Bgm",
+      "loop": true,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "BGM_Ending",
+      "clips": [
+        "Assets/_Project/Audio/BGM/BGM_Ending.wav"
+      ],
+      "volume": 1,
+      "bus": "Bgm",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "UI_Objective_Show",
+      "clips": [
+        "Assets/_Project/Audio/UI/UI_Objective_Show.wav"
+      ],
+      "volume": 0.5,
+      "bus": "Ui",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "UI_Hint_Show",
+      "clips": [
+        "Assets/_Project/Audio/UI/UI_Hint_Show.wav"
+      ],
+      "volume": 0.5,
+      "bus": "Ui",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "UI_Menu_Click",
+      "clips": [
+        "Assets/_Project/Audio/UI/UI_Menu_Click.wav"
+      ],
+      "volume": 0.5,
+      "bus": "Ui",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_OSG_Hurt",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_OSG_Hurt_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_SQD_Scout_01",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_SQD_Scout_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_SQD_Flare_01",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_SQD_Flare_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_SQD_Flare_02",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_SQD_Flare_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_SQD_Retreat_01",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_SQD_Retreat_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_PARK_Call_01",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_PARK_Call_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_PARK_Call_02",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_PARK_Call_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_SQD_Tank_01",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_SQD_Tank_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_SQD_Tank_02",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_SQD_Tank_02.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_SQD_Ally_01",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_SQD_Ally_01.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": false,
+      "nullClips": 0
+    },
+    {
+      "id": "VO_KPA_Shout",
+      "clips": [
+        "Assets/_Project/Audio/VO/VO_KPA_Shout_01.wav",
+        "Assets/_Project/Audio/VO/VO_KPA_Shout_02.wav",
+        "Assets/_Project/Audio/VO/VO_KPA_Shout_03.wav"
+      ],
+      "volume": 1,
+      "bus": "Vo",
+      "loop": false,
+      "spatial": true,
+      "nullClips": 0
+    }
+  ],
+  "setup_idempotence": {
+    "unchanged": true,
+    "entries": 51,
+    "inputBackground": "ResetAndDisableNonBackgroundDevices",
+    "inputEditor": "PointersAndKeyboardsRespectGameViewFocus",
+    "sceneDirty": false
+  },
+  "tests": {
+    "status": "completed",
+    "duration": 0.38,
+    "summary": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "inconclusive": 0
+    },
+    "results": [
+      {
+        "FullName": "FiveRivers.Tests.SoundAndTextTests.EveryLibraryEntry_HasClips",
+        "Status": "Passed",
+        "Duration": 0.0664017,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.SoundAndTextTests.EverySubtitleLine_HasVoiceInLibrary",
+        "Status": "Passed",
+        "Duration": 0.0027284,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.SoundAndTextTests.NoRewardSounds",
+        "Status": "Passed",
+        "Duration": 0.0005853,
+        "Message": null,
+        "StackTrace": null
+      },
+      {
+        "FullName": "FiveRivers.Tests.SoundAndTextTests.TutorialSteps_AreFilled",
+        "Status": "Passed",
+        "Duration": 0.0048361,
+        "Message": null,
+        "StackTrace": null
+      }
+    ]
+  },
+  "console_success_window": {
+    "entries": [],
+    "cursor": 2024,
+    "session": "bb45515128d649e3a4587d321b891a17",
+    "returned": 0,
+    "dropped": false,
+    "reset": false,
+    "counts": {
+      "error": 1989,
+      "warn": 3,
+      "log": 8
+    },
+    "groundTruth": {
+      "sampledUtc": "2026-10-28T12:42:51.3919031Z",
+      "ageMs": 147,
+      "compilationFailed": false,
+      "compiling": false,
+      "consoleErrors": 0,
+      "consoleWarnings": 1,
+      "consoleLogs": 0,
+      "seeded": true
+    }
+  },
+  "historical_issue": {
+    "recorded": true,
+    "description": "Initial transition contained roughly 1990 NullReference exception log records across FlowDirector, narrative/UI/enemy/audio updates and PlayerController teardown. Cause not determined. Preserved separately; not claimed fixed or proven unrelated to sound. Later successful verification window had no additional logged entries and current console errors 0/warnings 1 (AI Account API).",
+    "raw_local_evidence": "work/sound_integration_20261028/console_final.json"
+  },
+  "limitations": [
+    "Editor PlayMode output verified; no Windows standalone audio verification",
+    "No full-duration human headphone listening or 10-loop seam approval",
+    "Natural gameplay event sample covers 28 distinct clip paths; 40 route test directly calls AudioDirector.Play2D on temporary library clone with fixed clip selection",
+    "Raw import probe field gameClips=49 was a label error: 49 is total; game count is 40, derived from mapping and library references"
+  ],
+  "independent_review": {
+    "reviewer": "Astra",
+    "accepted_scope": "49 source/target SHA and PCM decode; 49 individual outputs; 40 game audio API routes; sampled natural/public game events; idempotence and input setting restoration. Whole-game error-free status not approved."
+  }
+}
