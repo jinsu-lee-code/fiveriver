@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_Run_Rifle_Mixamo.fbx",
+  "bytes": 381984,
+  "sha256": "c2e4c5ba8de7742d9c2386f0f64c0c773140fc337d51f651a149871e0cd6485c",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Rifle Run Forward",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}

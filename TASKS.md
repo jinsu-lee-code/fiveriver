@@ -256,3 +256,20 @@
 - [ ] 확인 방법 · 에디터 수작업 목록 작성
 - [ ] **실행 빌드에서** 확인 (Editor 확인만으로 완료 처리하지 않음)
 - [ ] `git status`로 의도하지 않은 변경 되돌리기, 임시 스크립트 · 에셋 삭제
+
+
+## 아트 납품 기록 · 2026-10-28
+
+- [x] 에셋 파일 교체: `SK_CH_ROK_Arms`, `SM_WP_M1Garand`, `SM_WP_M1Garand_Clip`, `SM_WP_M1Garand_ClipEmpty` — ART_SPEC 5~8. 기존 GUID 보존, 관련 재질·텍스처 포함.
+- [x] 이 프로젝트 재임포트 / `ArtSpecTests` 15/15 / 검사한 19프리팹·Dabudong 씬 Missing 0 / 4모델 정적 표시·2K 텍스처 연결 확인 (2026-10-28).
+- [x] 장전 클립 금속·황동 재질 remap 수정, 기존 FBX GUID 유지 (2026-10-28).
+- [ ] 팔·임시 가늠자·총구·클립 소켓 연결 / 실제 Walk 변형 / 실행 빌드 플레이 및 야간 확인. 콘솔 경고 2개 기록.
+- 검수 범위와 제한: [아트 납품 안내](Docs/Art/M1Arms_20261028/README.md). 전체 게임 또는 전체 ART_SPEC 완료가 아닙니다.
+
+## 사운드 연결 기록 · 2026-10-28
+
+- [x] 사용자49음원 이름·경로 정리, 게임40개/29개 ID와 보조·대안9개 분리. 기존 GUID 보존.
+- [x] 공회전/메뉴 클릭 실제 이벤트 연결, ApprovedClipMap 재생성 유지. 사용자 명시 게임 연결 요청에 따른 최소 코드 변경.
+- [x] Unity49개 개별 출력 및40개 게임API 출력, 실제 M1 8발·핑·장전/바주카 발사·장전·전차 상태 등 표본 확인, SoundAndTextTests4/4.
+- [ ] 전체 Windows 빌드·헤드폰 밸런스·루프 이음새·초기 NullReference 원인 확인.
+- 근거: [사운드 적용·검수표](Docs/Sound/SoundIntegration_20261028/README.md). 전체 게임 무결함·전체 SOUND_LIST 완료 표시는 아님.

@@ -1,0 +1,12 @@
+asset: T_UI_TitleBG
+step: concept image (VARCO GenerateImage, model gpt-image-2.5-flare, 3 images, 16:9)
+date: 2026-10-29
+flow: FiveRiver (f2f774fa-5369-49ca-b1d2-1b901245d770)
+chosen: T_UI_TitleBG_Concept_03.png
+note: added 'darker left third of the frame' to the prompt for the menu area (spec: left 1/3 dark)
+
+prompt:
+dawn mist over low Korean hills after a night battle, 1950, silhouettes of a trench line and a few soldiers far away, muted desaturated blue and amber, quiet and somber, cinematic wide shot, no text, 16:9
+
+negative (appended to prompt as 'Avoid: ...'):
+text, logo, modern buildings, bright colors

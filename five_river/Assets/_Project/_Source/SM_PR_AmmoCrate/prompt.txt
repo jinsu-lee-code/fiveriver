@@ -1,0 +1,10 @@
+asset: SM_PR_AmmoCrate
+step: concept image (VARCO GenerateImage, model gpt-image-2.5-flare, 3 images)
+date: 2026-10-29
+flow: FiveRiver (f2f774fa-5369-49ca-b1d2-1b901245d770)
+
+prompt:
+wooden military ammunition crate from the 1950s, rope handles, lid open showing cloth bandoliers of rifle clips inside, pale stencil paint marks without readable letters, realistic, Korean War 1950 summer, worn and dusty, muted earth tones, game-ready 3D asset, PBR materials, neutral even studio lighting, plain light grey background, single object centered, whole object visible, no text, no logo, no watermark
+
+negative (appended to prompt as 'Avoid: ...'):
+modern plastic case, readable text, logo

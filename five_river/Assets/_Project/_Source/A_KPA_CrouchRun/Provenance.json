@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_CrouchRun_Mixamo.fbx",
+  "bytes": 343936,
+  "sha256": "09ef8370894f72c797840ca37af0e34a52213305608f6e19b4fb052c3d2d1058",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Running Crouched With Rifle",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}

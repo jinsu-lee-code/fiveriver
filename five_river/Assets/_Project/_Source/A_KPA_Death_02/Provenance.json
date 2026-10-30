@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_Death_02_Mixamo.fbx",
+  "bytes": 511984,
+  "sha256": "5c3abbdbf470e84c779bb71b14c676a405071841272cf6ad98dcc23c1836818b",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Dying Falling Forward",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}

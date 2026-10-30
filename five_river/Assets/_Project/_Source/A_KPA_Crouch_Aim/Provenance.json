@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_Crouch_Aim_Mixamo.fbx",
+  "bytes": 351856,
+  "sha256": "85ca2e2fcd2b992c6b5bba2d3f71e3d76dc868d231777bf00d26634fd62b7ed4",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Rifle Kneeling And Aiming",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}

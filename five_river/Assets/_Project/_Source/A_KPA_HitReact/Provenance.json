@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_HitReact_Mixamo.fbx",
+  "bytes": 448736,
+  "sha256": "fd3a048b382b200e5a81b25c23f6837b5ab950217e35c3331aca9fe2f5715cd2",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Hit Reaction While Holding A Rifle",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}

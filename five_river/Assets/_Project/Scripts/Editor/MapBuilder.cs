@@ -239,9 +239,9 @@ namespace FiveRivers.EditorTools
             var people = new GameObject("People").transform;
             people.SetParent(gen, false);
             var rok = RokPrefab();
-            Place(rok, people, new Vector3(-14f, 0, -0.4f), 0).name = "Ally_1";
-            Place(rok, people, new Vector3(11f, 0, -0.4f), 0).name = "Ally_2";
-            Place(rok, people, new Vector3(16f, 0, -0.4f), -10).name = "Ally_3";
+            Crouched(Place(rok, people, new Vector3(-14f, 0, -0.4f), 0)).name = "Ally_1";
+            Crouched(Place(rok, people, new Vector3(11f, 0, -0.4f), 0)).name = "Ally_2";
+            Crouched(Place(rok, people, new Vector3(16f, 0, -0.4f), -10)).name = "Ally_3";
             Place(ParkPrefab(), people, new Vector3(-6.5f, 0, -1.2f), 90).name = "ParkYongpal";
             var blanket = Place(BlanketPrefab(), people, new Vector3(-9.5f, 0, -1.5f), 90);
             blanket.name = "BlanketBody";
@@ -378,15 +378,34 @@ namespace FiveRivers.EditorTools
         });
 
         public static GameObject RokPrefab() => GrayboxAssets.Prefab("PF_CH_ROK_Soldier", () =>
-            Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.70f, false, "Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx"));
+            Ally(Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.70f, false, "Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx")));
 
         public static GameObject ParkPrefab() => GrayboxAssets.Prefab("PF_CH_ROK_ParkYongpal", () =>
         {
-            var root = Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.72f, false, "Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx");
-            // 그레이박스 구분: 목의 수건 (ART_SPEC 구분 체크 "국군 병사 ↔ 박용팔") — 최종 모델에 수건이 있으면 지운다
-            GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Towel", new Vector3(0, 1.42f, 0.02f), new Vector3(0.36f, 0.08f, 0.3f), GrayboxAssets.Towel);
+            var root = Ally(Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.72f, false, "Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx"));
+            // 그레이박스 구분: 목의 수건 (ART_SPEC 구분 체크 "국군 병사 ↔ 박용팔") — 최종 모델(스킨 메시)이면 붙이지 않는다
+            if (root.GetComponentInChildren<SkinnedMeshRenderer>() == null)
+                GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Towel", new Vector3(0, 1.42f, 0.02f), new Vector3(0.36f, 0.08f, 0.3f), GrayboxAssets.Towel);
             return root;
         });
+
+        // 아군 Animator(AC_ROK) + 시작 자세 컴포넌트. 그레이박스 모델이면 Animator 없이 둔다.
+        static GameObject Ally(GameObject root)
+        {
+            var pose = root.AddComponent<FiveRivers.Narrative.AllyPose>();
+            var animator = GrayboxModels.Animate(root.transform.Find("Model"), "AC_ROK");
+            if (animator != null) SetupUtil.SetRef(pose, "animator", animator);
+            return root;
+        }
+
+        // 참호에 놓인 아군은 몸을 낮춰 대기 (A_ROK_Idle_Trench, ANIM_SPEC S1~S4)
+        static GameObject Crouched(GameObject ally)
+        {
+            var so = new SerializedObject(ally.GetComponent<FiveRivers.Narrative.AllyPose>());
+            so.FindProperty("crouch").boolValue = true;
+            so.ApplyModifiedPropertiesWithoutUndo();
+            return ally;
+        }
 
         // 키에 맞춘 캡슐 + 머리 위 모양: 국군 = 둥근 철모, 북한군 = 납작한 군모 (ART_SPEC 구분 체크)
         public static GameObject Person(Material body, Material head, float height, bool softCap, string fbx)

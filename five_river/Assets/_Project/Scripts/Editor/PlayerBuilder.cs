@@ -66,9 +66,12 @@ namespace FiveRivers.EditorTools
                 GrayboxAssets.Part(m1Model, PrimitiveType.Cube, "Stock", new Vector3(0, 0, -0.15f), new Vector3(0.05f, 0.07f, 0.7f), GrayboxAssets.RifleWood);
                 GrayboxAssets.Part(m1Model, PrimitiveType.Cylinder, "Barrel", new Vector3(0, 0.02f, 0.4f), new Vector3(0.022f, 0.25f, 0.022f), GrayboxAssets.Metal, new Vector3(90, 0, 0));
             }
-            // 가늠자 · 가늠쇠 (그레이박스 조준 확인용, 최종 모델에 있으면 지운다)
-            GrayboxAssets.Part(m1Model, PrimitiveType.Cube, "RearSight", new Vector3(0, 0.055f, 0.05f), new Vector3(0.03f, 0.03f, 0.02f), GrayboxAssets.Metal);
-            GrayboxAssets.Part(m1Model, PrimitiveType.Cube, "FrontSight", new Vector3(0, 0.05f, 0.62f), new Vector3(0.006f, 0.03f, 0.01f), GrayboxAssets.Metal);
+            // 가늠자 · 가늠쇠 (그레이박스 조준 확인용, 최종 모델에는 있으므로 붙이지 않는다)
+            if (!m1Fbx)
+            {
+                GrayboxAssets.Part(m1Model, PrimitiveType.Cube, "RearSight", new Vector3(0, 0.055f, 0.05f), new Vector3(0.03f, 0.03f, 0.02f), GrayboxAssets.Metal);
+                GrayboxAssets.Part(m1Model, PrimitiveType.Cube, "FrontSight", new Vector3(0, 0.05f, 0.62f), new Vector3(0.006f, 0.03f, 0.01f), GrayboxAssets.Metal);
+            }
             var m1Muzzle = new GameObject("Socket_Muzzle").transform;
             m1Muzzle.SetParent(m1Model, false);
             m1Muzzle.localPosition = new Vector3(0, 0.03f, m1Fbx ? 0.8f : 0.68f);
@@ -93,9 +96,11 @@ namespace FiveRivers.EditorTools
             bzModel.localPosition = new Vector3(0.2f, -0.13f, 0.1f);
             bool bzFbx = ViewModel(bzModel, "Weapons/Bazooka/SM_WP_Bazooka.fbx");
             if (!bzFbx)
+            {
                 GrayboxAssets.Part(bzModel, PrimitiveType.Cylinder, "Tube", new Vector3(0, 0, 0.1f), new Vector3(0.09f, 0.76f, 0.09f), GrayboxAssets.Olive, new Vector3(90, 0, 0));
-            GrayboxAssets.Part(bzModel, PrimitiveType.Cube, "Grip", new Vector3(0, -0.09f, 0.15f), new Vector3(0.03f, 0.12f, 0.05f), GrayboxAssets.Metal);
-            GrayboxAssets.Part(bzModel, PrimitiveType.Cube, "Sight", new Vector3(-0.06f, 0.05f, 0.3f), new Vector3(0.02f, 0.05f, 0.02f), GrayboxAssets.Metal);
+                GrayboxAssets.Part(bzModel, PrimitiveType.Cube, "Grip", new Vector3(0, -0.09f, 0.15f), new Vector3(0.03f, 0.12f, 0.05f), GrayboxAssets.Metal);
+                GrayboxAssets.Part(bzModel, PrimitiveType.Cube, "Sight", new Vector3(-0.06f, 0.05f, 0.3f), new Vector3(0.02f, 0.05f, 0.02f), GrayboxAssets.Metal);
+            }
             var bzMuzzle = new GameObject("Socket_RocketSpawn").transform;
             bzMuzzle.SetParent(bzModel, false);
             bzMuzzle.localPosition = new Vector3(0, 0, bzFbx ? 1.0f : 0.9f);
@@ -134,8 +139,53 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(fpAnim, "player", controller);
             SetupUtil.SetRef(fpAnim, "weapons", holder);
             SetupUtil.SetRef(fpAnim, "resupplier", resupplier);
+            SetupUtil.SetRef(fpAnim, "m1Animator", FirstPersonRig(m1Model, "AC_FP_M1", "Weapons/M1Garand/SM_WP_M1Garand_Clip.fbx", "ReloadClip"));
+            SetupUtil.SetRef(fpAnim, "bazookaAnimator", FirstPersonRig(bzModel, "AC_FP_Bazooka", "Weapons/Bazooka/SM_WP_BazookaRocket.fbx", "ReloadRocket"));
 
             return controller;
+        }
+
+        // 1인칭 팔 + 무기 애니메이션 (ANIM_SPEC 3-3 · 3-4). 클립은 VM 밑 "Arms" · "Model" · 장전 소품 경로를 움직이고
+        // 루트 위치도 (0,0,0)으로 덮어쓰므로, Animator는 VM(조준 · 흔들림은 코드)이 아니라 그 밑 FP_Anim에 둔다.
+        public static Animator FirstPersonRig(Transform vm, string controller, string propFbx, string propName)
+        {
+            const string armsFbx = "Characters/ROK_Arms/SK_CH_ROK_Arms.fbx";
+            var ac = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/_Project/Art/Animations/" + controller + ".controller");
+            var model = vm.Find("Model") ?? vm.Find("FP_Anim/Model");
+            if (ac == null || model == null || !GrayboxModels.Exists(armsFbx)) return null;
+
+            var old = vm.Find("FP_Anim");
+            if (old != null)
+            {
+                model.SetParent(vm, false);
+                Object.DestroyImmediate(old.gameObject);
+            }
+            var rig = new GameObject("FP_Anim").transform;
+            rig.SetParent(vm, false);
+            model.SetParent(rig, false);
+
+            var arms = (GameObject)PrefabUtility.InstantiatePrefab(GrayboxModels.LoadFbx(armsFbx), rig);
+            arms.name = "Arms";
+            var armsAnimator = arms.GetComponent<Animator>();
+            if (armsAnimator != null) armsAnimator.enabled = false; // 팔은 위 FP_Anim이 움직인다
+            if (GrayboxModels.Exists(propFbx))
+            {
+                var prop = (GameObject)PrefabUtility.InstantiatePrefab(GrayboxModels.LoadFbx(propFbx), rig);
+                prop.name = propName;
+            }
+            foreach (var r in rig.GetComponentsInChildren<Renderer>(true))
+            {
+                r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                if (r is SkinnedMeshRenderer s) s.updateWhenOffscreen = true;
+            }
+            foreach (var t in rig.GetComponentsInChildren<Transform>(true)) t.gameObject.layer = vm.gameObject.layer;
+
+            var animator = rig.gameObject.AddComponent<Animator>();
+            animator.runtimeAnimatorController = ac;
+            animator.applyRootMotion = false;
+            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            rig.gameObject.AddComponent<AnimationEventSink>();
+            return animator;
         }
 
         // 1인칭 무기 모델: FBX가 있으면 넣고 true. 그림자 없이 (화면에 붙은 모델)
@@ -170,6 +220,7 @@ namespace FiveRivers.EditorTools
                 Entry(EffectKind.CannonBlast, hitExplosion, 1.2f),
                 Entry(EffectKind.EnemyMuzzle, Flash("VFX_MuzzleFlash_Enemy", GrayboxAssets.FxYellow, 0.1f, 1.3f, 0.05f, new Color(1f, 0.7f, 0.35f), 2.5f, 5f), 0.15f),
                 Entry(EffectKind.ClipEject, ClipEjectPrefab(), 4f),
+                Entry(EffectKind.TankDestroyed, Flash("VFX_Tank_DestroyExplosion", GrayboxAssets.FxOrange, 2.0f, 4f, 1.2f, new Color(1f, 0.5f, 0.15f), 14f, 30f), 5f),
             };
             var so = new SerializedObject(effects);
             var list = so.FindProperty("entries");
@@ -234,6 +285,16 @@ namespace FiveRivers.EditorTools
             var root = new GameObject();
             GrayboxModels.Model(root, "Weapons/Bazooka/SM_WP_BazookaRocket.fbx", model =>
                 GrayboxAssets.Part(model, PrimitiveType.Cylinder, "Body", Vector3.zero, new Vector3(0.09f, 0.3f, 0.09f), GrayboxAssets.Olive, new Vector3(90, 0, 0)));
+            var rocket = root.AddComponent<Rocket>();
+            // 연기 꼬리: 납품된 VFX_RocketTrail을 꼬리에 붙인다. 없으면 그레이박스 Trail
+            var delivered = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Art/VFX/VFX_RocketTrail.prefab");
+            if (delivered != null)
+            {
+                var fx = (GameObject)PrefabUtility.InstantiatePrefab(delivered, root.transform);
+                fx.transform.localPosition = new Vector3(0, 0, -0.3f);
+                SetupUtil.SetRef(rocket, "trail", fx.transform);
+                return root;
+            }
             var trail = root.AddComponent<TrailRenderer>();
             trail.time = 1f; // VFX_RocketTrail: 연기 꼬리 1초
             trail.startWidth = 0.18f;
@@ -241,7 +302,6 @@ namespace FiveRivers.EditorTools
             trail.sharedMaterial = GrayboxAssets.FxWhite;
             trail.startColor = new Color(0.9f, 0.9f, 0.85f, 0.8f);
             trail.endColor = new Color(0.5f, 0.5f, 0.5f, 0f);
-            root.AddComponent<Rocket>();
             return root;
         });
     }

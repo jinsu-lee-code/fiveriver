@@ -204,11 +204,17 @@ namespace FiveRivers.EditorTools
                 AssetDatabase.CreateAsset(lib, LibraryPath);
             }
             var old = lib.entries.ToDictionary(e => e.id, e => e);
+            var approvedAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(Root + "ApprovedClipMap.json");
+            var approved = approvedAsset != null
+                ? JsonUtility.FromJson<ApprovedClipMap>(approvedAsset.text).entries.ToDictionary(e => e.id, e => e.paths)
+                : new Dictionary<string, string[]>();
             var entries = new List<SoundLibrary.Entry>();
             foreach (var s in Specs)
             {
-                var clips = Names(s)
-                    .Select(n => AssetDatabase.LoadAssetAtPath<AudioClip>(Root + s.folder + n + ".wav"))
+                var paths = approved.TryGetValue(s.id, out var selected)
+                    ? selected : Names(s).Select(n => Root + s.folder + n + ".wav").ToArray();
+                var clips = paths
+                    .Select(p => AssetDatabase.LoadAssetAtPath<AudioClip>(p))
                     .Where(c => c != null).ToArray();
                 old.TryGetValue(s.id, out var prev);
                 var e = prev ?? new SoundLibrary.Entry { id = s.id, volume = s.volume };
@@ -223,6 +229,19 @@ namespace FiveRivers.EditorTools
             lib.entries = entries.ToArray();
             EditorUtility.SetDirty(lib);
             AssetDatabase.SaveAssets();
+        }
+
+        [Serializable]
+        sealed class ApprovedClipMap
+        {
+            public ApprovedClipEntry[] entries;
+        }
+
+        [Serializable]
+        sealed class ApprovedClipEntry
+        {
+            public string id;
+            public string[] paths;
         }
     }
 }

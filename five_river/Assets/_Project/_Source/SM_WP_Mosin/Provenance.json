@@ -1,0 +1,16 @@
+{
+  "file": "SM_WP_Mosin_Varco.fbx",
+  "bytes": 3871788,
+  "sha256": "72af05d1ba25fb65f53e8c22828ec531d6fdac939b40a715ae495238daba147b",
+  "varcoTaskId": "5a6101ee-2e6a-43c6-9735-8b79b7d68016",
+  "sourceImage": "SM_WP_Mosin_Concept_02.png",
+  "sourceImageObject": "cc90c3513f486c88f0f63a66b90f3d37",
+  "polygonCount": 6000,
+  "topology": "tri",
+  "textureSize": 1024,
+  "pbr": true,
+  "flow": "FiveRiver f2f774fa-5369-49ca-b1d2-1b901245d770",
+  "date": "2026-10-29",
+  "newVarcoGeneration": true,
+  "originalModified": false
+}

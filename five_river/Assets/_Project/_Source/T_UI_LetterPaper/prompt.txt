@@ -1,0 +1,11 @@
+asset: T_UI_LetterPaper
+step: concept image (VARCO GenerateImage, model gpt-image-2.5-flare, 3 images, 16:9)
+date: 2026-10-29
+flow: FiveRiver (f2f774fa-5369-49ca-b1d2-1b901245d770)
+chosen: T_UI_LetterPaper_Concept_02.png
+
+prompt:
+old Korean letter paper from 1950, yellowed thin hanji paper with faint vertical red ruled lines, creases from being folded in four, soft water stains and worn edges, flat top view, evenly lit, completely blank with no writing, 16:9
+
+negative (appended to prompt as 'Avoid: ...'):
+text, handwriting, calligraphy, signature, stamp, modern paper

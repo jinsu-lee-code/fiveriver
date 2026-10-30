@@ -1,0 +1,16 @@
+{
+  "file": "SM_WP_Bazooka_Varco.fbx",
+  "bytes": 10146972,
+  "sha256": "ed7109cfffa4da98833e86d1a2120d02678fbe7081afcc02d62574429e96ab70",
+  "varcoTaskId": "9174fd94-3694-469e-bf38-76e58fd7351a",
+  "sourceImage": "SM_WP_Bazooka_Concept_02.png",
+  "sourceImageObject": "496a1984f1bc844422d236aafc18c5f8",
+  "polygonCount": 10000,
+  "topology": "tri",
+  "textureSize": 2048,
+  "pbr": true,
+  "flow": "FiveRiver f2f774fa-5369-49ca-b1d2-1b901245d770",
+  "date": "2026-10-29",
+  "newVarcoGeneration": true,
+  "originalModified": false
+}

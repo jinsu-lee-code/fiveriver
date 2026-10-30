@@ -1,0 +1,17 @@
+{
+  "file": "A_KPA_Death_01_Mixamo.fbx",
+  "bytes": 676304,
+  "sha256": "6e733930452a12ed45dc4e857e709ecd2071123a33b70afceece68b481ad3312",
+  "source": "Mixamo (mixamo.com)",
+  "mixamoAnimation": "Shot To The Chest Falling Backwards",
+  "character": "Y Bot (4f5d21e1-4ccc-41f1-b35b-fb2547bd8493)",
+  "export": {
+    "format": "FBX (fbx7_2019)",
+    "skin": "without",
+    "fps": 30,
+    "keyframeReduction": "none",
+    "inPlace": "where supported (locomotion)"
+  },
+  "date": "2026-10-30",
+  "originalModified": false
+}

@@ -1,0 +1,10 @@
+asset: SM_WP_BazookaRocket
+step: concept image (VARCO GenerateImage, model gpt-image-2.5-flare, 3 images)
+date: 2026-10-29
+flow: FiveRiver (f2f774fa-5369-49ca-b1d2-1b901245d770)
+
+prompt:
+3.5 inch M28 bazooka rocket, olive drab cylindrical body with pointed nose and tail fins, side view, realistic, Korean War 1950 summer, worn and dusty, muted earth tones, game-ready 3D asset, PBR materials, neutral even studio lighting, plain light grey background, single object centered, whole object visible, no text, no logo, no watermark
+
+negative (appended to prompt as 'Avoid: ...'):
+missile with wings, modern, text

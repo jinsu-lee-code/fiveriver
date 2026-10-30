@@ -138,6 +138,8 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(narrative, "flares", Object.FindFirstObjectByType<FlareDirector>());
             SetupUtil.SetRef(narrative, "tank", Object.FindFirstObjectByType<TankController>());
             SetupUtil.SetRef(narrative, "blanketBody", GameObject.Find("/[Map]/Generated/People/BlanketBody"));
+            var park = GameObject.Find("/[Map]/Generated/People/ParkYongpal");
+            SetupUtil.SetRef(narrative, "parkAnimator", park != null ? park.GetComponentInChildren<Animator>() : null);
 
             var dawn = SetupUtil.Ensure<FiveRivers.Narrative.DawnDirector>(narrativeGo);
             SetupUtil.SetRef(dawn, "director", systems.director);

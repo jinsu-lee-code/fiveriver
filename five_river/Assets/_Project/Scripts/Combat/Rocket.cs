@@ -13,6 +13,8 @@ namespace FiveRivers.Combat
     // 바주카 로켓. 곧게 날아가며, 맞힌 곳에서 터진다. 전차에는 판정만 넘긴다.
     public sealed class Rocket : MonoBehaviour
     {
+        [SerializeField] Transform trail; // VFX_RocketTrail: 터진 뒤에도 연기가 잠깐 남는다
+
         WeaponConfig config;
         Effects effects;
         Vector3 shooter;
@@ -47,7 +49,18 @@ namespace FiveRivers.Combat
             var target = hit.collider.GetComponentInParent<IRocketTarget>();
             if (target != null) target.OnRocketHit(hit.point, shooter);
             else Explode(hit.point, hit.normal);
+            LeaveTrail();
             Destroy(gameObject);
+        }
+
+        // 연기 꼬리를 효과 컨테이너로 옮겨 남은 연기가 사라질 때까지 둔다 (복구 · 새 회차 때 ClearAll로 함께 지워진다)
+        void LeaveTrail()
+        {
+            if (trail == null) return;
+            trail.SetParent(effects.Container, true);
+            foreach (var ps in trail.GetComponentsInChildren<ParticleSystem>()) ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            Destroy(trail.gameObject, 2.5f);
+            trail = null;
         }
 
         void Explode(Vector3 point, Vector3 normal)
@@ -59,6 +72,7 @@ namespace FiveRivers.Combat
                 var d = col.GetComponentInParent<IDamageable>();
                 if (d != null && !(d is PlayerHealth)) d.TakeDamage(config.rocketBlastDamage, point);
             }
+            LeaveTrail();
             Destroy(gameObject);
         }
     }
