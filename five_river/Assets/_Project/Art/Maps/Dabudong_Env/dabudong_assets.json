@@ -2,6 +2,7 @@
  "assets": [
   {
    "name": "barbed_wire",
+   "lod1": "",
    "fbx": "ENV_barbed_wire.fbx",
    "slots": 2,
    "base": [
@@ -13,8 +14,7 @@
     "T_barbed_wire_1_Normal.png"
    ],
    "foliage": false,
-   "tris": 2052,
-   "lod1": ""
+   "tris": 2052
   },
   {
    "name": "dead_pine",
@@ -258,6 +258,7 @@
   },
   {
    "name": "shrub",
+   "lod1": "ENV_shrub_LOD1.fbx",
    "fbx": "ENV_shrub.fbx",
    "slots": 2,
    "base": [
@@ -266,8 +267,7 @@
    ],
    "normal": [],
    "foliage": true,
-   "tris": 18768,
-   "lod1": "ENV_shrub_LOD1.fbx"
+   "tris": 18768
   },
   {
    "name": "straw_stack",
@@ -325,6 +325,7 @@
   },
   {
    "name": "young_pine",
+   "lod1": "ENV_young_pine_LOD1.fbx",
    "fbx": "ENV_young_pine.fbx",
    "slots": 2,
    "base": [
@@ -333,8 +334,7 @@
    ],
    "normal": [],
    "foliage": true,
-   "tris": 21820,
-   "lod1": "ENV_young_pine_LOD1.fbx"
+   "tris": 21820
   }
  ]
 }

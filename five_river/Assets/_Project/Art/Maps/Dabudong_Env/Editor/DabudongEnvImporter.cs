@@ -35,6 +35,10 @@ public static class DabudongEnvImporter
     const float DetailDistance = 150f;          // 이보다 먼 풀·벼는 지형층 색으로 보인다
     const int DetailPatchResolution = 32;
 
+    // 밝기(Unity 6000.3 배치 렌더로 맞춘 값). 해가 동쪽 낮게(14°) 떠 비탈이 그늘에 들므로 주변광을 넉넉히 준다
+    const float SunIntensity = 2.4f;
+    const float FoliageGlow = .35f;             // 잎 재질 자체발광(바탕색 × 이 값): 양면 잎의 뒷면이 검게 나오는 것을 막는다
+
     // 콜라이더를 붙일 것(사람이 부딪히는 것). 풀·덤불·그루터기·잔돌은 뺀다.
     static readonly HashSet<string> Solid = new HashSet<string> {
         "sandbag_row", "sandbag_wall", "fighting_position", "trench_revetment", "granite_boulder_a", "granite_boulder_b", "granite_boulder_c",
@@ -192,6 +196,14 @@ public static class DabudongEnvImporter
         m.SetFloat("_Metallic", 0f);
         m.SetFloat("_Cull", twoSided ? 0f : 2f);                    // 0 = 양면(얇은 잎), 2 = 뒷면 제거
         m.doubleSidedGI = twoSided;
+        if (twoSided)
+        {
+            // URP Lit 은 뒷면 법선을 뒤집지 않아 얇은 잎 뒷면이 그늘처럼 검게 된다 → 바탕색을 약하게 발광시켜 잎 사이로 새는 빛을 흉내 낸다
+            m.EnableKeyword("_EMISSION");
+            m.SetTexture("_EmissionMap", baseMap);
+            m.SetColor("_EmissionColor", new Color(FoliageGlow, FoliageGlow, FoliageGlow));
+            m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None;
+        }
         m.enableInstancing = true;
         EditorUtility.SetDirty(m);
         return m;
@@ -422,7 +434,7 @@ public static class DabudongEnvImporter
         var sun = new GameObject("Sun").AddComponent<Light>();
         sun.type = LightType.Directional;
         sun.color = Col(info.sun.color);
-        sun.intensity = 1.6f;
+        sun.intensity = SunIntensity;
         sun.shadows = LightShadows.Soft;
         sun.transform.rotation = Quaternion.LookRotation(V(info.sun.fwd));
         RenderSettings.sun = sun;
@@ -439,9 +451,9 @@ public static class DabudongEnvImporter
         RenderSettings.skybox = sky;
 
         RenderSettings.ambientMode = AmbientMode.Trilight;
-        RenderSettings.ambientSkyColor = new Color(.50f, .55f, .62f);
-        RenderSettings.ambientEquatorColor = new Color(.46f, .42f, .36f);
-        RenderSettings.ambientGroundColor = new Color(.26f, .22f, .17f);
+        RenderSettings.ambientSkyColor = new Color(.66f, .71f, .80f);
+        RenderSettings.ambientEquatorColor = new Color(.62f, .57f, .50f);
+        RenderSettings.ambientGroundColor = new Color(.40f, .34f, .27f);
         RenderSettings.fog = true;
         RenderSettings.fogMode = FogMode.Exponential;
         RenderSettings.fogColor = Col(info.fog.color);       // 8월 먼지 낀 대기(누런 회색)
@@ -452,11 +464,11 @@ public static class DabudongEnvImporter
         AssetDatabase.DeleteAsset(profilePath);
         var profile = ScriptableObject.CreateInstance<VolumeProfile>();
         AssetDatabase.CreateAsset(profile, profilePath);
-        profile.Add<Tonemapping>(true).mode.Override(TonemappingMode.ACES);
+        profile.Add<Tonemapping>(true).mode.Override(TonemappingMode.Neutral);     // ACES 는 이 장면에서 너무 어둡다
         var color = profile.Add<ColorAdjustments>(true);
-        color.saturation.Override(-18f);
-        color.contrast.Override(8f);
-        color.postExposure.Override(.1f);
+        color.saturation.Override(-15f);
+        color.contrast.Override(5f);
+        color.postExposure.Override(.35f);
         EditorUtility.SetDirty(profile);
 
         var volume = new GameObject("PostProcess").AddComponent<Volume>();
