@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+five_river/Assets/_Project/Art/Models/Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx filter=lfs diff=lfs merge=lfs -text
+five_river/Assets/_Project/Art/Models/Characters/KPA_Rifleman/SK_CH_KPA_Rifleman_B.fbx filter=lfs diff=lfs merge=lfs -text
+five_river/Assets/_Project/_Source/SK_CH_ROK_Protagonist/SK_CH_ROK_Protagonist.fbx filter=lfs diff=lfs merge=lfs -text
