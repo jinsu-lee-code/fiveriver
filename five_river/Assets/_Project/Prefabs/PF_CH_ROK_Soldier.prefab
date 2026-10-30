@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4603816925255220591}
   - component: {fileID: 8228624081195613310}
+  - component: {fileID: 5549533500677411589}
   m_Layer: 0
   m_Name: PF_CH_ROK_Soldier
   m_TagString: Untagged
@@ -56,6 +57,20 @@ CapsuleCollider:
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
+--- !u!114 &5549533500677411589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126496447091615100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 123b5a4566120a142950e58135e26f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Narrative.AllyPose
+  animator: {fileID: 4237772222124302718}
+  crouch: 0
 --- !u!1001 &7756609007765953775
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -104,15 +119,64 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3851337139821539562, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.4266678
+      objectReference: {fileID: 0}
+    - target: {fileID: -3851337139821539562, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5363831
+      objectReference: {fileID: 0}
+    - target: {fileID: -3851337139821539562, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.49568173
+      objectReference: {fileID: 0}
+    - target: {fileID: -3851337139821539562, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.53342974
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
       propertyPath: m_Name
       value: Model
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 234c1f179545026448aa6cafb7cefff4, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8589680860028143841}
   m_SourcePrefab: {fileID: 100100000, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+--- !u!95 &4237772222124302718 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+  m_PrefabInstance: {fileID: 7756609007765953775}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7450197444021789118 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+  m_PrefabInstance: {fileID: 7756609007765953775}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8589680860028143841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7450197444021789118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f71fe826db1f0b4da6f0fbb4287c1f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Combat.AnimationEventSink
 --- !u!4 &7795655873174534916 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
