@@ -97,6 +97,7 @@ namespace FiveRivers.Narrative
             {
                 var pos = start + new Vector3((i - reinforcements / 2f) * 2.2f, 0f, -i * 1.6f);
                 var w = Instantiate(reinforcementPrefab, pos, Quaternion.LookRotation(dir), transform);
+                if (w.TryGetComponent<AllyPose>(out var pose)) pose.Walk(walkSpeed); // A_ROK_Walk_Tired
                 walkers.Add(w.transform);
             }
         }

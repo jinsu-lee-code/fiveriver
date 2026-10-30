@@ -75,8 +75,10 @@ namespace FiveRivers.EditorTools
             foreach (var slot in slots)
             {
                 var id = new AssetImporter.SourceAssetIdentifier(typeof(Material), slot);
+                // 최종 에셋이 자기 폴더의 재질(텍스처 연결)로 이미 연결돼 있으면 그대로 둔다
+                if (map.TryGetValue(id, out var current) && current != null && !AssetDatabase.GetAssetPath(current).StartsWith(MaterialDir)) continue;
                 var target = SlotMaterial(slot);
-                if (!map.TryGetValue(id, out var current) || current != target)
+                if (current != target)
                 {
                     importer.AddRemap(id, target);
                     dirty = true;
@@ -101,6 +103,17 @@ namespace FiveRivers.EditorTools
             var instance = (GameObject)PrefabUtility.InstantiatePrefab(fbx, root.transform);
             instance.name = "Model";
             return instance.transform;
+        }
+
+        // Humanoid 최종 FBX면 모델의 Animator에 Controller(ANIM_SPEC 1-5)를 붙인다. 그레이박스(아바타 없음)는 null.
+        public static Animator Animate(Transform model, string controller)
+        {
+            var animator = model.GetComponent<Animator>();
+            if (animator == null || animator.avatar == null || !animator.avatar.isHuman) return null;
+            animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/_Project/Art/Animations/" + controller + ".controller");
+            animator.applyRootMotion = false; // 이동은 NavMesh · 코드 (ANIM_SPEC 1-4)
+            if (model.GetComponent<FiveRivers.Combat.AnimationEventSink>() == null) model.gameObject.AddComponent<FiveRivers.Combat.AnimationEventSink>();
+            return animator.runtimeAnimatorController != null ? animator : null;
         }
     }
 }

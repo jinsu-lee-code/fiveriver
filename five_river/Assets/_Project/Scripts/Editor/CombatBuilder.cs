@@ -60,6 +60,8 @@ namespace FiveRivers.EditorTools
             var enemy = root.AddComponent<EnemyAgent>();
             SetupUtil.SetRef(enemy, "model", model);
             SetupUtil.SetRef(enemy, "muzzle", muzzle);
+            var animator = GrayboxModels.Animate(model, "AC_KPA");
+            if (animator != null) SetupUtil.SetRef(enemy, "animator", animator);
             return root;
         });
 
