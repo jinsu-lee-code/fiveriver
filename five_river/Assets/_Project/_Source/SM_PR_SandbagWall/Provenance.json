@@ -1,0 +1,16 @@
+{
+  "file": "SM_PR_SandbagWall_Varco.fbx",
+  "bytes": 6868396,
+  "sha256": "13f834c3edb115f4798566e4193ed62b71070c3d7f5bbe7b1dfa4e0715b4ac1c",
+  "varcoTaskId": "c035fa0e-cbbd-4bc1-8c13-a4525e82a078",
+  "sourceImage": "SM_PR_SandbagWall_Concept_01.png",
+  "sourceImageObject": "e4ff1b484cc913fa0e37473e53784d01",
+  "polygonCount": 4000,
+  "topology": "tri",
+  "textureSize": 1024,
+  "pbr": true,
+  "flow": "FiveRiver f2f774fa-5369-49ca-b1d2-1b901245d770",
+  "date": "2026-10-29",
+  "newVarcoGeneration": true,
+  "originalModified": false
+}

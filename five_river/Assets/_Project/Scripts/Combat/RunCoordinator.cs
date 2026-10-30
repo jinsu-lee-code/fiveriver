@@ -75,6 +75,7 @@ namespace FiveRivers.Combat
 
         IEnumerator DeathSequence()
         {
+            player.Gate.Block(this); // 쓰러진 동안 조작 막기
             for (float t = 0f; t < deathFadeTime; t += Time.unscaledDeltaTime)
             {
                 Fade = t / deathFadeTime;
@@ -92,6 +93,7 @@ namespace FiveRivers.Combat
             }
             Fade = 0f;
             deathRoutine = null;
+            player.Gate.Unblock(this);
         }
 
         void StopDeath()
@@ -99,6 +101,7 @@ namespace FiveRivers.Combat
             if (deathRoutine != null) StopCoroutine(deathRoutine);
             deathRoutine = null;
             Fade = 0f;
+            player.Gate.Unblock(this);
         }
 
         void Restore(Transform at, bool bazooka)

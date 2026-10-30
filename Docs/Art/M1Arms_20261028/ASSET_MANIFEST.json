@@ -1,0 +1,134 @@
+{
+  "source_delivery_sha256": "1c88ef7bd747326bb9807bf6dd6619c6fdcf188568e0abaabdf33adf96d5d7a4",
+  "target_unity_validation": "import/static visuals/ArtSpecTests passed; final gameplay pending",
+  "files": [
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/M_CH_ROK_Body.mat",
+      "bytes": 4289,
+      "sha256": "b3eac326454602de53196a34cb337115feda198e031ac6ebcc5554fe382195e6"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/ROK_Arms_Poses.json",
+      "bytes": 107650,
+      "sha256": "40213a6ce313615754d1acf28c083fdf5bcb9412957ed849ff8e53bb095f662c"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/SK_CH_ROK_Arms.fbx",
+      "bytes": 1945756,
+      "sha256": "7cc26d08090693ad5faef5a508af54a74b3e84144fe42c181b76ed46e4df6051"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/Textures/T_CH_ROK_Arms_BaseColor.png",
+      "bytes": 3312749,
+      "sha256": "93669e6111d17f93d667158738e383382ea8349b36703ee47502d4bafde68607"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/Textures/T_CH_ROK_Arms_MetallicSmoothness.png",
+      "bytes": 408513,
+      "sha256": "c3b393ed6374162e9f1d6ab0981383b1d62523c9a1c0d1db8aa762d94ded42a6"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/Textures/T_CH_ROK_Arms_Normal.png",
+      "bytes": 2304187,
+      "sha256": "b753a0a05bcc1d64be712b91b9aa4623f0fff9383e1ecc55a78cf49eb424c923"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Materials/M_WP_M1_Brass.mat",
+      "bytes": 4288,
+      "sha256": "78e7afafa72d0fabfa1dd147d3afc5b92074e5f09a88292ea9889f79619fce86"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Materials/M_WP_M1_Clip.mat",
+      "bytes": 4288,
+      "sha256": "d98d4e58881b283942d927bcd600bb3f76611732a91b46c3f85cc438dfe98a34"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Materials/M_WP_M1_Metal.mat",
+      "bytes": 4288,
+      "sha256": "3c75bf2b9855ba80d7d644f3fed1e41401f49fb0318726806b9c59b2699c066b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Materials/M_WP_M1_Wood.mat",
+      "bytes": 4288,
+      "sha256": "84c9566d92759ff1f33b498fc6f0ea6adbd09c6997ca65bede25d967ab65450b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand.fbx",
+      "bytes": 1151596,
+      "sha256": "fd77ffe73ecca30cb389dfa813c67364a94ddbcf98420842cb86b88ad34f632f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand_Clip.fbx",
+      "bytes": 90236,
+      "sha256": "001bfa62cb32b81220608cc6a46147f5987b5e5846aad8ff1c301a217efbdf96"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand_ClipEmpty.fbx",
+      "bytes": 28076,
+      "sha256": "45440a31447a9b8728cadf3ee771be6f0daf8784d85aff764ab37e370ed1bd55"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_BaseColor.png",
+      "bytes": 1526035,
+      "sha256": "2c243e5c6f95711236f2bb829968405996700fdb9a6bde66a64cf603d07030d9"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_BaseColor.png",
+      "bytes": 130781,
+      "sha256": "59fdca77f109675c91ae42b07817cb7f98b1e7eb29d080c2668e9dc2ed04015a"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_MetallicSmoothness.png",
+      "bytes": 1412457,
+      "sha256": "864eafee55bf1c1f0af17b86064efb63d59b6fdf0cdad70b67fe460ed1504e2b"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Clip_Normal.png",
+      "bytes": 67662,
+      "sha256": "834f9ba464e6271e18ebe828a633ff2da225146b7f22d79949624663a8ec351f"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_MetallicSmoothness.png",
+      "bytes": 1523381,
+      "sha256": "9ad16edf0cf6a5434dabd4b14935c04cccab62afc0eca2bb879f77344ff1edb8"
+    },
+    {
+      "path": "five_river/Assets/_Project/Art/Models/Weapons/M1Garand/Textures/T_WP_M1Garand_Normal.png",
+      "bytes": 1763012,
+      "sha256": "d2786aaab5990e2f2ec3fd7abc6a3654a274ba3fecd5d6b4637d1819c6a4b76a"
+    },
+    {
+      "path": "five_river/Assets/_Project/_Source/SM_WP_M1Garand/Raw~/M1Garand_varco.fbx",
+      "bytes": 8688108,
+      "sha256": "3a0c9090290d957f3a8447a7b2a2c762ee9473fd502e3bc60cbdf88fc5a0a783"
+    },
+    {
+      "path": "five_river/Assets/_Project/_Source/SM_WP_M1Garand/Raw~/Provenance.json",
+      "bytes": 359,
+      "sha256": "582a18857edb764dec94e8273e5f4c3d474e2cdbf0c8707f80f218f8ae0b5ac4"
+    },
+    {
+      "path": "Docs/Art/M1Arms_20261028/ART_SPEC_작업완료_체크리스트.md",
+      "bytes": 4155,
+      "sha256": "8f5606d89114af76ceeb75e25b2af12b85c92bd2528533f758a20a33b86636f7"
+    },
+    {
+      "path": "Docs/Art/M1Arms_20261028/ART_SPEC_작업완료_체크리스트.html",
+      "bytes": 5959,
+      "sha256": "e1e467617e33b042e9d8c09d8c5d5fd2398e32953b621bb5a5f71401d2e6a23c"
+    },
+    {
+      "path": "Docs/Art/M1Arms_20261028/Preview/M1_실제화면.png",
+      "bytes": 751887,
+      "sha256": "97a5086e925acaa5028462c7e278d769bdd876bbf445a09f6c2ded17da921459"
+    },
+    {
+      "path": "Docs/Art/M1Arms_20261028/Preview/장전클립_8발.png",
+      "bytes": 302262,
+      "sha256": "01df72d54819957c2178b405995f86b6abf4e090a204d32c45b6ee4cd2da1745"
+    }
+  ],
+  "existing_metadata_policy": "Existing GUIDs preserved; only loaded clip importer material remap changed in Unity.",
+  "loaded_clip_meta_sha256": "80da3834a96eacfd50fb559d0879f7d211ec5a04b33d817c39a0b4f501ee66e7",
+  "existing_meta_files_preserved_at_initial_delivery": 402
+}

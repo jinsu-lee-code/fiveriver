@@ -52,9 +52,9 @@ namespace FiveRivers.Tutorial
                 player.ResetTutorialCounters();
                 active = true;
             }
-            else if (t.To >= FlowSection.Silence || t.To == FlowSection.Title)
+            else if (t.To >= FlowSection.Silence || t.To == FlowSection.Title || t.Reason == TransitionReason.DebugJump)
             {
-                active = false; // 남은 힌트는 주 공세까지만
+                active = false; // 남은 힌트는 주 공세까지만 (디버그 구간 이동은 학습을 건너뛴 것으로 본다)
             }
         }
 
