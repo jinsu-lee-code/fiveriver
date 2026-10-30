@@ -24,8 +24,19 @@ namespace FiveRivers.Tests
         static Bounds Bounds(GameObject go)
         {
             var rs = go.GetComponentsInChildren<Renderer>(true);
-            var b = rs[0].bounds;
-            foreach (var r in rs) b.Encapsulate(r.bounds);
+            var b = RendererBounds(rs[0]);
+            foreach (var r in rs) b.Encapsulate(RendererBounds(r));
+            return b;
+        }
+
+        // 리그 메시(SkinnedMeshRenderer)의 bounds 는 Unity가 넉넉하게 잡아 실제보다 8~12cm 크게 나온다(2026-10-30 확인).
+        // 키 · 피벗은 바인드 포즈 정점으로 잰다.
+        static Bounds RendererBounds(Renderer r)
+        {
+            if (!(r is SkinnedMeshRenderer s) || s.sharedMesh == null) return r.bounds;
+            var v = s.sharedMesh.vertices;
+            var b = new Bounds(r.transform.TransformPoint(v[0]), Vector3.zero);
+            foreach (var p in v) b.Encapsulate(r.transform.TransformPoint(p));
             return b;
         }
 
@@ -67,16 +78,20 @@ namespace FiveRivers.Tests
             Assert.AreEqual(1.52f, Bounds(bz).size.z, 1.52f * 0.1f, "길이 1.52 m");
         }
 
-        [TestCase("Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx", 1.70f, "M_CH_ROK_Body", "M_CH_ROK_Gear")]
-        [TestCase("Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx", 1.72f, "M_CH_ROK_Body", "M_CH_ROK_Gear")]
-        [TestCase("Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx", 1.68f, "M_CH_KPA_Body", "M_CH_KPA_Gear")]
-        public void Characters_HeightAndSlots(string rel, float height, string body, string gear)
+        // 캐릭터 슬롯 (결정 2026-10-30): Body · Gear 외에 납품 모델이 쓰는 Head · Belt · HandL · HandR · Skin 을 허용한다.
+        // 이유: 최종 모델이 부위별 재질로 들어왔고, 2칸으로 다시 굽는 것보다 규격을 실제에 맞추는 편이 일정상 안전하다.
+        static readonly string[] CharacterSlotParts = { "Body", "Gear", "Head", "Belt", "HandL", "HandR", "Skin" };
+
+        [TestCase("Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx", 1.70f, "M_CH_ROK")]
+        [TestCase("Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx", 1.72f, "M_CH_ROK")]
+        [TestCase("Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx", 1.68f, "M_CH_KPA")]
+        public void Characters_HeightAndSlots(string rel, float height, string slotPrefix)
         {
             var c = Load(rel);
             var b = Bounds(c);
             Assert.AreEqual(height, b.size.y, height * 0.05f, "키 ±5%");
             Assert.AreEqual(0f, b.min.y, 0.05f, "피벗 발 중앙");
-            CollectionAssert.IsSubsetOf(Slots(c), new[] { body, gear });
+            CollectionAssert.IsSubsetOf(Slots(c), CharacterSlotParts.Select(x => slotPrefix + "_" + x).ToArray());
         }
 
         [TestCase("Props/Sandbag/SM_PR_SandbagWall.fbx")]

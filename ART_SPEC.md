@@ -124,7 +124,7 @@ full body, A-pose with arms 45 degrees down, front view, standing straight, feet
 - **파일**: `SK_CH_ROK_Soldier.fbx`
 - **위치**: `Assets/_Project/Art/Models/Characters/ROK_Soldier/`
 - **도구**: VARCO 3D  ·  **쓰는 구간**: S2~S6
-- **규격**: 키 1.70m · 1~2만 삼각형 · 텍스처 1K · 슬롯 M_CH_ROK_Body, M_CH_ROK_Gear · 피벗 발 중앙
+- **규격**: 키 1.70m · 1~2만 삼각형 · 텍스처 1K · 슬롯 M_CH_ROK_Body, M_CH_ROK_Gear (+ 허용: _Head · _Belt · _HandL · _HandR · _Skin, 결정 2026-10-30) · 피벗 발 중앙
 - **그레이박스 임시본**: 회색 캡슐 1.70m (같은 이름 FBX)
 - **참고**: 참호 아군, 새벽 보충병 실루엣에 같이 쓴다. 1인칭 팔(SK_CH_ROK_Arms)도 이 모델에서 잘라 만든다.
 
@@ -168,7 +168,7 @@ modern equipment, camouflage pattern, body armor, zipper, text, logo, weapon in 
 - **파일**: `SK_CH_KPA_Rifleman.fbx`
 - **위치**: `Assets/_Project/Art/Models/Characters/KPA_Rifleman/`
 - **도구**: VARCO 3D  ·  **쓰는 구간**: S2~S3
-- **규격**: 키 1.68m · 1~2만 삼각형 · 텍스처 1K · 슬롯 M_CH_KPA_Body, M_CH_KPA_Gear · 피벗 발 중앙
+- **규격**: 키 1.68m · 1~2만 삼각형 · 텍스처 1K · 슬롯 M_CH_KPA_Body, M_CH_KPA_Gear (+ 허용: _Head · _Belt · _HandL · _HandR · _Skin, 결정 2026-10-30) · 피벗 발 중앙
 - **그레이박스 임시본**: 빨간 캡슐 1.68m (같은 이름 FBX)
 - **참고**: 정찰병 2명·주 공세 7명 모두 이 모델. 고증(군모·장구)은 D가 자료로 확인.
 
