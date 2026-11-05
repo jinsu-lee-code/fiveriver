@@ -1,3 +1,5 @@
+> 이전 초기 맵 보관 기록입니다. 현재 게임에 적용된 PC 정제 맵과 Unity 6000.3 검증은 [DabudongRefined_20261030](../DabudongRefined_20261030/README.md)를 확인하세요. 이 폴더의 이미지는 현행 맵이 아닙니다.
+
 # 다부동 맵 아트 이관
 
 원본: https://github.com/alslxhrl7-web/blender-ai-game-assets-guide/tree/6614ff7d66660fa7ff0e3195f755ae89a638a678

@@ -1,0 +1,33 @@
+{
+    "editorVersion": "6000.6.7f1",
+    "source": "Assets/_Project/Art/TerrainRidges20261023/M01_Continuous_Ridges_Reviewed.asset",
+    "output": "C:\\Users\\mbc\\Documents\\ChatGPT\\다섯개의강\\Map_Import_20261030\\refined_terrain_portable.bin",
+    "size": {
+        "x": 135.0,
+        "y": 64.0,
+        "z": 180.0
+    },
+    "heightmapResolution": 513,
+    "alphamapResolution": 512,
+    "alphamapLayers": 4,
+    "baseMapResolution": 512,
+    "detailResolution": 512,
+    "detailResolutionPerPatch": 16,
+    "detailPrototypes": 1,
+    "treePrototypes": 0,
+    "treeInstances": 0,
+    "holesResolution": 512,
+    "holeCount": 0,
+    "normalizedMinHeight": 0.00436428003013134,
+    "normalizedMaxHeight": 0.4211988151073456,
+    "terrainLayerGuids": [
+        "1b248b6c0a9f42c4f9e11a7ffd1f78de",
+        "1188eee7d92aa9d43b945f06c0b4dbc1",
+        "5b09e3ff91ce5a1408bbba3e5fcdd467",
+        "298b14297d360e245bb0b16388a7c4a3"
+    ],
+    "detailDensitySums": [
+        476249
+    ],
+    "byteLength": 6558526
+}

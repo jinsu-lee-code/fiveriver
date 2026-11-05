@@ -96,7 +96,7 @@ namespace FiveRivers.EditorTools
             g.objectiveScout = "정찰병을 막아라";
             g.objectiveAssault = "진지를 지켜라 · 밝을 때 엄폐해서 쏴라";
             g.objectiveSilence = "탄약 상자에서 탄약을 보충하라";
-            g.objectiveTankMove = "왼쪽 둔덕으로 이동하라";
+            g.objectiveTankMove = "측면 둔덕으로 이동하라";
             g.objectiveTankFire = "바주카로 전차 옆면을 노려라";
             g.objectiveAllySupport = "엎드려라";
 
@@ -105,15 +105,15 @@ namespace FiveRivers.EditorTools
             g.m1Name = "M1 개런드";
             g.bazookaName = "M20 바주카";
 
-            g.scoutSpotted = Line("분대장", "앞에 움직임 있다! 쏴!", 2.5f, "VO_SQD_Scout_01");
-            g.flareUp = Line("분대장", "조명탄이다! 엄폐하고 쏴!", 2.8f, "VO_SQD_Flare_01");
-            g.flareDown = Line("분대장", "어두워진다. 지금 움직여!", 2.8f, "VO_SQD_Flare_02");
-            g.retreat = Line("분대장", "물러간다… 탄약 챙겨!", 3f, "VO_SQD_Retreat_01");
-            g.parkCall1 = Line("박용팔", "만수야.", 2.5f, "VO_PARK_Call_01");
-            g.parkCall2 = Line("박용팔", "최만수! …만수 못 봤어?", 3.5f, "VO_PARK_Call_02");
-            g.tankArrives = Line("분대장", "전차다! 정면은 안 돼, 옆으로 돌아!", 3.5f, "VO_SQD_Tank_01");
-            g.tankRicochet = Line("분대장", "옆구리! 옆구리를 노려!", 2.5f, "VO_SQD_Tank_02");
-            g.allySupport = Line("분대장", "엎드려! 지원 온다!", 3f, "VO_SQD_Ally_01");
+            g.scoutSpotted = Line("분대장", "앞에 움직임 있다! 쏴!", 2.5f, "");
+            g.flareUp = Line("분대장", "조명탄이다! 엄폐하고 쏴!", 2.8f, "");
+            g.flareDown = Line("분대장", "어두워진다. 지금 움직여!", 2.8f, "");
+            g.retreat = Line("분대장", "물러간다… 탄약 챙겨!", 3f, "");
+            g.parkCall1 = Line("박용팔", "만수야.", 2.5f, "");
+            g.parkCall2 = Line("박용팔", "최만수! …만수 못 봤어?", 3.5f, "");
+            g.tankArrives = Line("분대장", "전차다! 정면은 안 돼, 옆으로 돌아!", 3.5f, "");
+            g.tankRicochet = Line("분대장", "옆구리! 옆구리를 노려!", 2.5f, "");
+            g.allySupport = Line("분대장", "엎드려! 지원 온다!", 3f, "");
 
             g.resultDate = "1950년 8월 · 다부동";
             g.resultName = "최만수";

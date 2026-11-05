@@ -17,23 +17,30 @@ namespace FiveRivers.Combat
         [SerializeField] Transform model;
         [SerializeField] Vector3 hipPosition;
         [SerializeField] Vector3 aimPosition;
+        [SerializeField] Vector3 hipEuler;
+        [SerializeField] Vector3 aimEuler;
         [SerializeField] LayerMask hitMask = ~0;
 
         float nextFire;
         float reloadEnd;
         float aimBlend;
+        float reloadStart;
+        float reloadDuration;
+        bool insertionCueSent;
 
         public M1Magazine Magazine { get; private set; }
         public bool Reloading { get; private set; }
         public ReloadKind ReloadKind { get; private set; }
         public float AimBlend => aimBlend;
         public Transform Model => model;
+        public float ReloadProgress => Reloading ? Mathf.Clamp01((Time.time - reloadStart) / Mathf.Max(0.01f, reloadDuration)) : 0f;
 
         public event Action Fired;
         public event Action ClipEjected;
         public event Action DryFired;
         public event Action<ReloadKind> ReloadStarted;
         public event Action Reloaded;
+        public event Action ClipInserted;
         public event Action<Collider> HitSomething;
 
         void Awake()
@@ -46,10 +53,11 @@ namespace FiveRivers.Combat
             float blendSpeed = config.aimBlendTime > 0f ? Time.deltaTime / config.aimBlendTime : 1f;
             aimBlend = Mathf.MoveTowards(aimBlend, aim && !Reloading ? 1f : 0f, blendSpeed);
             model.localPosition = Vector3.Lerp(hipPosition, aimPosition, aimBlend);
+            model.localRotation = Quaternion.Slerp(Quaternion.Euler(hipEuler), Quaternion.Euler(aimEuler), aimBlend);
 
             if (Reloading)
             {
-                if (Time.time >= reloadEnd) FinishReload();
+                AdvanceReload(Time.time);
                 return;
             }
             if (!canAct) return;
@@ -79,7 +87,10 @@ namespace FiveRivers.Combat
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(config.m1Damage, view.transform.position);
-                effects.Spawn(EffectKind.ImpactDirt, hit.point, Quaternion.LookRotation(hit.normal));
+                if (hit.collider.GetComponentInParent<TutorialTarget>() != null)
+                    M1SurfaceImpact.Wood(hit);
+                else
+                    effects.Spawn(EffectKind.ImpactDirt, hit.point, Quaternion.LookRotation(hit.normal));
                 HitSomething?.Invoke(hit.collider);
             }
 
@@ -110,9 +121,23 @@ namespace FiveRivers.Combat
             if (kind == ReloadKind.None || Reloading) return false;
             Reloading = true;
             ReloadKind = kind;
-            reloadEnd = Time.time + (kind == ReloadKind.Empty ? config.m1ReloadEmptyTime : config.m1ReloadPartialTime);
+            reloadStart = Time.time;
+            insertionCueSent = false;
+            reloadDuration = kind == ReloadKind.Empty ? config.m1ReloadEmptyTime : config.m1ReloadPartialTime;
+            reloadEnd = reloadStart + reloadDuration;
             ReloadStarted?.Invoke(kind);
             return true;
+        }
+
+        void AdvanceReload(float now)
+        {
+            if (!Reloading) return;
+            if (!insertionCueSent && now >= reloadStart + reloadDuration * 0.66f)
+            {
+                insertionCueSent = true;
+                ClipInserted?.Invoke();
+            }
+            if (now >= reloadEnd) FinishReload();
         }
 
         void FinishReload()
@@ -125,12 +150,14 @@ namespace FiveRivers.Combat
         public void CancelReload()
         {
             Reloading = false;
+            insertionCueSent = false;
         }
 
         public void ResetAmmo()
         {
             Magazine.Reset(config.m1StartReserve);
             Reloading = false;
+            insertionCueSent = false;
             aimBlend = 0f;
         }
     }

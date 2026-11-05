@@ -139,9 +139,8 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(fpAnim, "player", controller);
             SetupUtil.SetRef(fpAnim, "weapons", holder);
             SetupUtil.SetRef(fpAnim, "resupplier", resupplier);
-            SetupUtil.SetRef(fpAnim, "m1Animator", FirstPersonRig(m1Model, "AC_FP_M1", "Weapons/M1Garand/SM_WP_M1Garand_Clip.fbx", "ReloadClip"));
-            SetupUtil.SetRef(fpAnim, "bazookaAnimator", FirstPersonRig(bzModel, "AC_FP_Bazooka", "Weapons/Bazooka/SM_WP_BazookaRocket.fbx", "ReloadRocket"));
 
+            if (RefinedM1Setup.Available) RefinedM1Setup.Configure(controller);
             return controller;
         }
 

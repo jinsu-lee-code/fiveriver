@@ -21,17 +21,27 @@ namespace FiveRivers.Tests
         static string[] Slots(GameObject go) =>
             go.GetComponentsInChildren<Renderer>(true).SelectMany(r => r.sharedMaterials).Where(m => m != null).Select(m => m.name).Distinct().ToArray();
 
-        static Bounds Bounds(GameObject go)
+        static Bounds BindVertexBounds(GameObject go)
         {
             var rs = go.GetComponentsInChildren<Renderer>(true);
-            var b = RendererBounds(rs[0]);
-            foreach (var r in rs) b.Encapsulate(RendererBounds(r));
+            var b = RendererBindVertexBounds(rs[0]);
+            foreach (var r in rs) b.Encapsulate(RendererBindVertexBounds(r));
             return b;
+        }
+
+        // RiggedCharacterModels3 prefabs were authored against renderer bounds.
+        // Preserve that existing presentation contract; this is not anatomical height or posed foot contact.
+        static Bounds AuthoredRendererBounds(GameObject go)
+        {
+            var renderers = go.GetComponentsInChildren<Renderer>(true);
+            var bounds = renderers[0].bounds;
+            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+            return bounds;
         }
 
         // 리그 메시(SkinnedMeshRenderer)의 bounds 는 Unity가 넉넉하게 잡아 실제보다 8~12cm 크게 나온다(2026-10-30 확인).
         // 키 · 피벗은 바인드 포즈 정점으로 잰다.
-        static Bounds RendererBounds(Renderer r)
+        static Bounds RendererBindVertexBounds(Renderer r)
         {
             if (!(r is SkinnedMeshRenderer s) || s.sharedMesh == null) return r.bounds;
             var v = s.sharedMesh.vertices;
@@ -50,7 +60,7 @@ namespace FiveRivers.Tests
             var gun = t.GetComponentsInChildren<Transform>(true).First(x => x.name == "Gun");
             Assert.AreEqual("Turret", gun.parent.name, "Gun은 Turret 밑 (포탑과 같이 돈다)");
             CollectionAssert.IsSubsetOf(Slots(t), new[] { "M_VH_T34_Body", "M_VH_T34_Track" }, "재질 슬롯 2개 이하, 이름 규칙");
-            var b = Bounds(t);
+            var b = BindVertexBounds(t);
             Assert.AreEqual(3.0f, b.size.x, 3.0f * 0.1f, "폭 3.0 m");
             Assert.Greater(b.max.z, 3.5f, "포 방향 +Z");
             CollectionAssert.Contains(names, "TrackL");
@@ -65,7 +75,7 @@ namespace FiveRivers.Tests
             CollectionAssert.Contains(names, "Bolt");
             CollectionAssert.Contains(names, "ClipSlot");
             CollectionAssert.IsSubsetOf(Slots(m1), new[] { "M_WP_M1_Wood", "M_WP_M1_Metal" });
-            var b = Bounds(m1);
+            var b = BindVertexBounds(m1);
             Assert.AreEqual(1.10f, b.size.z, 1.10f * 0.1f, "길이 1.10 m");
             Assert.Greater(b.max.z, -b.min.z, "총구 +Z");
         }
@@ -75,7 +85,7 @@ namespace FiveRivers.Tests
         {
             var bz = Load("Weapons/Bazooka/SM_WP_Bazooka.fbx");
             CollectionAssert.Contains(bz.GetComponentsInChildren<Transform>(true).Select(x => x.name).ToArray(), "RocketSlot");
-            Assert.AreEqual(1.52f, Bounds(bz).size.z, 1.52f * 0.1f, "길이 1.52 m");
+            Assert.AreEqual(1.52f, BindVertexBounds(bz).size.z, 1.52f * 0.1f, "길이 1.52 m");
         }
 
         // 캐릭터 슬롯 (결정 2026-10-30): Body · Gear 외에 납품 모델이 쓰는 Head · Belt · HandL · HandR · Skin 을 허용한다.
@@ -87,8 +97,44 @@ namespace FiveRivers.Tests
         [TestCase("Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx", 1.68f, "M_CH_KPA")]
         public void Characters_HeightAndSlots(string rel, float height, string slotPrefix)
         {
+            var importer = AssetImporter.GetAtPath(Models + rel) as ModelImporter;
+            if (importer != null && importer.userData == "RiggedCharacterModels3")
+            {
+                // 납품본은 PBR 재질이 여러 개이며 키와 발 피벗은 게임 프리팹에서 보정한다.
+                string name = System.IO.Path.GetFileNameWithoutExtension(rel).Replace("SK_", "PF_");
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Prefabs/" + name + ".prefab");
+                Assert.IsNotNull(prefab, "게임용 캐릭터 프리팹 누락");
+                var instance = Object.Instantiate(prefab);
+                try
+                {
+                    var model = instance.transform.Find("Model");
+                    Assert.IsNotNull(model, "Model 연결 누락");
+                    var bounds = AuthoredRendererBounds(model.gameObject);
+                    Assert.AreEqual(height, bounds.size.y, height * 0.05f, "기존 게임 프리팹 renderer bounds 높이 ±5% (실제 신장 아님)");
+                    Assert.AreEqual(0f, bounds.min.y, 0.05f, "기존 게임 프리팹 renderer bounds 하단 (실제 발 접지 아님)");
+                    var animator = model.GetComponentInChildren<Animator>(true);
+                    Assert.IsNotNull(animator);
+                    Assert.IsNotNull(animator.avatar);
+                    Assert.IsTrue(animator.avatar.isValid && animator.avatar.isHuman, "Humanoid Avatar 유효성");
+                    Assert.IsNotNull(animator.runtimeAnimatorController, "기존 애니메이션 컨트롤러 연결");
+                    var skins = model.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+                    Assert.IsNotEmpty(skins, "스킨 메시 누락");
+                    foreach (var skin in skins)
+                    {
+                        Assert.IsNotNull(skin.sharedMesh, "메시 누락: " + skin.name);
+                        Assert.IsNotEmpty(skin.bones, "리그 바인딩 누락: " + skin.name);
+                        Assert.IsTrue(skin.bones.All(bone => bone != null), "누락된 본: " + skin.name);
+                    }
+                    var materials = model.GetComponentsInChildren<Renderer>(true).SelectMany(r => r.sharedMaterials).ToArray();
+                    Assert.IsNotEmpty(materials);
+                    Assert.IsTrue(materials.All(m => m != null && m.shader != null && m.shader.name == "Universal Render Pipeline/Lit"), "URP 재질 연결");
+                    Assert.IsTrue(materials.Any(m => m.GetTexture("_BaseMap") != null), "납품 BaseColor 텍스처 연결");
+                }
+                finally { Object.DestroyImmediate(instance); }
+                return;
+            }
             var c = Load(rel);
-            var b = Bounds(c);
+            var b = BindVertexBounds(c);
             Assert.AreEqual(height, b.size.y, height * 0.05f, "키 ±5%");
             Assert.AreEqual(0f, b.min.y, 0.05f, "피벗 발 중앙");
             CollectionAssert.IsSubsetOf(Slots(c), CharacterSlotParts.Select(x => slotPrefix + "_" + x).ToArray());
@@ -106,7 +152,7 @@ namespace FiveRivers.Tests
         {
             var go = Load(rel);
             Assert.AreEqual(Vector3.one, go.transform.localScale, "Transform 적용 (스케일 1)");
-            if (rel.StartsWith("Props/")) Assert.AreEqual(0f, Bounds(go).min.y, 0.05f, "피벗 바닥 중앙");
+            if (rel.StartsWith("Props/")) Assert.AreEqual(0f, BindVertexBounds(go).min.y, 0.05f, "피벗 바닥 중앙");
         }
 
         [Test]

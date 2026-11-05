@@ -1,0 +1,23 @@
+FiveRivers / MapPolish20261105 — 적용 에셋 출처
+
+1. Dirt Floor — eye-candy.xyz / Poly Haven
+Source: https://polyhaven.com/a/dirt_floor
+License: CC0 1.0, https://polyhaven.com/license
+License text: https://creativecommons.org/publicdomain/zero/1.0/
+Verified: 2026-11-05. 상업적 이용·수정·재배포 허용.
+Files: dirt_floor_diff_2k.jpg, dirt_floor_nor_gl_2k.jpg
+Application: 2.1m 반복 크기, 참호 안쪽에만 고유 TerrainLayer로 적용.
+현대 표면 스캔을 시각 재질로 사용했으며 1950년 다부동 현장 사진으로 주장하지 않음.
+Powered by Poly Haven — 공식 API로 파일을 조회·다운로드함.
+
+2. PF_PR_SandbagWall / SM_PR_SandbagWall — 기존 FiveRivers 프로젝트 에셋
+VARCO 3D로 생성된 기존 프로젝트 모델. https://3d.varco.ai/
+Generation: 2026-10-29 / task c035fa0e-cbbd-4bc1-8c13-a4525e82a078
+Local provenance: Assets/_Project/_Source/SM_PR_SandbagWall/Provenance.json
+Application: 이번 새 방벽 46개에 재사용. 원본 메시·재질은 보존하고 배치와 크기만 조정.
+이 모델을 CC0로 표시하거나 임의로 재라이선스하지 않음. 기존 생성 출처를 유지함.
+생성 시 Public/Private 값은 로컬 기록에 없으며, 공식 정책에서 Public은 CC BY 4.0, Private은 생성자의 상업적 이용을 허용함.
+Policy: https://3d.varco.ai/docs/release-notes/2026-10-12-choose-a-license-when-you-generate
+CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+
+이번 변경 대상의 출처 기록이며 기존 프로젝트 전체 에셋의 라이선스 목록을 대체하지 않음.

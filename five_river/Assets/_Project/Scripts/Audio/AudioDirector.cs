@@ -28,10 +28,11 @@ namespace FiveRivers.Audio
         [SerializeField] int poolSize = 24;
 
         readonly List<AudioSource> pool = new List<AudioSource>();
+        readonly Dictionary<AudioSource, SoundLibrary.Entry> poolEntries = new Dictionary<AudioSource, SoundLibrary.Entry>();
         readonly Dictionary<string, int> lastVariant = new Dictionary<string, int>();
         readonly Dictionary<string, float> lastPlayed = new Dictionary<string, float>();
         AudioSource ambience, music, flareBurn, voice;
-        AudioSource tankEngine, tankDamage;
+        AudioSource tankEngine, tankDamage, artillery;
         float duck = 1f;
         float stepDistance;
         float lastMoved;
@@ -45,18 +46,20 @@ namespace FiveRivers.Audio
             music = NewSource("Music", transform);
             flareBurn = NewSource("FlareBurn", transform);
             voice = NewSource("Voice", transform);
+            artillery = NewSource("DistantArtillery", transform);
         }
 
         void Start()
         {
             var flow = director.Flow;
             flow.SectionChanged += OnSectionChanged;
+            flow.RetryRequested += _ => ClearTransientAudio();
 
             weapons.M1.Fired += () => Play2D("SFX_M1_Fire");
             weapons.M1.ClipEjected += () => Play2D("SFX_M1_Ping");
             weapons.M1.DryFired += () => Play2D("SFX_M1_DryFire");
             weapons.M1.ReloadStarted += kind => { if (kind == ReloadKind.Partial) Play2D("SFX_M1_ClipRemove"); };
-            weapons.M1.Reloaded += () => Play2D("SFX_M1_ClipInsert");
+            weapons.M1.ClipInserted += () => Play2D("SFX_M1_ClipInsert");
             weapons.Bazooka.Fired += () => Play2D("SFX_Bazooka_Fire");
             weapons.Bazooka.Reloaded += () => Play2D("SFX_Bazooka_Load");
             weapons.Switched += _ => Play2D("SFX_Weapon_Switch");
@@ -70,7 +73,6 @@ namespace FiveRivers.Audio
 
             effects.Spawned += OnEffect;
             enemies.ShotMissedNearPlayer += p => PlayAt("SFX_Bullet_Whiz", p);
-            enemies.EnemySpawned += p => { if (director.Flow.Section == FlowSection.Assault) PlayAt("VO_KPA_Shout", p); };
             flares.Launched += () => Play2D("SFX_Flare_Launch");
             tank.Stopped += () =>
             {
@@ -80,6 +82,7 @@ namespace FiveRivers.Audio
             tank.SideHit += _ => SetTankLoops();
 
             subtitles.LineStarted += line => PlayVoice(line.voice);
+            subtitles.LineEnded += StopVoice;
             objective.Shown += () => Play2D("UI_Objective_Show");
 
             var body = tank.transform.GetChild(0);
@@ -99,20 +102,21 @@ namespace FiveRivers.Audio
 
         void OnSectionChanged(FlowTransition t)
         {
+            if (t.To == FlowSection.Title || t.Reason == TransitionReason.RunStart)
+                ClearTransientAudio();
             if (t.From == FlowSection.Title && t.To == FlowSection.Tutorial)
                 Play2D("UI_Menu_Click");
             switch (t.To)
             {
                 case FlowSection.Title:
                     SetLoop(ambience, null);
-                    SetLoop(music, "BGM_Title_Loop");
+                    SetLoop(music, null); // Title music is disabled; the authored clip remains in the library.
                     StopVoice();
                     break;
                 case FlowSection.Tutorial:
                 case FlowSection.Scout:
                     SetLoop(music, null);
                     SetLoop(ambience, "AMB_Night_Hills_Loop");
-                    ScheduleArtillery();
                     break;
                 case FlowSection.Assault:
                     SetLoop(ambience, "AMB_Battle_Distant_Loop");
@@ -129,6 +133,12 @@ namespace FiveRivers.Audio
                     SetLoop(ambience, "AMB_Dawn_Loop");
                     SetLoop(music, "BGM_Ending", loop: false); // 새벽 20 + 결과 20 = 40초
                     break;
+            }
+            if (ArtilleryAllowed(t.To)) ScheduleArtillery();
+            else
+            {
+                artillery.Stop();
+                nextArtillery = float.PositiveInfinity;
             }
             SetTankLoops();
         }
@@ -165,16 +175,29 @@ namespace FiveRivers.Audio
             {
                 wasPaused = director.Flow.Paused;
                 Play2D("UI_Menu_Click");
+                if (wasPaused)
+                {
+                    artillery.Stop();
+                    nextArtillery = float.PositiveInfinity;
+                }
+                else if (ArtilleryAllowed(director.Flow.Section)) ScheduleArtillery();
             }
             // Approach -> Holding changes without a section transition.
             SetTankLoops();
             // 대사 중 SFX · AMB를 낮춘다
             float target = voice.isPlaying || subtitles.Speaking ? Mathf.Pow(10f, config.duckDb / 20f) : 1f;
             duck = Mathf.MoveTowards(duck, target, Time.unscaledDeltaTime / Mathf.Max(0.01f, config.duckFade));
+            foreach (var source in pool)
+            {
+                if (!source.isPlaying || !poolEntries.TryGetValue(source, out var entry)) continue;
+                float duckable = entry.bus == SoundBus.Sfx || entry.bus == SoundBus.Amb ? duck : 1f;
+                source.volume = BusVolume(entry.bus) * entry.volume * duckable;
+            }
             ambience.volume = Volume("amb") * VolumeOf(ambience.clip) * duck;
             music.volume = Volume("bgm") * VolumeOf(music.clip);
             tankEngine.volume = Volume("sfx") * VolumeOf(tankEngine.clip) * duck;
             tankDamage.volume = Volume("sfx") * VolumeOf(tankDamage.clip) * duck;
+            artillery.volume = Volume("sfx") * VolumeOf(artillery.clip) * duck;
 
             float illum = flares.Illumination;
             if (illum > 0f && !flareBurn.isPlaying) SetLoop(flareBurn, "SFX_Flare_Burn_Loop");
@@ -200,13 +223,16 @@ namespace FiveRivers.Audio
             }
         }
 
+        // Preserve the existing tutorial/silence ambience and include the tank battle.
+        static bool ArtilleryAllowed(FlowSection section) => section >= FlowSection.Tutorial && section <= FlowSection.Tank;
+
         void ScheduleArtillery() => nextArtillery = Time.time + Random.Range(config.artilleryMin, config.artilleryMax);
 
         void UpdateArtillery()
         {
             var s = director.Flow.Section;
-            if (s < FlowSection.Tutorial || s > FlowSection.Silence || Time.time < nextArtillery) return;
-            Play2D("SFX_Artillery_Distant");
+            if (!ArtilleryAllowed(s) || director.Flow.Paused || Time.time < nextArtillery) return;
+            Play("SFX_Artillery_Distant", null, targetSource: artillery);
             ScheduleArtillery();
         }
 
@@ -267,17 +293,21 @@ namespace FiveRivers.Audio
 
         public void PlayAt(string id, Vector3 position) => Play(id, position);
 
-        void Play(string id, Vector3? position)
+        // A world-space M1 uses the same non-verbal clip and mixer settings as the player's rifle.
+        public void PlaySpatial(string id, Vector3 position) => Play(id, position, true);
+
+        void Play(string id, Vector3? position, bool forceSpatial = false, AudioSource targetSource = null)
         {
             var e = library.Find(id);
             if (e == null || !Ready(e)) return;
             var clip = Pick(e);
             if (clip == null) return;
-            var source = FreeSource();
+            var source = targetSource != null ? targetSource : FreeSource();
+            if (targetSource == null) poolEntries[source] = e;
             source.clip = clip;
             source.loop = false;
             source.pitch = 1f + Random.Range(-e.pitchVariance, e.pitchVariance);
-            bool spatial = e.spatial && position.HasValue;
+            bool spatial = (e.spatial || forceSpatial) && position.HasValue;
             source.spatialBlend = spatial ? 1f : 0f;
             source.maxDistance = e.maxDistance;
             source.rolloffMode = AudioRolloffMode.Linear;
@@ -312,6 +342,7 @@ namespace FiveRivers.Audio
 
         void PlayVoice(string id)
         {
+            StopVoice();
             if (string.IsNullOrEmpty(id)) return;
             var e = library.Find(id);
             if (e == null || e.clips.Length == 0) return;
@@ -321,6 +352,21 @@ namespace FiveRivers.Audio
             voice.volume = BusVolume(SoundBus.Vo) * e.volume;
             voice.Play();
             if (voice.clip != null) subtitles.ExtendCurrent(voice.clip.length + 0.3f);
+        }
+
+        void ClearTransientAudio()
+        {
+            foreach (var source in pool) source.Stop();
+            poolEntries.Clear();
+            StopVoice();
+            flareBurn.Stop();
+            artillery.Stop();
+            lastPlayed.Clear();
+            lastVariant.Clear();
+            stepDistance = 0f;
+            lastMoved = player.MovedDistance;
+            duck = 1f;
+            ScheduleArtillery();
         }
 
         void StopVoice() => voice.Stop();

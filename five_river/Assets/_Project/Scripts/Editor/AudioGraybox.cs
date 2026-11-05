@@ -10,7 +10,7 @@ using Random = System.Random;
 namespace FiveRivers.EditorTools
 {
     // SOUND_LIST 표의 파일명 그대로 그레이박스 소리를 합성하고(없는 파일만), SoundLibrary를 채운다.
-    // 음성(VO_)은 tools/make_graybox_vo.ps1 (Windows 기본 한국어 음성)로 만든다.
+    // TTS 대사는 제거했으며 비언어 신음만 유지한다.
     // 최종 소리가 sound 브랜치에서 같은 이름으로 오면 파일만 덮어쓰면 된다 (.meta 유지 → 연결 유지).
     static class AudioGraybox
     {
@@ -94,11 +94,8 @@ namespace FiveRivers.EditorTools
             S("UI_Objective_Show", U, 0, 0.4f, SoundBus.Ui, (t, r) => Noise(r) * Env(t, 0.02f, 0.3f) * 0.15f, volume: 0.5f);
             S("UI_Hint_Show", U, 0, 0.3f, SoundBus.Ui, (t, r) => Tone(t, 500f, 0.1f) * 0.2f, volume: 0.5f);
             S("UI_Menu_Click", U, 0, 0.2f, SoundBus.Ui, (t, r) => Click(t, 0f, r) * 0.5f, volume: 0.5f);
-            // 음성 (3-8 ~ 3-11) — 합성하지 않음(TTS 스크립트), 신음만 합성
+            // 사용자 요청(2026-10-30): TTS 대사/외침 제거. 비언어 신음 효과만 유지.
             S("VO_OSG_Hurt", V, 3, 0.6f, SoundBus.Vo, (t, r) => Tone(t, 160f - t * 60f, 0.4f) * 0.4f, cooldown: 0.5f);
-            foreach (var vo in new[] { "VO_SQD_Scout_01", "VO_SQD_Flare_01", "VO_SQD_Flare_02", "VO_SQD_Retreat_01", "VO_PARK_Call_01", "VO_PARK_Call_02", "VO_SQD_Tank_01", "VO_SQD_Tank_02", "VO_SQD_Ally_01" })
-                S(vo, V, 0, 0f, SoundBus.Vo, null);
-            S("VO_KPA_Shout", V, 3, 0f, SoundBus.Vo, null, spatial: true, maxDistance: 150f, cooldown: 4f);
         }
 
         static void S(string id, string folder, int variants, float seconds, SoundBus bus, Func<float, Random, float> synth,

@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ParkYongpal_GroundedIdle
+  m_Controller: {fileID: 9100000, guid: 234c1f179545026448aa6cafb7cefff4, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: -623603649343465320, guid: 9335c827bdb1a71459d1562e8c72e93b, type: 3}
+    m_OverrideClip: {fileID: 7400000, guid: c2f351ba4d5eb9d4aa776e0478d0087f, type: 2}
+  - m_OriginalClip: {fileID: -623603649343465320, guid: 4a7cc2df579134049897280c789dcdfe, type: 3}
+    m_OverrideClip: {fileID: 7400000, guid: e59b2e9b28b49e0419f7be2f6333ff15, type: 2}

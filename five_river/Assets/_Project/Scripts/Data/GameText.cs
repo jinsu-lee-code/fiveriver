@@ -43,10 +43,16 @@ namespace FiveRivers.Data
         public string objectiveTutorial;
         public string objectiveScout;
         public string objectiveAssault;
+        public string combatBrightHint;
+        public string combatDarkHint;
         public string objectiveSilence;
         public string objectiveTankMove;
+        public string objectiveTankEquip;
         public string objectiveTankFire;
+        public string objectiveTankFinish;
+        public string objectiveTankWait;
         public string objectiveAllySupport;
+        public string objectiveDawn;
 
         [Header("상호작용 안내")]
         public string resupplyPrompt;
@@ -63,6 +69,7 @@ namespace FiveRivers.Data
         public Line parkCall2;
         public Line tankArrives;
         public Line tankRicochet;
+        public Line tankFirstHit;
         public Line allySupport;
 
         [Header("결과 화면 (S7)")]

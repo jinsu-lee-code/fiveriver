@@ -31,11 +31,33 @@ namespace FiveRivers.Combat
         [SerializeField] float allyBlastFirstDelay = 0.6f;
         [SerializeField] float allyBlastInterval = 1.2f;
 
+        // Terrain contact preserves authored approach and final turn.
+        [SerializeField] Terrain driveTerrain;
+        [SerializeField] float groundClearance = 0f;
+        [SerializeField] Vector2 trackHalfFootprint = new Vector2(1.22f, 2.6f);
+
+        [Header("주포 고각 (T-34-85 ZiS-S-53 실제 범위)")]
+        [SerializeField] float gunDepression = -5f;
+        [SerializeField] float gunElevation = 22f;
+        [SerializeField] float aimHeight = 1.4f;   // 플레이어 발 기준 겨누는 높이
+
+        [Header("파괴 연출: 폭발 섬광 뒤 파괴 모델로 교체 (없으면 그을린 재질)")]
+        [SerializeField] GameObject intactModel;     // PF_VH_T34_85/Model
+        [SerializeField] GameObject destroyedModel;  // SM_VH_T34_85_Destroyed 인스턴스
+        [SerializeField] float destroyedSwapDelay = 0.15f;
+
         Material[] normalMaterials;
+        Transform gun;
+        Quaternion gunRest;
+        Quaternion turretBasis;
+        Quaternion turretRest;
+        float gunPitch;
+        float destroyedSwapAt = -1f;
         State state = State.Hidden;
         float nextFire;
         float nextAllyBlast;
         int allyBlastsLeft;
+        float approachElapsed;
 
         public int SideHits { get; private set; }
         public bool IsStopped => state == State.Stopped;
@@ -52,6 +74,11 @@ namespace FiveRivers.Combat
         {
             normalMaterials = new Material[bodyRenderers.Length];
             for (int i = 0; i < bodyRenderers.Length; i++) normalMaterials[i] = bodyRenderers[i].sharedMaterial;
+            // 포구 소켓은 Gun 밑에 있다 (TankBuilder). Gun이 Turret 밑이면 고각을 준다.
+            gun = gunMuzzle != null && gunMuzzle.parent != turret ? gunMuzzle.parent : null;
+            if (gun != null) gunRest = gun.localRotation;
+            turretBasis = Quaternion.Inverse(body.rotation) * turret.rotation;
+            turretRest = turret.localRotation;
             Hide();
         }
 
@@ -97,8 +124,15 @@ namespace FiveRivers.Combat
         {
             body.gameObject.SetActive(true);
             body.SetPositionAndRotation(at.position, at.rotation);
-            turret.localRotation = Quaternion.identity;
+            if (driveTerrain != null) AlignWithGround();
+            turret.localRotation = turretRest;
+            gunPitch = 0f;
+            if (gun != null) gun.localRotation = gunRest;
+            destroyedSwapAt = -1f;
+            if (intactModel != null) intactModel.SetActive(true);
+            if (destroyedModel != null) destroyedModel.SetActive(false);
             state = at == points.tankHold ? State.Holding : State.Approach;
+            approachElapsed = 0f;
             SideHits = 0;
             smoke.SetActive(false);
             fire.SetActive(false);
@@ -127,27 +161,86 @@ namespace FiveRivers.Combat
                 if (allyBlastsLeft == 0) Stop();
             }
 
+            if (destroyedSwapAt >= 0f && Time.time >= destroyedSwapAt)
+            {
+                destroyedSwapAt = -1f;
+                intactModel.SetActive(false);
+                destroyedModel.SetActive(true);
+            }
+
             if (state == State.Stopped) return;
 
             if (state == State.Approach)
             {
-                body.position = Vector3.MoveTowards(body.position, points.tankHold.position, config.approachSpeed * Time.deltaTime);
-                if (Vector3.Distance(body.position, points.tankHold.position) < 0.05f) state = State.Holding;
+                approachElapsed += Time.deltaTime;
+                float routeLength = Vector3.Distance(points.tankStart.position, points.tankHold.position);
+                float duration = routeLength / config.approachSpeed;
+                float progress = duration > 0f ? approachElapsed / duration : 1f;
+                SampleApproach(progress, points.tankStart.position, points.tankStart.rotation,
+                    points.tankHold.position, points.tankHold.rotation, out var position, out var rotation);
+                body.SetPositionAndRotation(position, rotation);
+                if (driveTerrain != null) AlignWithGround();
+                if (progress >= 1f) state = State.Holding;
             }
 
             var toPlayer = player.transform.position - turret.position;
-            toPlayer.y = 0f;
+            var turretUp = driveTerrain != null ? body.up : Vector3.up;
+            toPlayer = Vector3.ProjectOnPlane(toPlayer, turretUp);
             if (toPlayer.sqrMagnitude > 0.01f)
             {
-                var want = Quaternion.LookRotation(toPlayer);
+                var want = Quaternion.LookRotation(toPlayer, turretUp) * turretBasis;
                 turret.rotation = Quaternion.RotateTowards(turret.rotation, want, config.turretTurnSpeed * Time.deltaTime);
             }
+            AimGun(turretUp);
 
             if (!director.Flow.CombatLocked && director.Flow.Section == FlowSection.Tank && Time.time >= nextFire)
             {
                 nextFire = Time.time + config.fireInterval;
                 FireCannon();
             }
+        }
+
+        // 포탑이 좌우를 맡고, 주포는 포탑 오른쪽 축으로만 위아래를 겨눈다 (포탑과 같은 속도).
+        void AimGun(Vector3 turretUp)
+        {
+            if (gun == null) return;
+            var aim = player.transform.position + Vector3.up * aimHeight - gun.position;
+            var flat = Vector3.ProjectOnPlane(aim, turretUp);
+            float want = Mathf.Clamp(Mathf.Atan2(Vector3.Dot(aim, turretUp), flat.magnitude) * Mathf.Rad2Deg, gunDepression, gunElevation);
+            gunPitch = Mathf.MoveTowards(gunPitch, want, config.turretTurnSpeed * Time.deltaTime);
+            gun.rotation = Quaternion.AngleAxis(-gunPitch, turret.right) * (turret.rotation * gunRest);
+        }
+
+        // 기존 전체 접근 시간은 유지한다. 앞 75%에 직진하고, 마지막 25%는
+        // 정지 지점에서 선회하여 차체를 옆으로 미끄러뜨리지 않는다.
+        public static void SampleApproach(float progress, Vector3 startPosition, Quaternion startRotation,
+            Vector3 holdPosition, Quaternion holdRotation, out Vector3 position, out Quaternion rotation)
+        {
+            position = Vector3.Lerp(startPosition, holdPosition, Mathf.Clamp01(progress / 0.75f));
+            rotation = Quaternion.Slerp(startRotation, holdRotation, Mathf.InverseLerp(0.75f, 1f, progress));
+        }
+
+        // 지형을 바꾸거나 차체 형상을 고치지 않고, 양 궤도 접지점의 높이로 차체만 정렬한다.
+        void AlignWithGround()
+        {
+            var driveHeading = Vector3.ProjectOnPlane(body.forward, Vector3.up).normalized;
+            if (driveHeading.sqrMagnitude < 0.0001f) return;
+            var p = body.position;
+            var right = Vector3.Cross(Vector3.up, driveHeading);
+            var front = GroundPoint(p + driveHeading * trackHalfFootprint.y);
+            var back = GroundPoint(p - driveHeading * trackHalfFootprint.y);
+            var left = GroundPoint(p - right * trackHalfFootprint.x);
+            var rightPoint = GroundPoint(p + right * trackHalfFootprint.x);
+            var forward = (front - back).normalized;
+            var up = Vector3.Cross(forward, rightPoint - left).normalized;
+            p.y = (front.y + back.y + left.y + rightPoint.y) * 0.25f + groundClearance;
+            body.SetPositionAndRotation(p, Quaternion.LookRotation(forward, up));
+        }
+
+        Vector3 GroundPoint(Vector3 p)
+        {
+            p.y = driveTerrain.SampleHeight(p) + driveTerrain.transform.position.y;
+            return p;
         }
 
         // 위협 사격: 플레이어 근처(빗나감 거리)에 떨어진다. 폭발 반경 안이면 피해 (실패 보조 배율 적용)
@@ -188,9 +281,11 @@ namespace FiveRivers.Combat
             state = State.Stopped;
             allyBlastsLeft = 0;
             smoke.SetActive(false);
-            effects.Spawn(EffectKind.TankDestroyed, body.position + Vector3.up * 1.5f, Quaternion.identity);
             fire.SetActive(true);
-            foreach (var r in bodyRenderers) r.sharedMaterial = burntMaterial;
+            // 측면 2발째: 큰 폭발 → 섬광에 가려지는 사이 파괴 모델로 교체 (모델이 없으면 그을린 재질)
+            effects.Spawn(EffectKind.TankDestroyed, body.position + body.up * 1.6f, body.rotation);
+            if (intactModel != null && destroyedModel != null) destroyedSwapAt = Time.time + destroyedSwapDelay;
+            else foreach (var r in bodyRenderers) r.sharedMaterial = burntMaterial;
             Stopped?.Invoke();
             director.Flow.ReportGoalMet(FlowSection.Tank);
         }

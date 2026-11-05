@@ -45,6 +45,15 @@ namespace FiveRivers.Combat
             var controls = player.Controls;
             bool canAct = player.Gate.CanAct;
 
+            // Title/result end pending actions; temporary Full-mode input blockers do not.
+            if (player.Gate.Mode == Core.ControlMode.None)
+            {
+                m1.CancelReload();
+                bazooka.CancelReload();
+                Switching = false;
+                shown = Current;
+            }
+
             if (canAct && !Switching)
             {
                 if (controls.Weapon1.WasPressedThisFrame() && Current != WeaponSlot.M1) BeginSwitch(WeaponSlot.M1);

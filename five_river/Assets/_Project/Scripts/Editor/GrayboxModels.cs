@@ -57,6 +57,9 @@ namespace FiveRivers.EditorTools
             string path = ModelDir + relPath;
             var importer = AssetImporter.GetAtPath(path) as ModelImporter;
             if (importer == null) return null;
+            // 납품된 리깅 캐릭터는 전용 URP 재질 remap을 유지한다.
+            if (importer.userData == CharacterImportSetup.ImportTag)
+                return AssetDatabase.LoadAssetAtPath<GameObject>(path);
             bool dirty = false;
             if (importer.materialImportMode != ModelImporterMaterialImportMode.ImportViaMaterialDescription)
             {

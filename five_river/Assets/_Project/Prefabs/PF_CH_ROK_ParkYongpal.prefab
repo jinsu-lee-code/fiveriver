@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2719217548968299776}
   - component: {fileID: 6587666102160445248}
-  - component: {fileID: 4489691054590437027}
   m_Layer: 0
   m_Name: PF_CH_ROK_ParkYongpal
   m_TagString: Untagged
@@ -31,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8184239847008930664}
+  - {fileID: 7965902317937356050}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &6587666102160445248
@@ -57,21 +56,7 @@ CapsuleCollider:
   m_Height: 1.72
   m_Direction: 1
   m_Center: {x: 0, y: 0.86, z: 0}
---- !u!114 &4489691054590437027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1787157196929482154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 123b5a4566120a142950e58135e26f6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: FiveRivers::FiveRivers.Narrative.AllyPose
-  animator: {fileID: 2843018296434708754}
-  crouch: 0
---- !u!1001 &8511517122515299459
+--- !u!1001 &7567780816451832569
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -80,16 +65,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 2719217548968299776}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.84975255
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.84975255
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.84975255
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.0018391737
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.07420295
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.00061589427
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
       propertyPath: m_LocalRotation.w
@@ -161,32 +158,54 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5489075547940193551}
+      addedObject: {fileID: 7169494463126187199}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4619480707679383769}
   m_SourcePrefab: {fileID: 100100000, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
---- !u!95 &2843018296434708754 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
-  m_PrefabInstance: {fileID: 8511517122515299459}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8184239847008930664 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
-  m_PrefabInstance: {fileID: 8511517122515299459}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8853956384973181394 stripped
+--- !u!1 &7333902396129392552 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
-  m_PrefabInstance: {fileID: 8511517122515299459}
+  m_PrefabInstance: {fileID: 7567780816451832569}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5489075547940193551
+--- !u!114 &7169494463126187199
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8853956384973181394}
+  m_GameObject: {fileID: 7333902396129392552}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f71fe826db1f0b4da6f0fbb4287c1f8, type: 3}
+  m_Script: {fileID: 11500000, guid: c9dcb339a60715f45a685b9bdb70e506, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: FiveRivers::FiveRivers.Combat.AnimationEventSink
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Combat.CharacterAnimationEvents
+--- !u!114 &4619480707679383769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7333902396129392552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69aaf728401872c438cc70841da6c8d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Combat.AlliedRifleFit
+  correctShoulderedHands: 0
+  correctCarryPose: 1
+  shoulderOffset: {x: 0.025, y: -0.015, z: 0.025}
+  rightElbowDirection: {x: 0.35, y: -0.4, z: -0.05}
+  leftElbowDirection: {x: -0.25, y: -0.45, z: 0.12}
+  maxForearmRoll: 45
+  maxWristSwing: 35
+  supportWristGrip: {x: -0.04, y: -0.032, z: 0.22}
+  triggerWristGrip: {x: 0.025, y: -0.05, z: -0.185}
+  supportPalmDirection: {x: 1, y: 0.35, z: 0.1}
+  carryPosition: {x: 0.04, y: 1.08, z: 0.2}
+  carryEuler: {x: -3.2, y: -31.9, z: 0}
+--- !u!4 &7965902317937356050 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
+  m_PrefabInstance: {fileID: 7567780816451832569}
+  m_PrefabAsset: {fileID: 0}

@@ -75,6 +75,11 @@ namespace FiveRivers.Combat
 
         IEnumerator DeathSequence()
         {
+            var flow = director.Flow;
+            var deathSection = flow.Section;
+            var checkpoint = CheckpointState.For(deathSection);
+            int failuresAtDeath = flow.Checkpoints.Failures(checkpoint);
+            retried = false;
             player.Gate.Block(this); // 쓰러진 동안 조작 막기
             for (float t = 0f; t < deathFadeTime; t += Time.unscaledDeltaTime)
             {
@@ -82,8 +87,9 @@ namespace FiveRivers.Combat
                 yield return null;
             }
             Fade = 1f;
-            retried = false;
-            director.Flow.ReportPlayerDied();
+            // 암전 중 구간 상한이나 전차 재시도가 먼저 처리됐으면 지난 사망을 다시 보고하지 않는다.
+            if (flow.Section == deathSection && flow.Checkpoints.Failures(checkpoint) == failuresAtDeath)
+                flow.ReportPlayerDied();
             // 8:15 이후 · 체크포인트 없는 구간이면 복구가 오지 않는다 → 그 자리에서 일으킨다
             if (!retried) health.Restore();
             for (float t = 0f; t < deathFadeTime * 0.6f; t += Time.unscaledDeltaTime)

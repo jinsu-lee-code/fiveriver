@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Dabudong_NightDawnSky
+  m_Shader: {fileID: 4800000, guid: ebf98a23f66903441a823d901065bf01, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Dawn:
+        m_Texture: {fileID: 2800000, guid: 6415de708d138254c959676df64c1754, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Night:
+        m_Texture: {fileID: 2800000, guid: a8fa80f4e4d506c4f95d43924381c432, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DawnBlend: 0
+    - _DawnExposure: 0.7
+    - _NightExposure: 0.06
+    - _Rotation: 0
+    m_Colors:
+    - _NightTint: {r: 0.54999995, g: 0.68, b: 1, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -1,0 +1,31 @@
+FPS sleeve surface correction, 2026-11-05
+
+Art direction follows the Dabudong night-combat demo and rookie soldier
+Oh Seok-gu: preserve the existing subdued olive uniform color and matte
+cotton weave; add restrained, unequal fabric creases. This material is an
+art-direction approximation, not a claim of an exact historical textile.
+
+Existing source retained: Poly Haven Stretch Poplin
+https://polyhaven.com/a/stretch_poplin
+https://polyhaven.com/license
+Poly Haven assets are CC0; commercial use, modification and redistribution permitted.
+Source files already present in Assets/_Project/Art/SurfaceDetail20261030/.
+
+M1_FP_Sleeve_AlbedoTiled_20261105.png is a Blender emission bake of the existing
+stretch_poplin_diff_1k.png at the existing 2x3 UV repeat. It preserves the cloth color.
+M1_FP_SleeveFold_Normal_20261105.png is an original tangent-space normal bake
+from a separate mathematical cloth relief swatch. No external reference image
+is incorporated. The physical production arm/hand meshes, proportions, bones,
+pose, skin weights, camera and gun transforms were not modified by this work.
+
+Bake source and reproducible script are saved separately in evidence folder:
+FPSSleeve_20261105/M1_FP_SleeveSurface_NormalBake_20261105.blend
+FPSSleeve_20261105/bake_sleeve_surface.py
+
+Revision 2, requested after the normal-only result remained too smooth:
+M1_FP_Sleeve_ClothGrain_20261105.png retains that albedo and adds restrained
+original procedural fibre-tone variation, without incorporating the reference photo.
+The FPS-only runtime cloth surface now receives short asymmetric ridge/valley
+pairs in the visible forearm region. Original arm centreline, nominal radius,
+joint positions, wrist-rim fit and hand connection remain unchanged. No stored
+character mesh asset, hand mesh, camera, weapon or other avatar is modified.

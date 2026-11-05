@@ -43,11 +43,11 @@ namespace FiveRivers.UI
             float nameAt = config.dateDuration;
             float letterAt = nameAt + config.nameDuration;
             float titleAt = letterAt + config.letterDuration;
-            // 날짜 · 이름은 편지가 나올 때까지 남고, 마지막 3초에는 제목만 남는다
-            dateGroup.alpha = Window(t, 0f, letterAt);
+            // 각 내용을 순서대로 4 · 5 · 8 · 3초 표시한다.
+            dateGroup.alpha = Window(t, 0f, nameAt);
             nameGroup.alpha = Window(t, nameAt, letterAt);
             letterGroup.alpha = Window(t, letterAt, titleAt);
-            titleGroup.alpha = Window(t, titleAt, titleAt + config.titleDuration + fadeTime);
+            titleGroup.alpha = Window(t, titleAt, titleAt + config.titleDuration);
         }
 
         float Window(float t, float from, float to)

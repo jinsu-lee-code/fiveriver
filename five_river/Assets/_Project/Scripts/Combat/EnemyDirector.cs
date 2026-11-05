@@ -28,6 +28,8 @@ namespace FiveRivers.Combat
 
         public Vector3 PlayerEye => player.CameraPivot.position;
         public int AliveCount => alive.Count;
+        // Read-only targets for allied presentation; only player damage changes this roster.
+        public IReadOnlyList<EnemyAgent> ActiveEnemies => alive;
 
         public event System.Action<Vector3> ShotMissedNearPlayer; // 총알 스침 소리 위치
         public event System.Action<Vector3> EnemyFired;

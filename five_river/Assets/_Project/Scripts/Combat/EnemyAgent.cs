@@ -188,7 +188,7 @@ namespace FiveRivers.Combat
             agent.isStopped = true;
             agent.enabled = false;
             if (body != null) body.enabled = false;
-            model.localScale = Vector3.one;
+            if (animator == null) model.localScale = Vector3.one;
             if (animator != null)
             {
                 animator.SetInteger(DieIndexId, Random.Range(0, 3));

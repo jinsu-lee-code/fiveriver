@@ -1,0 +1,782 @@
+{
+  "sourceProject": "C:\\Users\\mbc\\Documents\\ChatGPT\\다섯개의강\\Map_Import_20261030\\refined-map-extract",
+  "targetProject": "C:\\Users\\mbc\\Documents\\user\\Forgotten War\\fiveriver\\five_river",
+  "assetCount": 87,
+  "totalBytes": 115883573,
+  "copyCount": 62,
+  "reuseCount": 25,
+  "conflictCount": 0,
+  "records": [
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/RL_Blanket_August.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/RL_Blanket_August.mat",
+      "guid": "97ad1685694c4e648850e6e57d721e28",
+      "bytes": 4112,
+      "sha256": "e7721ced317629a8de138d414811712eb4d276787e7eb8212346520e68e726dc",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Korean_Red_Pine/BaseColor.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Korean_Red_Pine/BaseColor.png",
+      "guid": "509bb62f4ee364a449d5f1013b82a72e",
+      "bytes": 7407110,
+      "sha256": "7b3f9a39326c9a02b36851709a8a5c3be95e5b5c4d544491e082d478d4f7379c",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Maps/DabudongRefined/SM_ENV_Dabudong_Refined.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/SM_ENV_Dabudong_Refined.prefab",
+      "guid": "bfdd1b3e1244b964498cd33dc1aa5914",
+      "bytes": 5421178,
+      "sha256": "f3dabccd3affc75b425707f4a1679be6ecebc725245221f59fcfcd36fc3751d0",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_Normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_Normal.png",
+      "guid": "be432ca5ecac3e7449f8b17c0a097249",
+      "bytes": 4559844,
+      "sha256": "128e0803b3a47a1f34a319d9bc30332c5cd00514e0928c706db61446123e9996",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/SurfacePolish20261023/Dry_Soil_BaseColor.jpg",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/SurfacePolish20261023/Dry_Soil_BaseColor.jpg",
+      "guid": "5454a169e85169f4b9b2c6a400f951c0",
+      "bytes": 3519711,
+      "sha256": "5f567f61a7e139101441a1209e9c174a4f92dce489b28bb168f6bfd0ca07e411",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Summer_Shrub/Summer_Shrub_PBR.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Summer_Shrub/Summer_Shrub_PBR.mat",
+      "guid": "034cd7c296da17c4f985f23efc305b3a",
+      "bytes": 4248,
+      "sha256": "0122f2597c7e6717a6ae4309c59ce1a9b90e51a0f981a899791b30e32a440601",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/needle_albedo.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/needle_albedo.png",
+      "guid": "e57982759ef0fdf44a44f1c4ac0f8977",
+      "bytes": 321251,
+      "sha256": "28d21da3be655992d4c2c3297a17b475fa56cd83996c1922523d2500c7d61d06",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Prefabs/RL_RockA.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Prefabs/RL_RockA.prefab",
+      "guid": "450e313b3e8c9ea46a51480d3f097236",
+      "bytes": 2728,
+      "sha256": "0fb37b0131df92103177881fd9e27d0cc4bb4e12e77c7e37176b8b59e61821e7",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/SurfacePolish20261023/Dry_Soil_TerrainMask.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/SurfacePolish20261023/Dry_Soil_TerrainMask.png",
+      "guid": "3ef3ea30d898597418c8b90799d5432e",
+      "bytes": 6694767,
+      "sha256": "749207d5fa854d0ec636e10850eea3f15e9c7d50397f7a10c4d8a41d797ba6d5",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Prefabs/RL_RockC.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Prefabs/RL_RockC.prefab",
+      "guid": "4a3b010922136994ebe177cf26d5a9c7",
+      "bytes": 2728,
+      "sha256": "9934e83c760b3a6eff6c362586fec23697a45d9ae3e2975719fc1e5938d4ea2e",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Sandbag_Wall/MetallicSmoothness.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Sandbag_Wall/MetallicSmoothness.png",
+      "guid": "6a2648bafc85ecf48849a99816009c22",
+      "bytes": 20727,
+      "sha256": "e8ad0c7078f98bf0d54f640fa1375800c5b28ea46dff59a8bab0e80bde7dd336",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Materials/RL_Wood.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Materials/RL_Wood.mat",
+      "guid": "2a94ca0f94f388c4eb919f6eb281b0dd",
+      "bytes": 4205,
+      "sha256": "a1f8a16c6c8027ffc99149a7a34f8dca59660a10f01a7abb7312c53bd7a1bc24",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Wood.mat",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Dry_Soil/AO.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Dry_Soil/AO.png",
+      "guid": "cc04c260e9adfe740bf173478ea563b6",
+      "bytes": 59578,
+      "sha256": "aeaa7437bf8bd1bbf2a9c25dfc45a280ee4839f58d0ae1a7cb4a0506e9098fa3",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/VarcoV12/Environment/Granite_Boulder/Granite_Boulder.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Granite_Boulder.mat",
+      "guid": "9d3716ac1e0d38d46bc1f81219cc200b",
+      "bytes": 4224,
+      "sha256": "80954b3643f25d2090ec2aa22ffc69a422ecdc95086c6f8b9306ca0ac0686e29",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/VarcoV12/Environment/Granite_Boulder/Granite_Boulder.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Granite_Boulder.prefab",
+      "guid": "2a950fa818f05bd4088ecc13d80424de",
+      "bytes": 5028,
+      "sha256": "8ec80b9c6b44fe044e6a502baaf93c063d2588e7b8dfa2f59bb78860847fa913",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Korean_Red_Pine_PBR.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Korean_Red_Pine_PBR.mat",
+      "guid": "54c193eb7b2ab1b42b4270bf7c1108bf",
+      "bytes": 4252,
+      "sha256": "8c95c27b7d48011ce0ffa250b98f31323cfb4e17b6a839d3a7a7fcbf46b8496b",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/bark_albedo.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/bark_albedo.png",
+      "guid": "f42259160cb53af4f8dec3443f9b7570",
+      "bytes": 45986,
+      "sha256": "cd27140b66813e14de5a26f8880b8697205cb0af3267db4d2958fa0e6726452c",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Summer_Shrub/Summer_Shrub.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Summer_Shrub/Summer_Shrub.prefab",
+      "guid": "d9a4fe6d1aad7f0438e2a929cfd85cd8",
+      "bytes": 10723,
+      "sha256": "6911c756a19efc230afb09af74a7d9f7c6cb6d0984d2fc48c608fada3ba0ef46",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/cloth_albedo.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/cloth_albedo.png",
+      "guid": "3b1724d4d0df8c944992c9ee014f433b",
+      "bytes": 323901,
+      "sha256": "d21d7c719f7178b756b45d03d6f3a114683fdbf4f55c1620507fac9a2d818cbc",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/cloth_albedo.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Prefabs/RL_PineA.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Prefabs/RL_PineA.prefab",
+      "guid": "37820a185921ecd48bb245ee5a2c2a2b",
+      "bytes": 3419,
+      "sha256": "31e37301f6f7a436de03e32918efd1b825e6763543885cec3db3340bfce396a6",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/RL_Sandbag_August.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/RL_Sandbag_August.mat",
+      "guid": "ddfc751ed68dd614d891cdae798094ac",
+      "bytes": 4096,
+      "sha256": "8c39600514ad783d4e74899fb7269c18167e70a6ad063f378dc37410ee3eefad",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/SurfacePolish20261023/Dabudong_Dry_0.terrainlayer",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/SurfacePolish20261023/Dabudong_Dry_0.terrainlayer",
+      "guid": "1b248b6c0a9f42c4f9e11a7ffd1f78de",
+      "bytes": 830,
+      "sha256": "9b6d6db17b9af660d6e5f0087b227be3567d5d6d00c6612138bc8ae79fb158e5",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_MetallicSmoothness.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_MetallicSmoothness.png",
+      "guid": "a9885b871419b7443b888c89692010de",
+      "bytes": 1714517,
+      "sha256": "8b2d28009a6de76b05e8da0f670f1ec1e3828e50969354e0ad919fac1d954d65",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/grass_albedo.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/grass_albedo.png",
+      "guid": "dfe36cfe6a463d947916944301317285",
+      "bytes": 317883,
+      "sha256": "9985e68dea4d7767740f26c245e48e1b3d24363a9f3314a0939397233e64b3f0",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_albedo.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Sandbag_Wall/AO.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Sandbag_Wall/AO.png",
+      "guid": "e3a62684201d0724ca17141e11c6f74f",
+      "bytes": 2189934,
+      "sha256": "cf4b168adfc78298bd27c4fa4ecb11f71a064638bcd0445b114ca8794ac786d3",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Materials/RL_Needle.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Materials/RL_Needle.mat",
+      "guid": "b795b18a55f34374f940035d3ebfe949",
+      "bytes": 4206,
+      "sha256": "fa3921ad6f1f05029a6dcba1312f6c12b077d1ccf033b9f5f8d76e8020b82dea",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Materials/RL_Bark.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Materials/RL_Bark.mat",
+      "guid": "4d9ff831d1aedd0468780d3b535d79df",
+      "bytes": 4205,
+      "sha256": "fbfb917d5e291e136c3716c2ac031a7cde610a074871f3dd27f7b126edb8b332",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_Apron.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_Apron.asset",
+      "guid": "d77654dff7a1ebc42bc78defa6e17731",
+      "bytes": 1314755,
+      "sha256": "914af6ca56f23694d76964402a427ed9cf1e5439caecdd210a1dfd91343565ba",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Apron.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/TerrainRidges20261023/Ridges_Backdrop.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/TerrainRidges20261023/Ridges_Backdrop.asset",
+      "guid": "0d932b3ae02a4b2429c9f1e236b54a48",
+      "bytes": 2016007,
+      "sha256": "c53bbe8e6ba3150409122fcf3a7b83890d96b8e4900d406f9818b8723b231821",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Korean_Red_Pine.fbx",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Korean_Red_Pine.fbx",
+      "guid": "e7fb12566c96e8a40a6997cd49f0cd2e",
+      "bytes": 510972,
+      "sha256": "ea2ed7f47368a3373eddbbd63d552c91e31e6c8505e5a3fe8da45c8746aa72f2",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Korean_Red_Pine/AO.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Korean_Red_Pine/AO.png",
+      "guid": "effea110a0b9ed8478c9eea5cd3e0bf4",
+      "bytes": 1718593,
+      "sha256": "25ed6cd135c2dae673a7ed543392ae1e73795dfe612917290f82be5f88120000",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/VarcoV12/Environment/Granite_Boulder/Granite_Boulder.fbx",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Granite_Boulder.fbx",
+      "guid": "57d04456ec1dc2340933b5e4ce6d99be",
+      "bytes": 145580,
+      "sha256": "5c0d6d77eab0b16ffd0b4be98ca9c5b134ec225831f69d3212503d02458b755c",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/bark_normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/bark_normal.png",
+      "guid": "508b19b8fb068514ebe5e29b47f42350",
+      "bytes": 124761,
+      "sha256": "63823eb7abf61c30d9a6002dadd54f8ad21b4e2a778fad360b9887136687c92a",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/wood_albedo.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/wood_albedo.png",
+      "guid": "6b3fa38dce15db14e97380a7f1f995ae",
+      "bytes": 113023,
+      "sha256": "dac81bee4b1766a1b56bb687a80f2e29a3c1eae596e09c4ca36cfbc751b7cf0b",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/wood_albedo.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_Bush.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_Bush.asset",
+      "guid": "a59c806fc185c1a4f9bbd83e40323dcf",
+      "bytes": 51628,
+      "sha256": "05360763280e99286e02cc61df19c077379a96191237f298bdd3e74339a24c0c",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Summer_Shrub/AO.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Summer_Shrub/AO.png",
+      "guid": "82f363af86a164a44affbbde4d40ad29",
+      "bytes": 1382881,
+      "sha256": "a4f386dc343676eed42e5c2d0fb7f92db3441f74b281b669129f2c6039f7a70e",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Summer_Shrub/Summer_Shrub.fbx",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Summer_Shrub/Summer_Shrub.fbx",
+      "guid": "5e3a1d5393d6bf94892bef4234ce62b8",
+      "bytes": 1055644,
+      "sha256": "14a8202bae0c21bc32ec9d5505adb46864e701077b9c884ad71b8c3cde99fe5f",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/RecoveredBaseline/WIP/Greybox/GB_Cover.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/RecoveredBaseline/WIP/Greybox/GB_Cover.mat",
+      "guid": "54abb3b2fd6030b42bd2c2da5da4d9b6",
+      "bytes": 4062,
+      "sha256": "feb48ffea91649d6adf911786e69aae39bf1569605961987e2a175a750d1aab1",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_Cover.mat",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Sandbag_Wall/Sandbag_Wall.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Sandbag_Wall/Sandbag_Wall.prefab",
+      "guid": "0140eea795b3f674fb332a32cad94eab",
+      "bytes": 10730,
+      "sha256": "a980fe9fb5cbe9b2ca0a25321185675cc0ab42491bb50148c4f604b9661e1f8b",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_SandbagWall1.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_SandbagWall1.asset",
+      "guid": "7021454da128a9a4d98909ad792633e2",
+      "bytes": 399756,
+      "sha256": "d66ba297f69352f8d45d508cb86acae2c4504586341cb2e52f884908161eafc0",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall1.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_Crates.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_Crates.asset",
+      "guid": "0948312d65e9a9344a1875eb26920c4e",
+      "bytes": 14082,
+      "sha256": "43419c883f11e3a229a877e221beacffea88f655c60a8766f0bb1d10a41d17d9",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Crates.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_RockB.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_RockB.asset",
+      "guid": "333a8cb0ee142ab439d280241ae4a7a7",
+      "bytes": 51635,
+      "sha256": "33b8940b812ac13f5be751b96a3a45e515cb9d88ff8e34504950b20f1c6e973c",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockB.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Sandbag_Wall/Normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Sandbag_Wall/Normal.png",
+      "guid": "75eb4788b0a26f6468c34381c158905f",
+      "bytes": 6646315,
+      "sha256": "85427ea6c9de664730d2fceb45aeaaf1427203966548632362b251ad3479ec55",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Summer_Shrub/MetallicSmoothness.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Summer_Shrub/MetallicSmoothness.png",
+      "guid": "212806f6ed263bb429cf98e661213fff",
+      "bytes": 1665948,
+      "sha256": "60278c1ca9c760492bb585c5503c473cf049ef6cdd3c6497a8a006ace8c350c2",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/RecoveredBaseline/WIP/Greybox/GB_PlayerZone.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/RecoveredBaseline/WIP/Greybox/GB_PlayerZone.mat",
+      "guid": "8adf5cbe5afa1e34d85a957104912702",
+      "bytes": 4049,
+      "sha256": "b29c2984601c1fbe617a81def9a34e3b67b6c33aa8e7f8827a28335885b3d794",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_PlayerZone.mat",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_RockC.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_RockC.asset",
+      "guid": "92990ae6cbe832048b7917888a3d2001",
+      "bytes": 51635,
+      "sha256": "79bd5d32e041cbfc7322b84caebf94be9365ccefeaa0f1ad6c475688dd2c9bfe",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockC.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/cloth_normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/cloth_normal.png",
+      "guid": "af52cb2ffd7ea234e837f69503a215f7",
+      "bytes": 456594,
+      "sha256": "5e8ee55752fa6f2f6713559e8a8e85f0dbe9a247ea8345c3ae6633c76683324c",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/cloth_normal.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Materials/RL_Bush.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Materials/RL_Bush.mat",
+      "guid": "64d7fc16f987aa2429fefacb6fa2156e",
+      "bytes": 4219,
+      "sha256": "eec86767b241537bd671ef104f3e39f43c415db68a8090aaeda3ae73be736ee8",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Materials/RL_Rock.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Materials/RL_Rock.mat",
+      "guid": "d1de5d97690f43443a40cff38b59b381",
+      "bytes": 4235,
+      "sha256": "940ab38a7b0f76cbab37b49ef3a5b48a0d8e2e3354bfd20a4c14920fdc9c40d6",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Rock.mat",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Prefabs/RL_Bush.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Prefabs/RL_Bush.prefab",
+      "guid": "5f79f4c99e5ef3d43a79307eba450dd4",
+      "bytes": 2727,
+      "sha256": "fe10a08f87d96e31738b0dd8120d599b6512ef27d9f40ef9671789267b5480ec",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Summer_Shrub/Normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Summer_Shrub/Normal.png",
+      "guid": "5492b3a2535b38942a65d86b3c317ea1",
+      "bytes": 9567066,
+      "sha256": "8bc51792b52426a563987edc85ded7fdbaa8c0d5996fb040363445ca5226e0ab",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/TerrainRidges20261023/Ridges_Dry_Earth.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/TerrainRidges20261023/Ridges_Dry_Earth.mat",
+      "guid": "3142fc242d58d704a9083dd4ef5f85f3",
+      "bytes": 4095,
+      "sha256": "886cd062ab0998bc676487a67c8bd591f1fd785e636b8d179c3ed68a698cdd5c",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_SandbagWall2.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_SandbagWall2.asset",
+      "guid": "3b6801bb71049e14485c5051a3ab2bea",
+      "bytes": 399756,
+      "sha256": "af9a9c70684e543447743a3c3524ce5d281b98d1354f9ea34eb5f1b071dc62c0",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall2.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/needle_normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/needle_normal.png",
+      "guid": "18e7d63f881a7c2489300242ed739109",
+      "bytes": 754054,
+      "sha256": "cc71fd2803812a6fc76acff6d17d5ee56a9befefad3df56108daae2c2d2f90f2",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/TerrainRidges20261023/M01_Continuous_Ridges_Reviewed.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/TerrainRidges20261023/M01_Continuous_Ridges_Reviewed.asset",
+      "guid": "67c31961c8d2fde47bec0f8af72aee34",
+      "bytes": 2189272,
+      "sha256": "f11e47f7a43c294ee2de93ab8b7e0812612add6dec18ac501755dc77d852ec3a",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Dry_Soil/Normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Dry_Soil/Normal.png",
+      "guid": "dde5a68588a54c949ba5357141dabf25",
+      "bytes": 4645397,
+      "sha256": "9ef23b4418ecbc93b14f46a870309c072f9d850b0d22fa774b1322a9281b0d22",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Summer_Shrub/BaseColor.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Summer_Shrub/BaseColor.png",
+      "guid": "6f7839ef61ecccb4fbdc1f079abca532",
+      "bytes": 7699563,
+      "sha256": "686fea31bf7d426ed46f96149ef0c0e15e505edf5e7364933ab47eaf5a1bd3dd",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/grass_normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/grass_normal.png",
+      "guid": "8bfc79bd075704144b201d59bb668502",
+      "bytes": 546928,
+      "sha256": "1c2c6d5f60d7cf0e4ca8b6c9fc18b35dbf0eaa3f401e3836fc09ba8d7c6898c0",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_normal.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/SurfacePolish20261023/Dabudong_Dry_3.terrainlayer",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/SurfacePolish20261023/Dabudong_Dry_3.terrainlayer",
+      "guid": "298b14297d360e245bb0b16388a7c4a3",
+      "bytes": 890,
+      "sha256": "3221917e56a52d9678253ee67d469e7551506605c4813160b01dd990ebbf9dd3",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/SurfacePolish20261023/Dabudong_Dry_2.terrainlayer",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/SurfacePolish20261023/Dabudong_Dry_2.terrainlayer",
+      "guid": "5b09e3ff91ce5a1408bbba3e5fcdd467",
+      "bytes": 821,
+      "sha256": "a9c4c690e886e3f57f28435fc3fc96ee58a7ea30c6257fe863622b9a0ce28537",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Sandbag_Wall/Sandbag_Wall_PBR.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Sandbag_Wall/Sandbag_Wall_PBR.mat",
+      "guid": "943e7fc29681cd14a8d45385a4d88fd3",
+      "bytes": 4247,
+      "sha256": "8637cb77e1cf06fa68ad2b9287c8405a511d86d945375c8f8230beff95e1c2c3",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Normal.png",
+      "guid": "553cb77803bc3534baaa6f8174f933e7",
+      "bytes": 8490694,
+      "sha256": "cf56f8d26f510502b708a4ab8de74facd8df308af544b9a0c13aa94f40832a10",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_SandbagWall0.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_SandbagWall0.asset",
+      "guid": "92c89edf9dd2c4c44b4f68d60c7623e1",
+      "bytes": 399756,
+      "sha256": "950a8e99da444f1914f405c1973c4260c8e75b79cc3a4b96aa85fc7a762ff6d2",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_SandbagWall0.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/grass_blade.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/grass_blade.png",
+      "guid": "c435483552e05fa48880403634593123",
+      "bytes": 6103,
+      "sha256": "4623f831f8bb54ce14bfe9c76f39cfddc6af260278587cbd405c6d6423583a25",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/grass_blade.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Sandbag_Wall/Sandbag_Wall.fbx",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Sandbag_Wall/Sandbag_Wall.fbx",
+      "guid": "a59afc0f3b72605499efdc379c99fda6",
+      "bytes": 373244,
+      "sha256": "9fdcfc8ecac46914732560acd54017232af248c8082006592c06b4e6f145a7af",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Prefabs/RL_RockB.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Prefabs/RL_RockB.prefab",
+      "guid": "b39386d6afd7eb74cac7c7bf0abd6889",
+      "bytes": 2726,
+      "sha256": "bf3523af4cf203602840d24c4496a7b65da47d53f5d2b5f35b48cf2514322da0",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_RockA.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_RockA.asset",
+      "guid": "e023d38bbd1b5a947b6743a259fa72b2",
+      "bytes": 51625,
+      "sha256": "520fd3f88def131b9e3bd13ac53d1ef293c0b09a3c7b0c5f719c7e00c8a8dd16",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_RockA.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/wood_normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/wood_normal.png",
+      "guid": "323ef6139700a8446a6f89fed023d12f",
+      "bytes": 188071,
+      "sha256": "c4b11b1cf7b435a6165186248bd384b52e97acc54828b322a0d1293c093759e7",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/wood_normal.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_PineA.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_PineA.asset",
+      "guid": "a13eced767c92b340bbacad2af84be05",
+      "bytes": 79883,
+      "sha256": "44644fd0bcd4d01b03d1a337e5091580b8a05d8dc35405a9d909f9de2c66cfb8",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/SurfacePolish20261023/Dabudong_Dry_1.terrainlayer",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/SurfacePolish20261023/Dabudong_Dry_1.terrainlayer",
+      "guid": "1188eee7d92aa9d43b945f06c0b4dbc1",
+      "bytes": 890,
+      "sha256": "50fd1b5c82d8b563dc2805e1947507794a1ae85065de321685072bc115ed9ce6",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_BaseColor.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_BaseColor.png",
+      "guid": "1743d5229bf650241b0a1a353fb95a2a",
+      "bytes": 6669959,
+      "sha256": "43402e9917ef49998cb796e1b63811e1a317ecad93965d06bfc38ff914a6c017",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Prefabs/RL_PineB.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Prefabs/RL_PineB.prefab",
+      "guid": "69321bf16229bbc47ae69aee0916c7b0",
+      "bytes": 3419,
+      "sha256": "51356b3b76b439049aceea719399e143879aa1c97abeec2354e019b181dabe3d",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Materials/RL_Apron.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Materials/RL_Apron.mat",
+      "guid": "60b20a367edcaf5449028a3e250c4d8c",
+      "bytes": 4223,
+      "sha256": "ad89d8a1e8c620c46c5333b0fd5f4f01f84e290671a38d9b9baf158c64f91659",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Materials/RL_Apron.mat",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Sandbag_Wall/BaseColor.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Sandbag_Wall/BaseColor.png",
+      "guid": "f6c4d27b814bfab488d1c17815f68ac8",
+      "bytes": 8172114,
+      "sha256": "5ac141a7b3babb4c1a7ef00e7ae398feb2db568bc6a035a3b7f552a0be450118",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/rock_normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/rock_normal.png",
+      "guid": "14129883902a83045b15abaf0a167f39",
+      "bytes": 429260,
+      "sha256": "3088678d14c85712587049189630e68dbc87a4059b97762f32ddbaa631439672",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/rock_normal.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/RecoveredBaseline/WIP/Greybox/GB_Prop.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/RecoveredBaseline/WIP/Greybox/GB_Prop.mat",
+      "guid": "3f2f7537cb6dfbe44baf73d183b4486d",
+      "bytes": 4056,
+      "sha256": "1cea31436fbaa82d782d7761859edfe20403a49e593cfb2a47b40b6cce893f09",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/WIP/Greybox/GB_Prop.mat",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_AO.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Textures/Granite_Boulder_AO.png",
+      "guid": "6637529754ebed14dbda49a03f56e94a",
+      "bytes": 2210905,
+      "sha256": "6671a8a09b9c12f01c69030669664d94f008307192a5ce5803b6b2eec5b3e55d",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/RL_Wood_August.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/RL_Wood_August.mat",
+      "guid": "87be68290428f434e9e17ebd832be155",
+      "bytes": 4075,
+      "sha256": "ba9302d8ac3d962b1986f9ed7394319be064c29a8244a78afd6fcba5223b5ad8",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Korean_Red_Pine/MetallicSmoothness.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Korean_Red_Pine/MetallicSmoothness.png",
+      "guid": "232dbca013e47c04bb9d87df16f83fc2",
+      "bytes": 1036100,
+      "sha256": "0d6e5cb14d4fb5ac83e61ef233d504fe7da77f239d7c7082ccf14f7052927656",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Korean_Red_Pine.prefab",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Korean_Red_Pine/Korean_Red_Pine.prefab",
+      "guid": "ce7807c22e6f9de4cb0bc22c8b0cc7d6",
+      "bytes": 11367,
+      "sha256": "88a73840bf7d0d3922fe7e90007a3dc2ec34efef9ea4903e5d08f4fd250084cc",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_Revetment.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_Revetment.asset",
+      "guid": "c4c740a8a49e1d641a3e37f4b1777355",
+      "bytes": 444348,
+      "sha256": "f5c750e473ac1dd2118ca951309bd42ddb25d8295c4c73caadee588a5e0d770b",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Revetment.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_PineB.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_PineB.asset",
+      "guid": "8adfe0fe6edaacd44bb4d825e20cd1f2",
+      "bytes": 79882,
+      "sha256": "d93b624f2d1190d6b383613eef77332d1c5649d567b2efd68e75c2240de2ebcf",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/EnvironmentCharacters20261023/Dry_Soil/BaseColor.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/EnvironmentCharacters20261023/Dry_Soil/BaseColor.png",
+      "guid": "4dd8adaeea7735840ba76357aaeab90c",
+      "bytes": 1095186,
+      "sha256": "30ff4afe52d0d98747faab5924db1cce7aa08fb98aba683adb89794a06071f96",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Meshes/RL_Blanket.asset",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Meshes/RL_Blanket.asset",
+      "guid": "424be162891a75346a0a11956c804e64",
+      "bytes": 26287,
+      "sha256": "4ad9eaee4126af4403306af4a6a77c731533463571e4b41c03127465261b6fff",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Meshes/RL_Blanket.asset",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    },
+    {
+      "source": "Assets/_Project/Art/SurfacePolish20261023/Dry_Soil_Normal.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/SurfacePolish20261023/Dry_Soil_Normal.png",
+      "guid": "0d1d2cf19f061474f94e5f74dcbcccf0",
+      "bytes": 9578253,
+      "sha256": "3ad892a618f546cc572eecd1ee28103f8c3a3a2d9d8b9b5667ec32fecdfee0b6",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Integrated20261023/Trench/Trench_Dry_Earth.mat",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Integrated20261023/Trench/Trench_Dry_Earth.mat",
+      "guid": "9e5d4034a65440442bb8e7cdd3c1bd3b",
+      "bytes": 4174,
+      "sha256": "39b604d5d87053ec000c244588c584d3536f1a4779776b0ce6d84eecb563f2c7",
+      "action": "copy"
+    },
+    {
+      "source": "Assets/_Project/Art/Realistic/Textures/rock_albedo.png",
+      "destination": "Assets/_Project/Art/Maps/DabudongRefined/Source/Art/Realistic/Textures/rock_albedo.png",
+      "guid": "d557fb0c5303e05408bb21da4170697c",
+      "bytes": 299662,
+      "sha256": "95396b3b4bef12fc7e38f7f3b1aa43d808e54d58a4da41f4706b63c8a76cfd99",
+      "existing": "Assets/_Project/Art/Maps/Dabudong/Source/Art/Realistic/Textures/rock_albedo.png",
+      "sameBytes": true,
+      "sameMeta": true,
+      "action": "reuse"
+    }
+  ]
+}

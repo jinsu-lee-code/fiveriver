@@ -30,6 +30,7 @@ namespace FiveRivers.Tutorial
 
         TutorialTracker tracker;
         bool active; // 추적 중 (S1 또는 시간 초과 뒤 남은 힌트)
+        bool manualReloadPending;
 
         public TutorialTracker Tracker => tracker;
 
@@ -37,8 +38,17 @@ namespace FiveRivers.Tutorial
         {
             director.Flow.SectionChanged += OnSectionChanged;
             player.StanceChanged += () => { if (player.Crouched) Report(TutorialStep.Stance); };
-            target.Hit += () => Report(TutorialStep.ShootTarget);
-            weapons.M1.ReloadStarted += _ => Report(TutorialStep.Reload);
+            target.Hit += () =>
+            {
+                if (weapons.M1.AimBlend > 0.5f) Report(TutorialStep.ShootTarget);
+            };
+            weapons.M1.ReloadStarted += _ => manualReloadPending = active && player.Controls.Reload.WasPressedThisFrame();
+            weapons.M1.Reloaded += () =>
+            {
+                if (manualReloadPending) Report(TutorialStep.Reload);
+                manualReloadPending = false;
+            };
+            weapons.LoadoutReset += () => manualReloadPending = false;
             promptGroup.alpha = 0f;
             remainingGroup.alpha = 0f;
         }
@@ -47,6 +57,7 @@ namespace FiveRivers.Tutorial
         {
             if (t.To == FlowSection.Tutorial)
             {
+                manualReloadPending = false;
                 tracker = new TutorialTracker(config.highlightAfter, config.hintAfter);
                 tracker.Completed += OnCompleted;
                 player.ResetTutorialCounters();

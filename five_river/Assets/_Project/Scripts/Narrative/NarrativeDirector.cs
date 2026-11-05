@@ -28,30 +28,45 @@ namespace FiveRivers.Narrative
         [SerializeField] float parkCall2At = 9f;
         [SerializeField] float silenceSettleAfterCall = 4f;
 
+        FlowSection lastCombatHintSection = FlowSection.Title;
+        bool lastCombatHintBright;
         bool flareLineSaid;
         bool darkLineSaid;
         bool ricochetLineSaid;
         bool resupplied;
         bool callsDone;
         Coroutine silence;
+        WeaponHolder weapons;
+        readonly TankObjectiveTracker tankObjective = new TankObjectiveTracker();
+
+        void OnEnable()
+        {
+            if (tank != null) tank.SideHit += OnTankSideHit;
+        }
+
+        void OnDisable()
+        {
+            if (tank != null) tank.SideHit -= OnTankSideHit;
+        }
+
+        void OnTankSideHit(int hits)
+        {
+            if (hits != 1 || director.Flow.Section != FlowSection.Tank) return;
+            subtitles.Say(text.tankFirstHit);
+        }
 
         void Start()
         {
             objective.SetLabel(text.objectiveLabel);
+            weapons = player.GetComponent<WeaponHolder>();
             var flow = director.Flow;
             flow.SectionChanged += OnSectionChanged;
-            flow.RetryRequested += _ => subtitles.Clear();
+            flow.RetryRequested += OnRetry;
             flares.Launched += () =>
             {
                 if (director.Flow.Section != FlowSection.Assault || flareLineSaid) return;
                 flareLineSaid = true;
                 subtitles.Say(text.flareUp);
-            };
-            flares.Darkening += () =>
-            {
-                if (director.Flow.Section != FlowSection.Assault || darkLineSaid) return;
-                darkLineSaid = true;
-                subtitles.Say(text.flareDown);
             };
             tank.Ricocheted += () =>
             {
@@ -63,8 +78,19 @@ namespace FiveRivers.Narrative
             blanketBody.SetActive(false);
         }
 
+        void OnRetry(FlowCheckpoint checkpoint)
+        {
+            subtitles.Clear();
+            lastCombatHintSection = FlowSection.Title;
+            if (checkpoint != FlowCheckpoint.Tank) return;
+            tankObjective.Reset();
+            ricochetLineSaid = false;
+            objective.Show(text.objectiveTankMove);
+        }
+
         void OnSectionChanged(FlowTransition t)
         {
+            lastCombatHintSection = FlowSection.Title;
             if (silence != null)
             {
                 StopCoroutine(silence);
@@ -75,6 +101,7 @@ namespace FiveRivers.Narrative
                 case FlowSection.Title:
                     subtitles.Clear();
                     objective.Hide();
+                    tankObjective.Reset();
                     blanketBody.SetActive(false);
                     break;
                 case FlowSection.Tutorial:
@@ -98,6 +125,7 @@ namespace FiveRivers.Narrative
                     silence = StartCoroutine(SilenceSequence());
                     break;
                 case FlowSection.Tank:
+                    tankObjective.Reset();
                     if (t.From != FlowSection.Tank)
                     {
                         subtitles.Clear();
@@ -111,6 +139,9 @@ namespace FiveRivers.Narrative
                     objective.Show(text.objectiveAllySupport);
                     break;
                 case FlowSection.Dawn:
+                    subtitles.Clear();
+                    objective.Show(text.objectiveDawn, ignoreParentGroups: true);
+                    break;
                 case FlowSection.Result:
                     objective.Hide();
                     break;
@@ -137,12 +168,38 @@ namespace FiveRivers.Narrative
         void Update()
         {
             var flow = director.Flow;
-            if (flow.Section == FlowSection.Silence && resupplied && callsDone == false)
+            if (flow.Section == FlowSection.Scout || flow.Section == FlowSection.Assault)
+            {
+                // Read the same illumination that drives enemy accuracy. Do not
+                // announce movement at fade start while the flare is still bright.
+                bool bright = flares.Illumination > 0.1f;
+                if (flow.Section != lastCombatHintSection || bright != lastCombatHintBright)
+                {
+                    if (!bright && lastCombatHintBright && lastCombatHintSection == FlowSection.Assault && !darkLineSaid)
+                    {
+                        darkLineSaid = true;
+                        subtitles.Say(text.flareDown);
+                    }
+                    string goal = flow.Section == FlowSection.Scout ? text.objectiveScout : text.objectiveAssault;
+                    string hint = bright ? text.combatBrightHint : text.combatDarkHint;
+                    objective.Show(string.IsNullOrEmpty(hint) ? goal : goal + " · " + hint);
+                    lastCombatHintSection = flow.Section;
+                    lastCombatHintBright = bright;
+                }
+            }
+            if (flow.Section == FlowSection.Silence && resupplied)
                 objective.Hide(); // 보충은 끝났고 호출을 듣는 중
             if (flow.Section == FlowSection.Tank && !tank.IsStopped)
             {
                 float d = Vector3.Distance(player.transform.position, points.moundTop.position);
-                objective.Show(d <= moundRadius ? text.objectiveTankFire : text.objectiveTankMove);
+                tankObjective.Observe(d <= moundRadius,
+                    weapons != null && weapons.Current == WeaponSlot.Bazooka && !weapons.Switching);
+                switch (tankObjective.Step)
+                {
+                    case TankObjectiveStep.MoveToMound: objective.Show(text.objectiveTankMove); break;
+                    case TankObjectiveStep.EquipBazooka: objective.Show(text.objectiveTankEquip); break;
+                    case TankObjectiveStep.FireAtSide: objective.Show(tank.SideHits > 0 ? text.objectiveTankFinish : tank.IsMoving ? text.objectiveTankWait : text.objectiveTankFire); break;
+                }
             }
         }
     }

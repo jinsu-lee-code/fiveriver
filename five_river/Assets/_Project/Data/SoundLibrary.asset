@@ -373,10 +373,10 @@ MonoBehaviour:
     cooldown: 0
   - id: BGM_Title_Loop
     clips:
-    - {fileID: 8300000, guid: 4e20834f088d8954a8bd7c5f91600428, type: 3}
+    - {fileID: 8300000, guid: a1511562dfbb33d4791752791463b5d7, type: 3}
     bus: 2
     volume: 1
-    pitchVariance: 0.05
+    pitchVariance: 0
     spatial: 0
     maxDistance: 120
     loop: 1
@@ -441,105 +441,3 @@ MonoBehaviour:
     maxDistance: 120
     loop: 0
     cooldown: 0.5
-  - id: VO_SQD_Scout_01
-    clips:
-    - {fileID: 8300000, guid: 03dac4babd73832498ba49143d6c8acd, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_SQD_Flare_01
-    clips:
-    - {fileID: 8300000, guid: 51d530884052ccc47b53242c3186afe9, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_SQD_Flare_02
-    clips:
-    - {fileID: 8300000, guid: ef619185d5892ab41aa6f93aa675a074, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_SQD_Retreat_01
-    clips:
-    - {fileID: 8300000, guid: 1365781d91efaf545b8b106cd4604f33, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_PARK_Call_01
-    clips:
-    - {fileID: 8300000, guid: 58fe61e1920084b45ba2070edca85e75, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_PARK_Call_02
-    clips:
-    - {fileID: 8300000, guid: f807c5eaaeeafd244b27c0784785fd01, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_SQD_Tank_01
-    clips:
-    - {fileID: 8300000, guid: 463c70b1156029145af13864409c6272, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_SQD_Tank_02
-    clips:
-    - {fileID: 8300000, guid: 495ac394fa38b9447a90052fd8a6cc9e, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_SQD_Ally_01
-    clips:
-    - {fileID: 8300000, guid: d3d3827fa570e7840b663e25c4087337, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: VO_KPA_Shout
-    clips:
-    - {fileID: 8300000, guid: 7344b43a87b3aa048b0bb2ecab2ddd11, type: 3}
-    - {fileID: 8300000, guid: d2860199ab6fce04e9b634359504fb70, type: 3}
-    - {fileID: 8300000, guid: 2eb2d952275fbef4e88165c9b83b0f21, type: 3}
-    bus: 3
-    volume: 1
-    pitchVariance: 0.05
-    spatial: 1
-    maxDistance: 150
-    loop: 0
-    cooldown: 4

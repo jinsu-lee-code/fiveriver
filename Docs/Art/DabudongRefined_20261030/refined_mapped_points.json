@@ -1,0 +1,562 @@
+[
+  {
+    "field": "playerSpawn",
+    "index": 0,
+    "name": "PlayerSpawn",
+    "worldPosition": {
+      "x": 0.0,
+      "y": -0.33068606,
+      "z": -0.5
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "tankCheckpoint",
+    "index": 0,
+    "name": "TankCheckpoint",
+    "worldPosition": {
+      "x": 17.0,
+      "y": 0.009178437,
+      "z": -1.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 0.57357645,
+      "z": -0.0,
+      "w": 0.81915206
+    }
+  },
+  {
+    "field": "moundTop",
+    "index": 0,
+    "name": "MoundTop",
+    "worldPosition": {
+      "x": 28.0,
+      "y": 1.5696179,
+      "z": -6.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 0.19080901,
+      "z": -0.0,
+      "w": 0.9816272
+    }
+  },
+  {
+    "field": "enemySpawns",
+    "index": 0,
+    "name": "EnemySpawn_0",
+    "worldPosition": {
+      "x": -20.0,
+      "y": 19.224546,
+      "z": 99.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "enemySpawns",
+    "index": 1,
+    "name": "EnemySpawn_1",
+    "worldPosition": {
+      "x": -10.0,
+      "y": 18.60669,
+      "z": 101.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "enemySpawns",
+    "index": 2,
+    "name": "EnemySpawn_2",
+    "worldPosition": {
+      "x": 0.0,
+      "y": 16.73186,
+      "z": 99.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "enemySpawns",
+    "index": 3,
+    "name": "EnemySpawn_3",
+    "worldPosition": {
+      "x": 17.0,
+      "y": 10.145257,
+      "z": 101.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "enemySpawns",
+    "index": 4,
+    "name": "EnemySpawn_4",
+    "worldPosition": {
+      "x": 25.0,
+      "y": 7.9649506,
+      "z": 99.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "scoutCovers",
+    "index": 0,
+    "name": "ScoutCover_0",
+    "worldPosition": {
+      "x": -22.0,
+      "y": 9.052322,
+      "z": 64.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "scoutCovers",
+    "index": 1,
+    "name": "ScoutCover_1",
+    "worldPosition": {
+      "x": -4.0,
+      "y": 10.077608,
+      "z": 68.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 0,
+    "name": "AssaultCover_0",
+    "worldPosition": {
+      "x": -18.0,
+      "y": 6.6350594,
+      "z": 50.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 1,
+    "name": "AssaultCover_1",
+    "worldPosition": {
+      "x": 3.0,
+      "y": 6.8308063,
+      "z": 54.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 2,
+    "name": "AssaultCover_2",
+    "worldPosition": {
+      "x": 20.0,
+      "y": 6.2367854,
+      "z": 52.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 3,
+    "name": "AssaultCover_3",
+    "worldPosition": {
+      "x": -20.0,
+      "y": 5.1352634,
+      "z": 38.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 4,
+    "name": "AssaultCover_4",
+    "worldPosition": {
+      "x": -2.0,
+      "y": 4.9056273,
+      "z": 40.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 5,
+    "name": "AssaultCover_5",
+    "worldPosition": {
+      "x": 26.0,
+      "y": 4.49941,
+      "z": 40.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 6,
+    "name": "AssaultCover_6",
+    "worldPosition": {
+      "x": -16.0,
+      "y": 3.6808655,
+      "z": 29.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 7,
+    "name": "AssaultCover_7",
+    "worldPosition": {
+      "x": 0.0,
+      "y": 3.130793,
+      "z": 27.999998
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 8,
+    "name": "AssaultCover_8",
+    "worldPosition": {
+      "x": 21.0,
+      "y": 2.4740028,
+      "z": 30.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "assaultCovers",
+    "index": 9,
+    "name": "AssaultCover_9",
+    "worldPosition": {
+      "x": 24.0,
+      "y": 9.110737,
+      "z": 66.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "retreatPoints",
+    "index": 0,
+    "name": "Retreat_0",
+    "worldPosition": {
+      "x": -20.0,
+      "y": 21.377995,
+      "z": 107.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "retreatPoints",
+    "index": 1,
+    "name": "Retreat_1",
+    "worldPosition": {
+      "x": 0.0,
+      "y": 19.47747,
+      "z": 108.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "retreatPoints",
+    "index": 2,
+    "name": "Retreat_2",
+    "worldPosition": {
+      "x": 25.0,
+      "y": 6.3724136,
+      "z": 107.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "tankStart",
+    "index": 0,
+    "name": "TankStart",
+    "worldPosition": {
+      "x": 44.766666,
+      "y": 0.009178437,
+      "z": 105.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 0.9997225,
+      "z": -0.0,
+      "w": -0.0235597
+    }
+  },
+  {
+    "field": "tankHold",
+    "index": 0,
+    "name": "TankHold",
+    "worldPosition": {
+      "x": 40.94,
+      "y": 0.009178437,
+      "z": 23.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 0.76604444,
+      "z": -0.0,
+      "w": -0.64278764
+    }
+  },
+  {
+    "field": "ammoCrates",
+    "index": 0,
+    "name": "AmmoCrate_Trench",
+    "worldPosition": {
+      "x": 5.0,
+      "y": -0.06144222,
+      "z": -1.6
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "ammoCrates",
+    "index": 1,
+    "name": "AmmoCrate_Left",
+    "worldPosition": {
+      "x": 17.5,
+      "y": 0.009178437,
+      "z": -1.6
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "target",
+    "index": 0,
+    "name": "Target",
+    "worldPosition": {
+      "x": 4.0,
+      "y": 0.733239,
+      "z": 18.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 1.0,
+      "z": -0.0,
+      "w": -4.371139e-08
+    }
+  },
+  {
+    "field": "parkSpot",
+    "index": 0,
+    "name": "ParkSpot",
+    "worldPosition": {
+      "x": -6.5,
+      "y": 0.009178437,
+      "z": -1.2
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 0.7071068,
+      "z": -0.0,
+      "w": 0.7071068
+    }
+  },
+  {
+    "field": "blanketSpot",
+    "index": 0,
+    "name": "BlanketSpot",
+    "worldPosition": {
+      "x": -9.5,
+      "y": 0.009178437,
+      "z": -1.5
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": 0.7071068,
+      "z": -0.0,
+      "w": 0.7071068
+    }
+  },
+  {
+    "field": "allySpots",
+    "index": 0,
+    "name": "AllySpot_1",
+    "worldPosition": {
+      "x": -14.0,
+      "y": -0.28408018,
+      "z": -0.4
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "allySpots",
+    "index": 1,
+    "name": "AllySpot_2",
+    "worldPosition": {
+      "x": 11.0,
+      "y": 0.009178437,
+      "z": -0.4
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "allySpots",
+    "index": 2,
+    "name": "AllySpot_3",
+    "worldPosition": {
+      "x": 16.0,
+      "y": 0.009178437,
+      "z": -0.4
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "reinforcementsStart",
+    "index": 0,
+    "name": "ReinforcementsStart",
+    "worldPosition": {
+      "x": 27.0,
+      "y": 0.9872764,
+      "z": -35.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  },
+  {
+    "field": "reinforcementsEnd",
+    "index": 0,
+    "name": "ReinforcementsEnd",
+    "worldPosition": {
+      "x": 23.0,
+      "y": 0.009178437,
+      "z": -1.0
+    },
+    "localRotation": {
+      "x": -0.0,
+      "y": -0.0,
+      "z": -0.0,
+      "w": 1.0
+    }
+  }
+]

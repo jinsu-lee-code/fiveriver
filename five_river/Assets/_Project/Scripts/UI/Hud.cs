@@ -35,10 +35,12 @@ namespace FiveRivers.UI
         [SerializeField] float crosshairGap = 10f;
         [SerializeField] float crosshairMoveGap = 22f;
         [SerializeField] float damagePulse = 0.55f;
-        [SerializeField] float damageDecay = 1.4f;
+        [SerializeField] float damageFadeDuration = 0.8f;
         [SerializeField] float runStartFade = 1.2f;
 
         float damageFlash;
+        float lowHealthPulseBlend;
+        float lowHealthPulsePhase;
         float transitionFade;
         float gap;
 
@@ -48,6 +50,8 @@ namespace FiveRivers.UI
             director.Flow.SectionChanged += t =>
             {
                 if (t.Reason == TransitionReason.RunStart) transitionFade = 1f;
+                if (t.Reason == TransitionReason.RunStart || t.To == FlowSection.Title || t.To >= FlowSection.AllySupport)
+                    ClearDamageFeedback();
             };
             gap = crosshairGap;
         }
@@ -63,12 +67,37 @@ namespace FiveRivers.UI
             UpdateCrosshair(mode);
             UpdatePrompt(flow);
 
-            damageFlash = Mathf.MoveTowards(damageFlash, 0f, Time.deltaTime * damageDecay);
-            float lowHealth = combat ? (1f - health.Fraction) * 0.45f : 0f;
-            SetAlpha(damageVignette, Mathf.Max(damageFlash, lowHealth));
+            UpdateDamageFeedback(flow, combat);
 
             transitionFade = Mathf.MoveTowards(transitionFade, 0f, Time.unscaledDeltaTime / runStartFade);
             SetAlpha(fade, Mathf.Max(run.Fade, transitionFade));
+        }
+
+        void UpdateDamageFeedback(DemoFlow flow, bool combat)
+        {
+            if (!combat || flow.Paused || flow.CombatLocked)
+            {
+                ClearDamageFeedback();
+                return;
+            }
+
+            damageFlash = Mathf.MoveTowards(damageFlash, 0f,
+                Time.deltaTime * damagePulse / Mathf.Max(0.01f, damageFadeDuration));
+            float lowHealth = (1f - health.Fraction) * 0.45f;
+            // Keep the existing transparent-centre sprite; gently strengthen only its edge.
+            float pulseTarget = health.Fraction <= 0.35f ? 1f : 0f;
+            lowHealthPulseBlend = Mathf.MoveTowards(lowHealthPulseBlend, pulseTarget, Time.deltaTime * 2f);
+            lowHealthPulsePhase = Mathf.Repeat(lowHealthPulsePhase + Time.deltaTime * (2f * Mathf.PI / 1.8f), 2f * Mathf.PI);
+            float pulse = (0.5f - 0.5f * Mathf.Cos(lowHealthPulsePhase)) * 0.12f * lowHealthPulseBlend;
+            SetAlpha(damageVignette, Mathf.Max(damageFlash, lowHealth + pulse));
+        }
+
+        void ClearDamageFeedback()
+        {
+            damageFlash = 0f;
+            lowHealthPulseBlend = 0f;
+            lowHealthPulsePhase = 0f;
+            SetAlpha(damageVignette, 0f);
         }
 
         void UpdateWeapon()

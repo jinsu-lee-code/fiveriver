@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 namespace FiveRivers.Combat
 {
     // 조작 키 (CLAUDE.md 핵심 설계 규칙 9, 변경 금지): WASD · 마우스 / 좌클릭 사격 · 우클릭 조준 / R 장전 /
-    // F 보충 / 1 · 2 무기 / Z 자세 / Shift 달리기 / Esc 메뉴. 화면 안내는 KeyLabel로 실제 바인딩을 읽는다.
+    // F 보충 / 1 · 2 무기 (Tab: 바주카) / Z 자세 / Shift 달리기 / Esc 메뉴. 화면 안내는 KeyLabel로 실제 바인딩을 읽는다.
     public sealed class GameControls : IDisposable
     {
         public readonly InputAction Move = new InputAction("Move", InputActionType.Value);
@@ -23,6 +23,8 @@ namespace FiveRivers.Combat
 
         public GameControls()
         {
+            // 기존 1/2와 전차전 해금 조건은 유지하고 Tab을 바주카 보조 키로 쓴다.
+            Weapon2.AddBinding("<Keyboard>/tab");
             Move.AddCompositeBinding("2DVector")
                 .With("Up", "<Keyboard>/w")
                 .With("Down", "<Keyboard>/s")

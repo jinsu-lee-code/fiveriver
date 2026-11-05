@@ -3,6 +3,8 @@
     "rootNamespace": "FiveRivers.Tests",
     "references": [
         "FiveRivers",
+        "Unity.InputSystem",
+        "Unity.TextMeshPro",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Unity.RenderPipelines.Core.Runtime",

@@ -54,8 +54,19 @@ namespace FiveRivers.EditorTools
 
         public static LevelPoints Build()
         {
+            if (ImportedMapSetup.Available) ImportedMapSetup.ValidateEnvironment();
             var map = SetupUtil.Root("[Map]");
             var gen = Regenerate(map.transform, "Generated");
+
+            if (ImportedMapSetup.Available)
+            {
+                ImportedMapSetup.PlaceEnvironment(map.transform);
+                BuildCharacters(gen);
+                BuildLighting();
+                var importedPoints = BuildPoints(map.transform);
+                ImportedMapSetup.AlignGameplay(map.transform, importedPoints);
+                return importedPoints;
+            }
 
             BuildGround(map.transform);
             BuildTrench(gen);

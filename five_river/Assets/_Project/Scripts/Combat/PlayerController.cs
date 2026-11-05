@@ -7,15 +7,23 @@ namespace FiveRivers.Combat
 {
     // 1인칭 이동 · 시점 · 자세. 몸(이 오브젝트)이 좌우, 카메라 축이 상하를 돈다.
     [RequireComponent(typeof(CharacterController))]
+    [DefaultExecutionOrder(-50)]
     public sealed class PlayerController : MonoBehaviour
     {
         [SerializeField] PlayerConfig config;
         [SerializeField] Transform cameraPivot;
         [SerializeField] InputGate gate;
 
+        [Header("정면 참호 통과 제한 (측면 통로는 유지)")]
+        [SerializeField] bool restrictFrontLine;
+        [SerializeField] bool allowSidePassage = true;
+        [SerializeField] Vector2 frontLineX = new Vector2(-20f, 20f);
+        [SerializeField] float frontLineZ = 0.57f;
+
         CharacterController body;
         float pitch;
         float recoil;
+        float recoilVelocity;
         float verticalSpeed;
         float eye;
 
@@ -59,9 +67,9 @@ namespace FiveRivers.Combat
                 pitch = Mathf.Clamp(pitch - d.y, -config.pitchLimit, config.pitchLimit);
                 LookedDegrees += d.magnitude;
             }
-
-            recoil = Mathf.MoveTowards(recoil, 0f, dt * config.recoilRecovery);
+            // Raycasts in WeaponHolder.Update must see this frame's mouse pitch.
             cameraPivot.localRotation = Quaternion.Euler(pitch - recoil, 0f, 0f);
+
 
             MoveInput = gate.CanAct ? Controls.Move.ReadValue<Vector2>() : Vector2.zero;
             if (gate.CanAct && Controls.Stance.WasPressedThisFrame()) SetCrouched(!Crouched);
@@ -75,7 +83,16 @@ namespace FiveRivers.Combat
             if (body.isGrounded && verticalSpeed < 0f) verticalSpeed = -1f;
             verticalSpeed -= config.gravity * dt;
             var before = transform.position;
-            body.Move((planar + Vector3.up * verticalSpeed) * dt);
+            var movement = (planar + Vector3.up * verticalSpeed) * dt;
+            // 플레이어의 정면 통과만 제한한다. 탄환/로켓/적의 물리 충돌은 바꾸지 않는다.
+            if (restrictFrontLine && movement.z > 0f && before.z <= frontLineZ && before.z + movement.z > frontLineZ)
+            {
+                float t = (frontLineZ - before.z) / movement.z;
+                float crossingX = before.x + movement.x * t;
+                if (!allowSidePassage || (crossingX >= frontLineX.x && crossingX <= frontLineX.y))
+                    movement.z = frontLineZ - before.z;
+            }
+            body.Move(movement);
             var moved = transform.position - before;
             moved.y = 0f;
             MovedDistance += moved.magnitude;
@@ -99,7 +116,25 @@ namespace FiveRivers.Combat
             StanceChanged?.Invoke();
         }
 
-        public void AddRecoil(float degrees) => recoil += degrees;
+        public void AddRecoil(float degrees)
+        {
+            recoil = Mathf.Min(recoil + degrees * 0.18f, 12f);
+            recoilVelocity += degrees * 50f;
+        }
+
+        void LateUpdate()
+        {
+            float dt = Time.deltaTime;
+            if (dt > 0f)
+            {
+                float omega = Mathf.Max(16f, config.recoilRecovery * 2.5f);
+                float impulse = recoilVelocity + omega * recoil;
+                float decay = Mathf.Exp(-omega * dt);
+                recoil = (recoil + impulse * dt) * decay;
+                recoilVelocity = (recoilVelocity - omega * impulse * dt) * decay;
+            }
+            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil, 0f, 0f);
+        }
 
         public void Teleport(Transform point)
         {
@@ -108,6 +143,7 @@ namespace FiveRivers.Combat
             body.enabled = true;
             pitch = 0f;
             recoil = 0f;
+            recoilVelocity = 0f;
             verticalSpeed = 0f;
             Crouched = false;
             eye = config.standEyeHeight;

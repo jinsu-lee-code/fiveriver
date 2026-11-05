@@ -1,0 +1,2521 @@
+{
+  "sourceScene": "C:\\Users\\mbc\\Documents\\user\\Forgotten War\\다섯개의강\\Assets\\_Project\\Scenes\\Missions\\M01_Dabudong.unity",
+  "sourceSceneSha256": "cfa11db5623540de33b3314c7dee094626c27cc2dec3f670ed463f2c342d2ec0",
+  "extractionSceneSha256": "cfa11db5623540de33b3314c7dee094626c27cc2dec3f670ed463f2c342d2ec0",
+  "mappedDirectArtPrefabInstances": 279,
+  "missing": 0,
+  "maxPositionErrorMeters": 4.357207122461251e-06,
+  "rows": [
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -53.271194,
+        16.745188,
+        95.26129
+      ],
+      "positionErrorMeters": 1.5904068026534677e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -48.16917,
+        11.102694,
+        -9.099553
+      ],
+      "positionErrorMeters": 5.928158584998471e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        56.806084,
+        1.4623293,
+        93.70696
+      ],
+      "positionErrorMeters": 2.6054665384976114e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -15.804416,
+        13.378134,
+        81.03123
+      ],
+      "positionErrorMeters": 2.9122302883125035e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -38.66993,
+        6.2718387,
+        -8.44503
+      ],
+      "positionErrorMeters": 5.403368758195155e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -48.86122,
+        9.648771,
+        -48.687443
+      ],
+      "positionErrorMeters": 1.3622132658438701e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        52.908348,
+        0.10834473,
+        84.339935
+      ],
+      "positionErrorMeters": 3.1405971330225546e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -56.22971,
+        12.836588,
+        -3.603369
+      ],
+      "positionErrorMeters": 3.864009569485548e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -43.74832,
+        7.7028613,
+        21.653025
+      ],
+      "positionErrorMeters": 1.5676163034128364e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -27.24322,
+        17.851845,
+        96.18594
+      ],
+      "positionErrorMeters": 3.663373040494959e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -46.13535,
+        19.036028,
+        103.64068
+      ],
+      "positionErrorMeters": 1.754291407012489e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -28.48703,
+        4.6335196,
+        -27.395508
+      ],
+      "positionErrorMeters": 1.9612588467741033e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        18.665628,
+        9.583139,
+        75.95771
+      ],
+      "positionErrorMeters": 6.591883876738029e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -30.104204,
+        13.479073,
+        81.89584
+      ],
+      "positionErrorMeters": 3.5365088425844307e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -19.489439,
+        4.8674927,
+        35.057274
+      ],
+      "positionErrorMeters": 1.3781492573485464e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        65.47698,
+        7.791029,
+        48.873203
+      ],
+      "positionErrorMeters": 2.1349533216017215e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        65.13584,
+        7.0738945,
+        7.800606
+      ],
+      "positionErrorMeters": 1.3881618871626293e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -38.307835,
+        7.4154315,
+        42.08891
+      ],
+      "positionErrorMeters": 9.297064270287967e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -42.89569,
+        8.51121,
+        -40.723347
+      ],
+      "positionErrorMeters": 1.0590792586846191e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -26.043661,
+        3.062798,
+        24.88239
+      ],
+      "positionErrorMeters": 9.390727533874042e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -7.530548,
+        13.264489,
+        82.80533
+      ],
+      "positionErrorMeters": 1.64289343007693e-06
+    },
+    {
+      "name": "Sparse_Field_Pine",
+      "position": [
+        -28.0,
+        6.1018972,
+        44.0
+      ],
+      "positionErrorMeters": 3.9685058794702854e-08
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -26.04488,
+        18.870356,
+        99.887184
+      ],
+      "positionErrorMeters": 4.2796418710473094e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -34.22169,
+        7.5973105,
+        52.252026
+      ],
+      "positionErrorMeters": 1.1995723354746926e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -43.156696,
+        9.857832,
+        56.775303
+      ],
+      "positionErrorMeters": 3.4196165550244575e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        33.80847,
+        -0.1,
+        18.36431
+      ],
+      "positionErrorMeters": 1.8155420935574306e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        8.269386,
+        20.303123,
+        119.15088
+      ],
+      "positionErrorMeters": 1.227214082085564e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        54.937023,
+        2.2771084,
+        -33.124657
+      ],
+      "positionErrorMeters": 3.628223015474828e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        52.46962,
+        0.07759887,
+        95.347336
+      ],
+      "positionErrorMeters": 3.0996598431772386e-07
+    },
+    {
+      "name": "CP06_Sandbags_Refined",
+      "position": [
+        -1.9769031,
+        4.948624,
+        39.11274
+      ],
+      "positionErrorMeters": 4.575102182564778e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        53.152546,
+        2.2085624,
+        -55.26081
+      ],
+      "positionErrorMeters": 8.553992925963953e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -31.6621,
+        14.378174,
+        84.998215
+      ],
+      "positionErrorMeters": 3.649165159171793e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        20.867338,
+        10.132033,
+        94.472916
+      ],
+      "positionErrorMeters": 5.259924232726993e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -34.258476,
+        13.73056,
+        83.32732
+      ],
+      "positionErrorMeters": 3.737002067300143e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        5.7578006,
+        4.996666,
+        39.783737
+      ],
+      "positionErrorMeters": 1.8933869093729692e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        2.516736,
+        0.7687893,
+        -40.903557
+      ],
+      "positionErrorMeters": 1.7910966401327874e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        18.536922,
+        0.7743497,
+        -54.207542
+      ],
+      "positionErrorMeters": 6.187964843562706e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -32.388138,
+        15.646708,
+        89.15158
+      ],
+      "positionErrorMeters": 9.522371490892956e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -38.471657,
+        9.324621,
+        62.591652
+      ],
+      "positionErrorMeters": 2.9575399862164096e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -43.06875,
+        12.94104,
+        80.247375
+      ],
+      "positionErrorMeters": 1.6025763301128517e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        74.05953,
+        6.9829845,
+        -55.833992
+      ],
+      "positionErrorMeters": 2.1659556429436514e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        53.265064,
+        0.056362554,
+        28.775995
+      ],
+      "positionErrorMeters": 3.4948543559981415e-07
+    },
+    {
+      "name": "CP12_Sandbags_Refined",
+      "position": [
+        32.023132,
+        2.769231,
+        47.111206
+      ],
+      "positionErrorMeters": 3.3863101740004963e-07
+    },
+    {
+      "name": "CP08_Sandbags_Refined",
+      "position": [
+        20.021948,
+        6.2609205,
+        51.11339
+      ],
+      "positionErrorMeters": 1.8815442264579882e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        68.64792,
+        5.509432,
+        -22.666035
+      ],
+      "positionErrorMeters": 1.343052288686373e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        65.81787,
+        4.5449867,
+        -37.452385
+      ],
+      "positionErrorMeters": 1.0952330009024988e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        47.466213,
+        1.5249838,
+        -28.53857
+      ],
+      "positionErrorMeters": 4.645392132743523e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -58.88224,
+        13.81726,
+        -21.297554
+      ],
+      "positionErrorMeters": 3.636667012375087e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -38.301918,
+        6.6611667,
+        -59.13339
+      ],
+      "positionErrorMeters": 1.4813594339813891e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -30.859964,
+        2.6762643,
+        -18.979994
+      ],
+      "positionErrorMeters": 4.1226840238260706e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -52.46768,
+        12.52364,
+        -25.65559
+      ],
+      "positionErrorMeters": 1.9127736312395522e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        63.18749,
+        4.9977446,
+        -6.752733
+      ],
+      "positionErrorMeters": 1.4629265044672596e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        18.12047,
+        9.646168,
+        110.459755
+      ],
+      "positionErrorMeters": 2.555868133774541e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -57.881413,
+        13.534507,
+        62.989155
+      ],
+      "positionErrorMeters": 5.646224812610498e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        52.26369,
+        0.07034236,
+        104.97152
+      ],
+      "positionErrorMeters": 1.086417205250987e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -44.18997,
+        7.8386216,
+        25.695778
+      ],
+      "positionErrorMeters": 1.8939611069627723e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        47.118366,
+        1.4978342,
+        -36.59699
+      ],
+      "positionErrorMeters": 1.3439021624428218e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        30.858055,
+        6.8400664,
+        83.45672
+      ],
+      "positionErrorMeters": 1.5597513526393358e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        65.1352,
+        7.8361855,
+        32.59918
+      ],
+      "positionErrorMeters": 1.7590838411268414e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        26.792995,
+        4.13998,
+        37.825172
+      ],
+      "positionErrorMeters": 6.410631435643233e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -43.732212,
+        22.778976,
+        116.61504
+      ],
+      "positionErrorMeters": 3.6672900027087205e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -17.545557,
+        8.160904,
+        60.007214
+      ],
+      "positionErrorMeters": 4.1391789190349353e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        51.171635,
+        2.0674174,
+        -17.250757
+      ],
+      "positionErrorMeters": 3.921444046416114e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        38.43139,
+        1.7729437,
+        114.4064
+      ],
+      "positionErrorMeters": 2.830102682186311e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -35.332863,
+        16.851217,
+        94.02455
+      ],
+      "positionErrorMeters": 1.4250313665360835e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        51.18295,
+        2.3355346,
+        -7.4994173
+      ],
+      "positionErrorMeters": 9.342530797961494e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -46.04656,
+        10.179213,
+        51.455257
+      ],
+      "positionErrorMeters": 1.7267283742151543e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        67.121796,
+        8.751109,
+        103.58991
+      ],
+      "positionErrorMeters": 2.442284123644299e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -37.717182,
+        9.951975,
+        67.94506
+      ],
+      "positionErrorMeters": 7.586221710824544e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -29.203224,
+        5.335548,
+        -38.229027
+      ],
+      "positionErrorMeters": 2.8495287900985934e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        53.04474,
+        0.3010818,
+        43.412
+      ],
+      "positionErrorMeters": 1.7548925370290143e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -41.20398,
+        6.4295335,
+        14.940769
+      ],
+      "positionErrorMeters": 5.444764216217075e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        49.464977,
+        1.9594691,
+        -7.8449554
+      ],
+      "positionErrorMeters": 2.688428112404996e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -21.211786,
+        3.7498024,
+        -37.70991
+      ],
+      "positionErrorMeters": 1.374142048059586e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        56.851025,
+        2.8831506,
+        -50.889725
+      ],
+      "positionErrorMeters": 4.5961276191240947e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        2.728409,
+        6.895192,
+        50.839886
+      ],
+      "positionErrorMeters": 3.2746206062387095e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        55.710682,
+        2.5429738,
+        -40.76682
+      ],
+      "positionErrorMeters": 1.0042687933928948e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -36.754593,
+        6.3951993,
+        -57.42861
+      ],
+      "positionErrorMeters": 1.7584787744043634e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        69.85403,
+        7.5695057,
+        -3.0604792
+      ],
+      "positionErrorMeters": 3.2057783516337884e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        0.29134467,
+        0.1339494,
+        -17.268824
+      ],
+      "positionErrorMeters": 3.7635203474409565e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        61.773125,
+        4.3064356,
+        -11.130136
+      ],
+      "positionErrorMeters": 5.554032284153535e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -41.441017,
+        8.353342,
+        -38.47938
+      ],
+      "positionErrorMeters": 1.5695618176066243e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -58.09904,
+        13.56857,
+        -12.095318
+      ],
+      "positionErrorMeters": 1.0072875169630537e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -30.210083,
+        1.9900317,
+        -17.380732
+      ],
+      "positionErrorMeters": 4.178731920654282e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -39.603977,
+        5.8561068,
+        19.51017
+      ],
+      "positionErrorMeters": 2.0833914414859548e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -53.77105,
+        10.738773,
+        30.36861
+      ],
+      "positionErrorMeters": 7.184380408113736e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -24.846262,
+        3.8151903,
+        -57.12597
+      ],
+      "positionErrorMeters": 1.067227179278832e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -19.885452,
+        2.749741,
+        -26.303352
+      ],
+      "positionErrorMeters": 4.537336441134809e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -22.242199,
+        9.224534,
+        60.783737
+      ],
+      "positionErrorMeters": 1.9411560266503064e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        67.777954,
+        8.359063,
+        73.324455
+      ],
+      "positionErrorMeters": 3.171878227916461e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        53.38798,
+        2.3319907,
+        116.468895
+      ],
+      "positionErrorMeters": 1.4155289657067403e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -58.810307,
+        13.841273,
+        -23.262669
+      ],
+      "positionErrorMeters": 6.711736425560924e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -25.138853,
+        12.476698,
+        78.26964
+      ],
+      "positionErrorMeters": 1.941432595069024e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -10.185799,
+        1.7242411,
+        -28.09076
+      ],
+      "positionErrorMeters": 8.060085489951078e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        5.7606854,
+        0.5587356,
+        17.736248
+      ],
+      "positionErrorMeters": 4.769533063570584e-08
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -50.00958,
+        10.869995,
+        -36.668304
+      ],
+      "positionErrorMeters": 1.3739561323882962e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        25.758293,
+        4.5854945,
+        37.134155
+      ],
+      "positionErrorMeters": 3.1330864953427213e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        51.076687,
+        0.241092,
+        67.46187
+      ],
+      "positionErrorMeters": 1.719650430274544e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -56.589127,
+        16.102657,
+        90.90261
+      ],
+      "positionErrorMeters": 9.372193575759463e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        62.270508,
+        6.1984835,
+        46.633892
+      ],
+      "positionErrorMeters": 1.9939438106410485e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        20.510221,
+        7.223112,
+        112.769356
+      ],
+      "positionErrorMeters": 5.422971944862255e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        7.359361,
+        0.49564317,
+        -24.96641
+      ],
+      "positionErrorMeters": 3.603263806053098e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -12.65153,
+        6.888806,
+        52.092186
+      ],
+      "positionErrorMeters": 2.986888268487192e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        26.614191,
+        6.262634,
+        102.46389
+      ],
+      "positionErrorMeters": 2.2041660014289481e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -24.477697,
+        3.716343,
+        -56.559376
+      ],
+      "positionErrorMeters": 4.4763702987621315e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -53.604137,
+        11.3057165,
+        37.381805
+      ],
+      "positionErrorMeters": 5.945563132823782e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        69.31693,
+        8.94285,
+        94.39333
+      ],
+      "positionErrorMeters": 4.357207122461251e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -55.603096,
+        13.014938,
+        -29.474262
+      ],
+      "positionErrorMeters": 4.268056459006039e-07
+    },
+    {
+      "name": "Sparse_Field_Pine",
+      "position": [
+        -9.0,
+        10.870165,
+        72.0
+      ],
+      "positionErrorMeters": 1.2878417976480705e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        4.541106,
+        13.878596,
+        93.54976
+      ],
+      "positionErrorMeters": 1.15298619489787e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -54.777954,
+        11.010004,
+        -46.847996
+      ],
+      "positionErrorMeters": 2.659899797656226e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -35.631184,
+        6.2995048,
+        -53.87162
+      ],
+      "positionErrorMeters": 4.1808301482472064e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        57.641705,
+        2.961792,
+        -59.158745
+      ],
+      "positionErrorMeters": 4.791597380796413e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -48.893326,
+        10.510562,
+        2.7920473
+      ],
+      "positionErrorMeters": 2.0600665922643338e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -46.406208,
+        8.951071,
+        -52.532623
+      ],
+      "positionErrorMeters": 3.6353803572085797e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        67.057304,
+        8.284301,
+        62.27016
+      ],
+      "positionErrorMeters": 8.001403513382877e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -21.737541,
+        8.735166,
+        61.80753
+      ],
+      "positionErrorMeters": 7.111920981225121e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        55.04422,
+        0.44034916,
+        42.513878
+      ],
+      "positionErrorMeters": 1.3458511703625718e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        12.160414,
+        7.4381394,
+        62.988895
+      ],
+      "positionErrorMeters": 4.912175144334823e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -5.060109,
+        14.4401,
+        90.19065
+      ],
+      "positionErrorMeters": 9.915740345678591e-07
+    },
+    {
+      "name": "Sparse_Field_Pine",
+      "position": [
+        30.0,
+        8.457717,
+        83.0
+      ],
+      "positionErrorMeters": 5.816650450185534e-08
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -34.008545,
+        2.484366,
+        14.304608
+      ],
+      "positionErrorMeters": 3.5880237637438946e-07
+    },
+    {
+      "name": "CP10_Sandbags_Refined",
+      "position": [
+        -30.002207,
+        6.770889,
+        45.115974
+      ],
+      "positionErrorMeters": 5.085639961842661e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        11.7468,
+        11.931435,
+        90.50555
+      ],
+      "positionErrorMeters": 3.475724249994947e-06
+    },
+    {
+      "name": "CP18_Sandbags_Refined",
+      "position": [
+        21.021828,
+        2.5535803,
+        29.108088
+      ],
+      "positionErrorMeters": 5.509137866255111e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -50.96896,
+        11.517163,
+        52.49472
+      ],
+      "positionErrorMeters": 5.691608959519035e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -13.042572,
+        2.18336,
+        -44.692978
+      ],
+      "positionErrorMeters": 1.3925960838928186e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        5.963042,
+        7.4245334,
+        60.221867
+      ],
+      "positionErrorMeters": 4.4984825842688867e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        24.850105,
+        0.29936522,
+        -20.652924
+      ],
+      "positionErrorMeters": 5.046462328478338e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -51.68792,
+        10.630943,
+        -43.952423
+      ],
+      "positionErrorMeters": 4.950608420843005e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        51.08606,
+        1.8317444,
+        -29.894054
+      ],
+      "positionErrorMeters": 5.967601352576177e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -58.236965,
+        11.791554,
+        -46.289314
+      ],
+      "positionErrorMeters": 5.554289686418115e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -39.998943,
+        23.352364,
+        118.0498
+      ],
+      "positionErrorMeters": 2.9889687690438723e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        14.281086,
+        12.604233,
+        110.752686
+      ],
+      "positionErrorMeters": 5.012511431151986e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        1.8631177,
+        6.594731,
+        52.1687
+      ],
+      "positionErrorMeters": 1.1809417581406744e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -19.815014,
+        4.9035187,
+        34.862633
+      ],
+      "positionErrorMeters": 2.746281522205359e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -45.13615,
+        9.993154,
+        -30.153124
+      ],
+      "positionErrorMeters": 5.776198888890848e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        5.1989985,
+        0.528474,
+        -57.60534
+      ],
+      "positionErrorMeters": 9.51333767718504e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -23.164139,
+        25.020597,
+        118.15174
+      ],
+      "positionErrorMeters": 1.1439215727395486e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -3.1103227,
+        0.9049887,
+        -59.699734
+      ],
+      "positionErrorMeters": 2.662998891591045e-07
+    },
+    {
+      "name": "Sparse_Field_Pine",
+      "position": [
+        13.0,
+        7.188186,
+        61.0
+      ],
+      "positionErrorMeters": 1.6867065433245898e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        56.24084,
+        1.0063403,
+        51.069622
+      ],
+      "positionErrorMeters": 9.13393527211827e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        23.73412,
+        9.114312,
+        63.01558
+      ],
+      "positionErrorMeters": 9.870165871757246e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        73.09836,
+        6.8082952,
+        -43.23575
+      ],
+      "positionErrorMeters": 2.5158977579622613e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -50.985798,
+        9.904713,
+        -50.362507
+      ],
+      "positionErrorMeters": 3.688727324441139e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -18.364382,
+        24.705,
+        117.85211
+      ],
+      "positionErrorMeters": 1.8300778110959323e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -55.021355,
+        13.927854,
+        79.02809
+      ],
+      "positionErrorMeters": 1.5248112920238532e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        3.467268,
+        0.5125269,
+        -56.68628
+      ],
+      "positionErrorMeters": 7.0380794537032e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        54.76634,
+        1.2094562,
+        8.504315
+      ],
+      "positionErrorMeters": 1.6939411855731804e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -51.54329,
+        9.985988,
+        20.921093
+      ],
+      "positionErrorMeters": 8.823155562955283e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        33.44907,
+        1.0710053,
+        40.08767
+      ],
+      "positionErrorMeters": 6.294372112705937e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -37.227654,
+        9.316516,
+        64.3523
+      ],
+      "positionErrorMeters": 2.6003017132933085e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -10.740199,
+        5.2423434,
+        41.736683
+      ],
+      "positionErrorMeters": 1.4244439821383346e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -43.50525,
+        9.189255,
+        -2.611692
+      ],
+      "positionErrorMeters": 1.006601464311463e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        52.54913,
+        0.046276927,
+        26.013342
+      ],
+      "positionErrorMeters": 5.228632280774731e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        48.77592,
+        -0.1,
+        19.2882
+      ],
+      "positionErrorMeters": 9.468301704744569e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -47.91942,
+        9.448269,
+        -48.82919
+      ],
+      "positionErrorMeters": 1.80931472512595e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        12.703402,
+        6.953876,
+        58.420322
+      ],
+      "positionErrorMeters": 6.033162051455775e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -9.691623,
+        4.7719913,
+        38.885666
+      ],
+      "positionErrorMeters": 2.902894265461821e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -39.16677,
+        7.882094,
+        -36.597355
+      ],
+      "positionErrorMeters": 9.46274115514986e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        74.75638,
+        8.741531,
+        -9.056273
+      ],
+      "positionErrorMeters": 1.919712814198566e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        34.523937,
+        0.4398931,
+        77.14735
+      ],
+      "positionErrorMeters": 3.510659111636575e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -48.375587,
+        11.112696,
+        -29.480679
+      ],
+      "positionErrorMeters": 7.095277318602198e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -0.74136347,
+        20.70697,
+        111.08959
+      ],
+      "positionErrorMeters": 1.9916069510828233e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -9.889795,
+        22.586103,
+        111.89159
+      ],
+      "positionErrorMeters": 3.734646246246476e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        27.66817,
+        5.427112,
+        105.619774
+      ],
+      "positionErrorMeters": 9.443300058894686e-07
+    },
+    {
+      "name": "CP04_Sandbags_Refined",
+      "position": [
+        -4.002571,
+        10.096681,
+        67.11579
+      ],
+      "positionErrorMeters": 1.3727699941932739e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        2.8619506,
+        6.5051923,
+        50.82385
+      ],
+      "positionErrorMeters": 1.276299727076208e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -34.70273,
+        9.0838995,
+        64.2251
+      ],
+      "positionErrorMeters": 2.9122043854840424e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -41.992252,
+        7.34891,
+        29.560589
+      ],
+      "positionErrorMeters": 4.124699058058992e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        55.329636,
+        2.5629513,
+        -47.275745
+      ],
+      "positionErrorMeters": 5.463967385517989e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        50.434437,
+        1.8301343,
+        -23.321184
+      ],
+      "positionErrorMeters": 2.580393843608214e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -59.375347,
+        22.23519,
+        110.8252
+      ],
+      "positionErrorMeters": 2.998271282277014e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -42.761684,
+        8.983078,
+        47.13949
+      ],
+      "positionErrorMeters": 1.8281514270444758e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -47.04657,
+        8.896226,
+        32.436874
+      ],
+      "positionErrorMeters": 4.332771202817839e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -58.230366,
+        15.705635,
+        88.17171
+      ],
+      "positionErrorMeters": 2.8582374248526973e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -57.494495,
+        13.412543,
+        -30.04325
+      ],
+      "positionErrorMeters": 9.9905372562784e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -51.19467,
+        11.893256,
+        60.237938
+      ],
+      "positionErrorMeters": 1.6432068618433778e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        8.832087,
+        2.706438,
+        28.076117
+      ],
+      "positionErrorMeters": 6.220797380903067e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        46.503258,
+        0.9319217,
+        2.6259112
+      ],
+      "positionErrorMeters": 2.5193744889021005e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -57.08771,
+        20.824162,
+        108.37113
+      ],
+      "positionErrorMeters": 2.366432476926874e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        23.889458,
+        0.22875774,
+        -20.146473
+      ],
+      "positionErrorMeters": 3.052858799967285e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        72.27782,
+        10.06712,
+        84.3448
+      ],
+      "positionErrorMeters": 4.328692629452223e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -45.02189,
+        10.995707,
+        64.34614
+      ],
+      "positionErrorMeters": 2.408054549162372e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        62.990772,
+        4.2751575,
+        -17.663057
+      ],
+      "positionErrorMeters": 4.1304977540928805e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        48.787193,
+        0.052893452,
+        13.816007
+      ],
+      "positionErrorMeters": 4.519880806331438e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        24.197756,
+        8.724911,
+        63.446297
+      ],
+      "positionErrorMeters": 4.4645953151960197e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        2.8401742,
+        2.493616,
+        25.64369
+      ],
+      "positionErrorMeters": 1.5093654942139431e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -39.429306,
+        6.6179547,
+        26.802973
+      ],
+      "positionErrorMeters": 2.109177500814965e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -49.32634,
+        9.97827,
+        -44.33683
+      ],
+      "positionErrorMeters": 5.251042191269897e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        11.702321,
+        7.306638,
+        56.76261
+      ],
+      "positionErrorMeters": 1.4100476595653778e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -36.360027,
+        5.4700537,
+        -18.785389
+      ],
+      "positionErrorMeters": 3.189257002679283e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        54.99642,
+        2.3214517,
+        -37.964203
+      ],
+      "positionErrorMeters": 1.8182301925383842e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -48.574883,
+        11.413705,
+        -14.342521
+      ],
+      "positionErrorMeters": 5.839406954267151e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        21.688625,
+        12.338977,
+        87.11721
+      ],
+      "positionErrorMeters": 5.319431820718034e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        53.105354,
+        0.10526866,
+        32.731056
+      ],
+      "positionErrorMeters": 3.7559294159124733e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        74.78147,
+        11.329689,
+        100.921165
+      ],
+      "positionErrorMeters": 1.3366835450721407e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        32.26146,
+        -0.063658915,
+        20.178465
+      ],
+      "positionErrorMeters": 6.587436975804995e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        62.61823,
+        7.196762,
+        79.43514
+      ],
+      "positionErrorMeters": 2.7433436697338926e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        56.099777,
+        2.9116414,
+        -14.030436
+      ],
+      "positionErrorMeters": 4.92466052771912e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        50.03756,
+        0.86239976,
+        7.353771
+      ],
+      "positionErrorMeters": 5.336660166026551e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        30.977974,
+        6.8118834,
+        85.971954
+      ],
+      "positionErrorMeters": 3.5469951932994027e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -50.23107,
+        10.033689,
+        35.090908
+      ],
+      "positionErrorMeters": 1.5416390486294746e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -44.000843,
+        8.428202,
+        -49.369423
+      ],
+      "positionErrorMeters": 3.3956996760969215e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -17.309155,
+        22.491932,
+        111.45483
+      ],
+      "positionErrorMeters": 3.6787166906151918e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        24.601162,
+        8.797206,
+        64.048706
+      ],
+      "positionErrorMeters": 1.0239583979977426e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -7.7369723,
+        25.583307,
+        118.70131
+      ],
+      "positionErrorMeters": 8.398569174692861e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -43.16532,
+        9.350619,
+        50.020157
+      ],
+      "positionErrorMeters": 1.3936230668926903e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -3.4759855,
+        1.2652225,
+        20.35631
+      ],
+      "positionErrorMeters": 1.22928638768716e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -15.812282,
+        21.235054,
+        107.71977
+      ],
+      "positionErrorMeters": 2.3714484563822608e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -51.087803,
+        9.627308,
+        -55.035213
+      ],
+      "positionErrorMeters": 4.957886618091235e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -36.092857,
+        3.9645805,
+        2.687704
+      ],
+      "positionErrorMeters": 3.727488679319504e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -37.687813,
+        6.81773,
+        -49.403805
+      ],
+      "positionErrorMeters": 2.987960078368798e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -9.7695465,
+        1.9940741,
+        -31.373056
+      ],
+      "positionErrorMeters": 4.1188387464250247e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -53.120636,
+        10.705659,
+        -46.284523
+      ],
+      "positionErrorMeters": 8.899756738000008e-08
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -0.24219924,
+        3.1693716,
+        24.78374
+      ],
+      "positionErrorMeters": 9.100499356395311e-07
+    },
+    {
+      "name": "CP16_Sandbags_Refined",
+      "position": [
+        8.021829,
+        3.4041488,
+        30.108088
+      ],
+      "positionErrorMeters": 5.776629564415376e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -20.174934,
+        5.380798,
+        35.018734
+      ],
+      "positionErrorMeters": 4.113011150594033e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -30.75946,
+        5.1495514,
+        -49.789722
+      ],
+      "positionErrorMeters": 6.30703290183219e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -2.8942466,
+        0.9117112,
+        -25.451769
+      ],
+      "positionErrorMeters": 1.2776599360711815e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -47.227356,
+        10.261343,
+        48.104427
+      ],
+      "positionErrorMeters": 3.403774969839641e-07
+    },
+    {
+      "name": "CP02_Sandbags_Refined",
+      "position": [
+        -17.978172,
+        6.6609254,
+        49.10809
+      ],
+      "positionErrorMeters": 6.302967404246065e-07
+    },
+    {
+      "name": "CP14_Sandbags_Refined",
+      "position": [
+        -8.978171,
+        3.9029384,
+        29.108088
+      ],
+      "positionErrorMeters": 5.784148196416246e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -47.478992,
+        9.161781,
+        13.303168
+      ],
+      "positionErrorMeters": 6.312143893115993e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -29.393097,
+        22.787382,
+        111.368576
+      ],
+      "positionErrorMeters": 1.553126334449043e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        59.97335,
+        3.1028922,
+        -32.82599
+      ],
+      "positionErrorMeters": 1.3383358045670382e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        26.007763,
+        4.100064,
+        36.977413
+      ],
+      "positionErrorMeters": 2.8190684698382285e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        19.26042,
+        0.5545045,
+        -26.06515
+      ],
+      "positionErrorMeters": 7.098839492205421e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -47.397404,
+        8.854405,
+        29.443296
+      ],
+      "positionErrorMeters": 6.554673308798677e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        19.707579,
+        0.76714456,
+        -49.98904
+      ],
+      "positionErrorMeters": 5.06640229586989e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        55.59333,
+        2.3754888,
+        -35.28718
+      ],
+      "positionErrorMeters": 1.8939144636837121e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -46.955288,
+        9.609855,
+        -40.869484
+      ],
+      "positionErrorMeters": 3.13474952479216e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -55.313076,
+        15.563051,
+        88.65281
+      ],
+      "positionErrorMeters": 8.858743862923424e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -32.47278,
+        15.087119,
+        87.57565
+      ],
+      "positionErrorMeters": 3.506377799621712e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        54.000145,
+        1.1054009,
+        119.03359
+      ],
+      "positionErrorMeters": 2.2245974410051455e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -46.770466,
+        22.904655,
+        116.73854
+      ],
+      "positionErrorMeters": 8.077262964790616e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        56.514282,
+        2.319189,
+        5.5566645
+      ],
+      "positionErrorMeters": 2.399238255344139e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -40.564346,
+        6.094612,
+        12.5402565
+      ],
+      "positionErrorMeters": 3.3622879851498446e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        37.06837,
+        -0.065,
+        99.11115
+      ],
+      "positionErrorMeters": 2.772674678830427e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        12.22964,
+        6.982986,
+        58.058853
+      ],
+      "positionErrorMeters": 1.5193293669568552e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -31.815493,
+        2.9111228,
+        -18.168465
+      ],
+      "positionErrorMeters": 5.020554639068225e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -12.582607,
+        1.4214779,
+        -23.454014
+      ],
+      "positionErrorMeters": 3.217465266353797e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        30.843103,
+        2.1643653,
+        37.350616
+      ],
+      "positionErrorMeters": 6.117966928024671e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        47.93315,
+        1.6571786,
+        -58.977413
+      ],
+      "positionErrorMeters": 1.258351692437744e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -23.619545,
+        5.516279,
+        41.709923
+      ],
+      "positionErrorMeters": 3.0467500648593067e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        34.7297,
+        0.1024078,
+        105.36584
+      ],
+      "positionErrorMeters": 3.425586662260899e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -27.47016,
+        0.90479577,
+        16.843603
+      ],
+      "positionErrorMeters": 4.881739213718511e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -30.0445,
+        4.9961863,
+        -52.748
+      ],
+      "positionErrorMeters": 1.1541497629020695e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -11.1258335,
+        2.1105862,
+        -37.730053
+      ],
+      "positionErrorMeters": 6.295445992797033e-08
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -56.896538,
+        12.620008,
+        41.68325
+      ],
+      "positionErrorMeters": 6.709819548346947e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        29.887125,
+        -0.098565616,
+        15.717935
+      ],
+      "positionErrorMeters": 3.9183784618757107e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        30.07177,
+        6.7772818,
+        93.67841
+      ],
+      "positionErrorMeters": 3.403343929303661e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -41.345406,
+        9.101418,
+        53.91007
+      ],
+      "positionErrorMeters": 1.6130839606853946e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        63.446144,
+        3.8626084,
+        -29.989782
+      ],
+      "positionErrorMeters": 3.5075477148934706e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        46.88642,
+        1.5407121,
+        -47.765804
+      ],
+      "positionErrorMeters": 1.238370849838799e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -51.06695,
+        10.907818,
+        -39.787266
+      ],
+      "positionErrorMeters": 1.772954448326624e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        67.836945,
+        8.307365,
+        65.16818
+      ],
+      "positionErrorMeters": 2.4458077932730234e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -16.242199,
+        3.674045,
+        25.78374
+      ],
+      "positionErrorMeters": 9.157881567002353e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        49.94246,
+        0.18150738,
+        64.402016
+      ],
+      "positionErrorMeters": 9.471089165006497e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        59.30482,
+        3.4875126,
+        38.615974
+      ],
+      "positionErrorMeters": 1.1003881216848891e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        6.257959,
+        0.21953951,
+        -21.52798
+      ],
+      "positionErrorMeters": 8.120662503481052e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        73.16746,
+        6.599698,
+        -35.58366
+      ],
+      "positionErrorMeters": 2.4236167182365397e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        48.762928,
+        0.7243142,
+        7.3543935
+      ],
+      "positionErrorMeters": 2.370572192098194e-08
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -27.29284,
+        4.2924194,
+        -55.519463
+      ],
+      "positionErrorMeters": 1.0367855806833931e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        48.12264,
+        1.5897651,
+        -39.13695
+      ],
+      "positionErrorMeters": 1.9434594628295314e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -47.56087,
+        22.144348,
+        113.307396
+      ],
+      "positionErrorMeters": 1.135378462071988e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -59.538284,
+        12.81985,
+        9.541638
+      ],
+      "positionErrorMeters": 4.818780679547376e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        62.76566,
+        6.418913,
+        15.102185
+      ],
+      "positionErrorMeters": 7.215682108159348e-07
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -38.66342,
+        6.388115,
+        -12.229606
+      ],
+      "positionErrorMeters": 1.6644839250355505e-06
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        -59.243618,
+        17.995033,
+        98.82382
+      ],
+      "positionErrorMeters": 2.038703348341892e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -37.399685,
+        6.922575,
+        -44.60386
+      ],
+      "positionErrorMeters": 1.0564402717019045e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        27.199978,
+        5.608936,
+        46.66258
+      ],
+      "positionErrorMeters": 1.43252974989482e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        2.2714264,
+        0.6710927,
+        -51.911736
+      ],
+      "positionErrorMeters": 4.671160567721625e-07
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -20.89814,
+        3.0519981,
+        -57.205368
+      ],
+      "positionErrorMeters": 7.342862106773642e-08
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        67.28615,
+        8.062954,
+        40.728054
+      ],
+      "positionErrorMeters": 1.92994920460833e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -21.930962,
+        8.759621,
+        61.69377
+      ],
+      "positionErrorMeters": 1.456043716141431e-06
+    },
+    {
+      "name": "Korean_Red_Pine",
+      "position": [
+        -4.0189037,
+        19.178755,
+        105.39871
+      ],
+      "positionErrorMeters": 2.1670992364788906e-06
+    },
+    {
+      "name": "Granite_Boulder",
+      "position": [
+        -58.003754,
+        16.233774,
+        91.212776
+      ],
+      "positionErrorMeters": 4.2702241798653403e-07
+    },
+    {
+      "name": "Summer_Shrub",
+      "position": [
+        35.379936,
+        -0.07931052,
+        100.05387
+      ],
+      "positionErrorMeters": 1.1752315207247904e-06
+    }
+  ]
+}

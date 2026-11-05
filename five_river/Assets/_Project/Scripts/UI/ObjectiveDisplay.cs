@@ -29,13 +29,14 @@ namespace FiveRivers.UI
 
         public void SetLabel(string text) => label.text = text;
 
-        public void Show(string text)
+        public void Show(string text, bool ignoreParentGroups = false)
         {
             if (string.IsNullOrEmpty(text))
             {
                 Hide();
                 return;
             }
+            group.ignoreParentGroups = ignoreParentGroups;
             if (visible && text == Current) return;
             Current = text;
             objective.text = text;
@@ -46,6 +47,7 @@ namespace FiveRivers.UI
 
         public void Hide()
         {
+            group.ignoreParentGroups = false;
             visible = false;
             Current = "";
         }

@@ -1,0 +1,57 @@
+[
+  {
+    "path": "Assets/_Project/Scenes/Dabudong.unity",
+    "bytes": 2225845,
+    "sha256": "4DCDB6A4C5F8C1DE7375EE86C1D34448B75DDA3C6C207BFEEB8E5A29D78991FA"
+  },
+  {
+    "path": "Assets/_Project/Art/HistoricalDabudong20261102/Frontline_HistoricalSurface.asset",
+    "bytes": 3587596,
+    "sha256": "6A776504AA934E756CC9DFC3D9FF58BE9A1D9690886804D39DFADB3CBB66DEEF"
+  },
+  {
+    "path": "Assets/_Project/Art/PhotoGround20261102/Frontline_PhotoPatch.asset",
+    "bytes": 3587580,
+    "sha256": "2BFC5724D323F71D6B4BD6818DD35360C2372CDCE7953759C5D21CC2B66A367F"
+  },
+  {
+    "path": "Assets/_Project/Art/FrontlinePolish20261102/Frontline_Terrain.asset",
+    "bytes": 3587564,
+    "sha256": "D7873A5F0ADA0BDB8BCFF440E5AB512FD23AC1CC4B874B2FD1164434F12C1322"
+  },
+  {
+    "path": "Assets/_Project/Scripts/Combat/BazookaPresentation.cs",
+    "bytes": 6504,
+    "sha256": "638541DD2E258B8C2701F1C5FC88138F669F4ECEE9C2B379DAF02182D45288FD"
+  },
+  {
+    "path": "Assets/_Project/Scripts/Combat/TankDamagePresentation.cs",
+    "bytes": 16863,
+    "sha256": "B52774C8B5CCF8F944820C92233A09CB492D28AA59C5C6FEEC90155021367A6E"
+  },
+  {
+    "path": "Assets/_Project/Scripts/Combat/PlayerController.cs",
+    "bytes": 6004,
+    "sha256": "B019F478AB4D4EA5604CFA0219904ECAEB7B1380CFD0B9E051EC67F5872F1AD0"
+  },
+  {
+    "path": "Assets/_Project/Scripts/Combat/TankController.cs",
+    "bytes": 10115,
+    "sha256": "520C293BFD2CF672BBEDA17A51E74900D72E536145939FBEAE0BE6FEB9FBE8B9"
+  },
+  {
+    "path": "Assets/_Project/Scripts/Combat/WeaponHolder.cs",
+    "bytes": 4895,
+    "sha256": "B6D12B0182F59F37F8144A7D51B91EB71EDEFFE7219BAE30FD1703E23B71B4DC"
+  },
+  {
+    "path": "Assets/_Project/Prefabs/PF_WP_BazookaRocket.prefab",
+    "bytes": 7209,
+    "sha256": "8F0B44B180100064DA459CC5F9A2D1BF5EC68BF250E6147B12C006BCA02E1280"
+  },
+  {
+    "path": "Assets/_Project/Data/SoundLibrary.asset",
+    "bytes": 10887,
+    "sha256": "00CFB580607C62250E50CEB8A7C49A2C219285EC7A6E676DAA8663947C7E10A8"
+  }
+]

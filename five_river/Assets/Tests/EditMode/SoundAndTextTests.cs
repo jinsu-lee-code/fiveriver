@@ -21,7 +21,7 @@ namespace FiveRivers.Tests
         }
 
         [Test]
-        public void EverySubtitleLine_HasVoiceInLibrary()
+        public void EverySubtitleLine_HasTextAndValidOptionalVoice()
         {
             var lib = AssetDatabase.LoadAssetAtPath<SoundLibrary>(LibraryPath);
             var text = AssetDatabase.LoadAssetAtPath<GameText>(TextPath);
@@ -29,7 +29,9 @@ namespace FiveRivers.Tests
             foreach (var line in lines)
             {
                 Assert.IsFalse(string.IsNullOrEmpty(line.text), "빈 자막");
-                Assert.IsNotNull(lib.Find(line.voice), "음성 없음: " + line.voice);
+                Assert.Greater(line.duration, 0f, "자막 표시 시간");
+                if (!string.IsNullOrEmpty(line.voice))
+                    Assert.IsNotNull(lib.Find(line.voice), "음성 없음: " + line.voice);
             }
         }
 

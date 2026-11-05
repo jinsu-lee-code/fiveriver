@@ -1,0 +1,6 @@
+Rocky Trail by Amal Kumar, Poly Haven. CC0.
+https://polyhaven.com/a/rocky_trail
+https://polyhaven.com/license
+Retrieved 2026-11-02. Photography/scan-based general ground material; not a documented Dabudong/1950 location.
+Original 2K diffuse and NormalGL retained. Derived mask: metallic=0, AO=1, height=0.5, smoothness=1-roughness.
+Existing terrain geometry, object placements and original TerrainData asset retained. Local blend only: x[-13,13], z[-9,11], feathered ellipse, peak weight 0.62.

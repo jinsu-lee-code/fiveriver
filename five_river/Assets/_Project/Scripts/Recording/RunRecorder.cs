@@ -125,7 +125,7 @@ namespace FiveRivers.Recording
             sb.Append(',').Append(run.entered.ContainsKey(FlowSection.AllySupport) ? 1 : 0);
             sb.Append(',').Append(flow.ForcedTankTriggered ? 1 : 0).Append(',').Append(flow.ForcedEndingTriggered ? 1 : 0);
             sb.Append(',').Append(run.pausedTime.ToString("0.0", inv));
-            sb.Append(',').Append(string.Join(" ", run.deaths));
+            sb.Append(',').Append('"').Append(string.Join(" ", run.deaths).Replace("\"", "\"\"")).Append('"');
             foreach (var s in Sections)
             {
                 bool has = run.fpsFrames.TryGetValue(s, out int frames) && frames > 0;

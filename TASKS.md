@@ -273,3 +273,50 @@
 - [x] Unity49개 개별 출력 및40개 게임API 출력, 실제 M1 8발·핑·장전/바주카 발사·장전·전차 상태 등 표본 확인, SoundAndTextTests4/4.
 - [ ] 전체 Windows 빌드·헤드폰 밸런스·루프 이음새·초기 NullReference 원인 확인.
 - 근거: [사운드 적용·검수표](Docs/Sound/SoundIntegration_20261028/README.md). 전체 게임 무결함·전체 SOUND_LIST 완료 표시는 아님.
+
+## 시연 품질 보강 · 2026-10-30 (Claude)
+
+- 결정 (2026-10-30): 10/30 기능 동결의 **예외**로 진행 — 사용자 지시("지스타 때 보여주기엔 민망한 수준"). 범위는 아래 두 항목만.
+- [x] **아군 처음부터 사격** — 플레이 확인 대기
+  - 구현: `AllyCombatant`에 제압 사격 추가. 튜토리얼 · 첫 교전 · 주 공세에서 보이는 적이 없으면 원래 바라보던 쪽 45~85 m 비탈(좌우 ±25°)을 쏜다. 간격은 `WaveConfig` 사격 간격 × 1.4. 적이 보이면 기존 조준 사격으로 돌아간다.
+  - 연출 전용: 피해 · 처치 · 진행 판정 없음. 탄착 흙먼지는 지면에만 생긴다.
+  - 확인 (자동, 플레이 모드): 튜토리얼 시작 후 약 9초 동안 아군 4명이 각각 2~3발 사격, 총구 화염 2~3회.
+  - 확인 방법: Dabudong 씬 → 시작 → 튜토리얼 중 좌우 참호의 아군이 앉아 앞 비탈로 쏘면 정상.
+- [x] **받침손(왼손) 새 모델** — 플레이 확인 대기
+  - 1차(뼈대 손 자세만 조정)는 사용자 판정 "여전히 어색함" → 사용자 지시로 바르코3D로 손을 새로 만듦.
+  - 근거: M1 입사 자세 사진, FM 23-5(1951) "총이 엄지와 검지 사이 V에, 손은 방아쇠울 바로 앞". 비교 그림 `Docs/Art/M1FPS_20261030/SupportGrip_Varco_20261030.png`.
+  - 제작: 바르코3D 흐름 "다섯개의강"(이미지 생성 → 3D, 라이선스 PRIVATE, 300포인트) → Blender `Docs/Art/M1FPS_20261030/SupportHandVarco/hand_prep.py`(쥔 손 통로 중심 원점, 통로 축 +Z, 손목 -Y) → `Art/Models/Characters/ROK_Arms/SupportHand/SM_CH_ROK_SupportHand_M1.fbx`.
+  - 적용: 메뉴 `FiveRivers/Setup/Natural Support Grip`(`SupportGripSetup`, 절대값). 새 손을 총(M1_ShotMotion) 앞 덮개 시작점에 고정(배율 0.65), 기존 골격 왼손은 손목 뼈 크기 0으로 숨김, 왼쪽 천 소매 끝을 새 손목(모델 기준 -0.09)에 맞춤.
+  - 테스트: EditMode 77/77 통과. 조준 화면 가림 없음.
+  - 손목에서 잘라(`hand_cut_wrist.py`) 왼쪽 천 소매가 손목을 덮게 했다(오른팔과 같은 소매).
+  - 알려진 한계: 손은 총에 고정된 정적 모델(손가락 움직임 없음). 아트 파일을 main 작업 트리에 직접 넣음(CLAUDE.md 아트 브랜치 규칙 예외, 사용자 지시).
+- [ ] 맵 교체(논밭 있는 맵) — 사용자에게 맵 위치 확인 대기. 깃허브 `blender-ai-game-assets-guide` 맵과 현재 정제 맵 모두 논밭 없음.
+- [ ] 실행 빌드 · 사람 플레이 확인 — 아직 안 함.
+- 되돌리기: 작업 전 전체 상태 `refs/backup/before-claude-20261030`.
+
+## 새벽 트럭 하차 연출 · 2026-11-02 (Codex) → 11-05 이어받음 (Claude)
+
+- 범위: 사용자 지시로 새로 허용됨. 새벽 학생 지원병 4명이 GMC 트럭 뒤 경사로로 내려와 합류. 연출 전용(새벽 시간 · 결과 진행은 DemoFlow 그대로).
+- 코드: `Narrative/DawnTruckSequence.cs`, `Narrative/DawnFootPlacement.cs`(경사로 발 맞춤), 메뉴 없는 `Editor/SetupDawnTruck.cs`(`BuildPrefab`, `ConnectScene`), 확인 도구 `Editor/DawnTruckReview.cs` · `DawnTruckCapture.cs`.
+- 배치: 정지 트럭 (30, -0.023, 3), 방향 90°. 예전 위치 (30, -3)는 둔덕이라 경사로가 떠서 6 m 옮김. 지형은 고치지 않음.
+- 모델: 원본 `GMC_Truck.fbx`(SHA256 FA048E95…)는 그대로. Blender `repair_truck.py`로 짐칸 통로를 가로막던 스캔 면 631개를 지우고 바닥 · 안쪽 벽을 새로 넣음 → `Art/DawnTruck20261102/GMC_Truck_Open.fbx`(SHA256 7F8EE900…). 바퀴는 회전하지 않음(정지 트럭).
+- [x] Codex: 이전 모델로 실제 20초 녹화, 4명 모두 새벽 안에 합류, 일시정지 흔들림 0, 시작 화면 복귀 시 트럭 · 학생 0개 확인. 근거 `Documents/ChatGPT/다섯개의강/DawnTruck_20261102/final_verified/`.
+- [x] Claude (11-05): EditMode 114/114 통과. 수리 모델을 Unity에서 렌더해 확인(`…/ModelRepair/unity_final_20261105/`, 진단용 조명 사용 · 게임 조명 아님) — 통로 가로막던 판 사라짐, 경사로 끝 땅에 닿음, FBX 해시 일치.
+- [ ] 남은 결함: 짐칸 왼쪽 안쪽 벽에 작은 검은 삼각형 구멍 몇 개(위 · 뒤에서 보임).
+- [ ] 수리 모델로 플레이 모드 20초 재녹화 · 걸음걸이 확인 · 일시정지 · 시작 화면 정리 재확인 — 아직 안 함 (Codex 중단 지점).
+- [ ] 실행 빌드(R9) · 사람 플레이 확인 — 아직 안 함. 마지막 빌드 R8(11-02 17:30)에는 트럭이 없다.
+- 결정 (2026-11-05, 사용자 지시 · 1950년 실제 사진 첨부): 천 덮개 짐칸 → **덮개 없는 나무 난간 짐칸**으로 다시 만듦. 원본 스캔의 운전석 · 차대 · 바퀴는 그대로, 짐칸 바닥(1.40 m) 위만 잘라내고 올리브색 판재 3단 + 기둥 7개 난간, 앞 난간, 양옆 접이식 의자, 뒤는 열림(경사로 그대로). 떠 있던 백미러에 지지대 추가.
+  - 제작: `Docs/Art/DawnTruck_20261105/build_open_cargo_truck.py`(Blender 5.2 배치, 원본 FBX 수정 없음) → 같은 이름 `GMC_Truck_Open.fbx` 덮어씀(.meta · GUID 유지) + `T_DawnTruck_Wood.png`. `SetupDawnTruck.BuildPrefab`이 FBX의 Wood 슬롯에 `M_DawnTruck_Wood.mat`을 넣도록 수정.
+  - [x] Blender 렌더 확인(진단 조명): `Docs/Art/DawnTruck_20261105/blender_*.png`.
+  - [ ] Unity 메뉴 `FiveRivers/Setup/Build Dawn Truck Prefab` 실행 → 새벽 구간에서 하차 확인 — 플레이 확인 대기.
+
+## 전차 · 탄약 상자 VARCO 교체 · 2026-11-05 (Claude, 사용자 지시)
+
+- 결정 (2026-11-05): 게임 전차는 **A안**(첫 VARCO 모델, 사용자 선택). 박물관 사진 기반 B안은 형상이 뭉툭해 쓰지 않고 자료도 삭제(사용자 지시). A안에 사실감 처리(틈새 그늘 · 모서리 마모 · 하부 흙먼지 · 무광) 적용 — 확인 렌더 `Docs/Art/T34_Varco432_20261105/A_weathered/`, 재현 `build_t34_varco432.py -- out source scan weather`.
+- [x] 전차 `SM_VH_T34_85.fbx` 교체: Hull / Turret / Gun(Turret 밑) / TrackL / TrackR로 분리, 26.6° 돌아가 있던 포탑과 11.6° 들린 주포를 정면 · 수평으로, 폭 3.0 m, 포신 0.55 m 연장(포구 +3.8 m), 찌그러짐 펴기, 뭉개진 번호 지우고 **빨간 별 + 흰 432** 선명하게 구움. 재현: `Docs/Art/T34_Varco432_20261105/build_t34_varco432.py`.
+- [x] `TankController`: 주포 고각 조준(-5° ~ +22°, 포탑 회전 속도 재사용), 측면 2발째 정지 순간 `VFX_Tank_DestroyExplosion` 실행(이전엔 미사용) → 0.15초 뒤 파괴 모델로 교체, 파괴 모델 없으면 기존 그을린 재질. 복구 · 새 회차에서 원상 복귀.
+- [x] 파괴 전차 `Art/Models/Vehicles/T34_85_Destroyed/SM_VH_T34_85_Destroyed.fbx`(사용자 첨부 사진 기준: 궤도 없음 · 엔진 덮개 젖혀짐 · 해치 열림 · 녹). 재현: `Docs/Art/T34_Destroyed_20261105/build_destroyed.py`.
+- [x] 탄약 상자 `SM_PR_AmmoCrate.fbx` 교체(밝은 나무 · 흰 띠 · 열린 뚜껑 · 탄띠, 0.70 m, 1,959 삼각형). 재현: `Docs/Art/AmmoCrate_Varco_20261105/build_ammo_crate.py`.
+- [x] Unity 메뉴 `FiveRivers/Setup/T34 Varco432 (Muzzle + Destroyed)` 실행됨(Editor.log "[T34] 포구 소켓 · 파괴 모델 연결 완료", 11-05 16:0x, Codex가 원래 저장소로 옮겨 일부 수정) — 씬 저장 여부는 확인 필요 (포구 소켓 맞춤, 파괴 모델을 전차 프리팹에 꺼진 채로 추가, 맵 배치용 `Prefabs/PF_VH_T34_85_Destroyed.prefab` 생성, TankController 연결).
+- [ ] EditMode 테스트(ArtSpecTests 전차 · 소품) · 플레이 확인: 전차 구간에서 포탑 · 주포가 플레이어를 따라오고, 측면 2발에 폭발 후 파괴 모델로 바뀌면 정상.
+- VARCO 사용: 이미지 50점 × 4, 3D 200점 × 4 = 1,000점.

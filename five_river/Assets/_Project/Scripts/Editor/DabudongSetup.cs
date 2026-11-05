@@ -146,7 +146,7 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(dawn, "points", points);
             SetupUtil.SetRef(dawn, "moon", GameObject.Find("/Moon").GetComponent<Light>());
             SetupUtil.SetRef(dawn, "view", player.GetComponentInChildren<Camera>());
-            SetupUtil.SetRef(dawn, "reinforcementPrefab", MapBuilder.RokPrefab());
+            SetupUtil.SetRef(dawn, "reinforcementPrefab", SetupUtil.LoadAsset<GameObject>("Assets/_Project/Prefabs/PF_CH_ROK_StudentReinforcement.prefab"));
 
             var recorder = SetupUtil.Ensure<FiveRivers.Recording.RunRecorder>(systems.director.gameObject);
             SetupUtil.SetRef(recorder, "director", systems.director);

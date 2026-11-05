@@ -70,6 +70,7 @@ namespace FiveRivers.Combat
 
         public void ClearAll()
         {
+            M1SurfaceImpact.Clear();
             if (container == null) return;
             for (int i = container.childCount - 1; i >= 0; i--)
                 Destroy(container.GetChild(i).gameObject);
