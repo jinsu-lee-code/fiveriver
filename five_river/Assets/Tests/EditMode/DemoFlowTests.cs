@@ -30,7 +30,8 @@ namespace FiveRivers.Tests
         [SetUp]
         public void SetUp()
         {
-            config = AssetDatabase.LoadAssetAtPath<FlowConfig>(FlowConfigPath);
+            config = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<FlowConfig>(FlowConfigPath));
+            config.legacyExhibitMode = true;
             tank = AssetDatabase.LoadAssetAtPath<TankConfig>(TankConfigPath);
             var assist = AssetDatabase.LoadAssetAtPath<AssistConfig>(AssistConfigPath);
             Assert.IsNotNull(config, FlowConfigPath);
@@ -47,6 +48,60 @@ namespace FiveRivers.Tests
             flow.PauseReleased += () => pauseReleases++;
             flow.RetryRequested += cp => retries.Add(cp);
             flow.Checkpoints.AssistActivated += () => assistActivations++;
+        }
+
+        [TearDown]
+        public void TearDown() => UnityEngine.Object.DestroyImmediate(config);
+
+        [Test]
+        public void ExpandedMission_WaitsForObjectivesAndMaintainsIndependentCheckpoints()
+        {
+            config.legacyExhibitMode = false;
+            flow.StartRun();
+            flow.ReportGoalMet(FlowSection.Tutorial);
+            flow.ReportGoalMet(FlowSection.Scout);
+            flow.ReportGoalMet(FlowSection.Assault);
+            Assert.AreEqual(FlowSection.Regroup, flow.Section);
+
+            flow.SetPaused(true);
+            flow.Tick(600);
+            Assert.AreEqual(0d, flow.RunTime);
+            flow.SetPaused(false);
+            flow.Tick(600);
+            Assert.AreEqual(FlowSection.Regroup, flow.Section);
+            flow.SetPaused(true);
+            flow.ReportGoalMet(FlowSection.Regroup);
+            Assert.AreEqual(FlowSection.Regroup, flow.Section);
+            flow.SetPaused(false);
+            Assert.AreEqual(FlowSection.WestAssault, flow.Section);
+            flow.Tick(700);
+            flow.ReportPlayerDied();
+            Assert.AreEqual(FlowCheckpoint.WestAssault, retries.Last());
+            Assert.AreEqual(0d, flow.SectionTime);
+
+            flow.ReportGoalMet(FlowSection.WestAssault);
+            Assert.AreEqual(FlowSection.Silence, flow.Section);
+            flow.ReportGoalMet(FlowSection.Silence);
+            flow.Tick(config.s4Min);
+            Assert.AreEqual(FlowSection.Tank, flow.Section);
+            flow.ReportGoalMet(FlowSection.Tank);
+            flow.Tick(700);
+            Assert.AreEqual(FlowSection.Dawn, flow.Section);
+            Assert.IsTrue(flow.CombatLocked);
+            flow.ReportGoalMet(FlowSection.Dawn);
+            Assert.AreEqual(FlowSection.HillAssault, flow.Section);
+            Assert.IsFalse(flow.CombatLocked);
+            flow.ReportPlayerDied();
+            Assert.AreEqual(FlowCheckpoint.HillAssault, retries.Last());
+            flow.ReportGoalMet(FlowSection.HillAssault);
+            flow.Tick(700);
+            Assert.AreEqual(FlowSection.Result, flow.Section);
+            Assert.IsFalse(flow.ForcedTankTriggered || flow.ForcedEndingTriggered);
+            flow.ReportGoalMet(FlowSection.Result);
+            Assert.AreEqual(FlowSection.Title, flow.Section);
+            Assert.IsTrue(flow.StartRun());
+            Assert.AreEqual(0, flow.Checkpoints.Failures(FlowCheckpoint.WestAssault));
+            Assert.AreEqual(0, flow.Checkpoints.Failures(FlowCheckpoint.HillAssault));
         }
 
         void AdvanceTo(double time)

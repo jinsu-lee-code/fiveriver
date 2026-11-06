@@ -23,6 +23,27 @@ namespace FiveRivers.EditorTools
             EditorSceneManager.SaveScene(rig.gameObject.scene);
         }
 
+        // Support-hand-only mesh updates must not recut or rebind the normal right hand.
+        public static void ConfigureSupport(M1ArmRig rig)
+        {
+            var data = new SerializedObject(rig);
+            var support = rig.transform.parent.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "SupportHand_M1");
+            if (support == null) throw new InvalidOperationException("Support hand is missing.");
+            var vertices = support.GetComponentsInChildren<MeshFilter>(true)
+                .Where(f => f.sharedMesh != null)
+                .SelectMany(f => f.sharedMesh.vertices.Select(v => support.InverseTransformPoint(f.transform.TransformPoint(v)))).ToArray();
+            Fit(data, "left", support, vertices, SupportGripSetup.CuffAxis);
+            var target = data.FindProperty("leftTarget").objectReferenceValue as Transform;
+            if (target != null)
+            {
+                target.position = support.TransformPoint(data.FindProperty("leftSkinCap").vector3Value);
+                EditorUtility.SetDirty(target);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+            }
+            data.ApplyModifiedProperties();
+            EditorUtility.SetDirty(rig);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(rig);
+        }
         public static void Configure(M1ArmRig rig)
         {
             var data = new SerializedObject(rig);
@@ -33,7 +54,7 @@ namespace FiveRivers.EditorTools
                     .Where(f => f.sharedMesh != null)
                     .SelectMany(f => f.sharedMesh.vertices.Select(v => support.InverseTransformPoint(f.transform.TransformPoint(v)))).ToArray();
                 // Blender's wrist cut imports on local -Z, unlike the skeletal hand's -Y.
-                Fit(data, "left", support, vertices, Vector3.forward);
+                Fit(data, "left", support, vertices, SupportGripSetup.CuffAxis);
                 var target = data.FindProperty("leftTarget").objectReferenceValue as Transform;
                 if(target != null)
                     target.position = support.TransformPoint(data.FindProperty("leftSkinCap").vector3Value);
@@ -77,7 +98,10 @@ namespace FiveRivers.EditorTools
             var band = vertices.Where(v => Vector3.Dot(v,axis) <= low + .0035f).ToArray();
             var centre = band.Aggregate(Vector3.zero, (sum, v) => sum + v) / band.Length;
             centre += axis*(low-Vector3.Dot(centre,axis));
-            var uAxis=Vector3.right;var vAxis=Vector3.Cross(axis,uAxis);
+            // The neutral support wrist is oblique to the rifle; measure in its own plane.
+            var uAxis=Vector3.ProjectOnPlane(Vector3.right,axis).normalized;
+            if(uAxis.sqrMagnitude<.0001f)uAxis=Vector3.ProjectOnPlane(Vector3.up,axis).normalized;
+            var vAxis=Vector3.Cross(axis,uAxis).normalized;
             var outline = Hull(band.Select(v => new Vector2(Vector3.Dot(v-centre,uAxis),Vector3.Dot(v-centre,vAxis))).ToArray());
             if (outline.Count < 3) throw new InvalidOperationException("Invalid wrist boundary: " + side);
             var rim = data.FindProperty(side + "CuffRim");

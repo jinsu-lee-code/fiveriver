@@ -30,18 +30,22 @@ namespace FiveRivers.Core
             }
         }
 
-        public static ControlMode ModeFor(FlowSection section)
+        public static ControlMode ModeFor(FlowSection section, bool expanded = false)
         {
             switch (section)
             {
                 case FlowSection.Tutorial:
                 case FlowSection.Scout:
                 case FlowSection.Assault:
+                case FlowSection.Regroup:
+                case FlowSection.WestAssault:
+                case FlowSection.HillAssault:
                 case FlowSection.Silence:
                 case FlowSection.Tank:
                     return ControlMode.Full;
-                case FlowSection.AllySupport:
                 case FlowSection.Dawn:
+                    return expanded ? ControlMode.Full : ControlMode.LookOnly;
+                case FlowSection.AllySupport:
                     return ControlMode.LookOnly;
                 default:
                     return ControlMode.None;

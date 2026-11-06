@@ -47,11 +47,17 @@ namespace FiveRivers.Combat
             else if (t.Reason == TransitionReason.DebugJump)
             {
                 StopDeath();
-                Restore(t.To >= FlowSection.Tank ? points.tankCheckpoint : points.playerSpawn, bazooka: t.To >= FlowSection.Tank);
+                bool late = t.To == FlowSection.Tank || t.To == FlowSection.AllySupport ||
+                    t.To == FlowSection.Dawn || t.To == FlowSection.HillAssault || t.To == FlowSection.Result;
+                Restore(late ? points.tankCheckpoint : points.playerSpawn, bazooka: late);
             }
             else if (t.To == FlowSection.Tank && t.From != FlowSection.Tank)
             {
                 weapons.GiveBazooka();
+            }
+            else if (t.To == FlowSection.HillAssault)
+            {
+                weapons.ResetLoadout(true, WeaponSlot.M1);
             }
             else if (t.To == FlowSection.Title)
             {
@@ -64,7 +70,7 @@ namespace FiveRivers.Combat
         {
             retried = true;
             effects.ClearAll();
-            bool tank = checkpoint == FlowCheckpoint.Tank;
+            bool tank = checkpoint == FlowCheckpoint.Tank || checkpoint == FlowCheckpoint.HillAssault;
             Restore(tank ? points.tankCheckpoint : points.playerSpawn, bazooka: tank);
         }
 

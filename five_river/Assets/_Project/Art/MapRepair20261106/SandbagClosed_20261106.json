@@ -1,0 +1,38 @@
+{
+  "source": "Assets/_Project/Art/Models/Props/Sandbag/SM_PR_SandbagWall.fbx",
+  "preserved": "Source shape, UVs and original material slot; only microscopic source boundary loops closed. Existing cover fitting is done separately without collider edits.",
+  "boundaryEdgesBefore": 591,
+  "boundaryEdgesAfter": 0,
+  "lods": [
+    {
+      "level": 0,
+      "vertices": 2141,
+      "triangles": 4322,
+      "dimensions": [
+        2.0,
+        1.0050548315048218,
+        0.6000000238418579
+      ]
+    },
+    {
+      "level": 1,
+      "vertices": 1060,
+      "triangles": 2160,
+      "dimensions": [
+        1.9980545043945312,
+        0.6000495553016663,
+        1.0052542686462402
+      ]
+    },
+    {
+      "level": 2,
+      "vertices": 455,
+      "triangles": 950,
+      "dimensions": [
+        1.9872394800186157,
+        0.6008120775222778,
+        1.002257227897644
+      ]
+    }
+  ]
+}

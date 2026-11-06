@@ -20,11 +20,13 @@ namespace FiveRivers.UI
         [SerializeField] TMP_Text resume;
         [SerializeField] TMP_Text restart;
 
+        TMP_Text soundSetting;
         bool open;
 
         void Start()
         {
             title.text = text.pauseTitle;
+            soundSetting = GameSoundSetting.AddRowBelow(restart);
             group.alpha = 0f;
             group.blocksRaycasts = false;
         }
@@ -41,7 +43,7 @@ namespace FiveRivers.UI
                 return;
             }
 
-            bool canPause = flow.IsRunning && flow.Section <= FlowSection.Tank;
+            bool canPause = flow.IsRunning && (flow.IsExpanded || flow.Section <= FlowSection.Tank) && flow.Section != FlowSection.Result;
             if (open && (!flow.Paused || !canPause)) Close();
 
             if (player.Controls.Pause.WasPressedThisFrame())
@@ -49,6 +51,7 @@ namespace FiveRivers.UI
                 if (open) Close();
                 else if (canPause) Open();
             }
+            if (open) GameSoundSetting.HandleInput(soundSetting);
             if (open && kb != null)
             {
                 if (kb.enterKey.wasPressedThisFrame) Close();

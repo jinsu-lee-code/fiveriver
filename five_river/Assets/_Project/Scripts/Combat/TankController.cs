@@ -55,6 +55,7 @@ namespace FiveRivers.Combat
         float destroyedSwapAt = -1f;
         State state = State.Hidden;
         float nextFire;
+        bool openedFire;
         float nextAllyBlast;
         int allyBlastsLeft;
         float approachElapsed;
@@ -137,6 +138,7 @@ namespace FiveRivers.Combat
             smoke.SetActive(false);
             fire.SetActive(false);
             for (int i = 0; i < bodyRenderers.Length; i++) bodyRenderers[i].sharedMaterial = normalMaterials[i];
+            openedFire = false;
             nextFire = Time.time + config.fireInterval * 0.6f;
             allyBlastsLeft = 0;
         }
@@ -195,6 +197,15 @@ namespace FiveRivers.Combat
 
             if (!director.Flow.CombatLocked && director.Flow.Section == FlowSection.Tank && Time.time >= nextFire)
             {
+                // Establish sight of the gun once on each appearance. Later shots still threaten cover.
+                if (!openedFire && Physics.Linecast(player.CameraPivot.position, gunMuzzle.position,
+                        out var obstruction, ~0, QueryTriggerInteraction.Ignore)
+                    && !obstruction.transform.IsChildOf(body))
+                {
+                    nextFire = Time.time + 0.25f;
+                    return;
+                }
+                openedFire = true;
                 nextFire = Time.time + config.fireInterval;
                 FireCannon();
             }
@@ -251,7 +262,7 @@ namespace FiveRivers.Combat
             var impact = target + new Vector3(offset.x, 0f, offset.y);
             if (Physics.Raycast(impact + Vector3.up * 20f, Vector3.down, out var hit, 40f, ~0, QueryTriggerInteraction.Ignore))
                 impact = hit.point;
-            effects.Spawn(EffectKind.EnemyMuzzle, gunMuzzle.position, gunMuzzle.rotation);
+            effects.Spawn(EffectKind.TankMuzzle, gunMuzzle.position, gunMuzzle.rotation);
             effects.Spawn(EffectKind.CannonBlast, impact, Quaternion.identity);
             if (Vector3.Distance(impact, target) <= config.cannonRadius)
                 playerHealth.TakeDamage(config.cannonDamage * director.EnemyDamageScale, impact);

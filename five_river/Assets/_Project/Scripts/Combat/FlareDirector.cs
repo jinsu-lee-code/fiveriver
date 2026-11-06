@@ -44,6 +44,9 @@ namespace FiveRivers.Combat
                 case FlowSection.Assault:
                     Schedule(config.assaultFirstDelay, true);
                     break;
+                case FlowSection.WestAssault:
+                    LaunchWest();
+                    break;
                 case FlowSection.Title:
                 case FlowSection.Tutorial:
                     ClearAll();
@@ -60,6 +63,7 @@ namespace FiveRivers.Combat
             ClearAll();
             if (checkpoint == FlowCheckpoint.FirstContact) Schedule(config.scoutFlareDelay, false);
             else if (checkpoint == FlowCheckpoint.MainAssault) Schedule(config.assaultFirstDelay, true);
+            else if (checkpoint == FlowCheckpoint.WestAssault) LaunchWest();
         }
 
         void Schedule(float delay, bool repeating)
@@ -98,6 +102,17 @@ namespace FiveRivers.Combat
         {
             float x = Mathf.Lerp(areaX.x, areaX.y, (float)rng.NextDouble());
             float z = Mathf.Lerp(areaZ.x, areaZ.y, (float)rng.NextDouble());
+            LaunchAt(x, z);
+        }
+
+        void LaunchWest()
+        {
+            nextLaunch = float.PositiveInfinity;
+            LaunchAt(-20f, 38f);
+        }
+
+        void LaunchAt(float x, float z)
+        {
             var pos = new Vector3(x, config.launchHeight, z);
             var flare = effects.SpawnTracked(flarePrefab, pos, Quaternion.identity);
             flare.Ignite(config);

@@ -355,9 +355,11 @@ namespace FiveRivers.EditorTools
             col.size = new Vector3(0.7f, 0.3f, 0.4f);
             col.center = new Vector3(0, 0.15f, 0);
             GrayboxModels.Model(root, "Props/AmmoCrate/SM_PR_AmmoCrate.fbx", model =>
-                GrayboxAssets.Part(model, PrimitiveType.Cube, "Box", new Vector3(0, 0.15f, 0), new Vector3(0.7f, 0.3f, 0.4f), GrayboxAssets.CratePale));
-            // 어두운 구간에서 찾기 쉽게 하는 흰 띠 (ART_SPEC 3-4 "밝은 나무색 또는 흰 띠") — 최종 모델이 띠를 갖추면 지운다
-            GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Band", new Vector3(0, 0.305f, 0), new Vector3(0.72f, 0.02f, 0.12f), GrayboxAssets.Marker);
+            {
+                GrayboxAssets.Part(model, PrimitiveType.Cube, "Box", new Vector3(0, 0.15f, 0), new Vector3(0.7f, 0.3f, 0.4f), GrayboxAssets.CratePale);
+                // FBX의 흰 표식을 보존하고, 임시 상자에만 식별용 띠를 붙인다.
+                GrayboxAssets.Part(root.transform, PrimitiveType.Cube, "Band", new Vector3(0, 0.305f, 0), new Vector3(0.72f, 0.02f, 0.12f), GrayboxAssets.Marker);
+            });
             return root;
         });
 

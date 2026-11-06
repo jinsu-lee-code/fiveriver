@@ -6,6 +6,9 @@ namespace FiveRivers.Data
     [CreateAssetMenu(fileName = "FlowConfig", menuName = "FiveRivers/Flow Config")]
     public sealed class FlowConfig : ScriptableObject
     {
+        [Tooltip("기존 9분 시연 전용 진행 규칙을 사용합니다.")]
+        public bool legacyExhibitMode;
+
         [Header("구간 상한 (초) : BALANCE 1-1")]
         public float s1Cap;
         public float s2Cap;

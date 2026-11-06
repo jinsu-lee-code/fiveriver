@@ -46,7 +46,7 @@ namespace FiveRivers.EditorTools
                 w.scouts = 2; w.mainAssault = 7; w.maxActive = 5; w.spawnInterval = 3f;
                 w.health = 100f; w.moveSpeed = 3.4f; w.retreatSpeed = 4.8f; w.coverHoldMin = 5f; w.coverHoldMax = 9f;
                 w.fireIntervalMin = 2.6f; w.fireIntervalMax = 4.2f;
-                w.accuracyDark = 0.1f; w.accuracyLit = 0.35f; w.crouchedFactor = 0.25f; w.damage = 18f; w.sightRange = 140f;
+                w.accuracyDark = 0.1f; w.accuracyLit = 0.35f; w.crouchedFactor = 0.25f; w.damage = 18f; w.expandedDamage = 35f; w.sightRange = 140f;
             });
             Ensure<FlareConfig>("FlareConfig", f =>
             {

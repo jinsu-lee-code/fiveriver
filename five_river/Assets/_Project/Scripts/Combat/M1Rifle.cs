@@ -83,7 +83,7 @@ namespace FiveRivers.Combat
             float spread = aimed ? config.m1AimSpread : config.m1HipSpread;
             var dir = Quaternion.Euler(UnityEngine.Random.Range(-spread, spread) * 0.5f, UnityEngine.Random.Range(-spread, spread) * 0.5f, 0f) * Vector3.forward;
             var ray = new Ray(view.transform.position, view.transform.rotation * dir);
-            if (Physics.Raycast(ray, out var hit, config.m1Range, hitMask, QueryTriggerInteraction.Ignore))
+            if (TryGetShotHit(ray, config.m1Range, hitMask, player.transform, out var hit))
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(config.m1Damage, view.transform.position);
@@ -113,6 +113,23 @@ namespace FiveRivers.Combat
                 ClipEjected?.Invoke();
                 TryReload();
             }
+        }
+
+        static bool TryGetShotHit(Ray ray, float range, int mask, Transform shooter, out RaycastHit hit)
+        {
+            if (!Physics.Raycast(ray, out hit, range, mask, QueryTriggerInteraction.Ignore)) return false;
+            if (!hit.collider.transform.IsChildOf(shooter)) return true;
+
+            // Only a self-hit needs another query. RaycastAll does not guarantee distance order.
+            float nearest = float.PositiveInfinity;
+            hit = default;
+            foreach (var candidate in Physics.RaycastAll(ray, range, mask, QueryTriggerInteraction.Ignore))
+            {
+                if (candidate.distance >= nearest || candidate.collider.transform.IsChildOf(shooter)) continue;
+                nearest = candidate.distance;
+                hit = candidate;
+            }
+            return hit.collider != null;
         }
 
         public bool TryReload()

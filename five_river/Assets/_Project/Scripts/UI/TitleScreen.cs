@@ -18,6 +18,7 @@ namespace FiveRivers.UI
         [SerializeField] TMP_Text operatorHint;
         [SerializeField] float inputDelay = 1.5f; // 결과 화면에서 막 돌아왔을 때 실수로 시작하지 않게
 
+        TMP_Text soundSetting;
         float shownAt;
         bool wasTitle;
 
@@ -27,6 +28,7 @@ namespace FiveRivers.UI
             subtitle.text = text.gameSubtitle;
             startPrompt.text = text.startPrompt;
             operatorHint.text = text.operatorHint;
+            soundSetting = GameSoundSetting.AddRowBelow(startPrompt);
         }
 
         void Update()
@@ -38,6 +40,7 @@ namespace FiveRivers.UI
             group.alpha = Mathf.MoveTowards(group.alpha, isTitle ? 1f : 0f, Time.unscaledDeltaTime * 2f);
             group.blocksRaycasts = isTitle;
             if (!isTitle) return;
+            if (GameSoundSetting.HandleInput(soundSetting)) return;
 
             float pulse = 0.55f + 0.45f * Mathf.Sin(Time.unscaledTime * 2.4f);
             startPrompt.alpha = pulse;

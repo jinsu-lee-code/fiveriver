@@ -86,7 +86,7 @@ namespace FiveRivers.EditorTools
             lines[1] = Img(cross, "Down", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(2, 10), UiStyle.Text, null).rectTransform;
             lines[2] = Img(cross, "Left", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10, 2), UiStyle.Text, null).rectTransform;
             lines[3] = Img(cross, "Right", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10, 2), UiStyle.Text, null).rectTransform;
-            var interact = Txt(combat, "Interact", new Vector2(0.5f, 0.5f), new Vector2(0, -130), new Vector2(900, 40), 26, UiStyle.Text, TextAlignmentOptions.Center);
+            var interact = Txt(combat, "Interact", new Vector2(1, 0), new Vector2(-64, 18), new Vector2(360, 36), 26, UiStyle.Text, TextAlignmentOptions.BottomRight, new Vector2(1, 0));
 
             // 튜토리얼 안내 (가운데 아래) · 남은 행동 (오른쪽 위)
             var tutorial = Rect(combat, "Tutorial", new Vector2(0.5f, 0f), new Vector2(0, 250), new Vector2(900, 140), new Vector2(0.5f, 0f));

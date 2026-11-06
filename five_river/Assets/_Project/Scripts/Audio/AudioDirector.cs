@@ -119,9 +119,11 @@ namespace FiveRivers.Audio
                     SetLoop(ambience, "AMB_Night_Hills_Loop");
                     break;
                 case FlowSection.Assault:
+                case FlowSection.WestAssault:
                     SetLoop(ambience, "AMB_Battle_Distant_Loop");
                     SetLoop(music, "BGM_Combat_Bed_Loop");
                     break;
+                case FlowSection.Regroup:
                 case FlowSection.Silence:
                     SetLoop(music, null); // 정적 구간에는 음악 없음 (SOUND_LIST 1-6)
                     SetLoop(ambience, "AMB_Silence_Loop");
@@ -131,7 +133,19 @@ namespace FiveRivers.Audio
                     break;
                 case FlowSection.Dawn:
                     SetLoop(ambience, "AMB_Dawn_Loop");
-                    SetLoop(music, "BGM_Ending", loop: false); // 새벽 20 + 결과 20 = 40초
+                    if (director.Flow.IsExpanded) SetLoop(music, null);
+                    else SetLoop(music, "BGM_Ending", loop: false);
+                    break;
+                case FlowSection.HillAssault:
+                    SetLoop(ambience, "AMB_Battle_Distant_Loop");
+                    SetLoop(music, "BGM_Combat_Bed_Loop");
+                    break;
+                case FlowSection.Result:
+                    if (director.Flow.IsExpanded)
+                    {
+                        SetLoop(ambience, "AMB_Dawn_Loop");
+                        SetLoop(music, "BGM_Ending", loop: false);
+                    }
                     break;
             }
             if (ArtilleryAllowed(t.To)) ScheduleArtillery();
@@ -161,10 +175,11 @@ namespace FiveRivers.Audio
             switch (kind)
             {
                 case EffectKind.ImpactDirt: PlayAt("SFX_Impact_Dirt", position); break;
+                case EffectKind.CannonBlast:
                 case EffectKind.RocketExplosion:
                 case EffectKind.TankHitExplosion: PlayAt("SFX_Rocket_HitSide", position); break;
                 case EffectKind.TankRicochet: PlayAt("SFX_Tank_Ricochet", position); break;
-                case EffectKind.CannonBlast: PlayAt("SFX_Tank_Cannon", position); break;
+                case EffectKind.TankMuzzle: PlayAt("SFX_Tank_Cannon", position); break;
                 case EffectKind.EnemyMuzzle: PlayAt("SFX_Enemy_RifleFire", position); break;
             }
         }
@@ -224,7 +239,8 @@ namespace FiveRivers.Audio
         }
 
         // Preserve the existing tutorial/silence ambience and include the tank battle.
-        static bool ArtilleryAllowed(FlowSection section) => section >= FlowSection.Tutorial && section <= FlowSection.Tank;
+        static bool ArtilleryAllowed(FlowSection section) => (section >= FlowSection.Tutorial && section <= FlowSection.Tank)
+            || section == FlowSection.WestAssault || section == FlowSection.HillAssault;
 
         void ScheduleArtillery() => nextArtillery = Time.time + Random.Range(config.artilleryMin, config.artilleryMax);
 

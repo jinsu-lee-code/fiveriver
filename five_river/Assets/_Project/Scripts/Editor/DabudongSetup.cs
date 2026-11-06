@@ -138,6 +138,8 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(narrative, "flares", Object.FindFirstObjectByType<FlareDirector>());
             SetupUtil.SetRef(narrative, "tank", Object.FindFirstObjectByType<TankController>());
             SetupUtil.SetRef(narrative, "blanketBody", GameObject.Find("/[Map]/Generated/People/BlanketBody"));
+            SetupUtil.SetRef(narrative, "mansuFall", SetupUtil.LoadAsset<AnimationClip>(
+                "Assets/_Project/Art/Animations/KPA/A_KPA_Death_01.fbx"));
             var park = GameObject.Find("/[Map]/Generated/People/ParkYongpal");
             SetupUtil.SetRef(narrative, "parkAnimator", park != null ? park.GetComponentInChildren<Animator>() : null);
 

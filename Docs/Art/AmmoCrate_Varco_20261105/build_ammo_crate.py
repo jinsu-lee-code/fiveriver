@@ -73,7 +73,8 @@ msi.filepath_raw = os.path.join(OUT, 'T_PR_AmmoCrate_MetallicSmoothness.png'); m
 
 bpy.ops.object.select_all(action='DESELECT'); o.select_set(True)
 bpy.ops.export_scene.fbx(filepath=os.path.join(OUT, 'SM_PR_AmmoCrate.fbx'), use_selection=True, object_types={'MESH'},
-                         apply_unit_scale=True, axis_forward='-Z', axis_up='Y', add_leaf_bones=False, bake_anim=False,
+                         global_scale=1.0, apply_unit_scale=True, apply_scale_options='FBX_SCALE_ALL',
+                         bake_space_transform=True, axis_forward='-Z', axis_up='Y', add_leaf_bones=False, bake_anim=False,
                          path_mode='STRIP')
 co = np.array([v.co[:] for v in o.data.vertices])
 info = dict(scale=S, size=(co.max(0) - co.min(0)).tolist(), tris_before=tris_before, tris=tris, textures=sorted(found))

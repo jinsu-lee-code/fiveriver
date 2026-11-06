@@ -9,6 +9,8 @@ namespace FiveRivers.Core
         FirstContact = 1, // CP1 첫 교전 (S2)
         MainAssault = 2,  // CP2 주 공세 (S3)
         Tank = 3,         // CP3 전차 직전 (S5)
+        WestAssault = 4,
+        HillAssault = 5,
     }
 
     // 체크포인트별 실패 횟수와 실패 보조 (FLOW.md 4번, GDD 5-4).
@@ -52,6 +54,8 @@ namespace FiveRivers.Core
             {
                 case FlowSection.Scout: return FlowCheckpoint.FirstContact;
                 case FlowSection.Assault: return FlowCheckpoint.MainAssault;
+                case FlowSection.WestAssault: return FlowCheckpoint.WestAssault;
+                case FlowSection.HillAssault: return FlowCheckpoint.HillAssault;
                 case FlowSection.Tank: return FlowCheckpoint.Tank;
                 default: return FlowCheckpoint.None;
             }

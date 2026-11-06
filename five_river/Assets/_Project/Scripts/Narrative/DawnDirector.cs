@@ -21,6 +21,7 @@ namespace FiveRivers.Narrative
         [SerializeField] Transform truckArrivalStart;
         [SerializeField] Transform truckArrivalStop;
         DawnTruckSequence truckSequence;
+        public Transform TaeSeok => truckSequence != null ? truckSequence.JoinedLead : walkers.Count > 0 ? walkers[0] : null;
         [SerializeField] FiveRivers.Data.GameText.Line arrivalNarration = new FiveRivers.Data.GameText.Line
         {
             text = "동이 틀 무렵, 학도병들이 보충 인원으로 참호에 합류했다.",
@@ -49,7 +50,9 @@ namespace FiveRivers.Narrative
 
         void Awake()
         {
-            ground = Terrain.activeTerrain;
+            ground = Terrain.activeTerrain;
+            if (director.Flow.IsExpanded)
+                gameObject.AddComponent<HillAssaultDirector>().Configure(director, this, points, view);
             nightLight = moon.color;
             nightIntensity = moon.intensity;
             nightRotation = moon.transform.rotation;
@@ -85,7 +88,7 @@ namespace FiveRivers.Narrative
         void OnSectionChanged(FlowTransition t)
         {
             if (t.To == FlowSection.Dawn) SpawnWalkers();
-            if (t.To == FlowSection.Result && truckSequence != null) truckSequence.StopEngine();
+            if ((t.To == FlowSection.HillAssault || t.To == FlowSection.Result) && truckSequence != null) truckSequence.StopEngine();
             // 새 회차 · 시작 화면 · (디버그) 새벽 이전 구간으로 돌아가면 밤으로
             if (t.To < FlowSection.Dawn && (blend > 0f || walkers.Count > 0 || truckSequence != null))
             {
@@ -98,10 +101,12 @@ namespace FiveRivers.Narrative
         void Update()
         {
             var flow = director.Flow;
-            if (flow.Section == FlowSection.Dawn || flow.Section == FlowSection.Result)
+            if (flow.Section == FlowSection.Dawn || flow.Section == FlowSection.HillAssault || flow.Section == FlowSection.Result)
             {
                 float duration = Mathf.Max(1f, director.Config.dawnDuration);
-                blend = flow.Section == FlowSection.Result ? 1f : Mathf.Clamp01((float)flow.SectionTime / duration);
+                if (flow.Section == FlowSection.Result) blend = 1f;
+                else if (flow.Section == FlowSection.HillAssault) blend = Mathf.MoveTowards(blend, 1f, Time.deltaTime / duration);
+                else blend = Mathf.Clamp01((float)flow.SectionTime / duration);
                 Apply();
             }
             if (truckSequence != null)
@@ -186,7 +191,13 @@ namespace FiveRivers.Narrative
         void OnReinforcementsArrived()
         {
             var subtitles = FindFirstObjectByType<FiveRivers.UI.SubtitleDisplay>();
-            if (subtitles != null) subtitles.Say(arrivalNarration);
+            if (subtitles == null) return;
+            subtitles.Say(arrivalNarration);
+            if (director.Flow.IsExpanded && TaeSeok != null)
+            {
+                TaeSeok.name = "학도병 윤태석";
+
+            }
         }
 
         void Ground(ref Vector3 position)

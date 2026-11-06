@@ -60,7 +60,7 @@
 | 정찰병 (S2) | 2명 | `WaveConfig.scouts` |
 | 주 공세 신규 적 (S3) | 7명 + 생존 정찰병 | `WaveConfig.mainAssault` |
 | 동시 활동 적 상한 | 5명 | `WaveConfig.maxActive` |
-| 적 명중률 · 피해 기본값 | → 2026-10-27 1차 값: 어둠 0.10 / 조명탄 아래 0.35, Z 자세 ×0.25, 시야가 막히면(모래주머니 뒤) 무조건 빗나감, 피해 18 | `WaveConfig.accuracyDark` · `accuracyLit` · `crouchedFactor` · `damage` |
+| 적 명중률 · 피해 기본값 | → 2026-10-27 1차 값: 어둠 0.10 / 조명탄 아래 0.35, Z 자세 ×0.25, 시야가 막히면(모래주머니 뒤) 무조건 빗나감. 일반 모드 보병탄 피해 35(체력 100에서 연속 3발), 전시 모드 18. 실패 보조 배율은 별도로 적용 | `WaveConfig.accuracyDark` · `accuracyLit` · `crouchedFactor` · `expandedDamage` · `damage` |
 | 출현 간격 · 체력 · 이동 · 철수 속도 | 3초 · 100(M1 한 발) · 3.4 · 4.8 m/s | `WaveConfig.spawnInterval` · `health` · `moveSpeed` · `retreatSpeed` |
 | 엄폐 유지 · 사격 간격 · 시야 거리 | 5~9초 뒤 더 가까운 엄폐물로(60%) · 2.6~4.2초 · 140 m | `WaveConfig.coverHoldMin/Max` · `fireIntervalMin/Max` · `sightRange` |
 
