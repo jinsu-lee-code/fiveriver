@@ -17,7 +17,35 @@ namespace FiveRivers.Combat
         [SerializeField] Transform loadedClip;
         [SerializeField] Transform chamberRounds;
         [SerializeField] MeshFilter sleeves;
-        Vector3 boltRest, handRest;
+        // Blender-authored right-hand reload; falls back to the procedural gesture below when missing.
+        [SerializeField] M1ReloadMotion reloadMotion;
+        Transform[] motionBones;
+        Quaternion[] motionRest;
+        // corrective shape that fills the cupped (grip-modelled) right palm while the reload opens the hand
+        SkinnedMeshRenderer palmSkin;
+        int palmShape=-1;
+        Vector3 boltRest, handRest, clipRestPos;
+        Quaternion clipRestRot=Quaternion.identity;
+        Quaternion handFrameRest=Quaternion.identity;
+        // Reload hand pose in the rifle frame (x right, y up, z toward the muzzle).
+        public static Vector3 ReloadFingerDirection=new Vector3(-.15f,-.35f,1f);
+        public static Vector3 ReloadPalmNormal=new Vector3(-1f,-.45f,0f);
+        public static Vector3 ReloadWristFromClipTop=new Vector3(.04f,.015f,-.045f);
+        // How far the rifle is presented during reload (position in metres, rotation in degrees).
+        public static Vector3 ReloadPresentOffset=new Vector3(0f,0f,.05f);
+        public static Vector3 ReloadPresentEuler=new Vector3(-18f,-4f,-32f);
+        // Where the clip comes from and where the hand leaves to, relative to the seated clip (out of view, right of the stock).
+        public static Vector3 ReloadFetchOffset=new Vector3(.2f,-.16f,-.1f);
+        // Beside the receiver on the right: the clip and hand pass here on the way in and out, never through the rifle.
+        public static Vector3 ReloadSideOffset=new Vector3(.08f,.06f,-.02f);
+        // Thumb contact point on top of the clip, in the clip's local space, and the same point relative to the
+        // clip pivot in the grip's parent space. Recomputed from the seated clip in Awake.
+        Vector3 clipTop=new Vector3(.003f,.0475f,.0334f);
+        Vector3 clipTopFromPivot=new Vector3(.003f,.0475f,.0334f);
+        // Depth of the thumb contact below the top of the rounds' bounding box centre (metres).
+        const float ClipContactAboveCentre=.0235f;
+        // 0..1 while the right hand is away from the grip for the reload; M1ArmRig uses it to bring the arm up from below.
+        public float ReloadArmWeight { get; private set; }
         Quaternion handRotation;
         float shotTime = -10f;
         Mesh sleeveMesh;
@@ -47,6 +75,8 @@ namespace FiveRivers.Combat
             player=rifle.GetComponent<PlayerController>();
             if(player!=null)previousView=player.CameraPivot.rotation;
             if (rightHand != null) { handRest = rightHand.localPosition; handRotation = rightHand.localRotation; }
+            if (loadedClip != null) { clipRestPos = loadedClip.localPosition; clipRestRot = loadedClip.localRotation; }
+            UseSeatedClipForReload();
             var fingerBones = (rightHandVisual != null ? rightHandVisual : rightHand).GetComponentsInChildren<Transform>();
             for(int f=0;f<5;f++)for(int joint=0;joint<3;joint++)foreach(var bone in fingerBones)
                 if(bone.name=="finger"+(f+1)+"-"+(joint+1)+".R"){reloadFingers[f,joint]=bone;fingerRest[f,joint]=bone.localRotation;}
@@ -79,6 +109,14 @@ namespace FiveRivers.Combat
                 bone.localRotation*=Quaternion.AngleAxis(extension,fingerHingeAxes[f,j]);
                 fingerOpen[f,j]=bone.localRotation;
             }
+            // Rest hand frame (finger direction + palm normal) in the grip's parent space, for the reload pose.
+            if(rightHand.parent!=null)
+            {
+                var restForward=rightHand.parent.InverseTransformDirection(forward);
+                var restNormal=rightHand.parent.InverseTransformDirection(palmNormal);
+                if(restForward.sqrMagnitude>1e-6f&&restNormal.sqrMagnitude>1e-6f)handFrameRest=Quaternion.LookRotation(restForward,restNormal);
+            }
+            BindReloadMotion(visual);
             ResetFingers();
             if(reloadFingers[0,2]!=null)
             {
@@ -101,6 +139,7 @@ namespace FiveRivers.Combat
         {
             if (!initialized) return;
             shotTime = -10f;
+            ReloadArmWeight = 0f;
             lookLag=Vector2.zero;
             if(player!=null)previousView=player.CameraPivot.rotation;
             transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -108,7 +147,7 @@ namespace FiveRivers.Combat
             rightHand.SetLocalPositionAndRotation(handRest, handRotation);
             ResetFingers();
             if (bolt != null) bolt.localPosition = boltRest;
-            if (loadedClip != null) loadedClip.gameObject.SetActive(false);
+            if (loadedClip != null) { loadedClip.SetLocalPositionAndRotation(clipRestPos, clipRestRot); loadedClip.gameObject.SetActive(false); }
             if(chamberRounds!=null)chamberRounds.gameObject.SetActive(true);
             UpdateSleeves();
         }
@@ -135,8 +174,12 @@ namespace FiveRivers.Combat
                     firingTransform.localRotation = Quaternion.Slerp(Quaternion.identity, firingTransform.localRotation, aimScale);
                 }
             }
-            // Keep the established grip throughout reload; no procedural hand-loading gesture.
-            float pose = 0f;
+            // Reload gesture: tilt the receiver into view, bring a fresh clip up with the right hand and thumb it in.
+            // Timing follows M1Rifle.ReloadProgress, so the gameplay reload duration is unchanged.
+            float reloadP = rifle.Reloading ? rifle.ReloadProgress : 0f;
+            // reference-video timing: lowered at once, raised back over the last tenth
+            float pose = rifle.Reloading ? Window(reloadP, .0f, .08f, .88f, .98f) : 0f;
+            float motionP = MotionProgress(reloadP);
             float steadiness=Mathf.Lerp(1f,.12f,rifle.AimBlend)*(1f-pose*.8f);
             float moving=player!=null?player.MoveInput.magnitude:0;
             if(player!=null&&Time.deltaTime>0)
@@ -150,31 +193,206 @@ namespace FiveRivers.Combat
             }
             float breath=Mathf.Sin(Time.time*1.45f)*.00065f;
             var handling=new Vector3(Mathf.Sin(walkPhase)*.0025f*moving,breath-Mathf.Abs(Mathf.Cos(walkPhase))*.0018f*moving,0)*steadiness;
-            transform.localPosition = new Vector3(-0.06f * pose, 0.025f * pose, 0.17f * pose)+handling;
-            transform.localRotation = Quaternion.Euler(-12f * pose+lookLag.y*steadiness,lookLag.x*steadiness,-15f*pose+Mathf.Sin(walkPhase)*.3f*moving*steadiness);
+            transform.localPosition = ReloadPresentOffset * pose+handling;
+            transform.localRotation = Quaternion.Euler(ReloadPresentEuler.x * pose+lookLag.y*steadiness,ReloadPresentEuler.y*pose+lookLag.x*steadiness,ReloadPresentEuler.z*pose+Mathf.Sin(walkPhase)*.3f*moving*steadiness);
             if (bolt != null)
             {
                 float cycle = age >= 0f && age < 0.10f ? Mathf.Sin(age / 0.10f * Mathf.PI) : 0f;
-                bool locked = rifle.Magazine != null && rifle.Magazine.InClip == 0;
-                float opened = locked ? 1f : cycle;
+                // An empty rifle holds the bolt open until the new clip seats (the ClipInserted cue at 66%).
+                bool locked = rifle.Magazine != null && rifle.Magazine.InClip == 0 && !(rifle.Reloading && reloadP >= .66f);
+                float opened = Mathf.Max(locked ? 1f : cycle, rifle.Reloading ? Window(reloadP, .06f, .16f, .70f, .80f) : 0f);
                 bolt.localPosition = boltRest + Vector3.back * (0.045f * opened);
             }
             if (rightHand != null)
             {
                 rightHand.SetLocalPositionAndRotation(handRest, handRotation);
+                ReloadArmWeight=0f;
+                if(palmShape>=0)palmSkin.SetBlendShapeWeight(palmShape,0f);
+                if (rifle.Reloading && loadedClip != null)
+                {
+                    if (motionBones != null) PlayAuthoredReload(motionP, reloadP);
+                    else PlaceReloadHandAndClip(reloadP);
+                }
                 if(rightHandVisual!=null)rightHandVisual.SetPositionAndRotation(rightHand.position,rightHand.rotation);
                 UpdateSleeves();
             }
-            // Ammo and reload duration still come from M1Rifle. Keep hands on the
-            // stock and suppress the detached moving clip used by the old gesture.
-            if(loadedClip!=null)loadedClip.gameObject.SetActive(false);
-            if(chamberRounds!=null)chamberRounds.gameObject.SetActive(rifle.Magazine!=null&&rifle.Magazine.InClip>0);
-            ResetFingers();ThumbContactError=0;
+            // Ammo and reload duration still come from M1Rifle. The old clip leaves as the bolt opens,
+            // the fresh clip is shown from the moment the hand picks it up until the reload completes.
+            bool clipInHand, oldClipOut;
+            if (motionBones != null)
+            {
+                // authored: a partial reload pulls the part-used clip out at 28% (the moving clip takes over from the
+                // seated one), an empty reload shows only the fresh clip once the hand brings it back (50%)
+                bool partial = rifle.ReloadKind == ReloadKind.Partial;
+                clipInHand = rifle.Reloading && loadedClip != null && motionP >= (partial ? .28f : .50f);
+                oldClipOut = rifle.Reloading && (!partial || motionP >= .28f);
+            }
+            else
+            {
+                clipInHand = rifle.Reloading && loadedClip != null && reloadP >= .18f;
+                oldClipOut = rifle.Reloading && reloadP >= .12f;
+            }
+            if(loadedClip!=null)loadedClip.gameObject.SetActive(clipInHand);
+            // during a partial reload the seated clip stays until the hand takes it (ammo is already counted out)
+            bool showSeated = rifle.Reloading ? !clipInHand && !oldClipOut : rifle.Magazine!=null&&rifle.Magazine.InClip>0;
+            if(chamberRounds!=null)chamberRounds.gameObject.SetActive(showSeated);
+            if(rifle.Reloading&&motionBones!=null&&loadedClip!=null){ResetFingers();ApplyAuthoredFingers(motionP);ThumbContactError=0;}
+            else if(rifle.Reloading)AnimateFingers(reloadP);else{ResetFingers();ThumbContactError=0;}
+        }
+
+        // The reload clip shows the same mesh and materials as the clip seated in the rifle, at exactly the seated pose,
+        // so the hand carries the real clip and the hand-off at the end of the reload is seamless.
+        void UseSeatedClipForReload()
+        {
+            if(loadedClip==null||chamberRounds==null||loadedClip.parent==null)return;
+            var seatedFilter=chamberRounds.GetComponent<MeshFilter>();var seatedRenderer=chamberRounds.GetComponent<MeshRenderer>();
+            var clipFilter=loadedClip.GetComponent<MeshFilter>();var clipRenderer=loadedClip.GetComponent<MeshRenderer>();
+            if(seatedFilter==null||seatedFilter.sharedMesh==null||seatedRenderer==null||clipFilter==null||clipRenderer==null)
+            {Debug.LogWarning("M1 reload keeps the legacy clip mesh: seated or reload clip has no mesh renderer.",this);return;}
+            if(loadedClip.parent!=rightHand.parent)
+            {Debug.LogWarning("M1 reload clip and right hand target must share a parent; keeping the legacy clip.",this);return;}
+            if(!chamberRounds.gameObject.activeInHierarchy||!seatedRenderer.enabled)
+            {Debug.LogWarning("M1 seated clip is hidden at start; reload clip contact point uses the legacy value.",this);return;}
+            var parent=loadedClip.parent;
+            clipRestPos=parent.InverseTransformPoint(chamberRounds.position);
+            clipRestRot=Quaternion.Inverse(parent.rotation)*chamberRounds.rotation;
+            var ps=parent.lossyScale;var cs=chamberRounds.lossyScale;
+            if(Mathf.Abs(ps.x)<1e-6f||Mathf.Abs(ps.y)<1e-6f||Mathf.Abs(ps.z)<1e-6f)return;
+            loadedClip.localScale=new Vector3(cs.x/ps.x,cs.y/ps.y,cs.z/ps.z);
+            clipFilter.sharedMesh=seatedFilter.sharedMesh;
+            clipRenderer.sharedMaterials=seatedRenderer.sharedMaterials;
+            loadedClip.SetLocalPositionAndRotation(clipRestPos,clipRestRot);
+            // The imported clip mesh has empty mesh bounds, so use the seated renderer's world bounds instead.
+            var centre=parent.InverseTransformPoint(seatedRenderer.bounds.center);
+            clipTopFromPivot=centre-clipRestPos+Vector3.up*ClipContactAboveCentre;
+            clipTop=loadedClip.InverseTransformPoint(parent.TransformPoint(clipRestPos+clipTopFromPivot));
+        }
+
+        void BindReloadMotion(Transform visual)
+        {
+            if(reloadMotion==null)reloadMotion=Resources.Load<M1ReloadMotion>("M1_ReloadMotion");
+            if(reloadMotion==null||!reloadMotion.IsValid||visual==null)return;
+            var found=new System.Collections.Generic.Dictionary<string,Transform>();
+            foreach(var t in visual.GetComponentsInChildren<Transform>(true))if(!found.ContainsKey(t.name))found.Add(t.name,t);
+            var bound=new Transform[reloadMotion.bones.Length];
+            for(int i=0;i<bound.Length;i++)
+            {
+                if(!found.TryGetValue(reloadMotion.bones[i],out bound[i]))
+                {Debug.LogWarning("M1 reload motion bone missing: "+reloadMotion.bones[i]+"; using the procedural reload.",this);return;}
+            }
+            motionBones=bound;
+            motionRest=new Quaternion[bound.Length];
+            for(int i=0;i<bound.Length;i++)motionRest[i]=bound[i].localRotation;
+            if(found.TryGetValue("metacarpal2.R",out var palmBone))
+                foreach(var skin in transform.root.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+                    if(System.Array.IndexOf(skin.bones,palmBone)>=0){M1HandProportion.Apply(skin);palmSkin=skin;palmShape=M1PalmFlatten.Add(skin);break;}
+        }
+
+        // The authored motion is the partial reload (take the old clip out, fetch, thumb the new one home at 66%).
+        // An empty reload has no clip to take out: it starts as the hand leaves for the fresh clip, and is spread so
+        // the thumb still seats it at 66% of the reload, in time with the insertion sound and the bolt.
+        float MotionProgress(float p)
+        {
+            if (!rifle.Reloading || rifle.ReloadKind != ReloadKind.Empty) return p;
+            if (p < .66f) return Mathf.Lerp(.44f, .66f, p / .66f);
+            return p;
+        }
+
+        void PlayAuthoredReload(float p, float reloadP)
+        {
+            reloadMotion.SampleWrist(p,out var wrist,out var wristRotation,out var clipOffset);
+            // ease in from / back to the live grip (over the reload's first 10% and last 5%) so the hand never pops,
+            // also when an empty reload enters the motion part-way
+            float w=Mathf.SmoothStep(0f,1f,Mathf.Clamp01(Mathf.Min(reloadP/.10f,(1f-reloadP)/.05f)));
+            rightHand.SetLocalPositionAndRotation(Vector3.Lerp(handRest,wrist,w),Quaternion.Slerp(handRotation,wristRotation,w));
+            loadedClip.SetLocalPositionAndRotation(clipRestPos+clipOffset,clipRestRot);
+            ReloadArmWeight=Window(p,.04f,.16f,.72f,.98f);
+            // open-hand phases: carrying the clip and resting on the receiver after it is home
+            if(palmShape>=0)palmSkin.SetBlendShapeWeight(palmShape,100f*Mathf.Max(Window(p,.22f,.30f,.56f,.62f),Window(p,.62f,.68f,.84f,.90f)));
+        }
+
+        void ApplyAuthoredFingers(float p)
+        {
+            for(int i=0;i<motionBones.Length;i++)motionBones[i].localRotation=reloadMotion.SampleBone(i,p);
+            RelaxIndex(p);
+        }
+
+        // Once the clip is home the authored index stays almost straight (knuckle 13° against the middle finger's 74°)
+        // and reads as pointing; curl it with the other fingers while the hand rests over the receiver.
+        static readonly float[] IndexRelaxCurl={28f,16f,18f};
+        void RelaxIndex(float p)
+        {
+            float w=Window(p,.64f,.70f,.84f,.92f);
+            if(w<=0f)return;
+            int index=System.Array.IndexOf(reloadMotion.bones,"finger2-1.R");
+            int middle=System.Array.IndexOf(reloadMotion.bones,"finger3-1.R");
+            int middlePalm=System.Array.IndexOf(reloadMotion.bones,"metacarpal2.R");
+            if(index<0||middle<0||middlePalm<0||index+2>=motionBones.Length)return;
+            // flexion axis taken from the bent middle finger, which runs alongside the index
+            var knuckle=motionBones[middle];var palmDir=knuckle.position-motionBones[middlePalm].position;
+            var axis=Vector3.Cross(palmDir,motionBones[middle+1].position-knuckle.position);
+            if(axis.sqrMagnitude<1e-10f)return;
+            axis.Normalize();
+            for(int j=0;j<3;j++)
+            {
+                var bone=motionBones[index+j];
+                bone.rotation=Quaternion.AngleAxis(IndexRelaxCurl[j]*w,axis)*bone.rotation;
+            }
+            RelaxThumb(w);
+        }
+
+        // In the same phase the authored thumb stands up off the back of the hand, 70 mm from the index knuckle;
+        // bring it in beside the curled index so the hand rests as one relaxed shape.
+        const float ThumbRelaxPull=.6f;
+        void RelaxThumb(float w)
+        {
+            int thumb=System.Array.IndexOf(reloadMotion.bones,"finger1-1.R");
+            int index=System.Array.IndexOf(reloadMotion.bones,"finger2-2.R");
+            if(thumb<0||index<0||thumb+2>=motionBones.Length)return;
+            var root=motionBones[thumb];var last=motionBones[thumb+2];
+            var tip=last.position+(last.position-motionBones[thumb+1].position).normalized*.03f;
+            var turn=Quaternion.FromToRotation(tip-root.position,motionBones[index].position-root.position);
+            root.rotation=Quaternion.Slerp(Quaternion.identity,turn,ThumbRelaxPull*w)*root.rotation;
+        }
+
+        void PlaceReloadHandAndClip(float p)
+        {
+            // Clip path in the rifle frame: up from below the view, beside the receiver, over the opening, then pressed in.
+            float toSide=Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.12f,.34f,p));
+            float over=Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.34f,.44f,p));
+            float seat=Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.44f,.66f,p));
+            var below=clipRestPos+ReloadFetchOffset;
+            var side=clipRestPos+ReloadSideOffset;
+            var above=clipRestPos+new Vector3(0f,.05f,0f);
+            var carried=Vector3.Lerp(Vector3.Lerp(below,side,toSide),above,over);
+            var clipPos=Vector3.Lerp(carried,clipRestPos,seat);
+            loadedClip.SetLocalPositionAndRotation(clipPos,clipRestRot);
+            // The hand holds the clip from the side. It fetches the clip out of view and leaves the same way, so it
+            // never sweeps across the lens. The clip goes all the way in; the hand follows only part of the way and
+            // the thumb finishes the push, so the fingers never sink into the receiver.
+            var reloadRotation=Quaternion.LookRotation(ReloadFingerDirection,ReloadPalmNormal)*Quaternion.Inverse(handFrameRest)*handRotation;
+            var grip=clipTopFromPivot+ReloadWristFromClipTop;
+            var low=below+grip;
+            var handSeated=Vector3.Lerp(above,clipRestPos,.15f)+grip;
+            Vector3 handPos;
+            if(p<.12f)handPos=Vector3.Lerp(handRest,low,Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.04f,.12f,p)));
+            else if(p<.70f)handPos=Vector3.Lerp(carried,clipRestPos,seat*.15f)+grip;
+            else
+            {
+                var leave=Vector3.Lerp(handSeated,side+grip,Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.70f,.78f,p)));
+                leave=Vector3.Lerp(leave,low,Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.78f,.90f,p)));
+                handPos=Vector3.Lerp(leave,handRest,Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.90f,.98f,p)));
+            }
+            float away=Window(p,.04f,.16f,.72f,.98f);
+            ReloadArmWeight=away;
+            rightHand.SetLocalPositionAndRotation(handPos,Quaternion.Slerp(handRotation,reloadRotation,away));
         }
 
         void ResetFingers()
         {
             for(int f=0;f<5;f++)for(int j=0;j<3;j++)if(reloadFingers[f,j]!=null)reloadFingers[f,j].localRotation=fingerRest[f,j];
+            // the authored reload also drives the metacarpals; put them back too
+            if(motionBones!=null&&motionRest!=null)for(int i=0;i<motionBones.Length;i++)if(motionBones[i]!=null)motionBones[i].localRotation=motionRest[i];
         }
 
         void AnimateFingers(float p)
@@ -189,12 +407,12 @@ namespace FiveRivers.Combat
                 if(finger==0)delta=new Vector3(-(12+joint*3)*release+(10+joint*2)*carry+(8+joint*2)*press-10*clear,joint==0?-6*release:0,joint==0?-8*release+6*carry:0);
                 else
                 {
-                    float spread=(finger-2.5f)*(joint==0?1.5f:0);
+                    float spread=(finger-2.5f)*(joint==0?7f:0);
                     float grasp=(joint==0?14:joint==1?28:18)*carry;
                     float relaxed=(joint==0?5:joint==1?9:7)*(1f-carry);
                     delta=new Vector3((grasp+relaxed)*release,0,spread*release);
                 }
-                var basePose=finger==0?fingerRest[finger,joint]:Quaternion.Slerp(fingerRest[finger,joint],fingerOpen[finger,joint],release);
+                var basePose=finger==0?fingerRest[finger,joint]:Quaternion.Slerp(fingerRest[finger,joint],fingerOpen[finger,joint],release*(1f-.6f*Mathf.Max(press,clear)));
                 bone.localRotation=basePose
                     *Quaternion.AngleAxis(delta.x,fingerHingeAxes[finger,joint])
                     *Quaternion.AngleAxis(delta.z,fingerSpreadAxes[finger,joint])
@@ -204,9 +422,9 @@ namespace FiveRivers.Combat
             // Do not drag the index fingertip onto the thumb's clip target: that creates a pincer.
             // Resetting before the constrained contact solve prevents accumulated twist.
             if(thumbTip==null||loadedClip==null||press<=0)return;
-            var target=loadedClip.TransformPoint(new Vector3(.003f,.0475f,.0334f));
+            var target=loadedClip.TransformPoint(clipTop);
             var goal=Vector3.Lerp(thumbTip.position,target,press);
-            for(int joint=0;joint<3;joint++){thumbPose[joint]=reloadFingers[0,joint].localRotation;thumbBend[joint]=0;}
+            for(int joint=0;joint<3;joint++){if(reloadFingers[0,joint]==null)return;thumbPose[joint]=reloadFingers[0,joint].localRotation;thumbBend[joint]=0;}
             for(int iteration=0;iteration<12;iteration++)for(int joint=2;joint>=0;joint--)
             {
                 var bone=reloadFingers[0,joint];if(bone==null)continue;

@@ -1,0 +1,10 @@
+Left FPS sleeve detail, 2026-11-06
+Original mathematical diagonal weave, thread and stitched-hem data maps.
+No reference image copied and no external raster modified.
+Retains stock Universal Render Pipeline/Lit and the existing source albedo/normal maps.
+Original Poly Haven Stretch Poplin source and CC0 record: ../FPSCloth20261105/SOURCE_LICENSE.txt.
+Art direction: muted olive cotton jacket, not an exact historical textile claim.
+Detail map is linear gray (0.5 is neutral), normal map uses Unity normal import.
+UV seam at v=.903; fold shadow at v=.931; exact wrist opening stays v=32/34.
+
+Final fine-grain revision: crossed microscopic fiber pattern replaces broad diagonal waves; albedo detail strength .32, normal .30. Main baked fold normal neutralized only in left material (BumpScale=0); physical folds and cuff bevel remain mesh-owned. Stitch has no normal displacement, only a faint albedo trace. Macro geometry unchanged.

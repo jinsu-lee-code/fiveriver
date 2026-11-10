@@ -63,7 +63,7 @@ namespace FiveRivers.DebugTools
         void OnGUI()
         {
             if (!open) return;
-            rect = GUILayout.Window(GetInstanceID(), rect, DrawWindow, "디버그 (F1)");
+            rect = GUILayout.Window(GetEntityId().GetHashCode(), rect, DrawWindow, "디버그 (F1)");
         }
 
         void DrawWindow(int id)

@@ -184,6 +184,30 @@
       "paths": [
         "Assets/_Project/Audio/VO/VO_OSG_Hurt_01.wav"
       ]
+    },
+    {
+      "id": "SFX_Foot_Dirt_Run",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_01.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_02.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_03.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_04.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_05.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_06.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_07.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Foot_Run_Varco_08.wav"
+      ]
+    },
+    {
+      "id": "SFX_Gear_Run",
+      "paths": [
+        "Assets/_Project/Audio/SFX/Foley/SFX_Gear_Run_Varco_01.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Gear_Run_Varco_02.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Gear_Run_Varco_03.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Gear_Run_Varco_04.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Gear_Run_Varco_05.wav",
+        "Assets/_Project/Audio/SFX/Foley/SFX_Gear_Run_Varco_06.wav"
+      ]
     }
   ]
 }

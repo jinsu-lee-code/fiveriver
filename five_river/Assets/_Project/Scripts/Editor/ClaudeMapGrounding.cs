@@ -17,6 +17,9 @@ public static void Apply(){
  foreach(var lod in root.GetComponentsInChildren<LODGroup>(true)){
  var levels=lod.GetLODs();if(levels.Length==0)continue;
  var render=levels[0].renderers.FirstOrDefault(r=>r!=null&&r.name.StartsWith("Sandbag_Wall"));if(render==null)continue;
+ // The 2026-11-06 repair replaces the incomplete scan on both sides. Keep it on explicit regrounding.
+ var repaired=render.GetComponent<MeshFilter>();
+ if(repaired!=null&&repaired.sharedMesh!=null&&(repaired.sharedMesh.name.Contains("_ClosedSandbags_")||AssetDatabase.GetAssetPath(repaired.sharedMesh).StartsWith("Assets/_Project/Art/MapRepair20261106/")))continue;
  if(lod.GetComponentsInChildren<Collider>(true).Length!=0)throw new InvalidOperationException("Unexpected visual collider.");
  var owner=lod.transform;while(owner!=null&&!owner.name.Contains("_Sandbags_"))owner=owner.parent;
  if(owner==null)throw new InvalidOperationException("Missing cover identity.");
@@ -83,4 +86,5 @@ static Mesh Baseline(Mesh source,string path){
  mesh=Object.Instantiate(source);mesh.name=Path.GetFileNameWithoutExtension(path);AssetDatabase.CreateAsset(mesh,path);return mesh;
 }
 }}
+
 

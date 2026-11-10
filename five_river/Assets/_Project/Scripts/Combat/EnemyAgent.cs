@@ -40,6 +40,17 @@ namespace FiveRivers.Combat
         bool shotPending;
         float deathTime;
 
+        // The Mosin used to sit on a fixed chest socket, so it hung in the air when the rifleman crouched or fell.
+        // It now rides in the hands (right hand on the wrist, left hand forward on the stock) and is dropped on death.
+        public static float GripForward = 0.07f;   // wrist -> grip, along the rifle
+        public static float GripBehindCentre = 0.17f; // grip sits this far behind the rifle's mesh centre
+        public static float MuzzleAhead = 0.6f;
+        public static float AimAhead = 0.5f;          // barrel passes this far ahead of the left hand       // barrel end ahead of the mesh centre
+        Transform rifle, rightHand, leftHand;
+        EnemyHandIK handIK;
+        Vector3 rifleCentreLocal;
+        bool rifleDropped;
+
         public Transform Cover { get; private set; }
         public bool Alive => state != State.Dead;
         public bool Retreating => state == State.Retreat;
@@ -52,6 +63,63 @@ namespace FiveRivers.Combat
         {
             agent = GetComponent<NavMeshAgent>();
             body = GetComponent<Collider>();
+            rifle = transform.Find("Socket_Rifle/Rifle");
+            if (animator != null && animator.isHuman)
+            {
+                rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
+                leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+            }
+            var mesh = rifle != null ? rifle.GetComponentInChildren<MeshFilter>() : null;
+            if (mesh != null && mesh.sharedMesh != null)
+                rifleCentreLocal = rifle.InverseTransformPoint(mesh.transform.TransformPoint(mesh.sharedMesh.bounds.center));
+            if (rifle != null && rightHand != null)
+            {
+                handIK = animator.GetComponent<EnemyHandIK>();
+                if (handIK == null) handIK = animator.gameObject.AddComponent<EnemyHandIK>();
+                handIK.Bind(animator, rifle, rifleCentreLocal, GripBehindCentre, MuzzleAhead);
+            }
+        }
+
+        void LateUpdate()
+        {
+            if (rifle == null || rifleDropped || rightHand == null || leftHand == null) return;
+            // The clips hold the hands close together, so the bare hand-to-hand line lies across the chest.
+            // Aim the barrel through a point ahead of the support hand instead: the rifle points forward and the
+            // left hand stays on the stock.
+            // aim from the animated (pre-IK) support hand: the IK pulls that hand onto the rifle, so using the IK'd
+            // hand here would feed back and droop the muzzle a little more every frame
+            var support = handIK != null && handIK.HasAnimatedHand ? handIK.AnimatedLeftHand : leftHand.position;
+            var along = support + transform.forward * AimAhead - rightHand.position;
+            if (along.sqrMagnitude < 0.0025f) return;
+            var rotation = Quaternion.LookRotation(along, transform.up);
+            var grip = rightHand.position + along.normalized * GripForward;
+            // the rifle's grip point (behind its centre on the local z axis) goes to the grip
+            var gripLocal = rifleCentreLocal + Vector3.back * GripBehindCentre;
+            rifle.SetPositionAndRotation(grip - rotation * Vector3.Scale(gripLocal, rifle.lossyScale), rotation);
+            // muzzle flash and shot origin follow the barrel end
+            if (muzzle != null) muzzle.SetPositionAndRotation(rifle.TransformPoint(rifleCentreLocal + Vector3.forward * MuzzleAhead), rotation);
+        }
+
+        // Let go of the rifle: it falls and settles on the ground with the body, then is cleared with it.
+        void DropRifle()
+        {
+            if (rifle == null || rifleDropped) return;
+            rifleDropped = true;
+            if (handIK != null) handIK.Holding = false;
+            // under the director, so ClearAll removes it with the bodies on retry / checkpoint
+            rifle.SetParent(owner != null ? owner.transform : null, true);
+            rifle.gameObject.layer = 2; // Ignore Raycast: never blocks sight lines or shots
+            var box = rifle.gameObject.AddComponent<BoxCollider>();
+            var rb = rifle.gameObject.AddComponent<Rigidbody>();
+            rb.mass = 4f;
+            rb.linearDamping = 0.2f;
+            rb.angularDamping = 0.6f;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            rb.linearVelocity = -transform.forward * Random.Range(0.4f, 1.0f) + Vector3.up * 0.6f;
+            rb.angularVelocity = Random.insideUnitSphere * 2.5f;
+            if (body != null) Physics.IgnoreCollision(box, body);
+            Destroy(rifle.gameObject, 8f);
         }
 
         public void Init(EnemyDirector director, WaveConfig waveConfig, Transform cover)
@@ -194,12 +262,14 @@ namespace FiveRivers.Combat
                 animator.SetInteger(DieIndexId, Random.Range(0, 3));
                 animator.SetTrigger(DieId);
             }
+            DropRifle();
             Gone?.Invoke(this);
             Destroy(gameObject, 8f);
         }
 
         void Leave()
         {
+            if (rifle != null && rifleDropped) Destroy(rifle.gameObject);
             state = State.Dead;
             Gone?.Invoke(this);
             Destroy(gameObject);

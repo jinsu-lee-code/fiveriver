@@ -2,6 +2,7 @@ using FiveRivers.Core;
 using FiveRivers.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace FiveRivers.UI
 {
@@ -23,6 +24,9 @@ namespace FiveRivers.UI
         [SerializeField] TMP_Text title;
         [SerializeField] float fadeTime = 0.8f;
 
+        int readingPage;
+        bool beganReading;
+
         void Start()
         {
             date.text = text.resultDate;
@@ -37,17 +41,64 @@ namespace FiveRivers.UI
             var flow = director.Flow;
             bool showing = flow.Section == FlowSection.Result;
             group.alpha = Mathf.MoveTowards(group.alpha, showing ? 1f : 0f, Time.unscaledDeltaTime / fadeTime);
-            if (!showing) return;
+            if (!showing)
+            {
+                if (beganReading) { date.text = text.resultDate; letter.text = text.resultLetter; }
+                readingPage = 0;
+                beganReading = false;
+                return;
+            }
 
             float t = (float)flow.SectionTime;
             float nameAt = config.dateDuration;
             float letterAt = nameAt + config.nameDuration;
             float titleAt = letterAt + config.letterDuration;
+            if (flow.IsExpanded && t >= letterAt)
+            {
+                ShowReadingPage(flow);
+                return;
+            }
             // 각 내용을 순서대로 4 · 5 · 8 · 3초 표시한다.
             dateGroup.alpha = Window(t, 0f, nameAt);
             nameGroup.alpha = Window(t, nameAt, letterAt);
             letterGroup.alpha = Window(t, letterAt, titleAt);
             titleGroup.alpha = Window(t, titleAt, titleAt + config.titleDuration);
+        }
+
+        void ShowReadingPage(DemoFlow flow)
+        {
+            // Holding a movement key or firing as the hill falls must not skip a page.
+            var keyboard = Keyboard.current;
+            bool advance = keyboard != null && (keyboard.enterKey.wasPressedThisFrame ||
+                keyboard.numpadEnterKey.wasPressedThisFrame || keyboard.spaceKey.wasPressedThisFrame);
+            if (beganReading && advance)
+            {
+                if (readingPage == 2)
+                {
+                    flow.ReportGoalMet(FlowSection.Result);
+                    return;
+                }
+                readingPage++;
+            }
+            beganReading = true;
+            dateGroup.alpha = 1f;
+            nameGroup.alpha = 0f;
+            letterGroup.alpha = readingPage < 2 ? 1f : 0f;
+            titleGroup.alpha = readingPage == 2 ? 1f : 0f;
+            switch (readingPage)
+            {
+                case 0:
+                    date.text = text.mansuPage + "     " + text.letterNext;
+                    letter.text = text.resultLetter;
+                    break;
+                case 1:
+                    date.text = text.seokguPage + "     " + text.letterClose;
+                    letter.text = text.seokguLetter;
+                    break;
+                default:
+                    date.text = text.missionReturn;
+                    break;
+            }
         }
 
         float Window(float t, float from, float to)

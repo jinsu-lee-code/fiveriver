@@ -12,6 +12,9 @@ namespace FiveRivers.Core
         AllySupport = 6, // S5 아군 지원 (5초)
         Dawn = 7,        // S6 새벽
         Result = 8,      // S7 결과 화면
+        Regroup = 9,
+        WestAssault = 10,
+        HillAssault = 11,
     }
 
     public enum TransitionReason

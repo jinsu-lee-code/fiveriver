@@ -9,24 +9,22 @@ using Object = UnityEngine.Object;
 
 namespace FiveRivers.EditorTools
 {
-    // 받침손(왼손) 파지 (2026-10-30 사용자 지시: 파지법 사진대로 바르코3D로 손을 새로 만들어 Blender에서 다듬어 적용).
-    // 근거: M1 입사(offhand) 사진과 FM 23-5(1951) "총이 엄지와 검지 사이 V에 놓이게, 손은 방아쇠울 바로 앞".
-    // 모델: 바르코3D 이미지→3D(흐름 "다섯개의강"), Blender `Docs/Art/M1FPS_20261030/SupportHandVarco/hand_prep.py`로
-    //       쥔 손 안쪽 통로 중심을 원점, 통로 축을 +Z, 손목을 -Y로 맞추고 통로 반지름을 총몸 반폭(.027 m)에 맞춤.
-    // 적용: 기존 골격 왼손은 숨기고(손목 뼈 크기 0), 새 손을 총(M1_ShotMotion)에 고정, 소매 끝(Grip_Left)을 새 손목에 맞춘다.
+    // Original VARCO support hand; source mesh, material and texture are unchanged.
+    // Rotation-only adjustment: keep the original scale, position and local +Z wrist measurement.
     public static class SupportGripSetup
     {
         const string HandModel = "Assets/_Project/Art/Models/Characters/ROK_Arms/SupportHand/SM_CH_ROK_SupportHand_M1.fbx";
         const string InstanceName = "SupportHand_M1";
         const string MaterialPath = "Assets/_Project/Art/Models/Characters/ROK_Arms/SupportHand/M_CH_ROK_SupportHand_M1.mat";
         const string BaseColorPath = "Assets/_Project/Art/Models/Characters/ROK_Arms/SupportHand/T_CH_ROK_SupportHand_M1_BaseColor.png";
-        // The Varco base colour is used as is.
+        // Preserve the original support-hand material values.
         static readonly Color SkinTint = Color.white;
         const float HandScale = 0.65f;
+        public static readonly Vector3 CuffAxis = Vector3.forward;
         // Rifle space (M1_ShotMotion): x right, y up, z toward the muzzle. The forend wood spans y ~0..0.049 here.
         static readonly Vector3 HandPosition = new Vector3(0f, 0.026f, 0.20f);
-        static readonly Vector3 HandEuler = new Vector3(0f, 0f, -30f);
-        // Sleeve end just inside the wrist cut (model cut at -0.11 by hand_cut_wrist.py; wrist toward -Y).
+        static readonly Vector3 HandEuler = new Vector3(-14f, -5f, -30f);
+        // Original sleeve endpoint seed; the original local +Z wrist measurement follows.
         static readonly Vector3 WristInHand = new Vector3(0f, -0.09f, 0f);
 
         [MenuItem("FiveRivers/Setup/Natural Support Grip")]
@@ -55,6 +53,14 @@ namespace FiveRivers.EditorTools
                 hand = ((GameObject)PrefabUtility.InstantiatePrefab(prefab, rifleSpace)).transform;
                 hand.name = InstanceName;
             }
+            // Remove any previous candidate mesh override from the existing scene instance.
+            // Restore the original FBX mesh before applying the selected rotation.
+            var sourceMesh = prefab.GetComponentInChildren<MeshFilter>(true);
+            var visualMesh = hand.GetComponentInChildren<MeshFilter>(true);
+            if (sourceMesh == null || visualMesh == null) throw new InvalidOperationException("Support hand mesh is missing.");
+            visualMesh.sharedMesh = sourceMesh.sharedMesh;
+            EditorUtility.SetDirty(visualMesh);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(visualMesh);
             hand.SetLocalPositionAndRotation(HandPosition, Quaternion.Euler(HandEuler));
             hand.localScale = Vector3.one * HandScale;
             var material = AssetDatabase.LoadAssetAtPath<Material>(MaterialPath);
@@ -82,7 +88,14 @@ namespace FiveRivers.EditorTools
             if (leftSleeve != null && leftSleeve.TryGetComponent<Renderer>(out var sleeveRenderer)) sleeveRenderer.enabled = true;
             grip.SetPositionAndRotation(hand.TransformPoint(WristInHand), hand.rotation);
             var armRig = rifleSpace.GetComponentInChildren<M1ArmRig>(true);
-            if (armRig != null) M1WristCuffSetup.Configure(armRig);
+            if (armRig != null)
+            {
+                // A newly generated rig still needs both original cuff fits.
+                // Updating an existing support hand leaves its normal right-hand mesh intact.
+                var rigData = new SerializedObject(armRig);
+                if (rigData.FindProperty("rightCuffRim").arraySize == 32) M1WristCuffSetup.ConfigureSupport(armRig);
+                else M1WristCuffSetup.Configure(armRig);
+            }
         }
 
         public static void ApplyBatch()

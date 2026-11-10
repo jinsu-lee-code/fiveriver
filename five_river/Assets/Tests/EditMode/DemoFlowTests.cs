@@ -30,7 +30,8 @@ namespace FiveRivers.Tests
         [SetUp]
         public void SetUp()
         {
-            config = AssetDatabase.LoadAssetAtPath<FlowConfig>(FlowConfigPath);
+            config = UnityEngine.Object.Instantiate(AssetDatabase.LoadAssetAtPath<FlowConfig>(FlowConfigPath));
+            config.legacyExhibitMode = true;
             tank = AssetDatabase.LoadAssetAtPath<TankConfig>(TankConfigPath);
             var assist = AssetDatabase.LoadAssetAtPath<AssistConfig>(AssistConfigPath);
             Assert.IsNotNull(config, FlowConfigPath);
@@ -47,6 +48,161 @@ namespace FiveRivers.Tests
             flow.PauseReleased += () => pauseReleases++;
             flow.RetryRequested += cp => retries.Add(cp);
             flow.Checkpoints.AssistActivated += () => assistActivations++;
+        }
+
+        [TearDown]
+        public void TearDown() => UnityEngine.Object.DestroyImmediate(config);
+
+        [Test]
+        public void ExpandedMission_WaitsForObjectivesAndMaintainsIndependentCheckpoints()
+        {
+            config.legacyExhibitMode = false;
+            flow.StartRun();
+            flow.ReportGoalMet(FlowSection.Tutorial);
+            flow.ReportGoalMet(FlowSection.Scout);
+            flow.ReportGoalMet(FlowSection.Assault);
+            Assert.AreEqual(FlowSection.Regroup, flow.Section);
+
+            flow.SetPaused(true);
+            flow.Tick(600);
+            Assert.AreEqual(0d, flow.RunTime);
+            flow.SetPaused(false);
+            flow.Tick(config.regroupCap - 1);
+            Assert.AreEqual(FlowSection.Regroup, flow.Section);
+            flow.SetPaused(true);
+            flow.ReportGoalMet(FlowSection.Regroup);
+            Assert.AreEqual(FlowSection.Regroup, flow.Section);
+            flow.SetPaused(false);
+            Assert.AreEqual(FlowSection.WestAssault, flow.Section);
+            flow.Tick(config.westAssaultCap - 1);
+            flow.ReportPlayerDied();
+            Assert.AreEqual(FlowCheckpoint.WestAssault, retries.Last());
+            Assert.AreEqual(0d, flow.SectionTime);
+
+            flow.ReportGoalMet(FlowSection.WestAssault);
+            Assert.AreEqual(FlowSection.Silence, flow.Section);
+            flow.ReportGoalMet(FlowSection.Silence);
+            flow.Tick(config.s4Min);
+            Assert.AreEqual(FlowSection.Tank, flow.Section);
+            // 전차 → 능선 탈환 → 정상의 새벽(보충병 합류) → 결말 (결정 2026-11-09)
+            flow.ReportGoalMet(FlowSection.Tank);
+            Assert.AreEqual(FlowSection.HillAssault, flow.Section);
+            Assert.IsFalse(flow.CombatLocked);
+            flow.ReportPlayerDied();
+            Assert.AreEqual(FlowCheckpoint.HillAssault, retries.Last());
+            flow.ReportGoalMet(FlowSection.HillAssault);
+            flow.Tick(config.dawnCap - 1);
+            Assert.AreEqual(FlowSection.Dawn, flow.Section);
+            Assert.IsTrue(flow.CombatLocked);
+            flow.ReportGoalMet(FlowSection.Dawn);
+            flow.Tick(config.resultCap - 1);
+            Assert.AreEqual(FlowSection.Result, flow.Section);
+            Assert.IsFalse(flow.ForcedTankTriggered || flow.ForcedEndingTriggered);
+            flow.ReportGoalMet(FlowSection.Result);
+            Assert.AreEqual(FlowSection.Title, flow.Section);
+            Assert.IsTrue(flow.StartRun());
+            Assert.AreEqual(0, flow.Checkpoints.Failures(FlowCheckpoint.WestAssault));
+            Assert.AreEqual(0, flow.Checkpoints.Failures(FlowCheckpoint.HillAssault));
+        }
+
+        double ExpandedCap(FlowSection section)
+        {
+            switch (section)
+            {
+                case FlowSection.Regroup: return config.regroupCap;
+                case FlowSection.WestAssault: return config.westAssaultCap;
+                case FlowSection.Dawn: return config.dawnCap;
+                case FlowSection.HillAssault: return config.hillAssaultCap;
+                case FlowSection.Result: return config.resultCap;
+                default: throw new ArgumentOutOfRangeException(nameof(section));
+            }
+        }
+
+        // 장면 사건(스폰 · 엄폐 도착 · 합류)이 끝내 오지 않아도 구간 안전 상한에서 다음 구간으로 넘어간다 (FLOW.md 1번).
+        [TestCase(FlowSection.Regroup, FlowSection.WestAssault, 0)]
+        [TestCase(FlowSection.WestAssault, FlowSection.Silence, 1)]
+        [TestCase(FlowSection.HillAssault, FlowSection.Dawn, 1)]
+        [TestCase(FlowSection.Dawn, FlowSection.Result, 0)]
+        [TestCase(FlowSection.Result, FlowSection.Title, 0)]
+        public void ExpandedSection_SafetyCapAdvancesWithoutGoal(FlowSection section, FlowSection next, int expectedRetreats)
+        {
+            config.legacyExhibitMode = false;
+            flow.DebugJumpTo(section);
+            double start = flow.RunTime;
+            double cap = ExpandedCap(section);
+            Assert.Greater(cap, 0);
+
+            flow.SetPaused(true);
+            flow.Tick(cap * 2);
+            Assert.AreEqual(section, flow.Section, "일시정지 중에는 상한 시간이 흐르지 않는다.");
+            flow.SetPaused(false);
+            flow.Tick(cap - Step);
+            Assert.AreEqual(section, flow.Section);
+            flow.Tick(Step * 2);
+            Assert.AreEqual(next, flow.Section);
+            AssertTransition(log.Last(), TransitionReason.SectionCap, start + cap);
+            Assert.AreEqual(expectedRetreats, retreats);
+        }
+
+        [TestCase(FlowSection.Regroup, FlowSection.WestAssault)]
+        [TestCase(FlowSection.WestAssault, FlowSection.Silence)]
+        [TestCase(FlowSection.HillAssault, FlowSection.Dawn)]
+        [TestCase(FlowSection.Dawn, FlowSection.Result)]
+        [TestCase(FlowSection.Result, FlowSection.Title)]
+        public void ExpandedSection_GoalBeforeSafetyCapAdvancesAsGoalMet(FlowSection section, FlowSection next)
+        {
+            config.legacyExhibitMode = false;
+            flow.DebugJumpTo(section);
+            double start = flow.RunTime;
+            flow.Tick(ExpandedCap(section) / 2);
+            flow.ReportGoalMet(section);
+            Assert.AreEqual(next, flow.Section);
+            AssertTransition(log.Last(), TransitionReason.GoalMet, start + ExpandedCap(section) / 2);
+            Assert.AreEqual(0, retreats);
+            Assert.IsFalse(log.Any(t => t.Reason == TransitionReason.SectionCap));
+        }
+
+        // 완료 보고가 하나도 오지 않는 확장 회차도 결말을 한 번 보고 Title로 돌아온다.
+        [Test]
+        public void ExpandedRun_NoGoalsReported_ReachesTitleThroughCaps()
+        {
+            config.legacyExhibitMode = false;
+            flow.StartRun();
+            int guard = 0;
+            while (flow.IsRunning && guard++ < 100000) flow.Tick(1);
+            Assert.AreEqual(FlowSection.Title, flow.Section, string.Join(", ", log));
+            Assert.AreEqual(1, Count(FlowSection.Regroup));
+            Assert.AreEqual(1, Count(FlowSection.HillAssault));
+            Assert.AreEqual(1, Count(FlowSection.Result));
+            // 전차 실패 → 아군 지원에서도 능선 탈환 → 새벽 합류 → 결말 순서를 지킨다
+            var order = log.Select(t => t.To).ToList();
+            Assert.Less(order.IndexOf(FlowSection.AllySupport), order.IndexOf(FlowSection.HillAssault));
+            Assert.Less(order.IndexOf(FlowSection.HillAssault), order.IndexOf(FlowSection.Dawn));
+            Assert.Less(order.IndexOf(FlowSection.Dawn), order.IndexOf(FlowSection.Result));
+            Assert.IsFalse(flow.ForcedTankTriggered || flow.ForcedEndingTriggered);
+            Assert.IsFalse(log.Any(t => t.Reason == TransitionReason.HardCap));
+        }
+
+        // 기존 시연 모드는 새 상한 값과 무관하게 같은 전환을 낸다.
+        [Test]
+        public void LegacyMode_IgnoresExpandedSafetyCaps()
+        {
+            flow.StartRun();
+            RunToEnd();
+            var baseline = log.Select(t => t.ToString()).ToList();
+            log.Clear();
+            config.regroupCap = config.westAssaultCap = config.dawnCap = config.hillAssaultCap = config.resultCap = 0.5f;
+            flow.StartRun();
+            RunToEnd();
+            CollectionAssert.AreEqual(baseline, log.Select(t => t.ToString()).ToList());
+
+            flow.DebugJumpTo(FlowSection.Regroup);
+            flow.Tick(10);
+            Assert.AreEqual(FlowSection.Regroup, flow.Section);
+            flow.AbortToTitle();
+            flow.DebugJumpTo(FlowSection.Dawn);
+            flow.Tick(config.dawnDuration - 1);
+            Assert.AreEqual(FlowSection.Dawn, flow.Section);
         }
 
         void AdvanceTo(double time)

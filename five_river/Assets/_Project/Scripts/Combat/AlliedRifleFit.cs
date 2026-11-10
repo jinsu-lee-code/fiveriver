@@ -7,6 +7,8 @@ namespace FiveRivers.Combat
     {
         public bool correctShoulderedHands = true;
         public bool correctCarryPose;
+        // Scene opt-in for Ally_3 only: the stand clip leaves his rifle muzzle-up and chin raised.
+        public bool correctStandingReady;
         // Explicitly enabled only on the three regular allies in Dabudong.
         public bool refineSupportGrip;
         // Authored only on the regular allies; other avatars keep the original gaze.

@@ -16,6 +16,7 @@ namespace FiveRivers.Combat
         EnemyMuzzle = 7,
         ClipEject = 8, // M1 빈 클립이 튀어나감 (8발째, ANIM_SPEC 3-3 "사격 이벤트 ClipEject로 코드에서 처리")
         TankDestroyed = 9, // 측면 2발째 · 전차 정지 순간의 큰 폭발 (VFX_Tank_DestroyExplosion)
+        TankMuzzle = 10,
     }
 
     // 일회성 효과(VFX_ 프리팹)를 만들고, 체크포인트 복구 · 새 회차 때 한꺼번에 지운다 (ART_SPEC 공통 체크 V5).
@@ -52,9 +53,11 @@ namespace FiveRivers.Combat
         public GameObject Spawn(EffectKind kind, Vector3 position, Quaternion rotation)
         {
             Spawned?.Invoke(kind, position);
+            // The muzzle flashes share a visual prefab but emit distinct audio events.
+            var visualKind = kind == EffectKind.TankMuzzle ? EffectKind.EnemyMuzzle : kind;
             foreach (var e in entries)
             {
-                if (e.kind != kind || e.prefab == null) continue;
+                if (e.kind != visualKind || e.prefab == null) continue;
                 var go = Instantiate(e.prefab, position, rotation, Container);
                 if (e.lifetime > 0f) Destroy(go, e.lifetime);
                 return go;

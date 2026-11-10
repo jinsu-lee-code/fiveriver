@@ -41,7 +41,11 @@ namespace FiveRivers.Combat
         bool pending, engaged, suppressing;
         Vector3 suppressAim;
         AllyRiflePose riflePose;
+        AlliedRifleFit rifleFit;
         float recoilAt = -100f;
+
+        // Set by HillAllies while he walks up the ridge: no turning or firing, rifle in the carry pose.
+        public bool Advancing { get; set; }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         public int ShotsFired { get; private set; }
@@ -57,10 +61,12 @@ namespace FiveRivers.Combat
             restingRotation = Quaternion.LookRotation(defensiveForward, Vector3.up);
             rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+            rifleFit = animator.GetComponent<AlliedRifleFit>();
             riflePose = new AllyRiflePose(animator, transform, weapon);
             director.Flow.SectionChanged += OnSectionChanged;
             director.Flow.RetryRequested += OnRetry;
             ResetCombat(true);
+            started = true;
         }
 
         void OnDestroy()
@@ -68,6 +74,12 @@ namespace FiveRivers.Combat
             if (director == null || director.Flow == null) return;
             director.Flow.SectionChanged -= OnSectionChanged;
             director.Flow.RetryRequested -= OnRetry;
+        }
+
+        bool started;
+        void OnEnable()
+        {
+            if (started) ResetCombat(false); // re-enabled after a section change it missed while off
         }
 
         void OnDisable()
@@ -79,8 +91,11 @@ namespace FiveRivers.Combat
             transition.To == FlowSection.Title || transition.To == FlowSection.Tutorial);
         void OnRetry(FlowCheckpoint checkpoint) => ResetCombat(true);
 
+        public void ResetForNewRun() => ResetCombat(true);
+
         void ResetCombat(bool resetCounts)
         {
+            if (!isActiveAndEnabled) return;
             StopFiring();
             recoilAt = -100f;
             transform.rotation = restingRotation;
@@ -92,9 +107,15 @@ namespace FiveRivers.Combat
 
         bool CombatActive => director.Flow.IsRunning && !director.Flow.Paused && !director.Flow.CombatLocked
             && playerHealth.Current > 0f && Time.timeScale > 0f
-            && (director.Flow.Section == FlowSection.Scout || director.Flow.Section == FlowSection.Assault);
+            && (director.Flow.Section == FlowSection.Scout || director.Flow.Section == FlowSection.Assault
+                || director.Flow.Section == FlowSection.WestAssault
+                || director.Flow.Section == FlowSection.HillAssault && !Advancing);
 
-        bool SuppressActive => fireFromStart && director.Flow.IsRunning && !director.Flow.Paused && !director.Flow.CombatLocked
+        // Park keeps his authored standing carry while the player learns the controls.
+        bool TutorialCarryPose => director.Flow.Section == FlowSection.Tutorial
+            && rifleFit != null && rifleFit.isActiveAndEnabled && rifleFit.correctCarryPose;
+
+        bool SuppressActive => !TutorialCarryPose && fireFromStart && director.Flow.IsRunning && !director.Flow.Paused && !director.Flow.CombatLocked
             && playerHealth.Current > 0f && Time.timeScale > 0f
             && (director.Flow.Section == FlowSection.Tutorial || director.Flow.Section == FlowSection.Scout
                 || director.Flow.Section == FlowSection.Assault);
@@ -102,9 +123,19 @@ namespace FiveRivers.Combat
         void Update()
         {
             if (director.Flow.Paused) return;
+            if (Advancing)
+            {
+                StopFiring();
+                return;
+            }
             if (!CombatActive) target = null;
             else if (target == null || !target.Alive || target.Retreating) target = FindTarget();
-            if (target == null && !SuppressActive) { StopFiring(); return; }
+            if (target == null && !SuppressActive)
+            {
+                StopFiring();
+                if (TutorialCarryPose) animator.SetBool(CrouchId, false);
+                return;
+            }
             if (target == null && (!suppressing || (!pending && Time.time >= nextPick))) PickSuppressAim();
             suppressing = target == null;
             engaged = true;
@@ -182,12 +213,16 @@ namespace FiveRivers.Combat
         void LateUpdate()
         {
             if (director.Flow.Paused) return;
-            // Both palms come from the actual crouch/fire clip, including its recoil.
-            if (engaged && (suppressing || target != null && target.Alive && !target.Retreating))
+            // Both palms come from the actual crouch/fire clip, including its recoil. While he kneels to fire the rifle
+            // stays shouldered even on the frame a target is lost (it used to drop into the standing carry).
+            if (engaged)
                 riflePose.Apply(AimPoint(), 0.022f * Mathf.Exp(-(Time.time - recoilAt) * 24f));
             else if (rightHand != null && leftHand != null && weapon != null)
             {
-                if (!riflePose.TryApplyCarry())
+                var section = director.Flow.Section;
+                bool portArms = director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
+                    && riflePose.ApplyPortArms();
+                if (!portArms && !riflePose.TryApplyCarry())
                 {
                     var forward = leftHand.position - rightHand.position;
                     if (forward.sqrMagnitude > 0.001f)

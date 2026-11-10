@@ -60,7 +60,7 @@
 | 정찰병 (S2) | 2명 | `WaveConfig.scouts` |
 | 주 공세 신규 적 (S3) | 7명 + 생존 정찰병 | `WaveConfig.mainAssault` |
 | 동시 활동 적 상한 | 5명 | `WaveConfig.maxActive` |
-| 적 명중률 · 피해 기본값 | → 2026-10-27 1차 값: 어둠 0.10 / 조명탄 아래 0.35, Z 자세 ×0.25, 시야가 막히면(모래주머니 뒤) 무조건 빗나감, 피해 18 | `WaveConfig.accuracyDark` · `accuracyLit` · `crouchedFactor` · `damage` |
+| 적 명중률 · 피해 기본값 | → 2026-10-27 1차 값: 어둠 0.10 / 조명탄 아래 0.35, Z 자세 ×0.25, 시야가 막히면(모래주머니 뒤) 무조건 빗나감. 일반 모드 보병탄 피해 35(체력 100에서 연속 3발), 전시 모드 18. 실패 보조 배율은 별도로 적용 | `WaveConfig.accuracyDark` · `accuracyLit` · `crouchedFactor` · `expandedDamage` · `damage` |
 | 출현 간격 · 체력 · 이동 · 철수 속도 | 3초 · 100(M1 한 발) · 3.4 · 4.8 m/s | `WaveConfig.spawnInterval` · `health` · `moveSpeed` · `retreatSpeed` |
 | 엄폐 유지 · 사격 간격 · 시야 거리 | 5~9초 뒤 더 가까운 엄폐물로(60%) · 2.6~4.2초 · 140 m | `WaveConfig.coverHoldMin/Max` · `fireIntervalMin/Max` · `sightRange` |
 
@@ -105,7 +105,7 @@
 | 측면 판정 각도 | 50° — 전차 정면 방향과 "전차 → 쏜 사람" 방향의 수평 각도가 50° 이상이면 측면 (2026-10-27 1차 값, 맵에서 참호는 정면 · 왼쪽 둔덕은 측면이 되도록 배치) | `TankConfig.sideAngle` |
 | 정지까지 측면 명중 | 2 | `TankConfig.hitsToStop` |
 | 접근 속도 · 포탑 회전 | 2.5 m/s → 2026-10-27 3.5 m/s (출발 z=150 → 110으로 당김: 정지 위치까지 40초 → 약 18초, 1차 시도 75초 안에 둔덕 이동 · 2발 여유) · 25 °/s | `TankConfig.approachSpeed` · `turretTurnSpeed` |
-| 주포 간격 · 피해 · 반경 · 빗나감 거리 | 9초 · 35 · 5 m · 6 m (플레이어 근처에 떨어지는 위협 사격) | `TankConfig.fireInterval` · `cannonDamage` · `cannonRadius` · `nearMissOffset` |
+| 주포 간격 · 피해 · 반경 · 빗나감 거리 | 9초 · 150 · 5 m · 6 m (플레이어 근처에 떨어지는 위협 사격. 반경 안이면 한 발에 사망 — 결정 2026-11-09, 실패 보조 ×0.8이 붙어도 체력 100을 넘김) | `TankConfig.fireInterval` · `cannonDamage` · `cannonRadius` · `nearMissOffset` |
 
 ## 3. 실패 보조 · 재시도
 | 항목 | 값 | 데이터 키 |

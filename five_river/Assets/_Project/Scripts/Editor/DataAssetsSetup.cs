@@ -17,7 +17,7 @@ namespace FiveRivers.EditorTools
                 t.sideAngle = 50; t.hitsToStop = 2;
                 t.attempt1 = 75; t.attempt2 = 45; t.supportAfterFails = 2;
                 t.approachSpeed = 3.5f; t.turretTurnSpeed = 25; t.fireInterval = 9;
-                t.cannonDamage = 35; t.cannonRadius = 5; t.nearMissOffset = 6;
+                t.cannonDamage = 150; t.cannonRadius = 5; t.nearMissOffset = 6;
             });
             Ensure<AssistConfig>("AssistConfig", a =>
             {
@@ -43,16 +43,16 @@ namespace FiveRivers.EditorTools
             });
             Ensure<WaveConfig>("WaveConfig", w =>
             {
-                w.scouts = 2; w.mainAssault = 7; w.maxActive = 5; w.spawnInterval = 3f;
+                w.scouts = 2; w.mainAssault = 5; w.maxActive = 5; w.spawnInterval = 3f;
                 w.health = 100f; w.moveSpeed = 3.4f; w.retreatSpeed = 4.8f; w.coverHoldMin = 5f; w.coverHoldMax = 9f;
                 w.fireIntervalMin = 2.6f; w.fireIntervalMax = 4.2f;
-                w.accuracyDark = 0.1f; w.accuracyLit = 0.35f; w.crouchedFactor = 0.25f; w.damage = 18f; w.sightRange = 140f;
+                w.accuracyDark = 0.1f; w.accuracyLit = 0.35f; w.crouchedFactor = 0.25f; w.damage = 18f; w.expandedDamage = 35f; w.sightRange = 140f;
             });
             Ensure<FlareConfig>("FlareConfig", f =>
             {
                 f.scoutFlareDelay = 8f; f.assaultFirstDelay = 5f; f.assaultInterval = 24f;
                 f.burnTime = 16f; f.fadeTime = 3f; f.launchHeight = 45f; f.fallSpeed = 1.6f; f.swayAmplitude = 1.5f;
-                f.lightIntensity = 1500f; f.lightRange = 110f;
+                f.lightIntensity = 1900f; f.lightRange = 110f;
             });
             Ensure<TutorialConfig>("TutorialConfig", t =>
             {
@@ -61,10 +61,10 @@ namespace FiveRivers.EditorTools
             Ensure<GameText>("GameText", SeedText);
             Ensure<AudioConfig>("AudioConfig", a =>
             {
-                a.master = 1f; a.sfx = 0.9f; a.amb = 0.6f; a.bgm = 0.6f; a.vo = 1f; a.ui = 0.6f;
+                a.master = 0.85f; a.sfx = 0.9f; a.amb = 0.6f; a.bgm = 0.6f; a.vo = 1f; a.ui = 0.6f;
                 a.duckDb = -8f; a.duckFade = 0.25f;
                 a.walkStride = 1.6f; a.runStride = 2.2f;
-                a.artilleryMin = 12f; a.artilleryMax = 25f;
+                a.artilleryMin = 5f; a.artilleryMax = 14f;
             });
             AssetDatabase.SaveAssets();
         }

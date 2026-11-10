@@ -50,7 +50,7 @@ namespace FiveRivers.UI
             director.Flow.SectionChanged += t =>
             {
                 if (t.Reason == TransitionReason.RunStart) transitionFade = 1f;
-                if (t.Reason == TransitionReason.RunStart || t.To == FlowSection.Title || t.To >= FlowSection.AllySupport)
+                if (t.Reason == TransitionReason.RunStart || t.To == FlowSection.Title || t.To == FlowSection.AllySupport || t.To == FlowSection.Dawn || t.To == FlowSection.Result)
                     ClearDamageFeedback();
             };
             gap = crosshairGap;
@@ -60,12 +60,12 @@ namespace FiveRivers.UI
         {
             var flow = director.Flow;
             var mode = player.Gate.Mode;
-            bool combat = flow.IsRunning && flow.Section <= FlowSection.AllySupport;
+            bool combat = flow.IsRunning && flow.Section != FlowSection.Dawn && flow.Section != FlowSection.Result;
             combatGroup.alpha = Mathf.MoveTowards(combatGroup.alpha, combat ? 1f : 0f, Time.unscaledDeltaTime * 3f);
 
             UpdateWeapon();
             UpdateCrosshair(mode);
-            UpdatePrompt(flow);
+            UpdatePrompt();
 
             UpdateDamageFeedback(flow, combat);
 
@@ -138,7 +138,7 @@ namespace FiveRivers.UI
                 crosshairLines[i].anchoredPosition = dirs[i] * gap;
         }
 
-        void UpdatePrompt(DemoFlow flow)
+        void UpdatePrompt()
         {
             string prompt = "";
             var controls = player.Controls;
@@ -146,8 +146,6 @@ namespace FiveRivers.UI
             {
                 if (resupplier.Nearby != null)
                     prompt = $"{UiStyle.Key(controls.Resupply)} {text.resupplyPrompt}";
-                else if (flow.Section == FlowSection.Tank && weapons.BazookaUnlocked && weapons.Current == WeaponSlot.M1 && !weapons.Switching)
-                    prompt = $"{UiStyle.Key(controls.Weapon2)} {text.bazookaPrompt}";
                 else if (weapons.Current == WeaponSlot.M1 && weapons.M1.Magazine.Total == 0)
                     prompt = $"<color=#EA5C4D>{text.resupplyPrompt}</color>";
             }

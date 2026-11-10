@@ -21,12 +21,14 @@ namespace FiveRivers.Tests
         public void OnlyScheduledPanelIsVisible(float elapsed, int expected)
         {
             var root = new GameObject("ResultTimingTest");
+            var exhibit = Object.Instantiate(Load<FlowConfig>("FlowConfig"));
+            exhibit.legacyExhibitMode = true;
             root.SetActive(false); // 직렬화 참조를 채우기 전 Awake를 실행하지 않는다.
             try
             {
                 var director = root.AddComponent<FlowDirector>();
                 var screen = root.AddComponent<ResultScreen>();
-                var flow = new DemoFlow(Load<FlowConfig>("FlowConfig"), Load<TankConfig>("TankConfig"), Load<AssistConfig>("AssistConfig"));
+                var flow = new DemoFlow(exhibit, Load<TankConfig>("TankConfig"), Load<AssistConfig>("AssistConfig"));
                 typeof(FlowDirector).GetProperty("Flow").SetValue(director, flow);
                 Set(screen, "director", director);
                 Set(screen, "config", Load<ResultConfig>("ResultConfig"));
@@ -53,7 +55,11 @@ namespace FiveRivers.Tests
                 if (elapsed > 19f)
                     Assert.Less(groups[3].alpha, 1f, "제목도 20초 안에 페이드아웃한다.");
             }
-            finally { Object.DestroyImmediate(root); }
+            finally
+            {
+                Object.DestroyImmediate(root);
+                Object.DestroyImmediate(exhibit);
+            }
         }
 
         static T Load<T>(string name) where T : Object =>
