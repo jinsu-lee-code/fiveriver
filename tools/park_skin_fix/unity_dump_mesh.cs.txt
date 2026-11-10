@@ -1,0 +1,12 @@
+var a=UnityEngine.GameObject.Find("ParkYongpal"); var s=a.GetComponentInChildren<UnityEngine.SkinnedMeshRenderer>(true); var m=s.sharedMesh;
+var v=m.vertices; var bw=m.boneWeights; var bp=m.bindposes; var n=m.normals;
+using(var w=new System.IO.BinaryWriter(System.IO.File.Create(@"<data_dir>/mesh.bin"))){
+ w.Write(v.Length); foreach(var p in v){w.Write(p.x);w.Write(p.y);w.Write(p.z);}
+ foreach(var p in n){w.Write(p.x);w.Write(p.y);w.Write(p.z);}
+ foreach(var b in bw){w.Write(b.boneIndex0);w.Write(b.boneIndex1);w.Write(b.boneIndex2);w.Write(b.boneIndex3);w.Write(b.weight0);w.Write(b.weight1);w.Write(b.weight2);w.Write(b.weight3);}
+ w.Write(m.subMeshCount); for(int i=0;i<m.subMeshCount;i++){ var t=m.GetTriangles(i); w.Write(t.Length); foreach(var x in t) w.Write(x);}
+ w.Write(bp.Length); foreach(var M in bp) for(int r=0;r<4;r++) for(int c=0;c<4;c++) w.Write(M[r,c]);
+}
+var names=new System.Text.StringBuilder(); foreach(var b in s.bones) names.AppendLine(b.name); System.IO.File.WriteAllText(@"<data_dir>/bones.txt",names.ToString());
+var mats=new System.Text.StringBuilder(); foreach(var mt in s.sharedMaterials) mats.AppendLine(mt?mt.name:"null"); System.IO.File.WriteAllText(@"<data_dir>/materials.txt",mats.ToString());
+return "verts="+v.Length+" bw="+bw.Length+" bonesPerVertMax="+m.GetBonesPerVertex().Length;

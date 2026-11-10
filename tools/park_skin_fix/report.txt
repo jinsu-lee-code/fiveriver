@@ -1,0 +1,9 @@
+region vertices=16061 iter=100 lam=0.5
+idle before: crushed(<0.5)=514 severe(<0.25)=50 stretched(>2)=58 of 6976
+idle after : crushed(<0.5)=390 severe(<0.25)=32 stretched(>2)=127 of 6976
+fire before: crushed(<0.5)=749 severe(<0.25)=79 stretched(>2)=63 of 6976
+fire after : crushed(<0.5)=632 severe(<0.25)=40 stretched(>2)=136 of 6976
+carry before: crushed(<0.5)=1597 severe(<0.25)=570 stretched(>2)=88 of 6976
+carry after : crushed(<0.5)=2090 severe(<0.25)=797 stretched(>2)=110 of 6976
+vertices whose weights changed (>0.01): 15510
+shirt normals smoothed: 35927 vertices, mean change 19.3 deg
