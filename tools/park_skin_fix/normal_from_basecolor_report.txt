@@ -1,0 +1,1 @@
+normal from base colour: 3710464 texels, tilt mean 6.8 deg, 95th 22.0 deg, max 67.4 deg (target 95th 22.0)
