@@ -1,0 +1,13 @@
+{
+ "before": {
+  "Rocket": 990
+ },
+ "holes_filled_faces": {
+  "Rocket": 1
+ },
+ "after": {
+  "Rocket": 993
+ },
+ "total_before": 990,
+ "total_after": 993
+}

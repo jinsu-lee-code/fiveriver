@@ -1,0 +1,28 @@
+{
+ "before": {
+  "Hull": 152527,
+  "TrackL": 156608,
+  "TrackR": 150197,
+  "Gun": 7218,
+  "Turret": 33491
+ },
+ "holes_filled_faces": {
+  "Hull": 15,
+  "TrackL": 1,
+  "TrackR": 0,
+  "Gun": 0,
+  "Turret": 1
+ },
+ "protected_seam_vertices": {
+  "Turret": 6524
+ },
+ "after": {
+  "Hull": 17999,
+  "TrackL": 10000,
+  "TrackR": 9998,
+  "Gun": 3500,
+  "Turret": 18000
+ },
+ "total_before": 500041,
+ "total_after": 59497
+}

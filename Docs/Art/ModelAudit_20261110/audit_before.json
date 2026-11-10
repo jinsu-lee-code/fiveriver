@@ -1,0 +1,855 @@
+[
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx",
+  "name": "SK_CH_KPA_Rifleman",
+  "budget": [
+   10000,
+   20000
+  ],
+  "objects": [
+   {
+    "object": "Body_Low",
+    "tris": 53275,
+    "size_m": 2.501,
+    "slots": [
+     "URPLab_Baked_Body",
+     "URPLab_Baked_Head",
+     "URPLab_Baked_Velt",
+     "LeftHand_Skin_v3",
+     "RightHand_Skin_v3",
+     "URPLab_Baked_Cap"
+    ],
+    "islands": 8,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 147,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 9
+   }
+  ],
+  "tris": 53275,
+  "dims_m": [
+   1.602,
+   0.425,
+   1.873
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/KPA_Rifleman/SK_CH_KPA_Rifleman_B.fbx",
+  "name": "SK_CH_KPA_Rifleman_B",
+  "budget": [
+   10000,
+   20000
+  ],
+  "objects": [
+   {
+    "object": "Body_Low",
+    "tris": 51919,
+    "size_m": 2.496,
+    "slots": [
+     "URPLab_Baked_Body",
+     "URPLab_Baked_Head",
+     "URPLab_Baked_Velt",
+     "LeftHand_Skin_v3",
+     "RightHand_Skin_v3",
+     "URPLab_Baked_Cap",
+     "URPLab_Baked_Body.001",
+     "URPLab_Baked_Head.001",
+     "URPLab_Baked_Velt.001",
+     "Hand_Left_Skin_FaceMatch",
+     "Hand_Right_Skin_FaceMatch"
+    ],
+    "islands": 8,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 147,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 9
+   }
+  ],
+  "tris": 51919,
+  "dims_m": [
+   1.602,
+   0.425,
+   1.867
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/KPA_Rifleman_B/SK_CH_KPA_Rifleman_B.fbx",
+  "name": "SK_CH_KPA_Rifleman_B",
+  "budget": [
+   10000,
+   20000
+  ],
+  "objects": [
+   {
+    "object": "Body_Low",
+    "tris": 51919,
+    "size_m": 2.496,
+    "slots": [
+     "URPLab_Baked_Body",
+     "URPLab_Baked_Head",
+     "URPLab_Baked_Velt",
+     "LeftHand_Skin_v3",
+     "RightHand_Skin_v3",
+     "URPLab_Baked_Cap",
+     "URPLab_Baked_Body.001",
+     "URPLab_Baked_Head.001",
+     "URPLab_Baked_Velt.001",
+     "Hand_Left_Skin_FaceMatch",
+     "Hand_Right_Skin_FaceMatch"
+    ],
+    "islands": 8,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 147,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 9
+   }
+  ],
+  "tris": 51919,
+  "dims_m": [
+   1.602,
+   0.425,
+   1.867
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/SK_CH_ROK_Arms.fbx",
+  "name": "SK_CH_ROK_Arms",
+  "budget": [
+   6000,
+   15000
+  ],
+  "objects": [
+   {
+    "object": "SK_CH_ROK_Arm_Right",
+    "tris": 3270,
+    "size_m": 0.614,
+    "slots": [
+     "M_CH_ROK_Body"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   },
+   {
+    "object": "SK_CH_ROK_Arm_Left",
+    "tris": 3264,
+    "size_m": 0.614,
+    "slots": [
+     "M_CH_ROK_Body"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 6534,
+  "dims_m": [
+   1.006,
+   0.295,
+   0.439
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/SupportHand/SM_CH_ROK_SupportHand_M1.fbx",
+  "name": "SM_CH_ROK_SupportHand_M1",
+  "budget": [
+   500,
+   15000
+  ],
+  "objects": [
+   {
+    "object": "SM_CH_ROK_SupportHand_M1",
+    "tris": 9760,
+    "size_m": 0.349,
+    "slots": [
+     "material_0"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 148,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 9760,
+  "dims_m": [
+   0.18,
+   0.212,
+   0.211
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/ROK_Arms/SupportHand/SM_CH_ROK_SupportHand_VisiblePolished.fbx",
+  "name": "SM_CH_ROK_SupportHand_VisiblePolished",
+  "budget": [
+   500,
+   15000
+  ],
+  "objects": [
+   {
+    "object": "SM_CH_ROK_SupportHand_M1",
+    "tris": 25264,
+    "size_m": 0.26,
+    "slots": [
+     "SupportSkin_Visible_FINAL"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 268,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 25264,
+  "dims_m": [
+   0.164,
+   0.129,
+   0.155
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx",
+  "name": "SK_CH_ROK_ParkYongpal",
+  "budget": [
+   10000,
+   20000
+  ],
+  "objects": [
+   {
+    "object": "Body_Low",
+    "tris": 62882,
+    "size_m": 2.664,
+    "slots": [
+     "URPLab_Baked_Body",
+     "URPLab_Baked_Helmat",
+     "URPLab_Baked_Head",
+     "URPLab_Baked_Velt",
+     "Arm_Skin_NoNails"
+    ],
+    "islands": 58,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 602,
+    "flipped_edges": 7,
+    "nonmanifold_edges": 46
+   }
+  ],
+  "tris": 62882,
+  "dims_m": [
+   1.786,
+   0.397,
+   1.935
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/ROK_Protagonist/SK_CH_ROK_Protagonist.fbx",
+  "name": "SK_CH_ROK_Protagonist",
+  "budget": [
+   10000,
+   20000
+  ],
+  "objects": [
+   {
+    "object": "Body_Low",
+    "tris": 97817,
+    "size_m": 2.727,
+    "slots": [
+     "URPLab_Baked_Body",
+     "URPLab_Baked_cap",
+     "URPLab_Baked_Head",
+     "URPLab_Baked_TecticalVest",
+     "Hand_Left_Skin_FaceMatch",
+     "Hand_Right_Skin_FaceMatch",
+     "URPLab_Baked_Pauch",
+     "URPLab_Baked_Pauch.001"
+    ],
+    "islands": 17,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 144,
+    "flipped_edges": 4,
+    "nonmanifold_edges": 31
+   }
+  ],
+  "tris": 97817,
+  "dims_m": [
+   1.745,
+   0.41,
+   2.055
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx",
+  "name": "SK_CH_ROK_Soldier",
+  "budget": [
+   10000,
+   20000
+  ],
+  "objects": [
+   {
+    "object": "StudentSoldier_Rigged_Mesh",
+    "tris": 41100,
+    "size_m": 2.539,
+    "slots": [
+     "URPLab_Baked_Body",
+     "URPLab_Baked_Cap",
+     "URPLab_Baked_Head",
+     "URPLab_Baked_Vest",
+     "Hand_Left_Skin_FaceMatch",
+     "Hand_Right_Skin_FaceMatch"
+    ],
+    "islands": 20,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 167,
+    "flipped_edges": 5,
+    "nonmanifold_edges": 30
+   }
+  ],
+  "tris": 41100,
+  "dims_m": [
+   1.576,
+   0.384,
+   1.953
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Props/AmmoCrate/SM_PR_AmmoCrate.fbx",
+  "name": "SM_PR_AmmoCrate",
+  "budget": [
+   500,
+   4000
+  ],
+  "objects": [
+   {
+    "object": "SM_PR_AmmoCrate",
+    "tris": 1959,
+    "size_m": 0.932,
+    "slots": [
+     "M_PR_AmmoCrate"
+    ],
+    "islands": 2,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 217,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 1959,
+  "dims_m": [
+   0.7,
+   0.351,
+   0.506
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Props/BlanketBody/SM_PR_BlanketBody.fbx",
+  "name": "SM_PR_BlanketBody",
+  "budget": [
+   500,
+   4000
+  ],
+  "objects": [
+   {
+    "object": "Blanket",
+    "tris": 2848,
+    "size_m": 1.826,
+    "slots": [
+     "M_PR_Blanket"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 42,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   },
+   {
+    "object": "Boot",
+    "tris": 152,
+    "size_m": 0.415,
+    "slots": [
+     "M_PR_Boot"
+    ],
+    "islands": 3,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 42,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 3000,
+  "dims_m": [
+   0.7,
+   1.8,
+   0.35
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Props/Sandbag/SM_PR_SandbagWall.fbx",
+  "name": "SM_PR_SandbagWall",
+  "budget": [
+   500,
+   4000
+  ],
+  "objects": [
+   {
+    "object": "SandbagWall",
+    "tris": 3989,
+    "size_m": 2.317,
+    "slots": [
+     "M_PR_Sandbag"
+    ],
+    "islands": 4,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 591,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 3989,
+  "dims_m": [
+   2.0,
+   0.6,
+   1.005
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Props/Target/SM_PR_Target.fbx",
+  "name": "SM_PR_Target",
+  "budget": [
+   500,
+   4000
+  ],
+  "objects": [
+   {
+    "object": "Board",
+    "tris": 905,
+    "size_m": 1.222,
+    "slots": [
+     "M_PR_Target"
+    ],
+    "islands": 4,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 221,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   },
+   {
+    "object": "Stake",
+    "tris": 85,
+    "size_m": 0.814,
+    "slots": [
+     "M_PR_Target"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 21,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 990,
+  "dims_m": [
+   0.5,
+   0.119,
+   1.7
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Vehicles/T34_85/SM_VH_T34_85.fbx",
+  "name": "SM_VH_T34_85",
+  "budget": [
+   30000,
+   60000
+  ],
+  "objects": [
+   {
+    "object": "Hull",
+    "tris": 152527,
+    "size_m": 6.167,
+    "slots": [
+     "M_VH_T34_Body"
+    ],
+    "islands": 6,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 2829,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 9
+   },
+   {
+    "object": "TrackL",
+    "tris": 156608,
+    "size_m": 5.344,
+    "slots": [
+     "M_VH_T34_Body"
+    ],
+    "islands": 22,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 1134,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   },
+   {
+    "object": "TrackR",
+    "tris": 150197,
+    "size_m": 5.375,
+    "slots": [
+     "M_VH_T34_Body"
+    ],
+    "islands": 21,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 1157,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   },
+   {
+    "object": "Gun",
+    "tris": 7218,
+    "size_m": 2.885,
+    "slots": [
+     "M_VH_T34_Body"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 158,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   },
+   {
+    "object": "Turret",
+    "tris": 33491,
+    "size_m": 3.131,
+    "slots": [
+     "M_VH_T34_Body"
+    ],
+    "islands": 3,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 633,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 500041,
+  "dims_m": [
+   3.0,
+   6.344,
+   2.872
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Vehicles/T34_85_Destroyed/SM_VH_T34_85_Destroyed.fbx",
+  "name": "SM_VH_T34_85_Destroyed",
+  "budget": [
+   30000,
+   60000
+  ],
+  "objects": [
+   {
+    "object": "SM_VH_T34_85_Destroyed",
+    "tris": 100000,
+    "size_m": 7.345,
+    "slots": [
+     "M_VH_T34_Destroyed"
+    ],
+    "islands": 21,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 100000,
+  "dims_m": [
+   3.45,
+   5.706,
+   3.08
+  ],
+  "over_budget": true
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Weapons/Bazooka/SM_WP_Bazooka.fbx",
+  "name": "SM_WP_Bazooka",
+  "budget": [
+   8000,
+   15000
+  ],
+  "objects": [
+   {
+    "object": "Body",
+    "tris": 10000,
+    "size_m": 1.6,
+    "slots": [
+     "M_WP_Bazooka"
+    ],
+    "islands": 2,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 10000,
+  "dims_m": [
+   0.202,
+   1.52,
+   0.456
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Weapons/Bazooka/SM_WP_BazookaRocket.fbx",
+  "name": "SM_WP_BazookaRocket",
+  "budget": [
+   500,
+   4000
+  ],
+  "objects": [
+   {
+    "object": "Rocket",
+    "tris": 990,
+    "size_m": 0.628,
+    "slots": [
+     "M_WP_BazookaRocket"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 96,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 990,
+  "dims_m": [
+   0.125,
+   0.6,
+   0.139
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand.fbx",
+  "name": "SM_WP_M1Garand",
+  "budget": [
+   8000,
+   15000
+  ],
+  "objects": [
+   {
+    "object": "Body",
+    "tris": 13724,
+    "size_m": 1.12,
+    "slots": [
+     "M_WP_M1_Wood",
+     "M_WP_M1_Metal"
+    ],
+    "islands": 39,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   },
+   {
+    "object": "Bolt",
+    "tris": 1200,
+    "size_m": 0.31,
+    "slots": [
+     "M_WP_M1_Wood",
+     "M_WP_M1_Metal"
+    ],
+    "islands": 2,
+    "floating": [
+     {
+      "tris": 600,
+      "gap": 0.005,
+      "center": [
+       -0.0,
+       -0.191,
+       0.074
+      ],
+      "size": [
+       0.024,
+       0.076,
+       0.012
+      ]
+     }
+    ],
+    "floating_count": 1,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 14924,
+  "dims_m": [
+   0.053,
+   1.1,
+   0.202
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand_Clip.fbx",
+  "name": "SM_WP_M1Garand_Clip",
+  "budget": [
+   50,
+   4000
+  ],
+  "objects": [
+   {
+    "object": "SM_WP_M1Garand_Clip",
+    "tris": 988,
+    "size_m": 0.1,
+    "slots": [
+     "M_WP_M1_Clip",
+     "M_WP_M1_Brass"
+    ],
+    "islands": 9,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 988,
+  "dims_m": [
+   0.024,
+   0.083,
+   0.049
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Weapons/M1Garand/SM_WP_M1Garand_ClipEmpty.fbx",
+  "name": "SM_WP_M1Garand_ClipEmpty",
+  "budget": [
+   50,
+   4000
+  ],
+  "objects": [
+   {
+    "object": "SM_WP_M1Garand_ClipEmpty",
+    "tris": 44,
+    "size_m": 0.057,
+    "slots": [
+     "M_WP_M1_Clip"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 44,
+  "dims_m": [
+   0.024,
+   0.016,
+   0.049
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Weapons/Mosin/SM_WP_Mosin.fbx",
+  "name": "SM_WP_Mosin",
+  "budget": [
+   8000,
+   15000
+  ],
+  "objects": [
+   {
+    "object": "Mosin",
+    "tris": 6000,
+    "size_m": 1.252,
+    "slots": [
+     "M_WP_Mosin"
+    ],
+    "islands": 1,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 6000,
+  "dims_m": [
+   0.1,
+   1.23,
+   0.21
+  ],
+  "over_budget": false
+ },
+ {
+  "file": "C:/Users/mbc/Documents/UnityProjects/fiveriver/five_river/Assets/_Project/Art/Models/Weapons/PPSh41/SM_WP_PPSh41.fbx",
+  "name": "SM_WP_PPSh41",
+  "budget": [
+   8000,
+   15000
+  ],
+  "objects": [
+   {
+    "object": "PPSh41",
+    "tris": 6000,
+    "size_m": 0.88,
+    "slots": [
+     "M_WP_PPSh41"
+    ],
+    "islands": 2,
+    "floating": [],
+    "floating_count": 0,
+    "boundary_edges": 0,
+    "flipped_edges": 0,
+    "nonmanifold_edges": 0
+   }
+  ],
+  "tris": 6000,
+  "dims_m": [
+   0.11,
+   0.84,
+   0.238
+  ],
+  "over_budget": false
+ }
+]
