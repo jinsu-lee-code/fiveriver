@@ -115,3 +115,33 @@ MonoBehaviour:
     \uBA39\uACE0 \uC2F6\uC2B5\uB2C8\uB2E4.\n\uADF8\uB54C\uAE4C\uC9C0 \uC544\uD504\uC9C0
     \uB9C8\uC2ED\uC2DC\uC624.\n\n\uB9CC\uC218 \uC62C\uB9BC"
   resultTitle: "\uB2E4\uC12F \uAC1C\uC758 \uAC15"
+
+  objectiveRegroupSupply: "탄약 상자에서 예비탄을 보충하라"
+  objectiveRegroupTalk: "참호 왼쪽 끝의 최만수에게 다가가라"
+  objectiveWest: "참호 왼쪽을 지켜라 · 서쪽 비탈을 막아라"
+  mansuPage: "최만수가 어머니께 보내는 편지"
+  seokguPage: "오석구가 아내에게 쓰는 편지"
+  letterNext: "[Enter]  다음 장"
+  letterClose: "[Enter]  편지 접기"
+  missionReturn: "[Enter]  처음 화면으로"
+  seokguLetter: "여보, 오늘 밤에도 하늘에 해가 몇 번이나 떴다 졌소.\n만수가 제 얘기도 한 줄 써 달라기에 그러마 했소.\n오늘 새로 온 아이 이름은 태석이오.\n이름을 잊을까 봐, 아침이 가기 전에 적어 두오.\n\n다부동에서, 석구"
+  mansuLetter:
+    speaker: "최만수"
+    text: "형님, 편지 쓰실 때 제 얘기도 한 줄 써 주이소. 제가 글을 모르가지고예."
+    duration: 5
+    voice: ""
+  mansuMorning:
+    speaker: "최만수"
+    text: "아침 되면… 좀 조용해지겠지예."
+    duration: 3
+    voice: ""
+  westWarning:
+    speaker: "박용팔"
+    text: "옆구리다! 서쪽이다잉!"
+    duration: 3
+    voice: ""
+  mansuLost:
+    speaker: "박용팔"
+    text: "만수야!"
+    duration: 2
+    voice: ""

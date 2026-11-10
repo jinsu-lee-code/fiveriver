@@ -6,6 +6,9 @@ namespace FiveRivers.Data
     [CreateAssetMenu(fileName = "FlowConfig", menuName = "FiveRivers/Flow Config")]
     public sealed class FlowConfig : ScriptableObject
     {
+        [Tooltip("기존 9분 시연 전용 진행 규칙을 사용합니다.")]
+        public bool legacyExhibitMode;
+
         [Header("구간 상한 (초) : BALANCE 1-1")]
         public float s1Cap;
         public float s2Cap;
@@ -30,5 +33,12 @@ namespace FiveRivers.Data
         public float forceEndingAt;
         public float allySupportDuration;
         public float hardCap;
+
+        [Header("확장 흐름 안전 상한 (초) : 장면 사건이 오지 않아도 결말까지 가도록. 정상 플레이보다 넉넉하게")]
+        public float regroupCap;
+        public float westAssaultCap;
+        public float dawnCap;
+        public float hillAssaultCap;
+        public float resultCap;
     }
 }

@@ -168,7 +168,7 @@ namespace FiveRivers.Tests
                     var so = new SerializedObject(c);
                     var p = so.GetIterator();
                     while (p.NextVisible(true))
-                        if (p.propertyType == SerializedPropertyType.ObjectReference && p.objectReferenceValue == null && p.objectReferenceInstanceIDValue != 0)
+                        if (p.propertyType == SerializedPropertyType.ObjectReference && p.objectReferenceValue == null && p.objectReferenceEntityIdValue != default)
                             Assert.Fail($"Missing 참조: {path} {c.GetType().Name}.{p.propertyPath}");
                 }
             }

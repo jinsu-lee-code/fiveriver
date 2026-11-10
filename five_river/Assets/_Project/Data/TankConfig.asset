@@ -20,6 +20,6 @@ MonoBehaviour:
   approachSpeed: 3.5
   turretTurnSpeed: 25
   fireInterval: 9
-  cannonDamage: 35
+  cannonDamage: 150
   cannonRadius: 5
   nearMissOffset: 6

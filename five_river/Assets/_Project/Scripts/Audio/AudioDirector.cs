@@ -31,8 +31,17 @@ namespace FiveRivers.Audio
         readonly Dictionary<AudioSource, SoundLibrary.Entry> poolEntries = new Dictionary<AudioSource, SoundLibrary.Entry>();
         readonly Dictionary<string, int> lastVariant = new Dictionary<string, int>();
         readonly Dictionary<string, float> lastPlayed = new Dictionary<string, float>();
-        AudioSource ambience, music, flareBurn, voice;
-        AudioSource tankEngine, tankDamage, artillery;
+        AudioSource ambience, music, voice, breath;
+        float sprintTime, breathLevel;
+        bool clipRemovePending;
+        AudioSource tankEngine, tankDamage;
+        // Distant shelling: a few muffled voices so salvos can overlap. Each shell gets its own distance
+        // (level + low-pass), side (pan) and pitch so the front sounds wide and far, never in your face.
+        readonly AudioSource[] artillery = new AudioSource[3];
+        readonly AudioLowPassFilter[] artilleryMuffle = new AudioLowPassFilter[3];
+        readonly float[] artilleryLevel = new float[3];
+        int artilleryVoice;
+        int salvoLeft;
         float duck = 1f;
         float stepDistance;
         float lastMoved;
@@ -44,9 +53,13 @@ namespace FiveRivers.Audio
             for (int i = 0; i < poolSize; i++) pool.Add(NewSource("OneShot_" + i, transform));
             ambience = NewSource("Ambience", transform);
             music = NewSource("Music", transform);
-            flareBurn = NewSource("FlareBurn", transform);
             voice = NewSource("Voice", transform);
-            artillery = NewSource("DistantArtillery", transform);
+            breath = NewSource("Breath", transform);
+            for (int i = 0; i < artillery.Length; i++)
+            {
+                artillery[i] = NewSource("DistantArtillery_" + i, transform);
+                artilleryMuffle[i] = artillery[i].gameObject.AddComponent<AudioLowPassFilter>();
+            }
         }
 
         void Start()
@@ -58,7 +71,8 @@ namespace FiveRivers.Audio
             weapons.M1.Fired += () => Play2D("SFX_M1_Fire");
             weapons.M1.ClipEjected += () => Play2D("SFX_M1_Ping");
             weapons.M1.DryFired += () => Play2D("SFX_M1_DryFire");
-            weapons.M1.ReloadStarted += kind => { if (kind == ReloadKind.Partial) Play2D("SFX_M1_ClipRemove"); };
+            // the part-used clip is pulled out about a third of the way in (reference reload video), not at the key press
+            weapons.M1.ReloadStarted += kind => clipRemovePending = kind == ReloadKind.Partial;
             weapons.M1.ClipInserted += () => Play2D("SFX_M1_ClipInsert");
             weapons.Bazooka.Fired += () => Play2D("SFX_Bazooka_Fire");
             weapons.Bazooka.Reloaded += () => Play2D("SFX_Bazooka_Load");
@@ -73,7 +87,8 @@ namespace FiveRivers.Audio
 
             effects.Spawned += OnEffect;
             enemies.ShotMissedNearPlayer += p => PlayAt("SFX_Bullet_Whiz", p);
-            flares.Launched += () => Play2D("SFX_Flare_Launch");
+            // The flare is heard once, where it pops open in the sky; no hiss while it burns.
+            flares.Burst += p => PlaySpatial("SFX_Flare_Launch", p);
             tank.Stopped += () =>
             {
                 PlayAt("SFX_Tank_EngineStall", tank.transform.GetChild(0).position);
@@ -119,9 +134,11 @@ namespace FiveRivers.Audio
                     SetLoop(ambience, "AMB_Night_Hills_Loop");
                     break;
                 case FlowSection.Assault:
+                case FlowSection.WestAssault:
                     SetLoop(ambience, "AMB_Battle_Distant_Loop");
                     SetLoop(music, "BGM_Combat_Bed_Loop");
                     break;
+                case FlowSection.Regroup:
                 case FlowSection.Silence:
                     SetLoop(music, null); // 정적 구간에는 음악 없음 (SOUND_LIST 1-6)
                     SetLoop(ambience, "AMB_Silence_Loop");
@@ -131,21 +148,32 @@ namespace FiveRivers.Audio
                     break;
                 case FlowSection.Dawn:
                     SetLoop(ambience, "AMB_Dawn_Loop");
-                    SetLoop(music, "BGM_Ending", loop: false); // 새벽 20 + 결과 20 = 40초
+                    if (director.Flow.IsExpanded) SetLoop(music, null);
+                    else SetLoop(music, "BGM_Ending", loop: false);
+                    break;
+                case FlowSection.HillAssault:
+                    SetLoop(ambience, "AMB_Battle_Distant_Loop");
+                    SetLoop(music, "BGM_Combat_Bed_Loop");
+                    break;
+                case FlowSection.Result:
+                    if (director.Flow.IsExpanded)
+                    {
+                        SetLoop(ambience, "AMB_Dawn_Loop");
+                        SetLoop(music, "BGM_Ending", loop: false);
+                    }
                     break;
             }
             if (ArtilleryAllowed(t.To)) ScheduleArtillery();
-            else
-            {
-                artillery.Stop();
-                nextArtillery = float.PositiveInfinity;
-            }
+            else StopArtillery();
             SetTankLoops();
         }
 
         void SetTankLoops()
         {
-            bool visible = tank.Visible;
+            // Tank loops only while the tank is actually on stage (its own section and the ally-support finish).
+            // After the fight the wreck can stay active, but Dawn, the hill assault and the result stay tank-silent.
+            var section = director.Flow.Section;
+            bool visible = tank.Visible && (section == FlowSection.Tank || section == FlowSection.AllySupport);
             if (!visible)
             {
                 tankEngine.Stop();
@@ -161,10 +189,11 @@ namespace FiveRivers.Audio
             switch (kind)
             {
                 case EffectKind.ImpactDirt: PlayAt("SFX_Impact_Dirt", position); break;
+                case EffectKind.CannonBlast:
                 case EffectKind.RocketExplosion:
                 case EffectKind.TankHitExplosion: PlayAt("SFX_Rocket_HitSide", position); break;
                 case EffectKind.TankRicochet: PlayAt("SFX_Tank_Ricochet", position); break;
-                case EffectKind.CannonBlast: PlayAt("SFX_Tank_Cannon", position); break;
+                case EffectKind.TankMuzzle: PlayAt("SFX_Tank_Cannon", position); break;
                 case EffectKind.EnemyMuzzle: PlayAt("SFX_Enemy_RifleFire", position); break;
             }
         }
@@ -175,11 +204,7 @@ namespace FiveRivers.Audio
             {
                 wasPaused = director.Flow.Paused;
                 Play2D("UI_Menu_Click");
-                if (wasPaused)
-                {
-                    artillery.Stop();
-                    nextArtillery = float.PositiveInfinity;
-                }
+                if (wasPaused) StopArtillery();
                 else if (ArtilleryAllowed(director.Flow.Section)) ScheduleArtillery();
             }
             // Approach -> Holding changes without a section transition.
@@ -191,20 +216,23 @@ namespace FiveRivers.Audio
             {
                 if (!source.isPlaying || !poolEntries.TryGetValue(source, out var entry)) continue;
                 float duckable = entry.bus == SoundBus.Sfx || entry.bus == SoundBus.Amb ? duck : 1f;
-                source.volume = BusVolume(entry.bus) * entry.volume * duckable;
+                poolGain.TryGetValue(source, out float gain);
+                source.volume = BusVolume(entry.bus) * entry.volume * duckable * (gain > 0f ? gain : 1f);
             }
             ambience.volume = Volume("amb") * VolumeOf(ambience.clip) * duck;
             music.volume = Volume("bgm") * VolumeOf(music.clip);
             tankEngine.volume = Volume("sfx") * VolumeOf(tankEngine.clip) * duck;
             tankDamage.volume = Volume("sfx") * VolumeOf(tankDamage.clip) * duck;
-            artillery.volume = Volume("sfx") * VolumeOf(artillery.clip) * duck;
+            for (int i = 0; i < artillery.Length; i++)
+                artillery[i].volume = Volume("sfx") * VolumeOf(artillery[i].clip) * artilleryLevel[i] * duck;
 
-            float illum = flares.Illumination;
-            if (illum > 0f && !flareBurn.isPlaying) SetLoop(flareBurn, "SFX_Flare_Burn_Loop");
-            if (illum <= 0f && flareBurn.isPlaying) flareBurn.Stop();
-            flareBurn.volume = Volume("sfx") * illum * 0.6f * duck;
-
+            if (clipRemovePending && (!weapons.M1.Reloading || weapons.M1.ReloadProgress >= .31f))
+            {
+                if (weapons.M1.Reloading) Play2D("SFX_M1_ClipRemove");
+                clipRemovePending = false;
+            }
             UpdateFootsteps();
+            UpdateBreath();
             UpdateArtillery();
         }
 
@@ -220,20 +248,64 @@ namespace FiveRivers.Audio
             {
                 stepDistance = 0f;
                 Play2D(player.Sprinting ? "SFX_Foot_Dirt_Run" : "SFX_Foot_Dirt");
+                // Rifle, sling and webbing move with every running step; walking only stirs them now and then.
+                if (player.Sprinting || Random.value < 0.3f) Play("SFX_Gear_Run", null, gain: player.Sprinting ? Random.Range(0.8f, 1f) : 0.4f);
             }
         }
 
-        // Preserve the existing tutorial/silence ambience and include the tank battle.
-        static bool ArtilleryAllowed(FlowSection section) => section >= FlowSection.Tutorial && section <= FlowSection.Tank;
+        // Heavy breathing builds up after a few seconds of running and dies away after stopping.
+        void UpdateBreath()
+        {
+            sprintTime = player.Sprinting ? sprintTime + Time.deltaTime : Mathf.Max(0f, sprintTime - Time.deltaTime * 0.6f);
+            float target = Mathf.Clamp01((sprintTime - 2f) / 3f);
+            breathLevel = Mathf.MoveTowards(breathLevel, target, Time.deltaTime / (target > breathLevel ? 2f : 3f));
+            if (breathLevel > 0f && !breath.isPlaying) SetLoop(breath, "SFX_Player_Breath_Run_Loop");
+            if (breathLevel <= 0f && breath.isPlaying) breath.Stop();
+            breath.volume = Volume("sfx") * VolumeOf(breath.clip) * breathLevel * duck;
+        }
 
-        void ScheduleArtillery() => nextArtillery = Time.time + Random.Range(config.artilleryMin, config.artilleryMax);
+        // Preserve the existing tutorial/silence ambience and include the tank battle.
+        static bool ArtilleryAllowed(FlowSection section) => (section >= FlowSection.Tutorial && section <= FlowSection.Tank)
+            || section == FlowSection.WestAssault || section == FlowSection.HillAssault;
+
+        void ScheduleArtillery()
+        {
+            nextArtillery = Time.time + Random.Range(config.artilleryMin, config.artilleryMax);
+            salvoLeft = Random.value < 0.4f ? Random.Range(1, 3) : 0; // sometimes 2-3 shells land close together
+        }
+
+        void StopArtillery()
+        {
+            foreach (var a in artillery) a.Stop();
+            nextArtillery = float.PositiveInfinity;
+            salvoLeft = 0;
+        }
 
         void UpdateArtillery()
         {
             var s = director.Flow.Section;
             if (!ArtilleryAllowed(s) || director.Flow.Paused || Time.time < nextArtillery) return;
-            Play("SFX_Artillery_Distant", null, targetSource: artillery);
-            ScheduleArtillery();
+            FireDistantShell(s);
+            if (salvoLeft > 0)
+            {
+                salvoLeft--;
+                nextArtillery = Time.time + Random.Range(0.35f, 1.6f);
+            }
+            else ScheduleArtillery();
+        }
+
+        void FireDistantShell(FlowSection section)
+        {
+            int i = artilleryVoice;
+            artilleryVoice = (artilleryVoice + 1) % artillery.Length;
+            var source = artillery[i];
+            Play("SFX_Artillery_Distant", null, targetSource: source);
+            float far = Random.value; // 0 = the nearer ridge, 1 = far down the valley
+            artilleryLevel[i] = Mathf.Lerp(0.38f, 0.14f, far) * (section == FlowSection.Silence ? 0.6f : 1f);
+            artilleryMuffle[i].cutoffFrequency = Mathf.Lerp(1400f, 450f, far);
+            source.panStereo = Random.Range(-0.75f, 0.75f);
+            source.pitch *= Mathf.Lerp(1f, 0.85f, far);
+            source.volume = Volume("sfx") * VolumeOf(source.clip) * artilleryLevel[i] * duck;
         }
 
         float Volume(string bus)
@@ -296,14 +368,20 @@ namespace FiveRivers.Audio
         // A world-space M1 uses the same non-verbal clip and mixer settings as the player's rifle.
         public void PlaySpatial(string id, Vector3 position) => Play(id, position, true);
 
-        void Play(string id, Vector3? position, bool forceSpatial = false, AudioSource targetSource = null)
+        readonly Dictionary<AudioSource, float> poolGain = new Dictionary<AudioSource, float>();
+
+        void Play(string id, Vector3? position, bool forceSpatial = false, AudioSource targetSource = null, float gain = 1f)
         {
             var e = library.Find(id);
             if (e == null || !Ready(e)) return;
             var clip = Pick(e);
             if (clip == null) return;
             var source = targetSource != null ? targetSource : FreeSource();
-            if (targetSource == null) poolEntries[source] = e;
+            if (targetSource == null)
+            {
+                poolEntries[source] = e;
+                poolGain[source] = gain;
+            }
             source.clip = clip;
             source.loop = false;
             source.pitch = 1f + Random.Range(-e.pitchVariance, e.pitchVariance);
@@ -313,7 +391,7 @@ namespace FiveRivers.Audio
             source.rolloffMode = AudioRolloffMode.Linear;
             source.transform.position = position ?? Vector3.zero;
             float duckable = e.bus == SoundBus.Sfx || e.bus == SoundBus.Amb ? duck : 1f;
-            source.volume = BusVolume(e.bus) * e.volume * duckable;
+            source.volume = BusVolume(e.bus) * e.volume * duckable * gain;
             source.Play();
         }
 
@@ -359,8 +437,9 @@ namespace FiveRivers.Audio
             foreach (var source in pool) source.Stop();
             poolEntries.Clear();
             StopVoice();
-            flareBurn.Stop();
-            artillery.Stop();
+            breath.Stop();
+            sprintTime = breathLevel = 0f;
+            foreach (var a in artillery) a.Stop();
             lastPlayed.Clear();
             lastVariant.Clear();
             stepDistance = 0f;

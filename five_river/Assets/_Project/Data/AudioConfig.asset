@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3737c78c4c645924a8bf4a337811e1b1, type: 3}
   m_Name: AudioConfig
   m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.AudioConfig
-  master: 1
+  master: 0.85
   sfx: 0.9
   amb: 0.6
   bgm: 0.6
@@ -22,5 +22,5 @@ MonoBehaviour:
   duckFade: 0.25
   walkStride: 1.6
   runStride: 2.2
-  artilleryMin: 12
-  artilleryMax: 25
+  artilleryMin: 5
+  artilleryMax: 14

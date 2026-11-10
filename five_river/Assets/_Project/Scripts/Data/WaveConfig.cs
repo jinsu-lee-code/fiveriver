@@ -9,6 +9,7 @@ namespace FiveRivers.Data
         [Header("구성 : BALANCE 2-1")]
         public int scouts;
         public int mainAssault;
+        [Min(1)] public int westAssault = 4;
         public int maxActive;
         public float spawnInterval;
 
@@ -26,6 +27,7 @@ namespace FiveRivers.Data
         public float accuracyLit;       // 조명탄 아래 명중률
         public float crouchedFactor;    // 플레이어가 Z 자세면 곱함
         public float damage;
+        [Min(1f)] public float expandedDamage = 35f;
         public float sightRange;
     }
 }

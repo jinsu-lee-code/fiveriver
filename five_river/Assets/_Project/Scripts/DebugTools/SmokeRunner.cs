@@ -20,6 +20,7 @@ namespace FiveRivers.DebugTools
         [SerializeField] int runs = 3;
 
         readonly StringBuilder report = new StringBuilder();
+        const float SectionTimeout = 120f; // 실제 시간 기준, 실패해도 보고서를 남긴다.
         int failures;
         Color nightFog;
 
@@ -66,24 +67,59 @@ namespace FiveRivers.DebugTools
                 Check(run, "time scale", Time.timeScale == speed);
 
                 flow.ReportGoalMet(FlowSection.Tutorial);
-                while (flow.Section == FlowSection.Scout || flow.Section == FlowSection.Assault)
+                float deadline = Time.realtimeSinceStartup + SectionTimeout;
+                while ((flow.Section == FlowSection.Scout || flow.Section == FlowSection.Assault)
+                    && Time.realtimeSinceStartup < deadline)
                 {
                     foreach (var e in FindObjectsByType<EnemyAgent>(FindObjectsSortMode.None))
                         if (e.Alive) e.TakeDamage(9999f, e.transform.position);
                     yield return new WaitForSecondsRealtime(0.3f);
                 }
+                if (flow.IsExpanded)
+                {
+                    Check(run, "reached regroup", flow.Section == FlowSection.Regroup);
+                    flow.ReportGoalMet(FlowSection.Regroup);
+                    Check(run, "reached western assault", flow.Section == FlowSection.WestAssault);
+                    yield return null;
+                    flow.ReportGoalMet(FlowSection.WestAssault);
+                    Log("Simulated regroup and western objective completion.");
+                }
                 Check(run, "reached silence", flow.Section == FlowSection.Silence);
                 flow.ReportGoalMet(FlowSection.Silence);
-                yield return new WaitUntil(() => flow.Section != FlowSection.Silence);
+                yield return WaitWhileSection(flow, FlowSection.Silence);
                 Check(run, "tank section", flow.Section == FlowSection.Tank && weapons.BazookaUnlocked && tank.Visible);
+                if (flow.Section != FlowSection.Tank)
+                {
+                    flow.AbortToTitle();
+                    break;
+                }
                 yield return new WaitForSecondsRealtime(1f);
                 var body = tank.transform.GetChild(0);
                 tank.OnRocketHit(body.position, body.position - body.right * 40f);
                 tank.OnRocketHit(body.position, body.position - body.right * 40f);
-                Check(run, "tank stopped -> dawn", flow.Section == FlowSection.Dawn);
+                Check(run, flow.IsExpanded ? "tank stopped -> hill assault" : "tank stopped -> dawn",
+                    flow.Section == (flow.IsExpanded ? FlowSection.HillAssault : FlowSection.Dawn));
                 double endingStart = flow.RunTime;
-                yield return new WaitUntil(() => flow.Section == FlowSection.Title);
-                Check(run, "ending 40s", System.Math.Abs(flow.RunTime - endingStart - 40.0) < 1.0);
+                if (flow.IsExpanded)
+                {
+                    yield return null;
+                    flow.ReportGoalMet(FlowSection.HillAssault);
+                    Check(run, "hill captured -> dawn", flow.Section == FlowSection.Dawn);
+                    yield return null;
+                    flow.ReportGoalMet(FlowSection.Dawn);
+                    Check(run, "reached result", flow.Section == FlowSection.Result);
+                    yield return null;
+                    flow.ReportGoalMet(FlowSection.Result);
+                    Log("Simulated hill capture, Tae-seok's arrival at dawn, and letter acknowledgement.");
+                }
+                else
+                {
+                    yield return WaitWhileSection(flow, FlowSection.Dawn);
+                    yield return WaitWhileSection(flow, FlowSection.Result);
+                    Check(run, "ending 40s", System.Math.Abs(flow.RunTime - endingStart - 40.0) < 1.0);
+                }
+                Check(run, "returned to title", flow.Section == FlowSection.Title);
+                if (flow.IsRunning) flow.AbortToTitle();
                 Log($"run {run} done: run time {flow.RunTime:0.0}s");
             }
 
@@ -92,6 +128,13 @@ namespace FiveRivers.DebugTools
             Log(failures == 0 ? "RESULT PASS" : $"RESULT FAIL ({failures})");
             File.WriteAllText(Path.Combine(Path.GetDirectoryName(Application.dataPath) ?? ".", "smoke_report.txt"), report.ToString());
             Application.Quit();
+        }
+
+        static IEnumerator WaitWhileSection(DemoFlow flow, FlowSection section)
+        {
+            float deadline = Time.realtimeSinceStartup + SectionTimeout;
+            while (flow.Section == section && Time.realtimeSinceStartup < deadline)
+                yield return null;
         }
 
         void Check(int run, string what, bool ok)

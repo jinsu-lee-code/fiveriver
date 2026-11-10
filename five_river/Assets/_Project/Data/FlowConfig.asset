@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aaf2c1729f4a84479da1230bb262914, type: 3}
   m_Name: FlowConfig
   m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.FlowConfig
+  legacyExhibitMode: 0
   s1Cap: 105
   s2Cap: 60
   s3Cap: 150
@@ -31,3 +32,8 @@ MonoBehaviour:
   forceEndingAt: 495
   allySupportDuration: 5
   hardCap: 540
+  regroupCap: 180
+  westAssaultCap: 240
+  dawnCap: 120
+  hillAssaultCap: 480
+  resultCap: 240

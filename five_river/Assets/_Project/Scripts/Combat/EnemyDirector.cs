@@ -4,6 +4,7 @@ using FiveRivers.Core;
 using FiveRivers.Data;
 using FiveRivers.DebugTools;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace FiveRivers.Combat
 {
@@ -22,6 +23,9 @@ namespace FiveRivers.Combat
 
         readonly List<EnemyAgent> alive = new List<EnemyAgent>();
         readonly HashSet<Transform> usedCovers = new HashSet<Transform>();
+        Transform[] westCovers;
+        Transform westSpawn;
+        public bool WestWaveCleared { get; private set; }
         WavePlan plan;
         int spawnIndex;
         bool scoutsActive;
@@ -55,6 +59,9 @@ namespace FiveRivers.Combat
                     int joined = alive.Count(e => e.Alive && !e.Retreating);
                     BeginAssault(joined);
                     break;
+                case FlowSection.WestAssault:
+                    BeginWest();
+                    break;
                 case FlowSection.Title:
                 case FlowSection.Tutorial:
                     ClearAll();
@@ -72,6 +79,7 @@ namespace FiveRivers.Combat
             ClearAll();
             if (checkpoint == FlowCheckpoint.FirstContact) BeginScouts();
             else if (checkpoint == FlowCheckpoint.MainAssault) BeginAssault(0);
+            else if (checkpoint == FlowCheckpoint.WestAssault) BeginWest();
         }
 
         void BeginScouts()
@@ -100,6 +108,24 @@ namespace FiveRivers.Combat
             }
         }
 
+        void BeginWest()
+        {
+            ClearAll();
+            WestWaveCleared = false;
+            westSpawn = points.enemySpawns.OrderBy(p => p.position.x).First();
+            westCovers = points.assaultCovers.Concat(points.scoutCovers)
+                .OrderBy(p => p.position.x).Take(4).ToArray();
+            plan = new WavePlan(config.westAssault, config.maxActive, config.spawnInterval, 0, Time.time);
+        }
+
+        // Hill defenders hold their authored cover. The hill director owns their objective.
+        public EnemyAgent SpawnDefender(Transform cover)
+        {
+            if (cover == null || !NavMesh.SamplePosition(cover.position, out var hit, 4f, NavMesh.AllAreas))
+                return null;
+            return SpawnAt(cover, hit.position, cover.rotation);
+        }
+
         void Update()
         {
             var flow = director.Flow;
@@ -111,13 +137,21 @@ namespace FiveRivers.Combat
                 flow.ReportGoalMet(FlowSection.Scout);
             }
 
-            if (flow.Section == FlowSection.Assault && plan != null)
+            if ((flow.Section == FlowSection.Assault || flow.Section == FlowSection.WestAssault) && plan != null)
             {
-                if (plan.TrySpawn(Time.time)) Spawn(PickCover(float.PositiveInfinity, far: true));
+                bool west = flow.Section == FlowSection.WestAssault;
+                if (west)
+                {
+                    if (NavMesh.SamplePosition(westSpawn.position, out var hit, 4f, NavMesh.AllAreas)
+                        && plan.TrySpawn(Time.time))
+                        SpawnAt(PickCover(float.PositiveInfinity, far: true), hit.position, westSpawn.rotation);
+                }
+                else if (plan.TrySpawn(Time.time)) Spawn(PickCover(float.PositiveInfinity, far: true));
                 if (plan.Done)
                 {
                     plan = null;
-                    flow.ReportGoalMet(FlowSection.Assault);
+                    if (west) WestWaveCleared = true;
+                    else flow.ReportGoalMet(FlowSection.Assault);
                 }
             }
         }
@@ -125,12 +159,17 @@ namespace FiveRivers.Combat
         EnemyAgent Spawn(Transform cover)
         {
             var spawn = points.enemySpawns[spawnIndex++ % points.enemySpawns.Length];
-            var e = Instantiate(enemyPrefab, spawn.position, spawn.rotation, transform);
+            return SpawnAt(cover, spawn.position, spawn.rotation);
+        }
+
+        EnemyAgent SpawnAt(Transform cover, Vector3 position, Quaternion rotation)
+        {
+            var e = Instantiate(enemyPrefab, position, rotation, transform);
             e.Gone += OnGone;
             e.Init(this, config, cover);
             usedCovers.Add(cover);
             alive.Add(e);
-            EnemySpawned?.Invoke(spawn.position);
+            EnemySpawned?.Invoke(position);
             return e;
         }
 
@@ -149,8 +188,9 @@ namespace FiveRivers.Combat
         // 빈 엄폐 지점 고르기. far면 먼 쪽부터, 아니면 지금보다 가까운(플레이어 쪽) 곳.
         Transform PickCover(float currentZ, bool far)
         {
-            var free = points.assaultCovers.Where(c => !usedCovers.Contains(c)).ToList();
-            if (free.Count == 0) return points.assaultCovers[Random.Range(0, points.assaultCovers.Length)];
+            var covers = director.Flow.Section == FlowSection.WestAssault ? westCovers : points.assaultCovers;
+            var free = covers.Where(c => !usedCovers.Contains(c)).ToList();
+            if (free.Count == 0) return far ? covers[Random.Range(0, covers.Length)] : null;
             if (far) return free.OrderByDescending(c => c.position.z).Take(3).OrderBy(_ => Random.value).First();
             var closer = free.Where(c => c.position.z < currentZ - 4f).OrderByDescending(c => c.position.z).FirstOrDefault();
             return closer;
@@ -158,7 +198,7 @@ namespace FiveRivers.Combat
 
         public void RequestAdvance(EnemyAgent e)
         {
-            if (e.IsScout && director.Flow.Section == FlowSection.Scout) return;
+            if (director.Flow.Section == FlowSection.HillAssault || (e.IsScout && director.Flow.Section == FlowSection.Scout)) return;
             var next = PickCover(e.transform.position.z, far: false);
             if (next == null || Random.value < 0.4f) return;
             Release(e.Cover);
@@ -181,7 +221,8 @@ namespace FiveRivers.Combat
 
             if (clear && Random.value < accuracy)
             {
-                playerHealth.TakeDamage(config.damage * director.EnemyDamageScale, muzzle);
+                float damage = director.Flow.IsExpanded ? config.expandedDamage : config.damage;
+                playerHealth.TakeDamage(damage * director.EnemyDamageScale, muzzle);
                 return;
             }
             // 빗나간 탄: 플레이어 근처 흙 · 모래주머니에 튄다
@@ -208,7 +249,7 @@ namespace FiveRivers.Combat
             plan = null;
             scoutsActive = false;
             foreach (var e in alive.ToArray())
-                if (e != null) Destroy(e.gameObject);
+                if (e != null) { e.Gone -= OnGone; e.gameObject.SetActive(false); Destroy(e.gameObject); }
             alive.Clear();
             usedCovers.Clear();
             // 쓰러진 몸도 지운다

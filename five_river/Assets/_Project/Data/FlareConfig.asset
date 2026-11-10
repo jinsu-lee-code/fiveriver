@@ -20,5 +20,5 @@ MonoBehaviour:
   launchHeight: 45
   fallSpeed: 1.6
   swayAmplitude: 1.5
-  lightIntensity: 1500
+  lightIntensity: 1900
   lightRange: 110

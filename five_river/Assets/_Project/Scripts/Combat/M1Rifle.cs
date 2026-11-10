@@ -21,6 +21,8 @@ namespace FiveRivers.Combat
         [SerializeField] Vector3 aimEuler;
         [SerializeField] LayerMask hitMask = ~0;
 
+        public static float AimEyePull = 0f; // 0.035 with WeaponHolder.PeepRing; 0 = original eye position
+
         float nextFire;
         float reloadEnd;
         float aimBlend;
@@ -52,7 +54,8 @@ namespace FiveRivers.Combat
         {
             float blendSpeed = config.aimBlendTime > 0f ? Time.deltaTime / config.aimBlendTime : 1f;
             aimBlend = Mathf.MoveTowards(aimBlend, aim && !Reloading ? 1f : 0f, blendSpeed);
-            model.localPosition = Vector3.Lerp(hipPosition, aimPosition, aimBlend);
+            // Bring the rear aperture to ~3.5 cm from the eye (it sat 9.5 cm away and read as a small plate).
+            model.localPosition = Vector3.Lerp(hipPosition, aimPosition + Vector3.back * AimEyePull, aimBlend);
             model.localRotation = Quaternion.Slerp(Quaternion.Euler(hipEuler), Quaternion.Euler(aimEuler), aimBlend);
 
             if (Reloading)
@@ -83,7 +86,7 @@ namespace FiveRivers.Combat
             float spread = aimed ? config.m1AimSpread : config.m1HipSpread;
             var dir = Quaternion.Euler(UnityEngine.Random.Range(-spread, spread) * 0.5f, UnityEngine.Random.Range(-spread, spread) * 0.5f, 0f) * Vector3.forward;
             var ray = new Ray(view.transform.position, view.transform.rotation * dir);
-            if (Physics.Raycast(ray, out var hit, config.m1Range, hitMask, QueryTriggerInteraction.Ignore))
+            if (TryGetShotHit(ray, config.m1Range, hitMask, player.transform, out var hit))
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(config.m1Damage, view.transform.position);
@@ -113,6 +116,23 @@ namespace FiveRivers.Combat
                 ClipEjected?.Invoke();
                 TryReload();
             }
+        }
+
+        static bool TryGetShotHit(Ray ray, float range, int mask, Transform shooter, out RaycastHit hit)
+        {
+            if (!Physics.Raycast(ray, out hit, range, mask, QueryTriggerInteraction.Ignore)) return false;
+            if (!hit.collider.transform.IsChildOf(shooter)) return true;
+
+            // Only a self-hit needs another query. RaycastAll does not guarantee distance order.
+            float nearest = float.PositiveInfinity;
+            hit = default;
+            foreach (var candidate in Physics.RaycastAll(ray, range, mask, QueryTriggerInteraction.Ignore))
+            {
+                if (candidate.distance >= nearest || candidate.collider.transform.IsChildOf(shooter)) continue;
+                nearest = candidate.distance;
+                hit = candidate;
+            }
+            return hit.collider != null;
         }
 
         public bool TryReload()

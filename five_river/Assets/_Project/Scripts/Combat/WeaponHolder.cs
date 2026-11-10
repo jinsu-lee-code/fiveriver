@@ -35,9 +35,40 @@ namespace FiveRivers.Combat
         public event Action LoadoutReset;          // 체크포인트 · 새 회차 (소리 없음)
         public event Action BazookaGiven;
 
+        // Peep-sight aiming: see PeepSightOverlay. Near clip drops while aiming so the rear sight 3-4 cm from
+        // the eye is not cut away.
+        public static bool DebugForceAim; // capture/review tools only
+        public static float HipNearClip = 0.03f, AimNearClip = 0.01f;
+        // Off by request (2026-11-07): aim through the real rear-sight model at its original eye position, no
+        // painted ghost ring or focus blur. Set true to bring the ghost-ring presentation back.
+        public static bool PeepRing = false;
+        PeepSightOverlay peep;
+        Transform rearSight;
+        Renderer[] rearApertures = Array.Empty<Renderer>();
+
         void Start()
         {
             ShowOnly(Current);
+            peep = view.gameObject.AddComponent<PeepSightOverlay>();
+            foreach (var t in m1.GetComponentsInChildren<Transform>(true))
+                if (t.name == "Sight_RearCentre") rearSight = t;
+            rearApertures = Array.FindAll(m1.GetComponentsInChildren<Renderer>(true), r => r.name == "M1_SingleRearAperture");
+            if (rearSight == null) Debug.LogWarning("[WeaponHolder] Sight_RearCentre not found; peep ring stays screen-centred.");
+        }
+
+        void LateUpdate()
+        {
+            float blend = PeepRing && Current == WeaponSlot.M1 && !Switching ? m1.AimBlend : 0f;
+            // the ring only appears once the eye is actually at the aperture
+            float ring = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.55f, 0.95f, blend));
+            var centre = new Vector2(.5f, .5f);
+            if (rearSight != null && ring > 0f)
+            {
+                var sp = view.WorldToViewportPoint(rearSight.position);
+                if (sp.z > 0f) centre = sp;
+            }
+            peep.Show(ring, centre);
+            foreach (var r in rearApertures) r.forceRenderingOff = ring > 0.5f;
         }
 
         void Update()
@@ -71,7 +102,7 @@ namespace FiveRivers.Combat
             }
 
             ApplyVisibility();
-            bool aim = canAct && !Switching && controls.Aim.IsPressed() && !player.Sprinting;
+            bool aim = canAct && !Switching && (controls.Aim.IsPressed() || DebugForceAim) && !player.Sprinting;
             player.Aiming = aim;
             bool weaponCanAct = canAct && !Switching;
             if (Current == WeaponSlot.M1) m1.Tick(weaponCanAct, aim);
@@ -80,6 +111,7 @@ namespace FiveRivers.Combat
             float blend = Current == WeaponSlot.M1 ? m1.AimBlend : bazooka.AimBlend;
             float aimFov = Current == WeaponSlot.M1 ? config.m1AimFov : config.bazookaAimFov;
             view.fieldOfView = Mathf.Lerp(config.hipFov, aimFov, blend);
+            view.nearClipPlane = Mathf.Lerp(HipNearClip, AimNearClip, PeepRing && Current == WeaponSlot.M1 ? blend : 0f);
         }
 
         void BeginSwitch(WeaponSlot to)

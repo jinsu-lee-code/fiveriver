@@ -20,6 +20,10 @@ namespace FiveRivers.Combat
         [SerializeField] Vector2 frontLineX = new Vector2(-20f, 20f);
         [SerializeField] float frontLineZ = 0.57f;
 
+        // The dawn counterattack opens a single crossing at the east end of the trench.
+        float? hillExitX;
+        public void SetHillExit(float? x) => hillExitX = x;
+
         CharacterController body;
         float pitch;
         float recoil;
@@ -89,7 +93,8 @@ namespace FiveRivers.Combat
             {
                 float t = (frontLineZ - before.z) / movement.z;
                 float crossingX = before.x + movement.x * t;
-                if (!allowSidePassage || (crossingX >= frontLineX.x && crossingX <= frontLineX.y))
+                bool inHillExit = hillExitX.HasValue && Mathf.Abs(crossingX - hillExitX.Value) <= 4f;
+                if (!inHillExit && (!allowSidePassage || (crossingX >= frontLineX.x && crossingX <= frontLineX.y)))
                     movement.z = frontLineZ - before.z;
             }
             body.Move(movement);

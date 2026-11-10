@@ -18,11 +18,18 @@ namespace FiveRivers.Recording
         [SerializeField] PlayerHealth health;
         [SerializeField] TankController tank;
 
-        static readonly FlowSection[] Sections =
+        static readonly FlowSection[] ExhibitSections =
         {
             FlowSection.Tutorial, FlowSection.Scout, FlowSection.Assault, FlowSection.Silence,
             FlowSection.Tank, FlowSection.AllySupport, FlowSection.Dawn, FlowSection.Result,
         };
+
+        static readonly FlowSection[] MissionSections = {
+            FlowSection.Tutorial, FlowSection.Scout, FlowSection.Assault, FlowSection.Regroup,
+            FlowSection.WestAssault, FlowSection.Silence, FlowSection.Tank, FlowSection.AllySupport,
+            FlowSection.HillAssault, FlowSection.Dawn, FlowSection.Result
+        };
+        FlowSection[] Sections => director.Flow.IsExpanded ? MissionSections : ExhibitSections;
 
         sealed class RunData
         {
@@ -49,6 +56,7 @@ namespace FiveRivers.Recording
 
         void Start()
         {
+            if (director.Flow.IsExpanded) path = Path.Combine(Application.persistentDataPath, "dabudong_runs.csv");
             director.Flow.SectionChanged += OnSectionChanged;
             health.Died += () =>
             {
@@ -70,7 +78,7 @@ namespace FiveRivers.Recording
             if (t.To != FlowSection.Title && !run.entered.ContainsKey(t.To)) run.entered[t.To] = t.Time;
             if (t.To == FlowSection.Title)
             {
-                string reason = t.Reason == TransitionReason.Timer ? "정상"
+                string reason = (t.Reason == TransitionReason.Timer || t.Reason == TransitionReason.GoalMet) ? "정상"
                     : t.Reason == TransitionReason.HardCap ? "강제"
                     : t.Reason == TransitionReason.Abort ? "운영자재시작"
                     : t.Reason.ToString();

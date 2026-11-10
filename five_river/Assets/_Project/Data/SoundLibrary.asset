@@ -17,7 +17,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 58037d8e88cf0e843b544e06e91ec06c, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.45
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -27,7 +27,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 263b5ba0e0ef6d6498df11697612d6fb, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.55
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -37,7 +37,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 532cd079bbceee540a61ece9d88e3c5c, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -47,7 +47,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 3f461de4aefac9a4f9d5c84a47edbbdb, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -57,7 +57,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 1fd295dca9d67b94ab8c4925ccf8bcdc, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -68,7 +68,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 61abcbf184c42c24488f74fbb646f7be, type: 3}
     - {fileID: 8300000, guid: 3cdeceab3bef94849ae791840ca96488, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.45
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -78,7 +78,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 316af7e216db0aa4ea946bed894588f5, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -88,7 +88,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: e2fd8362975bfdb45b8385b04c683057, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -99,7 +99,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: c7a60972debacb7409ada552467e1408, type: 3}
     - {fileID: 8300000, guid: ec9bf4e578b542f41bb337a61c71f38f, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.75
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 250
@@ -122,7 +122,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 2bfcf74fc0ea3814a8ef08af295c5259, type: 3}
     - {fileID: 8300000, guid: 9a7f4a5023fd8754181abf1753afd8c5, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 200
@@ -133,7 +133,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 7d185fa09500d8340b605781bdf85862, type: 3}
     - {fileID: 8300000, guid: fc4e9636ba99b584a9acbc94d524b1b7, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 200
@@ -146,7 +146,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 9e86e19a905be944cb2700bffd9f05ed, type: 3}
     - {fileID: 8300000, guid: 956bcaa6a38182248980ab70cac955f6, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.7
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -158,7 +158,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 298793441da07f544bd4aaef52ab8783, type: 3}
     - {fileID: 8300000, guid: ae7c6fd412ad2b142a913c507afd9518, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 60
@@ -168,7 +168,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: ef1a463c7815df74eace8616ff753f33, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.7
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -178,7 +178,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 9c7b552181533f54f9290122d6cc70c5, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.7
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 180
@@ -188,7 +188,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 4401598ee1e83ce4c87fff4c93d77b8e, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.45
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 180
@@ -208,7 +208,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 87613885d83d626498a58ad03015e382, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.85
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 300
@@ -219,7 +219,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 27e8113478477d343bbf9e8a6c82194b, type: 3}
     - {fileID: 8300000, guid: bcbf0890077138541a7e51bfe7490857, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.6
     pitchVariance: 0.05
     spatial: 1
     maxDistance: 200
@@ -259,10 +259,10 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: 935876e020c727345ba1e6a2a9f02a0e, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.8
     pitchVariance: 0.05
     spatial: 0
-    maxDistance: 120
+    maxDistance: 250
     loop: 0
     cooldown: 0
   - id: SFX_Flare_Burn_Loop
@@ -279,7 +279,7 @@ MonoBehaviour:
     clips:
     - {fileID: 8300000, guid: f72350dd7731393459410cc403958a48, type: 3}
     bus: 0
-    volume: 0.6
+    volume: 1
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -291,7 +291,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: a09e3d8dba94ffb4b8661cc0b4bd776d, type: 3}
     - {fileID: 8300000, guid: cb2566f025515ca4db0d40a14db8e6bb, type: 3}
     bus: 0
-    volume: 0.5
+    volume: 0.35
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -299,10 +299,14 @@ MonoBehaviour:
     cooldown: 0
   - id: SFX_Foot_Dirt_Run
     clips:
-    - {fileID: 8300000, guid: 16804f7536bee6f45a6ff0af83ff7029, type: 3}
-    - {fileID: 8300000, guid: 113bae22461b52949b1b88657171d88b, type: 3}
-    - {fileID: 8300000, guid: 4cc377d88eab1694bb567a3ba317c5ca, type: 3}
-    - {fileID: 8300000, guid: 57a4f8e3cdfbdbd4bb8872868f633498, type: 3}
+    - {fileID: 8300000, guid: fe8bfeb110672d541a70bebcbf5626d5, type: 3}
+    - {fileID: 8300000, guid: 7a2df0e3bd576884f874425c23205377, type: 3}
+    - {fileID: 8300000, guid: 5a15a002139b5d242bff10f806edbc4f, type: 3}
+    - {fileID: 8300000, guid: 66ce21fc2fb4e7343ab9883dae8c6377, type: 3}
+    - {fileID: 8300000, guid: b5ef3fcdab838e84f95829fa4375b754, type: 3}
+    - {fileID: 8300000, guid: 3328b4f115bfe2047b2d30c59f8f191c, type: 3}
+    - {fileID: 8300000, guid: c2f42b0fdfc038644be329b4be3834eb, type: 3}
+    - {fileID: 8300000, guid: 4276e68bfb87c474e8703b3e0b3a0f39, type: 3}
     bus: 0
     volume: 0.6
     pitchVariance: 0.05
@@ -315,7 +319,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 8f334b79ddd642143b22a5a4ae716395, type: 3}
     - {fileID: 8300000, guid: f2f250b8c353469419d22bd51a4af1ae, type: 3}
     bus: 0
-    volume: 1
+    volume: 0.4
     pitchVariance: 0.05
     spatial: 0
     maxDistance: 120
@@ -441,3 +445,28 @@ MonoBehaviour:
     maxDistance: 120
     loop: 0
     cooldown: 0.5
+  - id: SFX_Gear_Run
+    clips:
+    - {fileID: 8300000, guid: 6349ceecb459e764eb939de559a09c95, type: 3}
+    - {fileID: 8300000, guid: 988d8fc12b98b284c99db91d2ffca4f7, type: 3}
+    - {fileID: 8300000, guid: 3272e19fb348d5e469e3c9575b5c4e84, type: 3}
+    - {fileID: 8300000, guid: 65e26aef9fb9fee429e8fccce04d41fd, type: 3}
+    - {fileID: 8300000, guid: 0fe45f3e441319045a678759515ad418, type: 3}
+    - {fileID: 8300000, guid: 06aae373c96fe024290c74f14d275fe8, type: 3}
+    bus: 0
+    volume: 0.6
+    pitchVariance: 0.06
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Player_Breath_Run_Loop
+    clips:
+    - {fileID: 8300000, guid: a676b4d1b4c739e4d8cb2015f6ee5e0a, type: 3}
+    bus: 0
+    volume: 0.5
+    pitchVariance: 0
+    spatial: 0
+    maxDistance: 120
+    loop: 1
+    cooldown: 0

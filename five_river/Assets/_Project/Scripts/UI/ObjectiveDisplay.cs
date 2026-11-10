@@ -45,6 +45,15 @@ namespace FiveRivers.UI
             Shown?.Invoke();
         }
 
+        // Refresh the wording (distance, direction) without replaying the entrance animation or sound.
+        public void UpdateText(string text, bool ignoreParentGroups = false)
+        {
+            if (!visible || string.IsNullOrEmpty(text)) { Show(text, ignoreParentGroups); return; }
+            group.ignoreParentGroups = ignoreParentGroups;
+            Current = text;
+            objective.text = text;
+        }
+
         public void Hide()
         {
             group.ignoreParentGroups = false;

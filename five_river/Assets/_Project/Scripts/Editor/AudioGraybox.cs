@@ -79,6 +79,9 @@ namespace FiveRivers.EditorTools
             // 폴리 (3-4)
             S("SFX_Foot_Dirt", F, 4, 0.25f, SoundBus.Sfx, (t, r) => Brown(r) * Env(t, 0.003f, 0.15f) * 0.35f, volume: 0.5f);
             S("SFX_Foot_Dirt_Run", F, 4, 0.25f, SoundBus.Sfx, (t, r) => Brown(r) * Env(t, 0.003f, 0.18f) * 0.5f, volume: 0.6f);
+            // Running layers, cut from the rifle-handling and gear recordings by C:/sk_anim/scripts/make_run_foley.py
+            S("SFX_Gear_Run", F, 6, 0.32f, SoundBus.Sfx, (t, r) => Click(t, 0.03f, r) * 0.4f + Brown(r) * Env(t, 0.005f, 0.12f) * 0.2f, volume: 0.45f);
+            S("SFX_Player_Breath_Run_Loop", F, 0, 4.7f, SoundBus.Sfx, (t, r) => Brown(r) * 0.05f, volume: 0.5f, loop: true);
             S("SFX_Stance_Change", F, 2, 0.6f, SoundBus.Sfx, (t, r) => Brown(r) * Env(t, 0.04f, 0.45f) * 0.4f);
             S("SFX_Ammo_Pickup", F, 0, 1.0f, SoundBus.Sfx, (t, r) => Click(t, 0f, r) + Click(t, 0.25f, r) * 0.7f + Click(t, 0.5f, r) * 0.9f);
             // 환경음 (3-5) — 그레이박스는 10초 루프 (최종은 30초)

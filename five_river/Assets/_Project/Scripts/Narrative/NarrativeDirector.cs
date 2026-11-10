@@ -9,7 +9,7 @@ namespace FiveRivers.Narrative
 {
     // 구간별 목표 문구 · 분대장 · 박용팔 대사(자막)와 S4 정적 연출.
     // S4: 탄약 보충 + 박용팔의 호출(만수의 부재)이 끝나면 구간 완료를 보고한다 (GDD 4 · 8번). 정적 구간에는 음악 없음.
-    public sealed class NarrativeDirector : MonoBehaviour
+    public sealed partial class NarrativeDirector : MonoBehaviour
     {
         [SerializeField] FlowDirector director;
         [SerializeField] GameText text;
@@ -27,6 +27,8 @@ namespace FiveRivers.Narrative
         [SerializeField] float parkCall1At = 4f;
         [SerializeField] float parkCall2At = 9f;
         [SerializeField] float silenceSettleAfterCall = 4f;
+
+        public GameText Text => text;
 
         FlowSection lastCombatHintSection = FlowSection.Title;
         bool lastCombatHintBright;
@@ -81,6 +83,7 @@ namespace FiveRivers.Narrative
         void OnRetry(FlowCheckpoint checkpoint)
         {
             subtitles.Clear();
+            OnWestRetry(checkpoint);
             lastCombatHintSection = FlowSection.Title;
             if (checkpoint != FlowCheckpoint.Tank) return;
             tankObjective.Reset();
@@ -121,7 +124,8 @@ namespace FiveRivers.Narrative
                     subtitles.Clear();
                     subtitles.Say(text.retreat);
                     objective.Show(text.objectiveSilence);
-                    blanketBody.SetActive(true);
+                    // The covered body is Choi Man-su: in the expanded run it appears only after he has fallen.
+                    blanketBody.SetActive(!director.Flow.IsExpanded || mansuLostThisRun);
                     silence = StartCoroutine(SilenceSequence());
                     break;
                 case FlowSection.Tank:
@@ -146,6 +150,7 @@ namespace FiveRivers.Narrative
                     objective.Hide();
                     break;
             }
+            OnWestSectionChanged(t);
         }
 
         IEnumerator SilenceSequence()

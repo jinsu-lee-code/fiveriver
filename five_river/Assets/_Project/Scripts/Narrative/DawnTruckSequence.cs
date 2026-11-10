@@ -49,7 +49,8 @@ namespace FiveRivers.Narrative
         bool stopped, audioPaused, engineEnded;
         float engineVolume;
 
-        public int PassengerCount => passengers.Count;
+        public int PassengerCount => passengers.Count;
+        public Transform JoinedLead => JoinedCount > 0 && passengers.Count > 0 ? passengers[0].body : null;
         public int JoinedCount { get; private set; }
         public bool Stopped => stopped;
 
@@ -175,6 +176,10 @@ namespace FiveRivers.Narrative
             }
         }
 
+        // Forward offsets and headings relative to the authored join marker.
+        static readonly float[] JoinDepth = { .22f, -.48f, .42f, -.16f };
+        static readonly float[] JoinYaw = { 14f, -8f, -17f, 7f };
+
         void PresentStationaryArrival()
         {
             if (!arrivalPresented)
@@ -185,9 +190,12 @@ namespace FiveRivers.Narrative
                     var passenger = passengers[i];
                     if (passenger.body == null) continue;
                     float lateral = (i - (passengers.Count - 1) * .5f) * 1.1f;
-                    var position = joinEnd.TransformPoint(narratedJoinOffset + Vector3.right * lateral);
+                    int slot = i % JoinDepth.Length;
+                    var offset = new Vector3(lateral, 0f, JoinDepth[slot]);
+                    var position = joinEnd.TransformPoint(narratedJoinOffset + offset);
                     Ground(ref position);
-                    passenger.body.SetPositionAndRotation(position, joinEnd.rotation);
+                    var heading = joinEnd.rotation * Quaternion.Euler(0f, JoinYaw[slot], 0f);
+                    passenger.body.SetPositionAndRotation(position, heading);
                     passenger.released = true;
                     JoinedCount++;
                 }
@@ -195,8 +203,9 @@ namespace FiveRivers.Narrative
             }
             // Reveal only outside the player's view: never show an on-screen teleport.
             var planes = arrivalView != null ? GeometryUtility.CalculateFrustumPlanes(arrivalView) : null;
-            foreach (var passenger in passengers)
+            for (int i = 0; i < passengers.Count; i++)
             {
+                var passenger = passengers[i];
                 if (passenger.body == null || passenger.body.gameObject.activeSelf) continue;
                 var bounds = new Bounds(passenger.body.position + Vector3.up, new Vector3(1.2f, 2.2f, 1.2f));
                 if (planes != null && GeometryUtility.TestPlanesAABB(planes, bounds)) continue;
@@ -205,7 +214,7 @@ namespace FiveRivers.Narrative
                 {
                     passenger.animator.speed = 1f;
                     passenger.animator.SetFloat(SpeedId, 0f);
-                    passenger.animator.Play("Idle_Stand", 0, 0f);
+                    passenger.animator.Play("Idle_Stand", 0, Mathf.Repeat(i * .23f, 1f));
                     passenger.animator.Update(0f);
                 }
             }

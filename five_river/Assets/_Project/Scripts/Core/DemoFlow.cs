@@ -14,6 +14,7 @@ namespace FiveRivers.Core
         readonly TankConfig tank;
         readonly RunClock clock = new RunClock();
 
+        bool goalWhilePaused;
         double sectionStart;
         double silenceGoalAt = -1; // S4 완료 보고 시각, 미보고면 음수
         bool forcedSilence;        // 7:00 강제 전환으로 들어온 정적
@@ -33,6 +34,10 @@ namespace FiveRivers.Core
         public double TankAttemptLimit => TankFailures == 0 ? tank.attempt1 : tank.attempt2;
 
         public FlowSection Section { get; private set; } = FlowSection.Title;
+        public bool IsExpanded => !config.legacyExhibitMode;
+        FlowSection AfterAssault => IsExpanded ? FlowSection.Regroup : FlowSection.Silence;
+        // 확장 흐름은 전차 뒤 능선 탈환 → 새벽 보충병 합류 → 결말 (결정 2026-11-09, GDD 머리말)
+        FlowSection AfterTank => IsExpanded ? FlowSection.HillAssault : FlowSection.Dawn;
         public bool IsRunning => Section != FlowSection.Title;
         public double RunTime => clock.Elapsed;
         public double SectionTime => clock.Elapsed - sectionStart;
@@ -43,7 +48,8 @@ namespace FiveRivers.Core
         public bool EndingStarted { get; private set; }
 
         // 8:15 이후 · 아군 지원 · 결말 중에는 피해 · 사망 · 재시도를 받지 않는다.
-        public bool CombatLocked => ForcedEndingTriggered || Section >= FlowSection.AllySupport;
+        public bool CombatLocked => ForcedEndingTriggered || Section == FlowSection.AllySupport
+            || Section == FlowSection.Dawn || Section == FlowSection.Result;
 
         public event Action<FlowTransition> SectionChanged;
         public event Action EnemiesRetreatRequested;
@@ -90,15 +96,21 @@ namespace FiveRivers.Core
             Enter(FlowSection.Title, TransitionReason.Abort);
         }
 
-        // 일시정지는 표시만 바꾼다. 회차 시계는 계속 흐른다 (GDD 14번 9).
+        // 기본 회차는 일시정지 중 시계도 멈춘다.
         public void SetPaused(bool paused)
         {
-            if (IsRunning) Paused = paused;
+            if (!IsRunning) return;
+            Paused = paused;
+            if (!paused && goalWhilePaused)
+            {
+                goalWhilePaused = false;
+                ReportGoalMet(Section);
+            }
         }
 
         public void Tick(double unscaledDelta)
         {
-            if (!IsRunning || unscaledDelta <= 0) return;
+            if (!IsRunning || (Paused && IsExpanded) || unscaledDelta <= 0) return;
             AdvanceTo(clock.Elapsed + unscaledDelta);
         }
 
@@ -107,16 +119,27 @@ namespace FiveRivers.Core
         public void ReportGoalMet(FlowSection section)
         {
             if (!IsRunning || section != Section) return;
+            if (Paused && IsExpanded)
+            {
+                // 전투 연출이 같은 프레임에 완료된 경우 재개 시 보고를 한 번 소비한다.
+                goalWhilePaused = true;
+                return;
+            }
             switch (Section)
             {
                 case FlowSection.Tutorial: Enter(FlowSection.Scout, TransitionReason.GoalMet); break;
                 case FlowSection.Scout: Enter(FlowSection.Assault, TransitionReason.GoalMet); break;
-                case FlowSection.Assault: Enter(FlowSection.Silence, TransitionReason.GoalMet); break;
+                case FlowSection.Assault: Enter(AfterAssault, TransitionReason.GoalMet); break;
+                case FlowSection.Regroup: Enter(FlowSection.WestAssault, TransitionReason.GoalMet); break;
+                case FlowSection.WestAssault: Enter(FlowSection.Silence, TransitionReason.GoalMet); break;
+                case FlowSection.HillAssault: Enter(FlowSection.Dawn, TransitionReason.GoalMet); break;
+                case FlowSection.Dawn when IsExpanded: Enter(FlowSection.Result, TransitionReason.GoalMet); break;
+                case FlowSection.Result when IsExpanded: Enter(FlowSection.Title, TransitionReason.GoalMet); break;
                 case FlowSection.Silence:
                     if (silenceGoalAt < 0) silenceGoalAt = clock.Elapsed;
                     AdvanceTo(clock.Elapsed);
                     break;
-                case FlowSection.Tank: Enter(FlowSection.Dawn, TransitionReason.GoalMet); break;
+                case FlowSection.Tank: Enter(AfterTank, TransitionReason.GoalMet); break;
             }
         }
 
@@ -145,7 +168,7 @@ namespace FiveRivers.Core
             clock.DebugSet(time);
             Paused = false;
             TutorialTimedOut = false;
-            ForcedTankTriggered = time >= config.forceTankAt;
+            ForcedTankTriggered = !IsExpanded && time >= config.forceTankAt;
             ForcedEndingTriggered = false;
             EndingStarted = false;
             Enter(section, TransitionReason.DebugJump);
@@ -154,16 +177,25 @@ namespace FiveRivers.Core
 
         public double BaselineStart(FlowSection section)
         {
-            double t = 0;
-            if (section > FlowSection.Tutorial) t += config.s1Base;
-            if (section > FlowSection.Scout) t += config.s2Base;
-            if (section > FlowSection.Assault) t += config.s3Base;
-            if (section > FlowSection.Silence) t += config.s4Base;
-            // 아군 지원은 전차 상한까지 간 경우
-            if (section == FlowSection.AllySupport) t += config.s5Cap;
-            else if (section > FlowSection.Tank) t += config.s5Base;
-            if (section > FlowSection.Dawn) t += config.dawnDuration;
-            return t;
+            double assaultStart = config.s1Base + config.s2Base;
+            double regroupStart = assaultStart + config.s3Base;
+            double tankStart = regroupStart + config.s4Base;
+            double dawnStart = tankStart + config.s5Base;
+            // 행동으로 끝나는 추가 구간에는 가상의 기준 시간을 더하지 않는다.
+            switch (section)
+            {
+                case FlowSection.Scout: return config.s1Base;
+                case FlowSection.Assault: return assaultStart;
+                case FlowSection.Regroup:
+                case FlowSection.WestAssault:
+                case FlowSection.Silence: return regroupStart;
+                case FlowSection.Tank: return tankStart;
+                case FlowSection.AllySupport: return tankStart + config.s5Cap;
+                case FlowSection.Dawn:
+                case FlowSection.HillAssault: return dawnStart;
+                case FlowSection.Result: return dawnStart + config.dawnDuration;
+                default: return 0;
+            }
         }
 #endif
 
@@ -184,12 +216,12 @@ namespace FiveRivers.Core
             Boundary best = Boundary.None;
             at = double.PositiveInfinity;
 
-            if (!ForcedEndingTriggered && !EndingStarted && config.forceEndingAt < at)
+            if (!IsExpanded && !ForcedEndingTriggered && !EndingStarted && config.forceEndingAt < at)
             {
                 best = Boundary.ForcedEnding;
                 at = config.forceEndingAt;
             }
-            if (!ForcedTankTriggered && Section <= FlowSection.Silence && config.forceTankAt < at)
+            if (!IsExpanded && !ForcedTankTriggered && Section <= FlowSection.Silence && config.forceTankAt < at)
             {
                 best = Boundary.ForcedTank;
                 at = config.forceTankAt;
@@ -210,7 +242,7 @@ namespace FiveRivers.Core
                 best = Boundary.TankDeadline;
                 at = config.tankEntryDeadline;
             }
-            if (config.hardCap < at)
+            if (!IsExpanded && config.hardCap < at)
             {
                 best = Boundary.HardCap;
                 at = config.hardCap;
@@ -232,8 +264,14 @@ namespace FiveRivers.Core
                     return end;
                 case FlowSection.Tank: return sectionStart + config.s5Cap;
                 case FlowSection.AllySupport: return sectionStart + config.allySupportDuration;
-                case FlowSection.Dawn: return sectionStart + config.dawnDuration;
-                case FlowSection.Result: return sectionStart + config.resultDuration;
+                case FlowSection.Dawn when !IsExpanded: return sectionStart + config.dawnDuration;
+                case FlowSection.Result when !IsExpanded: return sectionStart + config.resultDuration;
+                // 확장 흐름의 행동 구간은 장면 사건이 끝내 오지 않을 때만 안전 상한으로 넘어간다.
+                case FlowSection.Regroup when IsExpanded: return sectionStart + config.regroupCap;
+                case FlowSection.WestAssault when IsExpanded: return sectionStart + config.westAssaultCap;
+                case FlowSection.Dawn: return sectionStart + config.dawnCap;
+                case FlowSection.HillAssault when IsExpanded: return sectionStart + config.hillAssaultCap;
+                case FlowSection.Result: return sectionStart + config.resultCap;
                 default: return double.PositiveInfinity;
             }
         }
@@ -291,7 +329,7 @@ namespace FiveRivers.Core
                     break;
                 case FlowSection.Assault:
                     EnemiesRetreatRequested?.Invoke();
-                    Enter(FlowSection.Silence, TransitionReason.SectionCap);
+                    Enter(AfterAssault, TransitionReason.SectionCap);
                     break;
                 case FlowSection.Silence:
                     var reason = forcedSilence ? TransitionReason.Timer
@@ -302,8 +340,25 @@ namespace FiveRivers.Core
                 case FlowSection.Tank:
                     Enter(FlowSection.AllySupport, TransitionReason.SectionCap);
                     break;
+                case FlowSection.Regroup:
+                    Enter(FlowSection.WestAssault, TransitionReason.SectionCap);
+                    break;
+                case FlowSection.WestAssault:
+                    EnemiesRetreatRequested?.Invoke();
+                    Enter(FlowSection.Silence, TransitionReason.SectionCap);
+                    break;
+                case FlowSection.HillAssault:
+                    EnemiesRetreatRequested?.Invoke();
+                    Enter(FlowSection.Dawn, TransitionReason.SectionCap);
+                    break;
+                case FlowSection.Dawn when IsExpanded:
+                    Enter(FlowSection.Result, TransitionReason.SectionCap);
+                    break;
+                case FlowSection.Result when IsExpanded:
+                    Enter(FlowSection.Title, TransitionReason.SectionCap);
+                    break;
                 case FlowSection.AllySupport:
-                    Enter(FlowSection.Dawn, TransitionReason.Timer);
+                    Enter(AfterTank, TransitionReason.Timer);
                     break;
                 case FlowSection.Dawn:
                     Enter(FlowSection.Result, TransitionReason.Timer);
@@ -330,6 +385,7 @@ namespace FiveRivers.Core
         void Enter(FlowSection to, TransitionReason reason)
         {
             var from = Section;
+            goalWhilePaused = false;
             Section = to;
             sectionStart = clock.Elapsed;
             if (to == FlowSection.Tank && from != FlowSection.Tank)
@@ -342,7 +398,7 @@ namespace FiveRivers.Core
                 silenceGoalAt = -1;
                 forcedSilence = reason == TransitionReason.ForcedTank;
             }
-            if (to == FlowSection.Dawn) EndingStarted = true;
+            if (to == (IsExpanded ? FlowSection.Result : FlowSection.Dawn)) EndingStarted = true;
             SectionChanged?.Invoke(new FlowTransition(from, to, reason, clock.Elapsed));
         }
 

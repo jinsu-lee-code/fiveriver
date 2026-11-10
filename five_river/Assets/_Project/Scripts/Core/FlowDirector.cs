@@ -26,7 +26,7 @@ namespace FiveRivers.Core
             Flow = new DemoFlow(config, tankConfig, assistConfig);
             Flow.PauseReleased += ResumeTime;
             Flow.SectionChanged += OnSectionChanged;
-            inputGate.Mode = InputGate.ModeFor(Flow.Section);
+            inputGate.Mode = InputGate.ModeFor(Flow.Section, Flow.IsExpanded);
         }
 
         // 평소 게임 시간 배율. 점검 모드(SmokeRunner)만 바꾼다.
@@ -44,7 +44,7 @@ namespace FiveRivers.Core
             Time.timeScale = 1f;
         }
 
-        // 일시정지는 게임 시간만 멈춘다. 회차 시계는 계속 흐른다 (GDD 14번 9).
+        // 일시정지 중 회차 시계의 동작은 DemoFlow가 모드별로 처리한다.
         public void SetPaused(bool paused)
         {
             Flow.SetPaused(paused);
@@ -56,7 +56,7 @@ namespace FiveRivers.Core
         void OnSectionChanged(FlowTransition t)
         {
             if (!Flow.Paused) Time.timeScale = BaseTimeScale;
-            inputGate.Mode = InputGate.ModeFor(t.To);
+            inputGate.Mode = InputGate.ModeFor(t.To, Flow.IsExpanded);
         }
     }
 }
