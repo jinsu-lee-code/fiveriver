@@ -42,7 +42,7 @@
 | A | `VO_PARK_Call_01.wav` | parkCall1 | 박용팔 | 만수야. | 2.5초 | 조용히 부름 |
 | A | `VO_PARK_Call_02.wav` | parkCall2 | 박용팔 | 최만수! …만수 못 봤어? | 3.5초 | 부르다가 불안해짐 |
 | B | `VO_PARK_MansuLost_01.wav` (새 이름) | mansuLost | 박용팔 | 만수야! | 2초 | 절규 |
-| B | `VO_PARK_West_01.wav` (새 이름) | westWarning | 박용팔 | 옆구리다! 서쪽이다잉! | 3초 | 외침 (쓰이는지 main 확인 후 제작) |
+| B | `VO_PARK_West_01.wav` (새 이름) | westWarning | 박용팔 | 옆구리다! 서쪽이다잉! | 3초 | 외침 (게임에서 쓰임, 11-10 확인) |
 | B | `VO_MANSU_Letter_01.wav` (새 이름) | mansuLetter | 최만수 | 형님, 편지 쓰실 때 제 얘기도 한 줄 써 주이소. 제가 글을 모르가지고예. | 5초 | 쑥스럽게, 작게 |
 | B | `VO_MANSU_Morning_01.wav` (새 이름) | mansuMorning | 최만수 | 아침 되면… 좀 조용해지겠지예. | 3초 | 지친 혼잣말 |
 | A | `VO_KPA_Shout_01.wav` | (적 돌격) | 북한군 | 짧은 돌격 함성 "앞으로!" 계열 | — | 멀리서 들리는 거리감 |
