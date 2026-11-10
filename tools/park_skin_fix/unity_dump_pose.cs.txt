@@ -1,0 +1,5 @@
+var a=UnityEngine.GameObject.Find("ParkYongpal"); var an=a.GetComponentInChildren<UnityEngine.Animator>(); var st=an.GetCurrentAnimatorStateInfo(0); var cmb=a.GetComponent<FiveRivers.Combat.AllyCombatant>(); bool eng=(bool)cmb.GetType().GetField("engaged",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance).GetValue(cmb);
+if(NEEDFIRE && !(st.IsName("Fire_Crouch")&&eng&&st.normalizedTime%1f>0.25f)) return "-";
+var s=a.GetComponentInChildren<UnityEngine.SkinnedMeshRenderer>(true); var bp=s.sharedMesh.bindposes;
+using(var w=new System.IO.BinaryWriter(System.IO.File.Create(@"<data_dir>/POSE.bin"))){ w.Write(s.bones.Length); for(int i=0;i<s.bones.Length;i++){ var M=s.transform.worldToLocalMatrix*s.bones[i].localToWorldMatrix*bp[i]; for(int r=0;r<4;r++) for(int c=0;c<4;c++) w.Write(M[r,c]); } }
+return "dumped POSE";
