@@ -1,0 +1,548 @@
+{
+  "averageColor": "#000000",
+  "categories": [
+    "surface",
+    "fabric"
+  ],
+  "comp_version": 1,
+  "description": "",
+  "displacementBias": 0.462709,
+  "displacementCalibrationAccuracy": 0.95732,
+  "displacementScale": 0.033707,
+  "environment": {
+    "biome": "undefined",
+    "region": "Asia"
+  },
+  "highest_available_res": 8192,
+  "id": "xivree2l",
+  "json": {
+    "contentLength": 12004,
+    "uri": "xivree2l.json"
+  },
+  "maps": [
+    {
+      "averageColor": "#8D8A80",
+      "bitDepth": 16,
+      "colorSpace": "sRGB",
+      "contentLength": 253816389,
+      "maxIntensity": 203,
+      "mimeType": "image/x-exr",
+      "minIntensity": 0,
+      "name": "Basecolor",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "basecolor",
+      "uri": "xivree2l_8K_Basecolor.exr"
+    },
+    {
+      "averageColor": "#8D8A80",
+      "bitDepth": 8,
+      "colorSpace": "sRGB",
+      "contentLength": 58865617,
+      "maxIntensity": 203,
+      "mimeType": "image/jpeg",
+      "minIntensity": 0,
+      "name": "Basecolor",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "basecolor",
+      "uri": "xivree2l_8K_Basecolor.jpg"
+    },
+    {
+      "averageColor": "#808080",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 227783177,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 0,
+      "name": "Bump",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "bump",
+      "uri": "xivree2l_8K_Bump.exr"
+    },
+    {
+      "averageColor": "#808080",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 30065206,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 0,
+      "name": "Bump",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "bump",
+      "uri": "xivree2l_8K_Bump.jpg"
+    },
+    {
+      "averageColor": "#FFFFFF",
+      "bitDepth": 32,
+      "colorSpace": "sRGB",
+      "contentLength": 202292596,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 255,
+      "name": "Cavity",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "cavity",
+      "uri": "xivree2l_8K_Cavity.exr"
+    },
+    {
+      "averageColor": "#FFFFFF",
+      "bitDepth": 8,
+      "colorSpace": "sRGB",
+      "contentLength": 44334514,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 255,
+      "name": "Cavity",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "cavity",
+      "uri": "xivree2l_8K_Cavity.jpg"
+    },
+    {
+      "averageColor": "#8F8F8F",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 260883267,
+      "maxIntensity": 190,
+      "mimeType": "image/x-exr",
+      "minIntensity": 95,
+      "name": "Displacement",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "displacement",
+      "uri": "xivree2l_8K_Displacement.exr"
+    },
+    {
+      "averageColor": "#8F8F8F",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 16240021,
+      "maxIntensity": 190,
+      "mimeType": "image/jpeg",
+      "minIntensity": 95,
+      "name": "Displacement",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "displacement",
+      "uri": "xivree2l_8K_Displacement.jpg"
+    },
+    {
+      "averageColor": "#272727",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 130744209,
+      "maxIntensity": 71,
+      "mimeType": "image/x-exr",
+      "minIntensity": 4,
+      "name": "Gloss",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "gloss",
+      "uri": "xivree2l_8K_Gloss.exr"
+    },
+    {
+      "averageColor": "#272727",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 49179167,
+      "maxIntensity": 71,
+      "mimeType": "image/jpeg",
+      "minIntensity": 4,
+      "name": "Gloss",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "gloss",
+      "uri": "xivree2l_8K_Gloss.jpg"
+    },
+    {
+      "averageColor": "#8181F8",
+      "bitDepth": 16,
+      "colorSpace": "Linear",
+      "contentLength": 220395941,
+      "maxIntensity": 167,
+      "mimeType": "image/x-exr",
+      "minIntensity": 116,
+      "name": "Normal",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "normal",
+      "uri": "xivree2l_8K_Normal.exr"
+    },
+    {
+      "averageColor": "#8181F8",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 78237017,
+      "maxIntensity": 167,
+      "mimeType": "image/jpeg",
+      "minIntensity": 116,
+      "name": "Normal",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "normal",
+      "uri": "xivree2l_8K_Normal.jpg"
+    },
+    {
+      "averageColor": "#C4C4C4",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 122484178,
+      "maxIntensity": 255,
+      "mimeType": "image/x-exr",
+      "minIntensity": 106,
+      "name": "Opacity",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "opacity",
+      "uri": "xivree2l_8K_Opacity.exr"
+    },
+    {
+      "averageColor": "#C4C4C4",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 48290159,
+      "maxIntensity": 255,
+      "mimeType": "image/jpeg",
+      "minIntensity": 106,
+      "name": "Opacity",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "opacity",
+      "uri": "xivree2l_8K_Opacity.jpg"
+    },
+    {
+      "averageColor": "#D8D8D8",
+      "bitDepth": 32,
+      "colorSpace": "Linear",
+      "contentLength": 118156564,
+      "maxIntensity": 251,
+      "mimeType": "image/x-exr",
+      "minIntensity": 184,
+      "name": "Roughness",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "roughness",
+      "uri": "xivree2l_8K_Roughness.exr"
+    },
+    {
+      "averageColor": "#D8D8D8",
+      "bitDepth": 8,
+      "colorSpace": "Linear",
+      "contentLength": 48694213,
+      "maxIntensity": 251,
+      "mimeType": "image/jpeg",
+      "minIntensity": 184,
+      "name": "Roughness",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "roughness",
+      "uri": "xivree2l_8K_Roughness.jpg"
+    },
+    {
+      "averageColor": "#383838",
+      "bitDepth": 16,
+      "colorSpace": "sRGB",
+      "contentLength": 223965555,
+      "maxIntensity": 56,
+      "mimeType": "image/x-exr",
+      "minIntensity": 56,
+      "name": "Specular",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "specular",
+      "uri": "xivree2l_8K_Specular.exr"
+    },
+    {
+      "averageColor": "#383838",
+      "bitDepth": 8,
+      "colorSpace": "sRGB",
+      "contentLength": 26096601,
+      "maxIntensity": 56,
+      "mimeType": "image/jpeg",
+      "minIntensity": 56,
+      "name": "Specular",
+      "physicalSize": "0.25x0.25",
+      "resolution": "8192x8192",
+      "type": "specular",
+      "uri": "xivree2l_8K_Specular.jpg"
+    }
+  ],
+  "meta": [
+    {
+      "key": "scanArea",
+      "name": "Scan Area",
+      "value": "0.25x0.25 m"
+    },
+    {
+      "key": "height",
+      "name": "Height",
+      "value": "0.075 m"
+    },
+    {
+      "key": "tileable",
+      "name": "Tileable",
+      "value": true
+    },
+    {
+      "key": "tiling_directions",
+      "name": "Tiling Directions",
+      "value": [
+        "x",
+        "y"
+      ]
+    },
+    {
+      "key": "texelDensity",
+      "name": "Texel Density",
+      "value": "32768 px/m"
+    },
+    {
+      "key": "calibration",
+      "name": "Calibration",
+      "value": "GretagMacbeth ColorChecker Color Rendition Chart"
+    },
+    {
+      "key": "scanner",
+      "name": "Scanner",
+      "value": "MKX"
+    }
+  ],
+  "models": [],
+  "name": "Plain Weave Cotton",
+  "pack": {
+    "_id": "premium-fabrics",
+    "name": "Premium Fabrics"
+  },
+  "physicalSize": null,
+  "points": 2,
+  "previews": {
+    "images": [
+      {
+        "contentLength": 157226,
+        "resolution": "360x360",
+        "tags": [
+          "thumb"
+        ],
+        "uri": "xivree2l_Grid_360.png"
+      },
+      {
+        "contentLength": 216391,
+        "resolution": "420x420",
+        "tags": [
+          "thumb"
+        ],
+        "uri": "xivree2l_Grid_420.png"
+      },
+      {
+        "contentLength": 713022,
+        "resolution": "720x720",
+        "tags": [
+          "thumb",
+          "retina"
+        ],
+        "uri": "xivree2l_Grid_720.png"
+      },
+      {
+        "contentLength": 1048890,
+        "resolution": "840x840",
+        "tags": [
+          "thumb",
+          "retina"
+        ],
+        "uri": "xivree2l_Grid_840.png"
+      },
+      {
+        "contentLength": 1998473,
+        "resolution": "1440x810",
+        "tags": [
+          "preview",
+          "clay"
+        ],
+        "uri": "xivree2l_PopupClay_1440.png"
+      },
+      {
+        "contentLength": 4292622,
+        "resolution": "1920x1080",
+        "tags": [
+          "preview",
+          "clay"
+        ],
+        "uri": "xivree2l_PopupClay_1920.png"
+      },
+      {
+        "contentLength": 11595179,
+        "resolution": "2880x1620",
+        "tags": [
+          "preview",
+          "clay",
+          "retina"
+        ],
+        "uri": "xivree2l_PopupClay_2880.png"
+      },
+      {
+        "contentLength": 20569235,
+        "resolution": "3840x2160",
+        "tags": [
+          "preview",
+          "clay",
+          "retina"
+        ],
+        "uri": "xivree2l_PopupClay_3840.png"
+      },
+      {
+        "contentLength": 3298285,
+        "resolution": "1440x810",
+        "tags": [
+          "preview",
+          "tiled"
+        ],
+        "uri": "xivree2l_PopupTiled_1440.png"
+      },
+      {
+        "contentLength": 6061677,
+        "resolution": "1920x1080",
+        "tags": [
+          "preview",
+          "tiled"
+        ],
+        "uri": "xivree2l_PopupTiled_1920.png"
+      },
+      {
+        "contentLength": 13302784,
+        "resolution": "2880x1620",
+        "tags": [
+          "preview",
+          "tiled",
+          "retina"
+        ],
+        "uri": "xivree2l_PopupTiled_2880.png"
+      },
+      {
+        "contentLength": 22857545,
+        "resolution": "3840x2160",
+        "tags": [
+          "preview",
+          "tiled",
+          "retina"
+        ],
+        "uri": "xivree2l_PopupTiled_3840.png"
+      },
+      {
+        "contentLength": 2499977,
+        "resolution": "1440x810",
+        "tags": [
+          "preview"
+        ],
+        "uri": "xivree2l_Popup_1440.png"
+      },
+      {
+        "contentLength": 4860109,
+        "resolution": "1920x1080",
+        "tags": [
+          "preview"
+        ],
+        "uri": "xivree2l_Popup_1920.png"
+      },
+      {
+        "contentLength": 12502265,
+        "resolution": "2880x1620",
+        "tags": [
+          "preview",
+          "retina"
+        ],
+        "uri": "xivree2l_Popup_2880.png"
+      },
+      {
+        "contentLength": 23124789,
+        "resolution": "3840x2160",
+        "tags": [
+          "preview",
+          "retina"
+        ],
+        "uri": "xivree2l_Popup_3840.png"
+      }
+    ],
+    "relativeSize": "1x1",
+    "scaleReferences": []
+  },
+  "process_date": "2024-04-16 11:14:22",
+  "properties": [],
+  "referencePreviews": {
+    "maps": [],
+    "models": []
+  },
+  "references": [],
+  "revised": false,
+  "revision": 0,
+  "semanticTags": {
+    "asset_type": "surface",
+    "color": [
+      "Gray"
+    ],
+    "contains": [
+      "Clothes",
+      "Fabric",
+      "Cotton",
+      "premium fabric"
+    ],
+    "country": "Pakistan",
+    "locations": {
+      "Asia": {
+        "Pakistan": {}
+      }
+    },
+    "maxSize": 0.25,
+    "minSize": 0.25,
+    "name": "Plain Weave Cotton",
+    "region": "Asia"
+  },
+  "tags": [
+    "gray",
+    "clothes",
+    "fabric",
+    "cotton"
+  ],
+  "texelDensity": 32768,
+  "texture_type": "basic",
+  "ue_plugin_archives": [
+    {
+      "contentLength": 307708859,
+      "gltfVersion": "2.0",
+      "tier": 0,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_0/xivree2l_tier_0.zip",
+      "version": 1
+    },
+    {
+      "contentLength": 113015640,
+      "gltfVersion": "2.0",
+      "tier": 1,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_1/xivree2l_tier_1.zip",
+      "version": 1
+    },
+    {
+      "contentLength": 25412670,
+      "gltfVersion": "2.0",
+      "tier": 2,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_2/xivree2l_tier_2.zip",
+      "version": 1
+    },
+    {
+      "contentLength": 2294063,
+      "gltfVersion": "2.0",
+      "tier": 3,
+      "type": "gltf",
+      "uri": "ue_plugin_archives/tier_3/xivree2l_tier_3.zip",
+      "version": 1
+    }
+  ],
+  "version": 2
+}
