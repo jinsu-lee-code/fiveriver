@@ -10,17 +10,17 @@
 |---|---|
 | Unity | **6000.6.8f1** (11-10 6000.3.25에서 올림). 처음 열 때 전체 재임포트 |
 | 테스트 | EditMode 133/133 (개인 저장소, 11-10 같은 파일 기준). 팀 저장소에서 6000.6.8로는 아직 안 돌림 |
-| 자동 순환 점검 | 마지막 PASS 11-08. 11-09 이후 변경(전차 한 발 사망 · 박용팔 견착 · 셔츠 수정) 뒤에는 안 돌림 |
+| 자동 순환 점검 | 마지막 PASS 11-09 (전차 한 발 사망 커밋 때). 11-10 박용팔 셔츠 수정 뒤에는 안 돌림 |
 | 실행 빌드 | 마지막 빌드 11-09 14:48 (itch.io 업로드본) — **전차 한 발 사망(15:41) · 박용팔 수정 이전** |
-| 문서 | `FLOW.md` · `TASKS.md`가 11-08 이후 그대로 — **진행 순서 변경(전차 → 고지 돌격 → 정상 새벽 → 편지)이 없음** |
+| 문서 | `FLOW.md`(0번 일반판 흐름) · `TASKS.md`(11-06~11-10 기록) 11-10 갱신 완료 |
 
 ## 1. 목록
 | 우선 | 번호 | 할 일 | 기다리는 것 |
 |---|---|---|---|
 | A | M1 | 팀 저장소 6000.6.8로 열기 → EditMode 테스트 · 콘솔 오류 0 확인 | — |
 | A | M2 | 개발 빌드 → `FiveRivers.exe -fiverivers-smoke` 3회 자동 완주 → 사람 3회 완주 (TASKS 관문 1-7) | M1 |
-| A | M3 | 대사 음성 연결: `GameText.asset` 14줄 `voice` 칸 + `SoundLibrary` + 덕킹 확인 | SOUND V1 · V2 |
-| A | M4 | `FLOW.md` · `TASKS.md`를 현재 진행 순서와 11-06~11-10 작업으로 갱신 | — |
+| A | M3 | 대사 음성 연결: 21줄 `voice` 칸 + `SoundLibrary` + 덕킹 확인 | SOUND V1 · V2 |
+| ✅ | M4 | `FLOW.md` · `TASKS.md`를 현재 진행 순서와 11-06~11-10 작업으로 갱신 — 11-10 완료 | — |
 | A | M5 | 에디터 `runInBackground` 정하기 | 결정 |
 | B | M6 | 일반 아군 3명 메시 교체 (`ROK_Regular_NoCap_SkinFix`) | ART R1 |
 | B | M7 | `AC_ROK` 달리기 상태 → `A_ROK_Run_PortArms` | ANIM N1 |
@@ -33,11 +33,12 @@
 ## 2. 항목별 메모
 
 ### M3. 대사 음성 연결
-- 지금은 14줄 모두 `voice`가 비어 자막만 나온다. 쓰이는 곳: `NarrativeDirector`(박용팔 호출 · 만수 대사), 전차 · 조명탄 · 정찰 · 후퇴 안내, `allySupport`(20곳).
+- 지금은 21줄 모두 `voice`가 비어 자막만 나온다. 쓰이는 곳: `NarrativeDirector`(박용팔 호출 · 만수 대사), 전차 · 조명탄 · 정찰 · 후퇴 안내, `allySupport`(20곳), `HillAssaultDirector`(고지 · 새벽 7줄).
+- 고지 · 새벽 7줄과 문구(`hill*` · `watchTruck` · `findTaeSeok` · `meetTaeSeok`)는 `GameText.Hill.cs`의 기본값으로만 있고 `GameText.asset`에는 아직 저장돼 있지 않다. CLAUDE.md "화면 문구는 GameText.asset에만" 규칙대로 에셋을 한 번 저장해 값이 에셋에 들어가게 한다.
 - 파일이 오면 `Setup/Audio Graybox + Sound Library`로 SoundLibrary를 채우고, GameText `voice`에 ID를 넣는다. 자막 시간 안에 끝나는지, 대사 중 효과음이 `AudioConfig.duckDb`만큼 줄어드는지 헤드폰으로 확인.
-- 새 이름 5개(`VO_SQD_Tank_03`, `VO_PARK_MansuLost_01`, `VO_PARK_West_01`, `VO_MANSU_Letter_01`, `VO_MANSU_Morning_01`)는 SOUND_LIST · 데이터 생성 코드(`DataAssetsSetup`)에도 추가.
+- 사운드 요청서의 "새 이름" 12개(`VO_SQD_Tank_03`, `VO_PARK_*` 8개, `VO_MANSU_*` 2개, `VO_TAESEOK_Meet_01`)는 SOUND_LIST · 데이터 생성 코드(`DataAssetsSetup`)에도 추가.
 
-### M4. 문서 갱신
+### M4. 문서 갱신 (11-10 완료)
 - FLOW.md: 구간 표 · 체크포인트 · 시간 상한을 현재 순서(전차 → 고지 돌격(박용팔 동행, 맨 위 바위 도착 판정) → 정상 새벽(윤태석) → 편지)로.
 - TASKS.md: 11-06~11-10 항목 추가 (맵 수리 · 메가스캔 · 장전 Blender · 진행 순서 변경 · 아군 참호 넘기 · 전차 한 발 사망 · 박용팔 견착 · 셔츠 수정 · 팀 저장소 동기화). 상태는 "플레이 확인 대기"로.
 - BALANCE.md: 전차 포탄 150(11-09)은 반영돼 있음.

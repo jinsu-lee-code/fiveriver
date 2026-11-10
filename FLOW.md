@@ -2,8 +2,38 @@
 
 > 도메인 설계 문서. 책임자: A(통합개발). 이번 데모에서 가장 사고가 나기 쉬운 시스템이다.
 > 수치는 BALANCE.md 1~3번. 규칙 원문은 GDD.md 5번.
+> **2026-11-10 갱신**: 지금 기본 회차는 **일반판(확장 흐름)**이다 (`FlowConfig.legacyExhibitMode = 0`). 0번이 현재 규칙이고, 1~7번의 9:00 상한 · 7:00 · 8:15 강제 전환은 **전시판**(`legacyExhibitMode = 1`)에서만 동작한다. 코드 기준: `Core/DemoFlow.cs` · `Data/FlowConfig.asset`.
 
 ---
+
+## 0. 현재 기본 흐름 — 일반판 (2026-11-10 기준)
+
+### 0-1. 구간 순서 (결정 2026-11-09, 사용자 승인 · GDD 머리말)
+`Title → S1 조작 학습 → S2 정찰 → S3 주 공세 → 재정비(보충 · 최만수 대화) → 서쪽 공세 → S4 정적 → S5 전차전 (→ 아군 지원) → 고지 탈환(박용팔 동행) → S6 정상의 새벽(보충병 윤태석 합류) → S7 이름과 편지 → Title`
+
+- 순서 변경 이유: 전차(정점) 뒤 대화로 긴장이 끊겼다가 다시 전투로 오르던 흐름을 **한 번의 상승(전차 → 능선)과 하강(새벽 · 신병 · 편지)**으로 정리하고, 만수가 빠진 자리를 새 신병이 채우는 장면으로 결말을 잇는다. 능선 동행자는 윤태석 → 박용팔로 바꿨다.
+- 전체 시간 상한이 없다. 구간은 **행동으로 끝나고**, 장면 사건이 끝내 오지 않을 때만 아래 안전 상한으로 넘어간다.
+- 일시정지 중에는 회차 시계도 멈춘다 (전시판과 다름). 일시정지 중 완료 보고는 재개할 때 한 번 처리한다.
+
+| 구간 (`FlowSection`) | 끝나는 조건 | 안전 상한 (`FlowConfig`) | 체크포인트 |
+|---|---|---|---|
+| S1 `Tutorial` | 시점 · 이동 · 자세 · 표적 명중 · 재장전 | `s1Cap` 105초 | — |
+| S2 `Scout` | 정찰병 처치 또는 후퇴 | `s2Cap` 60초 | CP1 첫 교전 |
+| S3 `Assault` | 주 공세 처치 · 잔여 철수 | `s3Cap` 150초 (적 철수) | CP2 주 공세 |
+| `Regroup` | 탄약 보충 + 참호 왼쪽 끝 최만수와 대화 | `regroupCap` 180초 | — |
+| `WestAssault` | 서쪽 비탈 공세 처치 | `westAssaultCap` 240초 (적 철수) | 서쪽 공세 |
+| S4 `Silence` | 박용팔 호출 · 부재 연출 (최소 `s4Min` 20초) | `s4Max` 40초 | — |
+| S5 `Tank` | 바주카 측면 유효 명중 2회 | `s5Cap` 140초 · 2회 실패 → `AllySupport` 5초 | CP3 전차 |
+| `HillAssault` | 오른쪽 참호 끝 → 첫 엄폐물 → 두 번째 엄폐선 → 오른쪽 능선 → **정상 맨 위 바위 3.5m 안 도착** (`HillAssaultDirector`) | `hillAssaultCap` 480초 (적 철수) | 고지 탈환 |
+| S6 `Dawn` | 트럭 내려다보기 → 올라오는 윤태석에게 F로 대화 → 박용팔 "만수 자리다" | `dawnCap` 120초 | — |
+| S7 `Result` | 편지 두 장을 Enter · Space로 넘김 | `resultCap` 240초 | — |
+
+- 고지 탈환: 아군은 플레이어가 아직 참호 안에 있어도 **먼저 참호 앞벽을 넘어** 나가고, 앞에총 자세로 함께 오른다 (11-09).
+- 전차 포탄은 한 발에 사망한다 (`TankConfig.cannonDamage` 150, 11-09, BALANCE.md).
+- 결말(S7)은 한 회차에 한 번만 시작한다 (`EndingStarted`).
+
+### 0-2. 아직 문서와 다른 점 (결정 필요)
+- CLAUDE.md "핵심 설계 규칙 1 · 3"(9:00 상한 우선, 체크포인트 3곳)과 "범위 제외"(최만수 생전 대화 · 서쪽 2차 공세)는 **전시판 기준**이다. 일반판은 2026-11-06 확장 작업으로 이를 넘어섰다 (CLAUDE.md 머리말). 지스타 전시판으로 돌아갈 때는 `legacyExhibitMode = 1`로 바꾸고 1~7번 규칙을 다시 확인한다.
 
 ## 1. 목적
 - 어떤 플레이(초보 · 숙련 · 방치 · 반복 사망 · 일시정지)여도 **9:00 안에 결말을 한 번 보고 시작 화면으로 돌아온다.**
@@ -23,7 +53,7 @@ RunResetter (MonoBehaviour)   새 회차 초기화 목록 실행
 
 ## 3. 상태와 전환
 
-### 3-1. 구간 상태
+### 3-1. 구간 상태 (전시판)
 `Title → S1 학습 → S2 첫 교전 → S3 주 공세 → S4 정적 → S5 전차 → S6 새벽 → S7 결과 → Title`
 
 | 전환 | 정상 조건 | 구간 상한 도달 시 (결정 2026-10-27, GDD 14번 1 · 2) |
@@ -36,7 +66,7 @@ RunResetter (MonoBehaviour)   새 회차 초기화 목록 실행
 | S6 → S7 | 20초 경과 | — |
 | S7 → Title | 20초 경과 (날짜 4 · 이름 5 · 편지 8 · 제목 3) | — |
 
-### 3-2. 강제 전환 (전체 상한 우선)
+### 3-2. 강제 전환 (전체 상한 우선 · 전시판에서만)
 | 시각 | 조건 | 동작 |
 |---|---|---|
 | **7:00** | 현재 구간이 S1~S3 | 공세 즉시 종료(적 철수) → 정적 20초 → **7:20 S5 진입** · 일시정지 해제 |
@@ -65,6 +95,10 @@ RunResetter (MonoBehaviour)   새 회차 초기화 목록 실행
 | CP2 | 주 공세(S3) 시작 | 위와 같음 | 위 + 조명탄 상태 · 스폰 대기열 |
 | CP3 | 전차(S5) 직전 | 위 + 바주카 탄 | 위 + 전차 연기 · 화재 · 손상 상태 · 전차 위치 |
 
+| 서쪽 공세 | `WestAssault` 시작 (일반판) | 위와 같음 | 위와 같음 |
+| 고지 탈환 | `HillAssault` 시작 (일반판) | 위와 같음 | 위와 같음 |
+
+- 일반판은 체크포인트가 5곳(`CheckpointState.For`: Scout · Assault · WestAssault · Tank · HillAssault)이다. 전시판에는 서쪽 공세 · 고지 탈환 구간이 없으므로 CP1~CP3만 쓰인다.
 - **중복 스폰 방지**: 복구 시 스폰 대기열과 살아 있는 적을 먼저 비우고, 구간 스폰을 처음부터 다시 실행한다. 스폰 트리거는 "한 번만" 플래그로 막는다.
 - 실패 보조(×0.7 / ×0.8)는 원본 데이터가 아니라 **실행 중 복사본**에 적용한다. 새 회차에서 복사본을 다시 만든다.
 
@@ -119,6 +153,10 @@ RunResetter (MonoBehaviour)   새 회차 초기화 목록 실행
 | 새벽 · 결과 화면 | `DawnDirector` · `ResultScreen` | `FlowConfig.asset`, `ResultConfig.asset`, `GameText.asset` | 구현 · 에디터 확인 |
 | 회차 초기화 | 시스템마다 `SectionChanged`(RunStart · Title) 구독 (TASKS 2-6 목록) | — | 실행 빌드 3회 자동 확인 (2026-10-27) |
 | 회차 기록 | `RunRecorder` | `persistentDataPath/runs.csv` | 구현 · 확인 |
+| 재정비 · 서쪽 공세 (일반판) | `NarrativeDirector` · `NarrativeDirector.West` | `FlowConfig.regroupCap` · `westAssaultCap`, `GameText` objectiveRegroup* · objectiveWest | 구현 · 에디터 확인 |
+| 고지 탈환 · 정상 판정 (일반판) | `HillAssaultDirector` (정상 = 맨 위 바위 3.5m 안) · `HillAllies` · `AllyRiflePose` | `FlowConfig.hillAssaultCap`, `GameText.Hill.cs` | 구현 · 플레이 확인 대기 (11-09) |
+| 새벽 보충병 · 트럭 (일반판) | `DawnDirector` · `DawnTruckSequence` · `HillAssaultDirector`(윤태석 대화) | `Art/DawnTruck20261102/PF_DawnTruck.prefab` | 구현 · 플레이 확인 대기 |
+| 자동 순환 점검 | `DebugTools/SmokeRunner` (`-fiverivers-smoke`) | 실행 폴더 `smoke_report.txt` | 마지막 PASS 11-09 (전차 한 발 사망 커밋 때) |
 
 ## 9. 착수 때 정할 질문
 GDD.md 14번 1~10 중 1 · 2 · 3 · 4 · 5 · 6 · 7 · 9 · 10번이 이 문서에 해당한다. 1~7 · 9는 2026-10-27 결정 (3번 표에 반영). 남은 것: 10 운영자 재시작 방법.

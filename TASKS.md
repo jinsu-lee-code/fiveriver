@@ -320,3 +320,40 @@
 - [x] Unity 메뉴 `FiveRivers/Setup/T34 Varco432 (Muzzle + Destroyed)` 실행됨(Editor.log "[T34] 포구 소켓 · 파괴 모델 연결 완료", 11-05 16:0x, Codex가 원래 저장소로 옮겨 일부 수정) — 씬 저장 여부는 확인 필요 (포구 소켓 맞춤, 파괴 모델을 전차 프리팹에 꺼진 채로 추가, 맵 배치용 `Prefabs/PF_VH_T34_85_Destroyed.prefab` 생성, TankController 연결).
 - [ ] EditMode 테스트(ArtSpecTests 전차 · 소품) · 플레이 확인: 전차 구간에서 포탑 · 주포가 플레이어를 따라오고, 측면 2발에 폭발 후 파괴 모델로 바뀌면 정상.
 - VARCO 사용: 이미지 50점 × 4, 3D 200점 × 4 = 1,000점.
+
+## 일반판 확장 · 2026-11-06 ~ 11-08 (Codex · Claude, 사용자 지시)
+
+- 결정 (2026-11-06): 지스타 전시판(9분 상한)을 보존하고, 기본 회차를 **일반판(확장 흐름)**으로 바꿈 — Unity 6000.6.8f1, 전체 시간 상한 없음, 행동으로 진행 (`FlowConfig.legacyExhibitMode = 0`, CLAUDE.md 머리말 · FLOW.md 0번).
+- [x] 재정비(보충 · 최만수 대화) · 서쪽 공세 구간 추가 (`NarrativeDirector.West`, 체크포인트 `WestAssault`) — 플레이 확인 대기
+- [x] 소리 밸런스 · 조명탄 · 먼 포격, 바르코 달리기 발소리 `SFX_Foot_Run_Varco_01~08` · 장비 소리 `SFX_Gear_Run_Varco_01~06` (원본 `source/sound/`) — 헤드폰 확인 대기
+- [x] 맵: 거점 모래주머니 낮은 벽(3단 · 틈 수정), 포탄 구덩이, 트럭 진입로 바퀴 자국, 메가스캔 소품(`Art/Megascans20261107`), 물체 뚫림 방지 충돌체 39개 — 메뉴 `FiveRivers/Map/...`
+- [x] 1인칭 M1 장전을 참고 영상 순서로 Blender에서 다시 만듦(곡선 경로 · 클립 세워 집기 · 엄지 누르기), 손바닥 보정 · 손목 각도 · 손 비율 (원본 `source/animation/`, 메뉴 `FiveRivers/Animation/Import M1 Reload Motion (Blender)`) — 플레이 확인 대기
+- [x] 가늠자(원본 모델 + 금속 질감), 담요 시신, 적 총 손에 들기 · 떨어뜨리기 · 왼손 IK
+- [x] 메가스캔 모델 읽기 설정 켬 → 플레이 때 콘솔 오류 28개 제거
+- 확인 (11-08): EditMode 133/133, 자동 3회 순환 점검 PASS, 콘솔 오류 0
+- 참고: 개인 저장소(alslxhrl7-web/Projet-Fiverriver)에서 진행, 인수인계 `HANDOFF_다섯개의강_20261108.md`
+
+## 진행 순서 변경 · 고지 탈환 · 2026-11-09 (Claude, 사용자 지시)
+
+- 결정 (2026-11-09, 사용자 승인): 전차 → 보충병 합류 → 고지 탈환을 **전차 → 고지 탈환(박용팔 동행) → 정상의 새벽(보충병 윤태석 합류) → 편지**로 바꿈. 이유: 전차 뒤 긴장이 끊겼다 다시 오르던 흐름을 한 번의 상승과 하강으로 정리, 만수가 빠진 자리를 새 신병이 채움 (GDD 머리말 · FLOW.md 0-1).
+- [x] 고지 탈환 `HillAssaultDirector`: 오른쪽 참호 끝 → 첫 엄폐물 → 두 번째 엄폐선 → 오른쪽 능선 → **정상 맨 위 바위 3.5m 안에 들어가면 확보** — 플레이 확인 대기
+- [x] 아군은 플레이어가 참호 안에 있어도 먼저 참호 앞벽을 넘어 나가고, 앞에총(port arms)으로 함께 오름 (`HillAllies` · `AllyRiflePose`) — 플레이 확인 대기
+- [x] 정상 새벽: 트럭 내려다보기 → 올라오는 윤태석에게 F로 대화 → 박용팔 "만수 자리다" → 결말
+- [x] 아군 사격 클립 `A_ROK_Fire_Crouch` Blender 수정, 장전 때 오른손 검지 · 엄지 수정
+- [x] **전차 포탄 한 발 사망**: `TankConfig.cannonDamage` 35 → 150 (실패 보조 ×0.8이 붙어도 한 발, BALANCE.md) — 플레이 확인 대기
+- [x] 박용팔 사격 자세: 다른 병사와 같은 견착 방식, 오른손 위치 · 어깨 기준 조정(팔꿈치 접힘 121° → 104°)
+- [x] 패키지 목록에서 이 PC 전용 경로(claude-hand · MCP for Unity) 제거
+- [x] Windows 빌드 + itch.io 업로드(butler `windows` 채널), 페이지 · 스크린샷 교체 — **빌드는 11-09 14:48, 전차 한 발 사망 · 박용팔 수정 이전**
+- 확인: EditMode 133/133, 자동 3회 순환 점검 PASS (전차 한 발 사망 커밋 때)
+- [ ] 사람이 실행 빌드로 처음부터 끝까지 확인 — 아직 안 함
+
+## 박용팔 셔츠 수정 · 팀 저장소 동기화 · 2026-11-10 (Claude, 사용자 지시)
+
+- [x] 박용팔 셔츠 · 어깨 뭉개짐: 원인 3가지(손 위치, 셔츠 노멀이 면마다 나뉨, 그 메시 기준으로 구운 노멀 맵)를 Blender로 수정 — 셔츠 노멀 평균 19.3° 보정, 어깨 · 팔 웨이트 다듬기(앞에총 깊은 접힘 102 → 64), 노멀 맵 세기 1 → 0.3. 원본은 두고 `Art/SurfaceDetail20261110/ROK_ParkYongpal_SkinFix.asset` 연결. 메뉴 `FiveRivers/Characters/Apply Park Skin Fix (Blender)`, 자료 · 되돌리기 `tools/park_skin_fix/README.md` — 플레이 확인 대기
+  - 확인 방법: Dabudong 씬 → 고지 탈환에서 박용팔을 가까이 → 사격 · 앞에총 때 어깨 · 소매에 삼각형 무늬가 없으면 정상
+  - 테스트: EditMode 133/133
+- [x] 팀 저장소(jinsu-lee-code/fiveriver)에 개인 저장소 최신본 반영: 파트별 커밋(art · animator · sound) → main 병합, **팀 프로젝트도 Unity 6000.6.8f1**
+- [x] 파트별 추가 요청서 `ART_REQUEST_20261110.md` · `ANIM_REQUEST_20261110.md` · `SOUND_REQUEST_20261110.md`, 시스템 남은 일 `SYSTEM_TODO_20261110.md` (팀 저장소)
+- [x] FLOW.md를 일반판 흐름으로 갱신 (0번 추가, 1~7번은 전시판 표시)
+- [ ] 화면 대사 21줄 모두 음성 없음(자막만) → 사운드 요청서 V1
+- [ ] 에디터 `runInBackground`: 빌드 메뉴(`BuildRunner.cs:29`)가 끄고 저장 → 에디터 Play 중 창이 뒤로 가면 게임이 멈춤. 결정 필요
