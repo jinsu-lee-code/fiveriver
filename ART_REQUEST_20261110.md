@@ -21,6 +21,7 @@
 | B | R4 | `SM_WP_Bazooka.fbx` | M20(3.5인치) / M9A1(2.36인치) 확정 후 형태 확인 | 기획(D) 결정 → Blender | 전차전 |
 | C | R5 | `ART_SPEC.md` 전차 항목 | `T_VH_T34_Body_BaseColor` · `M_VH_T34_Body` 항목을 실제 납품 형태로 고치기 | 문서 | — |
 | A | R6 | ART_SPEC 검수 30칸 | 실행 빌드에서 보고 합격 / 수정 요청 기록 | 검수 | 전 구간 |
+| B | R7 | `SM_VH_T34_85.fbx` (R5에서 나옴, 2026-11-10) | 궤도(TrackL/R)를 `M_VH_T34_Track` 슬롯으로 나누기 · 삼각형 50만 → 예산(3~6만) 쪽으로 줄이기. 지금 상태를 받아들일지 D · C 결정 먼저 | Blender | 전차전 |
 
 ## 2. 항목별 요청
 
@@ -35,10 +36,10 @@
 - **main 연결**: 아군 3명의 SkinnedMeshRenderer 메시만 바꾼다 (연결은 `main`에서, CLAUDE.md 규칙)
 
 검수:
-- [ ] 사격 · 앞에총 자세에서 어깨 · 소매에 삼각형 무늬 없음 (수정 전과 같은 각도 캡처 비교)
-- [ ] 정점 수 · 서브메시 수 · 뼈 수가 원본과 같음
-- [ ] 노멀 맵 세기를 낮췄다면 재질 값 기록
-- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모:
+- [x] 사격 · 앞에총 자세에서 어깨 · 소매에 삼각형 무늬 없음 (수정 전과 같은 각도 캡처 비교) — Blender 렌더 `tools/regular_skin_fix/r_fire_*` · `r_carry_*` 기준(2026-11-10). 게임 화면은 main 연결 뒤 R6에서
+- [x] 정점 수 · 서브메시 수 · 뼈 수가 원본과 같음 — 정점 200,845 · 서브메시 8 · 뼈 65 · bindpose · UV · 위치 모두 같음(Unity에서 비교, 2026-11-10)
+- [x] 노멀 맵 세기를 낮췄다면 재질 값 기록 — 재질은 바꾸지 않음
+- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모 (2026-11-10, art 납품): `ROK_Regular_NoCap_SkinFix.asset` 새로 만듦(원본 그대로), 셔츠(서브메시 0)와 조끼(3) 법선 + 어깨 · 팔 가중치. 아군 컨트롤러에 앞에총 상태가 없어 박용팔과 같은 `A_KPA_Run_Rifle` 클립 자세로 비교. 자료와 main 연결 방법은 `tools/regular_skin_fix/README.md`
 
 ### R2. 새벽 트럭 짐칸 구멍 — `GMC_Truck_Open.fbx` [A]
 - **위치**: `Assets/_Project/Art/DawnTruck20261102/`
@@ -46,10 +47,10 @@
 - **방법**: Blender에서 구멍 난 면을 메우고 노멀 방향 통일 → ART_SPEC 1-4 규칙으로 같은 이름 내보내기. 부품 이름 · 재질 슬롯 유지.
 
 검수:
-- [ ] 위 · 뒤 · 안쪽에서 구멍 없음
-- [ ] 하차 경사로(`DawnTruck_RearRamp`) 끝이 땅에 닿고 통로를 막지 않음
-- [ ] 메뉴 `FiveRivers/Setup/Build Dawn Truck Prefab` 다시 실행 후 새벽 구간에서 학생병 4명 하차 정상
-- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모:
+- [x] 위 · 뒤 · 안쪽에서 구멍 없음 — 짐칸 안 1 cm 간격 레이 97,137개 중 바닥 아래가 보이는 곳 0, 같은 각도 캡처에서 검은 쐐기 사라짐(2026-11-10, `C:/Users/mbc/.claude-hand/exchange/r2_truck_bed/*_after.png`, 저장소 안 렌더는 `Docs/Art/DawnTruck_20261110/after_*.png`)
+- [ ] 하차 경사로(`DawnTruck_RearRamp`) 끝이 땅에 닿고 통로를 막지 않음 — 통로는 막지 않음(선 검사), 경사로 끝은 트럭 바퀴 높이(0)까지 내려옴. **실제 땅은 확인 못 함**: art 에디터(6000.3)에서 지형 데이터 `Frontline_SandbagTrench_20261105.asset`(6000.6.8로 저장)을 못 읽어 땅이 없다
+- [ ] 메뉴 `FiveRivers/Setup/Build Dawn Truck Prefab` 다시 실행 후 새벽 구간에서 학생병 4명 하차 정상 — 프리팹을 바꾸는 메뉴라 art에서는 하지 않음(main 담당). FBX만 바꿨고 부품 이름 · 재질 슬롯 · GUID가 같아 지금 프리팹도 Missing 없음, `ArtSpecTests` 15/15 통과
+- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모 (2026-11-10, art 납품): 구멍처럼 보이던 검은 삼각형은 실제 구멍이 아니라 원본 스캔(GMC_Body)이 새 바닥판(1.38 m)보다 최대 2 cm 위로 뚫고 올라온 삼각형 336개였다(빛을 못 받는 옆면). 짐칸 안의 그 정점을 바닥 아래(1.37)로 내리고, 바닥판 앞 끝을 운전석 뒤까지 4 cm 늘려 바닥 아래가 보이던 가로 틈을 막음. 원본 스캔이 이 PC에 없어 납품 FBX를 직접 고침 — 재현 `Docs/Art/DawnTruck_20261110/fix_cargo_floor.py`. 남은 것: 앞 난간 바깥 양쪽 모서리(운전석 폭 밖)의 2~20 cm 빈틈은 난간 판 사이로만 보여 그대로 둠
 
 ### R3. 박용팔 셔츠 노멀 맵 다시 굽기 [B]
 - **위치**: `Assets/_Project/Art/SurfaceDetail20261030/` (`SK_CH_ROK_ParkYongpal_URPLab_Baked_Body.mat`이 쓰는 노멀 맵)
@@ -68,6 +69,7 @@
 ### R5. 전차 요청서 정리 [C]
 - 11-05에 전차를 `SM_VH_T34_85.fbx`(Hull / Turret / Gun / TrackL / TrackR, 빨간 별 + 흰 432를 구워 넣음)로 바꿨다. 재현 스크립트 `Docs/Art/T34_Varco432_20261105/build_t34_varco432.py`.
 - ART_SPEC의 `T_VH_T34_Body_BaseColor` · `M_VH_T34_Body` 항목을 실제 파일 이름과 슬롯에 맞게 고치고 검수 칸을 채운다.
+- 결과 (2026-11-10): ART_SPEC 13번에 "실제 납품" 줄을 더하고 검수 칸을 파일 기준으로 채움. 화면으로 볼 3칸은 R6. 파일에서 찾은 차이 — 궤도 별도 재질 없음(다섯 부품 모두 `M_VH_T34_Body`), 삼각형 500,041(예산 3~6만), 길이 6.34 m(요청 8.1 m), BaseColor 4K(요청 2K) → 13번 결과를 🔁 수정 요청으로 적음. 받아들일지는 D · C가 정한다
 
 ### R6. ART_SPEC 검수 30칸 기록 [A]
 - 실행 빌드(개발 빌드)에서 각 항목의 "검수" 체크를 보고 `결과: ✅ 합격` 또는 `🔁 수정 요청 — 메모`로 바꾼다.
