@@ -1,0 +1,7 @@
+source C:/Users/mbc/Documents/UnityProjects/fiveriver/tools/char_reduce/park: 145960 vertices, triangles [13708, 14304, 15148, 9940, 9825] = 62925, target 20000 (ratio 0.318)
+sub 0: 13708 -> welded 13695 -> 4356 triangles; surface distance max 0.44% p99 0.164% of mesh size; UV corners outside coverage 102/13068; UV faces flipped 10; vertices without weights 0
+sub 1: 14304 -> welded 14290 -> 4545 triangles; surface distance max 0.07% p99 0.024% of mesh size; UV corners outside coverage 148/13635; UV faces flipped 13; vertices without weights 0
+sub 2: 15148 -> welded 15138 -> 4814 triangles; surface distance max 0.05% p99 0.029% of mesh size; UV corners outside coverage 165/14442; UV faces flipped 24; vertices without weights 0
+sub 3: 9940 -> welded 9936 -> 3159 triangles; surface distance max 0.14% p99 0.065% of mesh size; UV corners outside coverage 34/9477; UV faces flipped 8; vertices without weights 0
+sub 4: 9825 -> welded 9823 -> 3122 triangles; surface distance max 0.10% p99 0.041% of mesh size; UV corners outside coverage 58/9366; UV faces flipped 4; vertices without weights 0
+result: 46870 vertices, triangles [4356, 4545, 4814, 3159, 3122] = 19996
