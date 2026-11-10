@@ -1,0 +1,114 @@
+# Author the M1 partial-reload hand animation on the rebuilt viewmodel and bake it for Unity.
+import bpy, json, math, sys, os
+from mathutils import Matrix, Vector, Quaternion, Euler
+A=json.load(open("C:/sk_anim/scripts/params.json")); MODE=sys.argv[sys.argv.index("--")+1] if "--" in sys.argv else "render"
+bpy.ops.wm.open_mainfile(filepath="C:/sk_anim/reload_scene.blend")
+sc=bpy.context.scene; sc.render.fps=A["fps"]; F=A["frames"]; sc.frame_start=0; sc.frame_end=F
+P=Matrix(((1,0,0,0),(0,0,1,0),(0,1,0,0),(0,0,0,1)))
+V=lambda a:Vector(a)
+def smooth(a,b,p):
+    t=min(1,max(0,(p-a)/(b-a))) if b>a else 1.0
+    return t*t*(3-2*t)
+def window(p,s,pk,f,e): return smooth(s,pk,p)*(1-smooth(f,e,p))
+arm=bpy.data.objects["HandRig"]; bones=arm.data.bones
+bpy.context.view_layer.objects.active=arm
+# bone lengths along the chain so IK tips sit on the fingertips
+bpy.ops.object.mode_set(mode='EDIT')
+for e in arm.data.edit_bones:
+    if e.name.endswith(".L"): continue
+    kids=e.children
+    if kids: L=(kids[0].head-e.head).length
+    else: L=(e.parent.length*0.85) if e.parent else 0.02
+    if L>1e-4: e.length=L
+bpy.ops.object.mode_set(mode='OBJECT')
+# seated clip -> carried clip object
+seat=bpy.data.objects["SM_M1_Clip_L0"]
+vs=[seat.matrix_world@v.co for v in seat.data.vertices]
+cmin=V((min(v.x for v in vs),min(v.y for v in vs),min(v.z for v in vs))); cmax=V((max(v.x for v in vs),max(v.y for v in vs),max(v.z for v in vs)))
+ccen=(cmin+cmax)/2; ctop=V((ccen.x,ccen.y,cmax.z))
+clip=seat.copy(); clip.data=seat.data; clip.name="ReloadClip"; sc.collection.objects.link(clip)
+clip_rest=clip.matrix_world.copy()
+# targets parented to the clip, given relative to the clip top
+def target(name,off):
+    t=bpy.data.objects.new(name,None); sc.collection.objects.link(t); t.parent=clip
+    t.matrix_parent_inverse=clip.matrix_world.inverted(); t.location=ctop+V(off); return t
+tT=target("T_thumb",A["thumb_target_clip"]); tI=target("T_index",A["index_target_clip"]); tM=target("T_middle",A["middle_target_clip"])
+pb=arm.pose.bones
+def ik(bone,tgt):
+    c=pb[bone].constraints.new('IK'); c.target=tgt; c.chain_count=3; c.use_tail=True; return c
+cT=ik("finger1-3.R",tT); cI=ik("finger2-3.R",tI); cM=ik("finger3-3.R",tM)
+# rest hand frame
+wr=bones["wrist.R"]; W0=arm.matrix_world@wr.matrix_local
+def head(n): return arm.matrix_world@bones[n].head_local
+f_rest=(head("finger2-1.R")-head("wrist.R")).normalized(); a_rest=(head("finger5-1.R")-head("finger2-1.R"))
+n_rest=f_rest.cross(a_rest).normalized(); a_rest=n_rest.cross(f_rest).normalized()
+Rrest=Matrix((f_rest,n_rest,a_rest)).transposed()
+fd=V(A["finger_dir"]).normalized(); nd=V(A["palm_normal"]); nd=(nd-fd*nd.dot(fd)).normalized(); ad=nd.cross(fd).normalized()
+Rdes=Matrix((fd,nd,ad)).transposed()
+load_rot=(Rdes@Rrest.inverted()).to_quaternion()@W0.to_quaternion()
+rest_rot=W0.to_quaternion(); rest_loc=W0.translation.copy()
+cam=bpy.data.objects["GameCam"]; cam0=cam.matrix_world.copy()
+def U2B(m): return P@m@P
+def present(p):
+    k=window(p,.02,.16,.84,.98); o=A["present_offset_unity"]; e=A["present_euler_unity"]
+    q=Euler((math.radians(e[0]*k),math.radians(e[1]*k),math.radians(e[2]*k)),'ZXY').to_quaternion()  # Unity Quaternion.Euler order
+    mu=Matrix.Translation(V((o[0]*k,o[1]*k,o[2]*k)))@q.to_matrix().to_4x4()
+    return U2B(mu)
+def pose_at(p):
+    fetch=V(A["fetch"]); side=V(A["side"]); above=V(A["above"])
+    toSide=smooth(.12,.34,p); over=smooth(.34,.44,p); seatk=smooth(.44,.66,p)
+    carried=fetch.lerp(side,toSide).lerp(above,over)
+    clip_off=carried.lerp(V((0,0,0)),seatk)
+    gripoff=V(A["wrist_from_clip_top"])
+    hand_clip=carried.lerp(V((0,0,0)),seatk*A["hand_follow_seat"])
+    low=ctop+fetch+gripoff; seated_hand=ctop+above.lerp(V((0,0,0)),A["hand_follow_seat"])+gripoff
+    if p<.12: hp=rest_loc.lerp(low,smooth(.04,.12,p))
+    elif p>=.60 and p<.70: hp=seated_hand+V(A.get('lift_after_seat',[0,0,0]))*smooth(.60,.68,p)
+    elif p<.60: hp=ctop+hand_clip+gripoff
+    else:
+        lifted=seated_hand+V(A.get("lift_after_seat",[0,0,0]))
+        lv=lifted; lv=lv.lerp(ctop+side+gripoff,smooth(.72,.77,p)); lv=lv.lerp(low,smooth(.77,.86,p)); hp=lv.lerp(rest_loc,smooth(.90,.98,p))
+    away=window(p,.04,.16,.72,.98)
+    rot=rest_rot.slerp(load_rot,away)
+    ge=A.get('grab_end',[.62,.70]); grab=window(p,.14,.24,ge[0],ge[1]); thumb=window(p,.14,.24,.70,.76)
+    return clip_off,hp,rot,grab,thumb
+for f in range(F+1):
+    p=f/F; sc.frame_set(f)
+    co,hp,rot,grab,thumb=pose_at(p)
+    clip.matrix_world=Matrix.Translation(co)@clip_rest; clip.keyframe_insert("location"); clip.keyframe_insert("rotation_euler")
+    M=Matrix.Translation(hp)@rot.to_matrix().to_4x4()
+    pb["wrist.R"].matrix=arm.matrix_world.inverted()@M; pb["wrist.R"].keyframe_insert("location"); pb["wrist.R"].keyframe_insert("rotation_quaternion")
+    cT.influence=thumb; cI.influence=grab; cM.influence=grab
+    curl=window(p,.10,.22,.66,.80); cd=A.get("curl_deg",[0,0,0]); ex=window(p,.56,.66,.86,.94); ed=A.get("exit_curl_deg",[0,0,0])
+    for fn in ("finger2","finger3","finger4","finger5"):
+        for j in range(3):
+            ang=ed[j]*ex+(cd[j]*curl if fn in("finger4","finger5") else 0)
+            if fn=="finger2": ang+=A.get("index_curl_deg",[0,0,0])[j]*window(p,.36,.46,.80,.90)
+            b=pb["%s-%d.R"%(fn,j+1)]; b.rotation_mode='XYZ'; b.rotation_euler=(math.radians(ang),0,0); b.keyframe_insert("rotation_euler")
+    for c in (cT,cI,cM): c.keyframe_insert("influence")
+    cam.matrix_world=present(p).inverted()@cam0; cam.keyframe_insert("location"); cam.keyframe_insert("rotation_euler")
+seat.hide_render=True; seat.keyframe_insert("hide_render",frame=0)
+for fc in (arm.animation_data.action.fcurves if arm.animation_data and hasattr(arm.animation_data.action,'fcurves') else []):
+    for k in fc.keyframe_points: k.interpolation='LINEAR'
+bpy.ops.wm.save_as_mainfile(filepath="C:/sk_anim/reload_anim.blend")
+if MODE in("render","both"):
+    os.makedirs("C:/sk_anim/render/frames",exist_ok=True)
+    for p in A["renders"]:
+        sc.frame_set(int(round(p*F))); sc.render.filepath="C:/sk_anim/render/frames/r_%.2f.png"%p; bpy.ops.render.render(write_still=True)
+if MODE in("export","both"):
+    out={"fps":A["fps"],"frames":F,"bones":[],"wrist":[],"clip":[],"local":{}}
+    names=[b.name for b in bones if b.name.endswith(".R")]
+    out["bones"]=names
+    for n in names: out["local"][n]=[]
+    dg=bpy.context.evaluated_depsgraph_get()
+    for f in range(F+1):
+        sc.frame_set(f); dg.update(); ae=arm.evaluated_get(dg)
+        mats={n:U2B(ae.matrix_world@ae.pose.bones[n].matrix) for n in names}
+        out["wrist"].append([x for r in mats["wrist.R"].transposed() for x in r])
+        out["clip"].append([x for r in U2B(clip.evaluated_get(dg).matrix_world).transposed() for x in r])
+        for n in names:
+            par=bones[n].parent
+            loc=(mats[par.name].inverted()@mats[n]) if par else mats[n]
+            q=loc.to_quaternion(); out["local"][n].append([q.x,q.y,q.z,q.w])
+    json.dump(out,open("C:/sk_anim/reload_partial_baked.json","w"))
+print("ANIM_OK")
