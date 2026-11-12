@@ -6,7 +6,7 @@ namespace FiveRivers.Combat
     // moving/scaling the skeleton or replacing the existing skinned adult character.
     public sealed class AllyRiflePose
     {
-        readonly Transform rightUpper, rightFore, rightHand, leftUpper, leftFore, leftHand, head, neck;
+        readonly Transform rightUpper, rightFore, rightHand, leftUpper, leftFore, leftHand, head, neck, hips, spine, chest;
         readonly Transform root, weapon;
         readonly AlliedRifleFit fit;
         readonly Transform[][] leftFingers, rightFingers;
@@ -32,6 +32,10 @@ namespace FiveRivers.Combat
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
             head = animator.GetBoneTransform(HumanBodyBones.Head);
             neck = animator.GetBoneTransform(HumanBodyBones.Neck);
+            hips = animator.GetBoneTransform(HumanBodyBones.Hips);
+            spine = animator.GetBoneTransform(HumanBodyBones.Spine);
+            chest = animator.GetBoneTransform(HumanBodyBones.Chest);
+            if (chest == null) chest = animator.GetBoneTransform(HumanBodyBones.UpperChest);
             leftFingers = Fingers(animator, true);
             rightFingers = Fingers(animator, false);
             leftIndex = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal);
@@ -124,19 +128,88 @@ namespace FiveRivers.Combat
 
         // Ridge assault and the dawn on the crest: every rifleman walks and waits at port arms with Park's carry
         // contacts. Otherwise the plain soldiers' rifles hang between the hands of an unarmed walk/idle clip.
-        public bool ApplyPortArms()
+        // advance, run: how much of the crouched advance (CrouchRun_Rifle) and of the rifle run (Run_Rifle) is
+        // playing; both 0 while he stands, which keeps the level port arms above.
+        // Moving with that standing pose looked wrong: the rifle stayed frozen in front of the root like a tray
+        // while the body bobbed and bent under it, and the face looked at the ground. While he moves the rifle is
+        // carried on the chest so it moves with the body, and he looks where he is going. The run also squares
+        // the chest to the slope and leans into it.
+        public bool ApplyPortArms(float advance = 0f, float run = 0f)
         {
             if (fit == null || !fit.isActiveAndEnabled) return false;
-            ApplyCarryContacts();
+            run = Mathf.Clamp01(run);
+            advance = Mathf.Clamp(advance, 0f, 1f - run);
+            if (run > 0f) LeanIntoRun(run);
+            ApplyCarryContacts(advance, run);
+            if (advance + run > 0f) FaceAhead(advance, run);
             return true;
         }
 
-        void ApplyCarryContacts()
+        // Moving poses, tuned on Ally_1 from side/front/three-quarter film strips (2026-11-10).
+        // Static (like HillAllies' speeds) so they can be adjusted while playing.
+        public static float RunLean = 8f;        // extra forward lean of the chest, degrees
+        public static float RunSquare = .5f;     // share of the clip's sideways chest turn that is taken out
+        public static float RunFollow = .6f;     // how far the rifle follows the chest (twist and lean) instead of the root
+        public static Vector3 RunOffset = new Vector3(.02f, -.25f, .15f); // rifle from the mid-shoulder point, metres
+        // High port: muzzle up past the left shoulder. The roll keeps the support forearm untwisted
+        // (at 0 and below its sleeve corkscrewed into a dark band).
+        public static Vector3 RunEuler = new Vector3(-38f, -68f, 25f);
+        // Crouched advance: low ready, the rifle in front of the belt pointing ahead and a little left, level
+        // once the bent chest has tipped it (a wider yaw carried it sideways like a bar).
+        public static float AdvanceFollow = .6f;
+        public static Vector3 AdvanceOffset = new Vector3(.02f, -.27f, .17f);
+        public static Vector3 AdvanceEuler = new Vector3(-14f, -30f, 20f);
+        public static float AdvanceLook = -.16f, RunLook = -.08f; // how far below level he looks
+        static readonly Vector3 CarryRightElbow = new Vector3(.4f, -.4f, -.1f), CarryLeftElbow = new Vector3(-.3f, -.5f, .05f);
+        // Moving: both elbows down and in, close to how the arms hang. With flatter hints Park's longer arms
+        // winged the trigger elbow out and pushed the bare upper arm through his rolled sleeve.
+        public static Vector3 RunRightElbow = new Vector3(.15f, -.9f, -.2f), RunLeftElbow = new Vector3(-.3f, -.8f, .15f);
+
+        void LeanIntoRun(float weight)
         {
-            weapon.SetPositionAndRotation(root.TransformPoint(fit.carryPosition), root.rotation * Quaternion.Euler(fit.carryEuler));
+            if (spine == null) return;
+            var across = Vector3.ProjectOnPlane(rightUpper.position - leftUpper.position, root.up);
+            float turn = across.sqrMagnitude > .0001f ? Vector3.SignedAngle(across, root.right, root.up) * RunSquare : 0f;
+            // half at the waist and half at the chest, so the correction is a curve and not a hinge
+            float share = chest != null ? .5f : 1f;
+            var delta = Quaternion.AngleAxis(turn * share * weight, root.up) * Quaternion.AngleAxis(RunLean * share * weight, root.right);
+            spine.rotation = delta * spine.rotation;
+            if (chest != null) chest.rotation = delta * chest.rotation;
+        }
+
+        void FaceAhead(float advance, float run)
+        {
+            if (head == null) return;
+            float weight = advance + run;
+            var direction = (root.forward + root.up * ((AdvanceLook * advance + RunLook * run) / weight)).normalized;
+            if (neck != null)
+                neck.rotation = Quaternion.Slerp(Quaternion.identity, Quaternion.FromToRotation(head.forward, direction), .3f * weight) * neck.rotation;
+            // not the full turn: a little of the clip's head bob stays
+            head.rotation = Quaternion.Slerp(head.rotation, Quaternion.LookRotation(direction, root.up), .85f * weight);
+        }
+
+        void ApplyCarryContacts(float advance = 0f, float run = 0f)
+        {
+            var position = root.TransformPoint(fit.carryPosition);
+            var rotation = root.rotation * Quaternion.Euler(fit.carryEuler);
+            float moving = advance + run;
+            if (moving > 0f && hips != null)
+            {
+                // The chest frame: across the shoulders, up along the spine. The rifle is placed in a frame part
+                // of the way from the root to it, so it rides the body's bob, bend and twist without whipping.
+                float gait = run / moving; // 0 = advance, 1 = run
+                var mid = (rightUpper.position + leftUpper.position) * .5f;
+                var right = (rightUpper.position - leftUpper.position).normalized;
+                var up = Vector3.ProjectOnPlane(mid - hips.position, right).normalized;
+                var torso = Quaternion.Slerp(root.rotation, Quaternion.LookRotation(Vector3.Cross(right, up), up), Mathf.Lerp(AdvanceFollow, RunFollow, gait));
+                var movingRotation = torso * Quaternion.Slerp(Quaternion.Euler(AdvanceEuler), Quaternion.Euler(RunEuler), gait);
+                position = Vector3.Lerp(position, mid + torso * Vector3.Lerp(AdvanceOffset, RunOffset, gait), moving);
+                rotation = Quaternion.Slerp(rotation, movingRotation, moving);
+            }
+            weapon.SetPositionAndRotation(position, rotation);
             var rightRotation = Quaternion.LookRotation(weapon.TransformDirection(new Vector3(0f, .35f, 1f)), -weapon.right) * Quaternion.Inverse(rightPalmFrame);
-            Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(new Vector3(.03f, -.065f, -.19f)), rightRotation, root.TransformDirection(new Vector3(.4f, -.4f, -.1f)), fit, true);
-            Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(fit.supportWristGrip), SupportRotation(fit.supportPalmDirection), root.TransformDirection(new Vector3(-.3f, -.5f, .05f)), fit, true);
+            Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(new Vector3(.03f, -.065f, -.19f)), rightRotation, root.TransformDirection(Vector3.Lerp(CarryRightElbow, RunRightElbow, moving)), fit, true);
+            Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(fit.supportWristGrip), SupportRotation(fit.supportPalmDirection), root.TransformDirection(Vector3.Lerp(CarryLeftElbow, RunLeftElbow, moving)), fit, true);
             Grip(leftFingers, leftThumb, leftIndex, leftLittle, false);
             Grip(rightFingers, rightThumb, rightIndex, rightLittle, true);
         }

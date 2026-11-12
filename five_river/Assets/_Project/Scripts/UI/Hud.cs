@@ -38,6 +38,9 @@ namespace FiveRivers.UI
         [SerializeField] float damageFadeDuration = 0.8f;
         [SerializeField] float runStartFade = 1.2f;
 
+        // A staged sequence has the screen (TankEntranceDirector): weapon, ammo and crosshair are put away.
+        public bool Cinematic { get; set; }
+
         float damageFlash;
         float lowHealthPulseBlend;
         float lowHealthPulsePhase;
@@ -60,7 +63,7 @@ namespace FiveRivers.UI
         {
             var flow = director.Flow;
             var mode = player.Gate.Mode;
-            bool combat = flow.IsRunning && flow.Section != FlowSection.Dawn && flow.Section != FlowSection.Result;
+            bool combat = flow.IsRunning && flow.Section != FlowSection.Dawn && flow.Section != FlowSection.Result && !Cinematic;
             combatGroup.alpha = Mathf.MoveTowards(combatGroup.alpha, combat ? 1f : 0f, Time.unscaledDeltaTime * 3f);
 
             UpdateWeapon();
@@ -129,7 +132,7 @@ namespace FiveRivers.UI
         void UpdateCrosshair(ControlMode mode)
         {
             float aim = weapons.Current == WeaponSlot.M1 ? weapons.M1.AimBlend : weapons.Bazooka.AimBlend;
-            bool show = mode == ControlMode.Full && aim < 0.5f && !weapons.Switching;
+            bool show = mode == ControlMode.Full && aim < 0.5f && !weapons.Switching && !Cinematic;
             crosshairGroup.alpha = Mathf.MoveTowards(crosshairGroup.alpha, show ? 1f : 0f, Time.unscaledDeltaTime * 8f);
             bool moving = player.MoveInput.sqrMagnitude > 0.01f;
             gap = Mathf.MoveTowards(gap, moving ? crosshairMoveGap : crosshairGap, Time.deltaTime * 60f);

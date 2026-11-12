@@ -23,3 +23,4 @@ MonoBehaviour:
   cannonDamage: 150
   cannonRadius: 5
   nearMissOffset: 6
+  entranceTake: 3

@@ -33,6 +33,8 @@ namespace FiveRivers.Combat
 
         static readonly int FireId = Animator.StringToHash("Fire");
         static readonly int CrouchId = Animator.StringToHash("Crouch");
+        static readonly int RunRifleId = Animator.StringToHash("Run_Rifle");
+        static readonly int CrouchRunRifleId = Animator.StringToHash("CrouchRun_Rifle");
         Transform rightHand, leftHand;
         Quaternion restingRotation;
         Vector3 defensiveForward;
@@ -46,6 +48,8 @@ namespace FiveRivers.Combat
 
         // Set by HillAllies while he walks up the ridge: no turning or firing, rifle in the carry pose.
         public bool Advancing { get; set; }
+        // Kneeling to fire: HillAllies leaves his facing alone while this is true.
+        public bool Engaged => engaged;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         public int ShotsFired { get; private set; }
@@ -210,6 +214,17 @@ namespace FiveRivers.Combat
                 || hit.collider.GetComponentInParent<EnemyAgent>() == candidate;
         }
 
+        // How much of one of HillAllies' moving states is on screen: follows the cross-fade in and out of it,
+        // so the moving rifle carry eases in with the legs instead of snapping.
+        float StateWeight(int state)
+        {
+            bool now = animator.GetCurrentAnimatorStateInfo(0).shortNameHash == state;
+            if (!animator.IsInTransition(0)) return now ? 1f : 0f;
+            bool next = animator.GetNextAnimatorStateInfo(0).shortNameHash == state;
+            float t = Mathf.SmoothStep(0f, 1f, animator.GetAnimatorTransitionInfo(0).normalizedTime);
+            return now ? (next ? 1f : 1f - t) : next ? t : 0f;
+        }
+
         void LateUpdate()
         {
             if (director.Flow.Paused) return;
@@ -221,7 +236,7 @@ namespace FiveRivers.Combat
             {
                 var section = director.Flow.Section;
                 bool portArms = director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
-                    && riflePose.ApplyPortArms();
+                    && riflePose.ApplyPortArms(Advancing ? StateWeight(CrouchRunRifleId) : 0f, Advancing ? StateWeight(RunRifleId) : 0f);
                 if (!portArms && !riflePose.TryApplyCarry())
                 {
                     var forward = leftHand.position - rightHand.position;

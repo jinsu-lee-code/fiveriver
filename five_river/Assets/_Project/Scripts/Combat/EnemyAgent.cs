@@ -21,6 +21,12 @@ namespace FiveRivers.Combat
         static readonly int DieId = Animator.StringToHash("Die");
         static readonly int DieIndexId = Animator.StringToHash("DieIndex");
         static readonly int RetreatId = Animator.StringToHash("Retreat");
+        static readonly int RunStateId = Animator.StringToHash("Run");
+        // A_KPA_Run_Rifle의 디딘 발은 사람 크기 1인 리그 기준 약 5.2 m/s로 움직인다 (2026-11-10 플레이 중 측정,
+        // HillAllies.RunClipSpeed와 같은 값. 적 리그 0.88에서는 약 4.6 m/s). 전진(3.4 m/s)을 원래 속도로 재생하면
+        // 디딘 발이 초당 1.4 m씩 뒤로 미끄러졌다. 지면 속도에 재생 속도를 맞춘다.
+        const float RunClipSpeed = 5.2f, MinRunAnimSpeed = 0.72f, MaxRunAnimSpeed = 1.3f;
+        float runFootSpeed = RunClipSpeed;
 
         [SerializeField] Transform model;
         [SerializeField] Transform muzzle;
@@ -46,6 +52,8 @@ namespace FiveRivers.Combat
         public static float GripBehindCentre = 0.17f; // grip sits this far behind the rifle's mesh centre
         public static float MuzzleAhead = 0.6f;
         public static float AimAhead = 0.5f;          // barrel passes this far ahead of the left hand       // barrel end ahead of the mesh centre
+        public static Vector3 RunCarryEuler = new Vector3(18f, -32f, 0f); // low ready while running, relative to the body
+        public static Vector3 TriggerWrist = new Vector3(0.03f, -0.05f, 0f); // trigger wrist from the grip point, rifle space
         Transform rifle, rightHand, leftHand;
         EnemyHandIK handIK;
         Vector3 rifleCentreLocal;
@@ -68,6 +76,7 @@ namespace FiveRivers.Combat
             {
                 rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
                 leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                runFootSpeed = RunClipSpeed * animator.humanScale * animator.transform.lossyScale.y;
             }
             var mesh = rifle != null ? rifle.GetComponentInChildren<MeshFilter>() : null;
             if (mesh != null && mesh.sharedMesh != null)
@@ -92,12 +101,33 @@ namespace FiveRivers.Combat
             var along = support + transform.forward * AimAhead - rightHand.position;
             if (along.sqrMagnitude < 0.0025f) return;
             var rotation = Quaternion.LookRotation(along, transform.up);
-            var grip = rightHand.position + along.normalized * GripForward;
+            // Running, the rifle is not pointed: it is carried low and ready, muzzle down and to the left, which is
+            // where the run clip's own hands lead (held out level in front it looked like a bar pushed ahead of
+            // him; a high port puts it across his face because the clip keeps the trigger hand at chest height).
+            // The carry eases in and out with the run clip.
+            float carry = RunCarryWeight();
+            if (carry > 0f) rotation = Quaternion.Slerp(rotation, transform.rotation * Quaternion.Euler(RunCarryEuler), carry);
+            // Running, the wood passes above and to the left of the trigger wrist: the palm, not the wrist bone, lies
+            // on it (with the wrist on the axis the hand sat on top of the receiver). Aiming keeps the clip's grip.
+            var grip = rightHand.position + rotation * new Vector3(-TriggerWrist.x * carry, -TriggerWrist.y * carry, GripForward);
             // the rifle's grip point (behind its centre on the local z axis) goes to the grip
             var gripLocal = rifleCentreLocal + Vector3.back * GripBehindCentre;
             rifle.SetPositionAndRotation(grip - rotation * Vector3.Scale(gripLocal, rifle.lossyScale), rotation);
             // muzzle flash and shot origin follow the barrel end
             if (muzzle != null) muzzle.SetPositionAndRotation(rifle.TransformPoint(rifleCentreLocal + Vector3.forward * MuzzleAhead), rotation);
+            // running: support hand under the fore-end, palms onto the wood, fingers closed round it
+            if (handIK != null) handIK.Shape(carry);
+        }
+
+        // How much of the Run state is on screen (follows the controller's cross-fades).
+        float RunCarryWeight()
+        {
+            if (animator == null || state == State.Dead) return 0f;
+            bool now = animator.GetCurrentAnimatorStateInfo(0).shortNameHash == RunStateId;
+            if (!animator.IsInTransition(0)) return now ? 1f : 0f;
+            bool next = animator.GetNextAnimatorStateInfo(0).shortNameHash == RunStateId;
+            float t = Mathf.SmoothStep(0f, 1f, animator.GetAnimatorTransitionInfo(0).normalizedTime);
+            return now ? (next ? 1f : 1f - t) : next ? t : 0f;
         }
 
         // Let go of the rifle: it falls and settles on the ground with the body, then is cleared with it.
@@ -228,7 +258,11 @@ namespace FiveRivers.Combat
         {
             if (animator != null)
             {
-                animator.SetFloat(SpeedId, agent.velocity.magnitude);
+                float speed = agent.velocity.magnitude;
+                animator.SetFloat(SpeedId, speed);
+                // 달리기 상태에서만 지면 속도에 재생 속도를 맞춘다 (사격 · 피격 등 다른 동작은 원래 속도)
+                bool running = animator.GetCurrentAnimatorStateInfo(0).shortNameHash == RunStateId;
+                animator.speed = running ? Mathf.Clamp(speed / runFootSpeed, MinRunAnimSpeed, MaxRunAnimSpeed) : 1f;
                 animator.SetBool(CrouchId, state == State.Cover && !Standing);
                 animator.SetBool(AimId, state == State.Cover);
                 animator.SetBool(RetreatId, state == State.Retreat);
@@ -259,6 +293,7 @@ namespace FiveRivers.Combat
             if (animator == null) model.localScale = Vector3.one;
             if (animator != null)
             {
+                animator.speed = 1f; // 달리다 쓰러져도 사망 동작은 원래 속도로
                 animator.SetInteger(DieIndexId, Random.Range(0, 3));
                 animator.SetTrigger(DieId);
             }

@@ -81,6 +81,8 @@ namespace FiveRivers.Combat
             if (gun != null) gunRest = gun.localRotation;
             turretBasis = Quaternion.Inverse(body.rotation) * turret.rotation;
             turretRest = turret.localRotation;
+            // wheels turn and the track belts run with the distance the hull travels (TankRunningGear)
+            body.gameObject.AddComponent<TankRunningGear>().Build(body);
             Hide();
         }
 
@@ -124,6 +126,7 @@ namespace FiveRivers.Combat
 
         void Appear(Transform at)
         {
+            Scripted = false;
             body.gameObject.SetActive(true);
             body.SetPositionAndRotation(at.position, at.rotation);
             if (driveTerrain != null) AlignWithGround();
@@ -147,6 +150,7 @@ namespace FiveRivers.Combat
 
         void Hide()
         {
+            Scripted = false;
             state = State.Hidden;
             allyBlastsLeft = 0;
             body.gameObject.SetActive(false);
@@ -173,6 +177,8 @@ namespace FiveRivers.Combat
             }
 
             if (state == State.Stopped) return;
+            // the entrance sequence is driving the tank: no approach, no turret tracking, no fire of its own
+            if (Scripted) return;
 
             if (state == State.Approach)
             {
@@ -274,6 +280,63 @@ namespace FiveRivers.Combat
             if (Vector3.Distance(impact, target) <= config.cannonRadius)
                 playerHealth.TakeDamage(config.cannonDamage * director.EnemyDamageScale, impact);
             CannonFired?.Invoke();
+        }
+
+        // ---- Entrance sequence (TankEntranceDirector) ----
+        // While Scripted the tank only goes where it is put. It can still be hit and stopped.
+        public bool Scripted { get; private set; }
+        public int EntranceTake => config.entranceTake;
+        public Vector3 RouteStart => points.tankStart.position;
+        public Vector3 RouteHold => points.tankHold.position;
+        public Quaternion RouteStartRotation => points.tankStart.rotation;
+        public Vector3 MuzzlePosition => gunMuzzle.position;
+        public Vector3 TurretPosition => turret.position;
+
+        public void BeginScripted()
+        {
+            if (state == State.Hidden || state == State.Stopped) return;
+            Scripted = true;
+        }
+
+        // position: on the ground plane (height comes from the terrain). hullYaw, turretYaw: world headings in
+        // degrees. gunPitch: degrees above the turret's own level, within the real gun's range.
+        public void SetScriptedPose(Vector3 position, float hullYaw, float turretYaw, float pitch)
+        {
+            if (!Scripted) return;
+            body.SetPositionAndRotation(position, Quaternion.Euler(0f, hullYaw, 0f));
+            if (driveTerrain != null) AlignWithGround();
+            var turretUp = driveTerrain != null ? body.up : Vector3.up;
+            var heading = Vector3.ProjectOnPlane(Quaternion.Euler(0f, turretYaw, 0f) * Vector3.forward, turretUp);
+            if (heading.sqrMagnitude > 0.0001f) turret.rotation = Quaternion.LookRotation(heading, turretUp) * turretBasis;
+            if (gun == null) return;
+            gunPitch = Mathf.Clamp(pitch, gunDepression, gunElevation);
+            gun.rotation = Quaternion.AngleAxis(-gunPitch, turret.right) * (turret.rotation * gunRest);
+        }
+
+        // A staged shot: flash, report and blast, no damage (the player has no control during the sequence).
+        public void ScriptedFire(Vector3 impact)
+        {
+            if (!Scripted) return;
+            effects.Spawn(EffectKind.TankMuzzle, gunMuzzle.position, gunMuzzle.rotation);
+            effects.Spawn(EffectKind.CannonBlast, impact, Quaternion.identity);
+            CannonFired?.Invoke();
+        }
+
+        // Hands the tank back where the sequence left it: it carries on down the same road from there.
+        public void EndScripted()
+        {
+            if (!Scripted) return;
+            Scripted = false;
+            if (state == State.Hidden || state == State.Stopped) return;
+            var route = points.tankHold.position - points.tankStart.position;
+            float along = route.sqrMagnitude > 0.01f ? Mathf.Clamp01(Vector3.Dot(body.position - points.tankStart.position, route) / route.sqrMagnitude) : 1f;
+            // SampleApproach drives the straight run over the first 75% of the time and turns on the spot after
+            float duration = route.magnitude / config.approachSpeed;
+            approachElapsed = along * 0.75f * duration;
+            state = along >= 1f ? State.Holding : State.Approach;
+            openedFire = false;
+            sightWaitUntil = -1f;
+            nextFire = Time.time + config.fireInterval * 0.6f;
         }
 
         public void OnRocketHit(Vector3 point, Vector3 shooterPosition)
