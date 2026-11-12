@@ -14,7 +14,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ai.navigation": {
-      "version": "2.0.16",
+      "version": "2.0.14",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -71,10 +71,12 @@
       "dependencies": {}
     },
     "com.unity.ide.rider": {
-      "version": "3.1.0",
+      "version": "3.0.40",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.ext.nunit": "1.0.6"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
@@ -87,7 +89,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.20.1",
+      "version": "1.20.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -110,16 +112,6 @@
         "com.unity.modules.uielements": "1.0.0"
       }
     },
-    "com.unity.multiplayer.center.quickstart": {
-      "version": "2.0.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.uielements": "1.0.0",
-        "com.unity.multiplayer.center": "2.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.6",
       "depth": 1,
@@ -128,7 +120,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.2.2",
+      "version": "3.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -217,15 +209,16 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "6.6.0",
+      "version": "1.8.13",
       "depth": 0,
-      "source": "builtin",
+      "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
-      }
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ugui": {
       "version": "2.0.0",
@@ -349,12 +342,6 @@
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.modules.physicscore2d": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.modules.screencapture": {
       "version": "1.0.0",
       "depth": 0,
@@ -386,26 +373,12 @@
         "com.unity.modules.terrain": "1.0.0"
       }
     },
-    "com.unity.modules.tetgen": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.modules.tilemap": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.physics2d": "1.0.0"
-      }
-    },
-    "com.unity.modules.timelinefoundation": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.jsonserialize": "1.0.0"
       }
     },
     "com.unity.modules.ui": {
