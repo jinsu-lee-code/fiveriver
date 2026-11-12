@@ -26,7 +26,7 @@ namespace FiveRivers.EditorTools
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode) { Debug.LogError("[TrouserShadowFloor] Edit mode only."); return; }
             var done = new HashSet<Material>();
-            foreach (var renderer in Object.FindObjectsByType<SkinnedMeshRenderer>(FindObjectsInactive.Include))
+            foreach (var renderer in Object.FindObjectsByType<SkinnedMeshRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
                 var material = renderer.sharedMaterials.Length > 0 ? renderer.sharedMaterials[0] : null;
                 if (material == null || !material.name.Contains("Baked_Body") || !AssetDatabase.Contains(material) || !done.Add(material)) continue;

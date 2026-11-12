@@ -36,7 +36,7 @@ namespace FiveRivers.EditorTools
             parent.transform.SetParent(map.transform, false);
             Undo.RegisterCompleteObjectUndo(terrain.terrainData, "Cover earth paint");
 
-            var renderers = Object.FindObjectsByType<Renderer>(FindObjectsInactive.Include);
+            var renderers = Object.FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             int dressed = 0;
             foreach (Transform cp in cover.transform)
             {

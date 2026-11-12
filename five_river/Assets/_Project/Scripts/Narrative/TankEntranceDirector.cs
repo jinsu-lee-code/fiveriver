@@ -145,7 +145,7 @@ namespace FiveRivers.Narrative
             if (road.sqrMagnitude > 1f) player.transform.rotation = Quaternion.LookRotation(road);
 
             var leader = points.parkSpot != null ? points.parkSpot.position : player.transform.position;
-            foreach (var ally in FindObjectsByType<AllyCombatant>(FindObjectsInactive.Exclude))
+            foreach (var ally in FindObjectsByType<AllyCombatant>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
                 if (ally.name == "ParkYongpal") leader = ally.transform.position;
             var context = new TankEntranceContext
             {

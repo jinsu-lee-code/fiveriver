@@ -368,7 +368,7 @@ namespace FiveRivers.Narrative
             var anchor = points.enemySpawns[2].position;
             Vector3 best = anchor;
             float bestHeight = float.NegativeInfinity;
-            foreach (var rock in FindObjectsByType<MeshRenderer>(FindObjectsInactive.Exclude))
+            foreach (var rock in FindObjectsByType<MeshRenderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
             {
                 var parent = rock.transform.parent;
                 if (parent == null || !parent.name.StartsWith("Granite_Boulder")) continue;

@@ -168,10 +168,20 @@ namespace FiveRivers.Tests
                     var so = new SerializedObject(c);
                     var p = so.GetIterator();
                     while (p.NextVisible(true))
-                        if (p.propertyType == SerializedPropertyType.ObjectReference && p.objectReferenceValue == null && p.objectReferenceEntityIdValue != default)
+                        if (p.propertyType == SerializedPropertyType.ObjectReference && p.objectReferenceValue == null && HasDanglingId(p))
                             Assert.Fail($"Missing 참조: {path} {c.GetType().Name}.{p.propertyPath}");
                 }
             }
+        }
+
+        // a reference that points at something no longer there (Unity 6000.6 names it EntityId, 6000.3 InstanceID)
+        static bool HasDanglingId(SerializedProperty p)
+        {
+#if UNITY_6000_6_OR_NEWER
+            return p.objectReferenceEntityIdValue != default;
+#else
+            return p.objectReferenceInstanceIDValue != 0;
+#endif
         }
     }
 }
