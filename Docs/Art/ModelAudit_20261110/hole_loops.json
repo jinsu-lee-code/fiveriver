@@ -1,0 +1,420 @@
+{
+ "SM_VH_T34_85": {
+  "Hull": {
+   "loops": 30,
+   "largest(rel perim)": [
+    [
+     1048,
+     4.1337
+    ],
+    [
+     853,
+     3.4169
+    ],
+    [
+     482,
+     2.001
+    ],
+    [
+     48,
+     1.2714
+    ],
+    [
+     218,
+     0.7038
+    ]
+   ],
+   "small_loops(<2% of size)": 18,
+   "small_edges": 62
+  },
+  "TrackL": {
+   "loops": 11,
+   "largest(rel perim)": [
+    [
+     1048,
+     4.2003
+    ],
+    [
+     14,
+     0.0738
+    ],
+    [
+     26,
+     0.07
+    ],
+    [
+     13,
+     0.036
+    ],
+    [
+     8,
+     0.024
+    ]
+   ],
+   "small_loops(<2% of size)": 6,
+   "small_edges": 25
+  },
+  "TrackR": {
+   "loops": 12,
+   "largest(rel perim)": [
+    [
+     853,
+     3.4577
+    ],
+    [
+     218,
+     0.717
+    ],
+    [
+     40,
+     0.1179
+    ],
+    [
+     10,
+     0.0419
+    ],
+    [
+     7,
+     0.0326
+    ]
+   ],
+   "small_loops(<2% of size)": 7,
+   "small_edges": 29
+  },
+  "Gun": {
+   "loops": 1,
+   "largest(rel perim)": [
+    [
+     158,
+     1.1863
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  },
+  "Turret": {
+   "loops": 2,
+   "largest(rel perim)": [
+    [
+     630,
+     5.8642
+    ],
+    [
+     3,
+     0.0113
+    ]
+   ],
+   "small_loops(<2% of size)": 1,
+   "small_edges": 3
+  }
+ },
+ "SM_PR_SandbagWall": {
+  "SandbagWall": {
+   "loops": 106,
+   "largest(rel perim)": [
+    [
+     9,
+     0.5531
+    ],
+    [
+     11,
+     0.4591
+    ],
+    [
+     12,
+     0.4294
+    ],
+    [
+     9,
+     0.3478
+    ],
+    [
+     7,
+     0.3025
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  }
+ },
+ "SM_PR_AmmoCrate": {
+  "SM_PR_AmmoCrate": {
+   "loops": 36,
+   "largest(rel perim)": [
+    [
+     19,
+     1.2999
+    ],
+    [
+     9,
+     0.8291
+    ],
+    [
+     9,
+     0.8088
+    ],
+    [
+     8,
+     0.6763
+    ],
+    [
+     9,
+     0.5657
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  }
+ },
+ "SM_PR_Target": {
+  "Board": {
+   "loops": 26,
+   "largest(rel perim)": [
+    [
+     23,
+     2.4826
+    ],
+    [
+     18,
+     1.1662
+    ],
+    [
+     11,
+     1.0294
+    ],
+    [
+     10,
+     0.9063
+    ],
+    [
+     7,
+     0.9043
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  },
+  "Stake": {
+   "loops": 3,
+   "largest(rel perim)": [
+    [
+     12,
+     1.5864
+    ],
+    [
+     5,
+     1.1652
+    ],
+    [
+     4,
+     0.4901
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  }
+ },
+ "SM_PR_BlanketBody": {
+  "Blanket": {
+   "loops": 2,
+   "largest(rel perim)": [
+    [
+     37,
+     1.134
+    ],
+    [
+     5,
+     0.1101
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  },
+  "Boot": {
+   "loops": 2,
+   "largest(rel perim)": [
+    [
+     37,
+     7.1518
+    ],
+    [
+     5,
+     0.6945
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  }
+ },
+ "SM_WP_BazookaRocket": {
+  "Rocket": {
+   "loops": 17,
+   "largest(rel perim)": [
+    [
+     10,
+     0.4631
+    ],
+    [
+     9,
+     0.3277
+    ],
+    [
+     8,
+     0.2878
+    ],
+    [
+     4,
+     0.2179
+    ],
+    [
+     6,
+     0.186
+    ]
+   ],
+   "small_loops(<2% of size)": 1,
+   "small_edges": 5
+  }
+ },
+ "SM_CH_ROK_SupportHand_M1": {
+  "SM_CH_ROK_SupportHand_M1": {
+   "loops": 1,
+   "largest(rel perim)": [
+    [
+     148,
+     1.7294
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  }
+ },
+ "SM_CH_ROK_SupportHand_VisiblePolished": {
+  "SM_CH_ROK_SupportHand_M1": {
+   "loops": 1,
+   "largest(rel perim)": [
+    [
+     268,
+     2.1014
+    ]
+   ],
+   "small_loops(<2% of size)": 0,
+   "small_edges": 0
+  }
+ },
+ "SK_CH_KPA_Rifleman": {
+  "Body_Low": {
+   "loops": 10,
+   "largest(rel perim)": [
+    [
+     65,
+     0.1251
+    ],
+    [
+     66,
+     0.1247
+    ],
+    [
+     2,
+     0.0052
+    ],
+    [
+     2,
+     0.005
+    ],
+    [
+     2,
+     0.0049
+    ]
+   ],
+   "small_loops(<2% of size)": 8,
+   "small_edges": 16
+  }
+ },
+ "SK_CH_ROK_ParkYongpal": {
+  "Body_Low": {
+   "loops": 78,
+   "largest(rel perim)": [
+    [
+     187,
+     0.6401
+    ],
+    [
+     91,
+     0.2638
+    ],
+    [
+     105,
+     0.2441
+    ],
+    [
+     2,
+     0.012
+    ],
+    [
+     3,
+     0.005
+    ]
+   ],
+   "small_loops(<2% of size)": 75,
+   "small_edges": 219
+  }
+ },
+ "SK_CH_ROK_Protagonist": {
+  "Body_Low": {
+   "loops": 28,
+   "largest(rel perim)": [
+    [
+     89,
+     0.1248
+    ],
+    [
+     2,
+     0.0064
+    ],
+    [
+     1,
+     0.0063
+    ],
+    [
+     2,
+     0.0057
+    ],
+    [
+     4,
+     0.0052
+    ]
+   ],
+   "small_loops(<2% of size)": 27,
+   "small_edges": 59
+  }
+ },
+ "SK_CH_ROK_Soldier": {
+  "StudentSoldier_Rigged_Mesh": {
+   "loops": 33,
+   "largest(rel perim)": [
+    [
+     89,
+     0.1325
+    ],
+    [
+     2,
+     0.0217
+    ],
+    [
+     3,
+     0.009
+    ],
+    [
+     2,
+     0.0076
+    ],
+    [
+     3,
+     0.005
+    ]
+   ],
+   "small_loops(<2% of size)": 31,
+   "small_edges": 88
+  }
+ }
+}

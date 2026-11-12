@@ -1,0 +1,13 @@
+{
+ "before": {
+  "SM_VH_T34_85_Destroyed": 100000
+ },
+ "holes_filled_faces": {
+  "SM_VH_T34_85_Destroyed": 0
+ },
+ "after": {
+  "SM_VH_T34_85_Destroyed": 55000
+ },
+ "total_before": 100000,
+ "total_after": 55000
+}

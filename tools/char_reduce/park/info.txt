@@ -1,0 +1,16 @@
+name: ROK_ParkYongpal_SkinFix
+assetPath: Assets/_Project/Art/SurfaceDetail20261110/ROK_ParkYongpal_SkinFix.asset
+nv: 145960
+subMeshTriangles: 0:13708 1:14304 2:15148 3:9940 4:9825 
+subMeshTopology: 0:Triangles 1:Triangles 2:Triangles 3:Triangles 4:Triangles 
+bounds: center=(0.00001, -0.00001, 0.00546) size=(0.01078, 0.00227, 0.01090)
+blendShapeCount: 0
+indexFormat: UInt32
+maxBonesPerVertex: 4
+bindposeCount: 52
+usedUVChannels: 0
+hasColors: False
+guid: 275bdbe1cf773f1458fd604f3f4a9bd2
+localFileID: 4300000
+sceneSkinnedMeshRenderers:
+  Dabudong: [Map]/Generated/People/ParkYongpal/Model/Body_Low
