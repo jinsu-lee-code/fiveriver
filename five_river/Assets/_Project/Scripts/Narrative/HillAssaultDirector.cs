@@ -20,6 +20,8 @@ namespace FiveRivers.Narrative
         // Tae-seok appears out of view on the slope below the crest and walks the last stretch up.
         const float ClimbStartDistance = 18f, ClimbSpeed = 1.8f, WalkClipSpeed = 1.3f, MeetDistance = 3.2f, StandOff = 2.6f;
         // The crest is captured by reaching the highest boulder on the hill top (the player cannot stand on it).
+        const float GreetTurn = 2f, GreetTurnSpeed = 160f, FaceHeight = 1.5f;
+        float greetUntil;
         const float SummitReach = 3.5f, SummitRockSearch = 40f;
         static readonly int SpeedId = Animator.StringToHash("Speed");
 
@@ -33,6 +35,8 @@ namespace FiveRivers.Narrative
         Camera view;
         GameText copy;
         Stage stage;
+        // 0 at the trench exit, 1 at the summit boulder; DawnDirector lets the sky lighten only this far
+        public float ClimbProgress => started ? Mathf.Clamp01((float)stage / (float)Stage.Summit) : 0f;
         bool started;
         readonly List<Transform> pendingDefenders = new List<Transform>();
         float nextSpawnAttempt;
@@ -136,7 +140,7 @@ namespace FiveRivers.Narrative
             if (!started)
             {
                 started = true;
-                allies.Begin();
+                allies.Begin(ExitPoint);
                 player.SetHillExit(ExitPoint.x);
                 subtitles.Say(copy.parkDeparts);
             }
@@ -203,6 +207,8 @@ namespace FiveRivers.Narrative
                 arrivalStarted = true;
                 allies.Hold(player.transform.position);
             }
+            allies.Settle();
+            if (CutsceneRig.Running > 0) return; // the summit dawn sequence plays first
             switch (arrival)
             {
                 case Arrival.Waiting:
@@ -226,11 +232,15 @@ namespace FiveRivers.Narrative
                         lastGuideKey = lastGuideText = null;
                         subtitles.Say(copy.taeSeokMeets);
                         nextLineAt = Time.time + copy.taeSeokMeets.duration + .3f;
+                        greetUntil = Time.time + GreetTurn;
                         arrival = Arrival.Talking;
                     }
                     break;
                 case Arrival.Talking:
                     FaceClimberToPlayer();
+                    // he stands lower on the slope: bring his face into frame as the greeting starts, then leave the view alone
+                    if (Time.time < greetUntil && climber != null)
+                        player.LookToward(climber.position + Vector3.up * FaceHeight, GreetTurnSpeed * Time.deltaTime);
                     if (Time.time < nextLineAt) return;
                     subtitles.Say(copy.parkMansuPlace);
                     nextLineAt = Time.time + copy.parkMansuPlace.duration + .5f;

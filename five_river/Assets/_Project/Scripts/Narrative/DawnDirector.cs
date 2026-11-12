@@ -23,6 +23,11 @@ namespace FiveRivers.Narrative
         DawnTruckSequence truckSequence;
         // 확장 흐름: 윤태석은 고지 정상 아래 비탈에서 따로 올라온다 (SpawnClimber). 트럭 인원은 참호에 남는다.
         Transform climber;
+        public float DawnRate { get; set; } = 1f; // SummitDawnDirector hurries the daybreak while its view is on the sky
+        public DawnTruckSequence TruckSequence => truckSequence;
+        public Transform Truck => truckSequence != null ? truckSequence.transform : null;
+        public Transform TruckStop => truckArrivalStop;
+        public Vector3 DawnLightEuler => dawnLightEuler;
         public Transform TaeSeok => director.Flow.IsExpanded ? climber : truckSequence != null ? truckSequence.JoinedLead : walkers.Count > 0 ? walkers[0] : null;
         [SerializeField] FiveRivers.Data.GameText.Line arrivalNarration = new FiveRivers.Data.GameText.Line
         {
@@ -36,10 +41,10 @@ namespace FiveRivers.Narrative
         [SerializeField] Vector3 dawnLightEuler = new Vector3(8f, 120f, 0f); // 오른쪽 뒤에서 낮게 (실루엣)
         [SerializeField] Color dawnSky = new Color(0.55f, 0.55f, 0.62f);
         [SerializeField] Color dawnEquator = new Color(0.45f, 0.40f, 0.38f);
-        [SerializeField] Color dawnFog = new Color(0.52f, 0.50f, 0.55f);
+        [SerializeField] Color dawnFog = new Color(0.52f, 0.50f, 0.55f);        // the night haze thins as the day breaks, so the valley and the truck below read from the crest        [SerializeField] float dawnFogDensity = .0075f;
 
         Color nightLight, nightSky, nightEquator, nightFog, nightBackground;
-        float nightIntensity;
+        float nightIntensity, nightFogDensity;
         Quaternion nightRotation;
         readonly List<Transform> walkers = new List<Transform>();
         readonly List<Vector3> walkerDestinations = new List<Vector3>();
@@ -47,20 +52,23 @@ namespace FiveRivers.Narrative
         static readonly int SpeedId = Animator.StringToHash("Speed");
         Terrain ground;
         float blend;
-        Material originalSky, runtimeSky;
+        Material originalSky, runtimeSky;        HillAssaultDirector hill;        // the ridge is retaken "before the day breaks": the sky only greys while climbing and breaks at the summit        [SerializeField, Range(0f, 1f)] float preDawnAtSummit = .35f;
         float lastEnvironmentBlend=-1f;
 
         void Awake()
         {
             ground = Terrain.activeTerrain;
             if (director.Flow.IsExpanded)
-                gameObject.AddComponent<HillAssaultDirector>().Configure(director, this, points, view);
+            {
+                (hill = gameObject.AddComponent<HillAssaultDirector>()).Configure(director, this, points, view);
+                gameObject.AddComponent<SummitDawnDirector>().Configure(director, FindFirstObjectByType<FiveRivers.Combat.PlayerController>(), this, FindFirstObjectByType<FiveRivers.UI.ObjectiveDisplay>());
+            }
             nightLight = moon.color;
             nightIntensity = moon.intensity;
             nightRotation = moon.transform.rotation;
             nightSky = RenderSettings.ambientSkyColor;
             nightEquator = RenderSettings.ambientEquatorColor;
-            nightFog = RenderSettings.fogColor;
+            nightFog = RenderSettings.fogColor;            nightFogDensity = RenderSettings.fogDensity;
             nightBackground = view.backgroundColor;
             originalSky=RenderSettings.skybox;
             if(originalSky!=null && originalSky.HasProperty("_DawnBlend"))
@@ -108,7 +116,12 @@ namespace FiveRivers.Narrative
                 float duration = Mathf.Max(1f, director.Config.dawnDuration);
                 if (flow.Section == FlowSection.Result) blend = 1f;
                 // 확장 흐름은 능선 탈환 중에 동이 트기 시작해 정상의 새벽까지 이어진다
-                else if (flow.Section == FlowSection.HillAssault || flow.IsExpanded) blend = Mathf.MoveTowards(blend, 1f, Time.deltaTime / duration);
+                else if (flow.Section == FlowSection.HillAssault)
+                {
+                    float cap = preDawnAtSummit * (hill != null ? hill.ClimbProgress : 0f);
+                    blend = Mathf.MoveTowards(blend, cap, Time.deltaTime / duration);
+                }
+                else if (flow.IsExpanded) blend = Mathf.MoveTowards(blend, 1f, Time.deltaTime / duration * DawnRate);
                 else blend = Mathf.Clamp01((float)flow.SectionTime / duration);
                 Apply();
             }
@@ -139,7 +152,7 @@ namespace FiveRivers.Narrative
             moon.transform.rotation = Quaternion.Slerp(nightRotation, Quaternion.Euler(dawnLightEuler), e);
             RenderSettings.ambientSkyColor = Color.Lerp(nightSky, dawnSky, e);
             RenderSettings.ambientEquatorColor = Color.Lerp(nightEquator, dawnEquator, e);
-            RenderSettings.fogColor = Color.Lerp(nightFog, dawnFog, e);
+            RenderSettings.fogColor = Color.Lerp(nightFog, dawnFog, e);            RenderSettings.fogDensity = Mathf.Lerp(nightFogDensity, dawnFogDensity, e);
             view.backgroundColor = Color.Lerp(nightBackground, dawnFog, e);
             if(runtimeSky!=null)
             {

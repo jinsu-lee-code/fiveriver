@@ -141,6 +141,17 @@ namespace FiveRivers.Combat
             cameraPivot.localRotation = Quaternion.Euler(pitch - recoil, 0f, 0f);
         }
 
+        // Turns the view a little toward a point (scripted beats such as greeting someone); the player keeps control.
+        public void LookToward(Vector3 point, float degrees)
+        {
+            var to = point - cameraPivot.position;
+            var flat = new Vector3(to.x, 0f, to.z);
+            if (flat.sqrMagnitude < .0001f) return;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(flat), degrees);
+            float wanted = -Mathf.Atan2(to.y, flat.magnitude) * Mathf.Rad2Deg;
+            pitch = Mathf.Clamp(Mathf.MoveTowards(pitch, wanted, degrees), -config.pitchLimit, config.pitchLimit);
+        }
+
         public void Teleport(Transform point)
         {
             body.enabled = false;

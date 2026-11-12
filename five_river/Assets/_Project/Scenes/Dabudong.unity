@@ -4259,9 +4259,11 @@ MonoBehaviour:
   dawnLight: {r: 1, g: 0.78, b: 0.6, a: 1}
   dawnIntensity: 1.1
   dawnLightEuler: {x: 8, y: 120, z: 0}
-  dawnSky: {r: 0.55, g: 0.55, b: 0.62, a: 1}
-  dawnEquator: {r: 0.45, g: 0.4, b: 0.38, a: 1}
-  dawnFog: {r: 0.52, g: 0.5, b: 0.55, a: 1}
+  dawnSky: {r: 0.62, g: 0.58, b: 0.58, a: 1}
+  dawnEquator: {r: 0.55, g: 0.45, b: 0.4, a: 1}
+  dawnFog: {r: 0.66, g: 0.57, b: 0.53, a: 1}
+  dawnFogDensity: 0.0075
+  preDawnAtSummit: 0.35
 --- !u!114 &190929091
 MonoBehaviour:
   m_ObjectHideFlags: 0

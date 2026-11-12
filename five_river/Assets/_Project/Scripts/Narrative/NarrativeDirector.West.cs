@@ -23,6 +23,7 @@ namespace FiveRivers.Narrative
         Quaternion rifleLocalRotation;
         Vector3 rifleLocalScale;
         bool mansuLostThisRun;
+        const float MansuFallStart = .72f;
         Vector3 blanketOriginalPosition;
 
         void OnWestSectionChanged(FlowTransition transition)
@@ -106,6 +107,9 @@ namespace FiveRivers.Narrative
                 // Fast volleys can finish the wave early. Play the loss on the last volley in that case.
                 yield return new WaitUntil(() => !director.Flow.Paused &&
                     (director.Flow.SectionTime >= mansuLossAt || westEnemies.WestWaveCleared));
+                // the view goes to him a moment before he is hit (MansuFallDirector)
+                if (mansuCut != null && mansu != null && mansuCut.Begin(mansu.transform))
+                    yield return new WaitUntil(() => !mansuCut.Playing || mansuCut.Elapsed >= MansuFallDirector.HitAt);
                 ShowMansuLoss();
             }
             yield return new WaitUntil(() => westEnemies.WestWaveCleared &&
@@ -142,8 +146,35 @@ namespace FiveRivers.Narrative
             fallGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
             var output = AnimationPlayableOutput.Create(fallGraph, "Body", animator);
             var fall = AnimationClipPlayable.Create(fallGraph, mansuFall);
-            output.SetSourcePlayable(fall);
+            // the clip spends its first 0.7 s standing upright; he is at his post, so start where it starts to go down
+            fall.SetTime(Mathf.Min(MansuFallStart, mansuFall.length * .5f));
+            // The clip starts upright and he is usually kneeling at his post: ease out of the pose he is in
+            // (the hit straightens him) instead of snapping to the clip's first frame.
+            var mixer = AnimationMixerPlayable.Create(fallGraph, 2);
+            if (animator.runtimeAnimatorController != null)
+                fallGraph.Connect(AnimatorControllerPlayable.Create(fallGraph, animator.runtimeAnimatorController), 0, mixer, 0);
+            fallGraph.Connect(fall, 0, mixer, 1);
+            mixer.SetInputWeight(0, 1f);
+            mixer.SetInputWeight(1, 0f);
+            output.SetSourcePlayable(mixer);
             fallGraph.Play();
+            StartCoroutine(BlendIntoFall(fallGraph, mixer));
+        }
+
+        IEnumerator BlendIntoFall(PlayableGraph graph, AnimationMixerPlayable mixer)
+        {
+            const float blend = 0.28f;
+            for (float t = 0f; t < blend; t += Time.deltaTime)
+            {
+                if (!graph.IsValid()) yield break;
+                float w = Mathf.SmoothStep(0f, 1f, t / blend);
+                mixer.SetInputWeight(0, 1f - w);
+                mixer.SetInputWeight(1, w);
+                yield return null;
+            }
+            if (!graph.IsValid()) yield break;
+            mixer.SetInputWeight(0, 0f);
+            mixer.SetInputWeight(1, 1f);
         }
 
         void StopWestBeat()

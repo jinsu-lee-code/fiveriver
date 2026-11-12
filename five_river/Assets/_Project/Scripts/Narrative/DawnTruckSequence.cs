@@ -114,6 +114,17 @@ namespace FiveRivers.Narrative
         }
 
         // The ending letter owns Result audio; the new arrival engine must not bleed into it.
+        // A staged camera cut (SummitDawnDirector) shows the men where they stand: no on-screen pop across a cut,
+        // so they are revealed at once instead of waiting until the player looks away.
+        bool revealAnywhere;
+        public void RevealNow()
+        {
+            if (!narratedArrival || !stopped) return;
+            revealAnywhere = true;
+            elapsed = Mathf.Max(elapsed, Mathf.Max(.1f, approachDuration) + stopSettle);
+            PresentStationaryArrival();
+        }
+
         public void StopEngine()
         {
             engineEnded = true;
@@ -208,7 +219,7 @@ namespace FiveRivers.Narrative
                 var passenger = passengers[i];
                 if (passenger.body == null || passenger.body.gameObject.activeSelf) continue;
                 var bounds = new Bounds(passenger.body.position + Vector3.up, new Vector3(1.2f, 2.2f, 1.2f));
-                if (planes != null && GeometryUtility.TestPlanesAABB(planes, bounds)) continue;
+                if (!revealAnywhere && planes != null && GeometryUtility.TestPlanesAABB(planes, bounds)) continue;
                 passenger.body.gameObject.SetActive(true);
                 if (passenger.animator != null)
                 {

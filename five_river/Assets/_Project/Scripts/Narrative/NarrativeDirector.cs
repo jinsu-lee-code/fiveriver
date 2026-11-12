@@ -39,6 +39,8 @@ namespace FiveRivers.Narrative
         bool callsDone;
         Coroutine silence;
         WeaponHolder weapons;
+        TankEntranceDirector tankEntrance;
+        MansuFallDirector mansuCut;
         readonly TankObjectiveTracker tankObjective = new TankObjectiveTracker();
 
         void OnEnable()
@@ -78,6 +80,13 @@ namespace FiveRivers.Narrative
             };
             resupplier.Resupplied += () => resupplied = true;
             blanketBody.SetActive(false);
+            // staged entrance of the tank (TankConfig.entranceTake; 0 = none, the section starts as before)
+            tankEntrance = gameObject.AddComponent<TankEntranceDirector>();
+            tankEntrance.Configure(director, tank, player, points, subtitles, objective, text, flares);
+            // staged first flare of the main assault (expanded run, once per run)
+            gameObject.AddComponent<FlareRevealDirector>().Configure(director, player, flares, objective, text);
+            mansuCut = gameObject.AddComponent<MansuFallDirector>();
+            mansuCut.Configure(director, player, objective, text);
         }
 
         void OnRetry(FlowCheckpoint checkpoint)
@@ -133,7 +142,8 @@ namespace FiveRivers.Narrative
                     if (t.From != FlowSection.Tank)
                     {
                         subtitles.Clear();
-                        subtitles.Say(text.tankArrives);
+                        // a staged entrance says the line itself, at its own moment
+                        if (tankEntrance == null || !tankEntrance.WillPlay(t)) subtitles.Say(text.tankArrives);
                     }
                     objective.Show(text.objectiveTankMove);
                     break;
@@ -194,7 +204,7 @@ namespace FiveRivers.Narrative
             }
             if (flow.Section == FlowSection.Silence && resupplied)
                 objective.Hide(); // 보충은 끝났고 호출을 듣는 중
-            if (flow.Section == FlowSection.Tank && !tank.IsStopped)
+            if (flow.Section == FlowSection.Tank && !tank.IsStopped && (tankEntrance == null || !tankEntrance.Playing))
             {
                 float d = Vector3.Distance(player.transform.position, points.moundTop.position);
                 tankObjective.Observe(d <= moundRadius,
