@@ -28,7 +28,7 @@
 | S6 `Dawn` | 트럭 내려다보기 → 올라오는 윤태석에게 F로 대화 → 박용팔 "만수 자리다" | `dawnCap` 120초 | — |
 | S7 `Result` | 편지 두 장을 Enter · Space로 넘김 | `resultCap` 240초 | — |
 
-- 고지 탈환: 아군은 플레이어가 아직 참호 안에 있어도 **먼저 참호 앞벽을 넘어** 나가고, 앞에총 자세로 함께 오른다 (11-09).
+- 고지 탈환: 아군은 플레이어와 같은 길로 나간다 — **참호를 따라 달려 오른쪽(동쪽) 끝으로** 한 명씩 나가고, 플레이어가 아직 참호 안에 있으면 출구 너머에 가운데를 비운 줄로 서서 기다렸다가 플레이어가 지나가면 뒤에 붙는다 (결정 2026-11-10, 사용자 지시. 11-09의 "참호 앞벽을 넘어 나감"은 넘는 동작이 없어 걷는 채로 벽 위로 떠올라 어색했다). 이동은 웅크려 전진(`CrouchRun_Rifle`) · 뒤처지면 달리기(`Run_Rifle`), 서 있을 때만 앞에총.
 - 전차 포탄은 한 발에 사망한다 (`TankConfig.cannonDamage` 150, 11-09, BALANCE.md).
 - 결말(S7)은 한 회차에 한 번만 시작한다 (`EndingStarted`).
 
@@ -154,7 +154,7 @@ RunResetter (MonoBehaviour)   새 회차 초기화 목록 실행
 | 회차 초기화 | 시스템마다 `SectionChanged`(RunStart · Title) 구독 (TASKS 2-6 목록) | — | 실행 빌드 3회 자동 확인 (2026-10-27) |
 | 회차 기록 | `RunRecorder` | `persistentDataPath/runs.csv` | 구현 · 확인 |
 | 재정비 · 서쪽 공세 (일반판) | `NarrativeDirector` · `NarrativeDirector.West` | `FlowConfig.regroupCap` · `westAssaultCap`, `GameText` objectiveRegroup* · objectiveWest | 구현 · 에디터 확인 |
-| 고지 탈환 · 정상 판정 (일반판) | `HillAssaultDirector` (정상 = 맨 위 바위 3.5m 안) · `HillAllies` · `AllyRiflePose` | `FlowConfig.hillAssaultCap`, `GameText.Hill.cs` | 구현 · 플레이 확인 대기 (11-09) |
+| 고지 탈환 · 정상 판정 (일반판) | `HillAssaultDirector` (정상 = 맨 위 바위 3.5m 안) · `HillAllies`(참호 끝으로 나가 뒤따름) · `AllyRiflePose`(이동 중 소총 자세) | `FlowConfig.hillAssaultCap`, `GameText.Hill.cs`, 애니메이터 상태 `CrouchRun_Rifle` · `Run_Rifle` (메뉴 `FiveRivers/Animation/Add Ally Crouch Run 20261110`) | 구현 · 에디터 연속 캡처 확인 · 플레이 확인 대기 (11-10) |
 | 새벽 보충병 · 트럭 (일반판) | `DawnDirector` · `DawnTruckSequence` · `HillAssaultDirector`(윤태석 대화) | `Art/DawnTruck20261102/PF_DawnTruck.prefab` | 구현 · 플레이 확인 대기 |
 | 자동 순환 점검 | `DebugTools/SmokeRunner` (`-fiverivers-smoke`) | 실행 폴더 `smoke_report.txt` | 마지막 PASS 11-09 (전차 한 발 사망 커밋 때) |
 
