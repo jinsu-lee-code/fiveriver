@@ -1,8 +1,9 @@
 # Author the M1 partial-reload hand animation on the rebuilt viewmodel and bake it for Unity.
 import bpy, json, math, sys, os
 from mathutils import Matrix, Vector, Quaternion, Euler
-A=json.load(open("C:/sk_anim/scripts/params.json")); MODE=sys.argv[sys.argv.index("--")+1] if "--" in sys.argv else "render"
-bpy.ops.wm.open_mainfile(filepath=A.get("scene","C:/sk_anim/reload_scene.blend"))
+ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+A=json.load(open(os.path.join(ROOT,"scripts","params.json"))); MODE=sys.argv[sys.argv.index("--")+1] if "--" in sys.argv else "render"
+bpy.ops.wm.open_mainfile(filepath=os.path.join(ROOT,A.get("scene","reload_scene_prop.blend")))
 sc=bpy.context.scene; sc.render.fps=A["fps"]; F=A["frames"]; sc.frame_start=0; sc.frame_end=F
 P=Matrix(((1,0,0,0),(0,0,1,0),(0,1,0,0),(0,0,0,1)))
 V=lambda a:Vector(a)
@@ -142,11 +143,11 @@ for f in range(F+1):
 seat.hide_render=True; seat.keyframe_insert("hide_render",frame=0)
 for fc in (arm.animation_data.action.fcurves if arm.animation_data and hasattr(arm.animation_data.action,'fcurves') else []):
     for k in fc.keyframe_points: k.interpolation='LINEAR'
-bpy.ops.wm.save_as_mainfile(filepath="C:/sk_anim/reload_anim.blend")
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT,"reload_anim.blend"))
 if MODE in("render","both"):
-    os.makedirs("C:/sk_anim/render/frames",exist_ok=True)
+    os.makedirs(os.path.join(ROOT,"render","frames"),exist_ok=True)
     for p in A["renders"]:
-        sc.frame_set(int(round(p*F))); sc.render.filepath="C:/sk_anim/render/frames/r_%.2f.png"%p; bpy.ops.render.render(write_still=True)
+        sc.frame_set(int(round(p*F))); sc.render.filepath=os.path.join(ROOT,"render","frames","r_%.2f.png"%p); bpy.ops.render.render(write_still=True)
 if MODE in("export","both"):
     out={"fps":A["fps"],"frames":F,"bones":[],"wrist":[],"clip":[],"local":{}}
     names=[b.name for b in bones if b.name.endswith(".R")]
@@ -162,5 +163,5 @@ if MODE in("export","both"):
             par=bones[n].parent
             loc=(mats[par.name].inverted()@mats[n]) if par else mats[n]
             q=loc.to_quaternion(); out["local"][n].append([q.x,q.y,q.z,q.w])
-    json.dump(out,open("C:/sk_anim/reload_partial_baked.json","w"))
+    json.dump(out,open(os.path.join(ROOT,"reload_partial_baked.json"),"w"))
 print("ANIM_OK")
