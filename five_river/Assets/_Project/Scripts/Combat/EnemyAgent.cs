@@ -47,6 +47,8 @@ namespace FiveRivers.Combat
         public static float MuzzleAhead = 0.6f;
         public static float AimAhead = 0.5f;          // barrel passes this far ahead of the left hand       // barrel end ahead of the mesh centre
         Transform rifle, rightHand, leftHand;
+        Transform rightUpper, rightFore, leftUpper, leftFore;
+        NpcRifleGrip rifleGrip;
         EnemyHandIK handIK;
         Vector3 rifleCentreLocal;
         bool rifleDropped;
@@ -77,12 +79,26 @@ namespace FiveRivers.Combat
                 handIK = animator.GetComponent<EnemyHandIK>();
                 if (handIK == null) handIK = animator.gameObject.AddComponent<EnemyHandIK>();
                 handIK.Bind(animator, rifle, rifleCentreLocal, GripBehindCentre, MuzzleAhead);
+                BindRifleGrip();
             }
+        }
+
+        void BindRifleGrip()
+        {
+            rifleGrip = rifle.GetComponent<NpcRifleGrip>();
+            if (rifleGrip == null) return;
+            rightUpper = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
+            rightFore = animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
+            leftUpper = animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+            leftFore = animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
         }
 
         void LateUpdate()
         {
             if (rifle == null || rifleDropped || rightHand == null || leftHand == null) return;
+            bool freshAnimation = handIK != null && handIK.AnimatedThisFrame;
+            // 컬링으로 애니메이터가 멈췄을 때 보정한 손에 같은 보정이 누적되는 것을 막는다.
+            if (rifleGrip != null && rifleGrip.HasOffsets && !freshAnimation) return;
             // The clips hold the hands close together, so the bare hand-to-hand line lies across the chest.
             // Aim the barrel through a point ahead of the support hand instead: the rifle points forward and the
             // left hand stays on the stock.
@@ -98,6 +114,11 @@ namespace FiveRivers.Combat
             rifle.SetPositionAndRotation(grip - rotation * Vector3.Scale(gripLocal, rifle.lossyScale), rotation);
             // muzzle flash and shot origin follow the barrel end
             if (muzzle != null) muzzle.SetPositionAndRotation(rifle.TransformPoint(rifleCentreLocal + Vector3.forward * MuzzleAhead), rotation);
+            if (rifleGrip != null && freshAnimation)
+            {
+                rifleGrip.ApplyToAnimatedArm(true, rightUpper, rightFore, rightHand);
+                rifleGrip.ApplyToAnimatedArm(false, leftUpper, leftFore, leftHand);
+            }
         }
 
         // Let go of the rifle: it falls and settles on the ground with the body, then is cleared with it.
@@ -261,6 +282,7 @@ namespace FiveRivers.Combat
             {
                 animator.SetInteger(DieIndexId, Random.Range(0, 3));
                 animator.SetTrigger(DieId);
+                animator.gameObject.AddComponent<EnemyDeathGrounding>().Bind(animator);
             }
             DropRifle();
             Gone?.Invoke(this);

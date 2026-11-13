@@ -44,6 +44,9 @@ namespace FiveRivers.Combat
         AlliedRifleFit rifleFit;
         float recoilAt = -100f;
 
+        // 박용팔의 사격 원본은 가슴이 이미 옆으로 돌아가 있어 몸을 덜 비틀어 견착한다.
+        float AimYawOffset => AlliedRifleFit.IsParkAvatar(animator) ? -26f : rifleYawOffset;
+
         // Set by HillAllies while he walks up the ridge: no turning or firing, rifle in the carry pose.
         public bool Advancing { get; set; }
 
@@ -143,7 +146,7 @@ namespace FiveRivers.Combat
             var direction = AimPoint() - transform.position;
             direction.y = 0f;
             if (direction.sqrMagnitude < 0.01f) return;
-            var aimRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0f, -rifleYawOffset, 0f);
+            var aimRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0f, -AimYawOffset, 0f);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, aimRotation, turnSpeed * Time.deltaTime);
             if (pending || Time.time < nextShot || Quaternion.Angle(transform.rotation, aimRotation) > 8f) return;
             if (!suppressing && !CanSee(target)) { target = FindTarget(); nextShot = Time.time + 0.25f; return; }
@@ -229,6 +232,7 @@ namespace FiveRivers.Combat
                     {
                         var rotation = Quaternion.LookRotation(forward, transform.up);
                         weapon.SetPositionAndRotation(rightHand.position - rotation * gripLocal, rotation);
+                        riflePose.ApplyClipCarryGrip();
                     }
                 }
             }

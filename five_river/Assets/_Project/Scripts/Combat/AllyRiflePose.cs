@@ -7,23 +7,29 @@ namespace FiveRivers.Combat
     public sealed class AllyRiflePose
     {
         readonly Transform rightUpper, rightFore, rightHand, leftUpper, leftFore, leftHand, head, neck;
-        readonly Transform root, weapon;
+        readonly Transform root, weapon, rightClavicle, leftClavicle;
         readonly AlliedRifleFit fit;
+        readonly NpcRifleGrip grip;
         readonly Transform[][] leftFingers, rightFingers;
         readonly Transform leftIndex, leftLittle, rightIndex, rightLittle;
         readonly Quaternion leftPalmFrame, rightPalmFrame;
         readonly Quaternion rightReadyUpperFrame, rightReadyForeRest, rightReadyHandRest;
-        readonly bool rightReadyElbowFrameValid;
+        readonly bool isPark, rightReadyElbowFrameValid;
+        readonly Quaternion parkNeckRest, parkHeadRest, parkFaceInHead;
+        readonly Quaternion? parkSupportHandRest;
         readonly Transform[] leftThumb, rightThumb;
         readonly System.Collections.Generic.Dictionary<Transform, Quaternion> fingerRest = new System.Collections.Generic.Dictionary<Transform, Quaternion>();
         static readonly Vector3 Butt = new Vector3(0f, -0.02f, -0.375f);
         static readonly Vector3 RightGrip = new Vector3(0f, -0.035f, -0.16f);
         static readonly Vector3 LeftGrip = new Vector3(0f, -0.015f, 0.22f);
+        static readonly Vector3 ParkSupportThumb = new Vector3(-.020f, .010f, .235f);
 
         public AllyRiflePose(Animator animator, Transform actor, Transform rifle)
         {
             root = actor; weapon = rifle;
             fit = animator.GetComponent<AlliedRifleFit>();
+            grip = rifle != null ? rifle.GetComponent<NpcRifleGrip>() : null;
+            isPark = AlliedRifleFit.IsParkAvatar(animator);
             rightUpper = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
             rightFore = animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
             rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
@@ -43,12 +49,31 @@ namespace FiveRivers.Combat
             leftThumb = new[] { animator.GetBoneTransform(HumanBodyBones.LeftThumbProximal), animator.GetBoneTransform(HumanBodyBones.LeftThumbIntermediate), animator.GetBoneTransform(HumanBodyBones.LeftThumbDistal) };
             rightThumb = new[] { animator.GetBoneTransform(HumanBodyBones.RightThumbProximal), animator.GetBoneTransform(HumanBodyBones.RightThumbIntermediate), animator.GetBoneTransform(HumanBodyBones.RightThumbDistal) };
             var skeleton = animator.avatar.humanDescription.skeleton;
+            if (isPark)
+            {
+                parkSupportHandRest = ParkBindRotation(leftFore, leftHand);
+                rightClavicle = animator.GetBoneTransform(HumanBodyBones.RightShoulder);
+                leftClavicle = animator.GetBoneTransform(HumanBodyBones.LeftShoulder);
+                if (neck != null && head != null)
+                {
+                    parkNeckRest = SkeletonRotation(neck, skeleton);
+                    parkHeadRest = SkeletonRotation(head, skeleton);
+                    parkFaceInHead = ParkFaceFromBindPose(animator, head);
+                }
+            }
             // Park (carry profile) needs the same native-hinge elbow rebuild when he shoulders the rifle to fire.
             if (fit != null && (fit.correctStandingReady || fit.correctCarryPose) && rightUpper != null && rightFore != null && rightHand != null
                 && rightFore.parent == rightUpper && rightHand.parent == rightFore)
             {
-                rightReadyForeRest = SkeletonRotation(rightFore, skeleton);
-                rightReadyHandRest = SkeletonRotation(rightHand, skeleton);
+                var foreRest = SkeletonRotation(rightFore, skeleton);
+                var handRest = SkeletonRotation(rightHand, skeleton);
+                if (isPark)
+                {
+                    foreRest = ParkBindRotation(rightUpper, rightFore) ?? foreRest;
+                    handRest = ParkBindRotation(rightFore, rightHand) ?? handRest;
+                }
+                rightReadyForeRest = foreRest;
+                rightReadyHandRest = handRest;
                 var nativeUpper = rightFore.localPosition.normalized;
                 var nativeFore = rightReadyForeRest * rightHand.localPosition.normalized;
                 var nativeHinge = Vector3.Cross(nativeUpper, nativeFore);
@@ -65,38 +90,25 @@ namespace FiveRivers.Combat
 
         public void Apply(Vector3 aim, float recoil)
         {
-            // Park (carry profile) shoulders the rifle with the same contacts as the others: his delivered fire-arm
-            // pose held the rifle at chest height once the crouch clip was straightened (2026-11-09).
             var currentFit = fit != null && fit.isActiveAndEnabled && (fit.correctShoulderedHands || fit.correctCarryPose) ? fit : null;
-            var shoulder = rightUpper.position + (currentFit != null ? root.TransformDirection(currentFit.shoulderOffset) : root.up * 0.025f);
-            var forward = (aim - shoulder).normalized;
-            var rotation = Quaternion.LookRotation(forward, root.up);
-            var animatedAxis = leftHand.position - rightHand.position;
-            var handDelta = Quaternion.FromToRotation(animatedAxis, forward);
-            var rightRotation = handDelta * rightHand.rotation;
-            var leftRotation = handDelta * leftHand.rotation;
-            weapon.SetPositionAndRotation(shoulder - rotation * Butt - forward * recoil, rotation);
-            Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(currentFit != null ? currentFit.triggerWristGrip : RightGrip), rightRotation, currentFit != null ? root.TransformDirection(currentFit.rightElbowDirection) : Vector3.zero, currentFit);
-            // His rig keeps a large upper-arm/forearm roll from the solve; rebuild the native elbow hinge as for the ready actor.
-            if (currentFit != null && currentFit.correctCarryPose && !currentFit.correctShoulderedHands) AlignStandingRightElbow(rightRotation);
-            if (currentFit != null)
+            bool alignRightElbow = currentFit != null && currentFit.correctCarryPose && !currentFit.correctShoulderedHands;
+            if (isPark && alignRightElbow)
             {
-                leftRotation = SupportRotation(currentFit.supportPalmDirection);
-                Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(currentFit.supportWristGrip), leftRotation, root.TransformDirection(currentFit.leftElbowDirection), currentFit, true);
+                LevelParkShoulders();
+                var bodyRight = ParkShoulderLine();
+                var bodyForward = Vector3.Cross(bodyRight, root.up);
+                // 견착점은 상완 관절의 앞쪽이자 가슴 쪽에 있다.
+                var pocket = rightUpper.position + bodyForward * .130f - bodyRight * .045f + root.up * .043f;
+                var sight = (aim - pocket).normalized;
+                var rifleRotation = Quaternion.LookRotation(sight, root.up);
+                weapon.SetPositionAndRotation(pocket - rifleRotation * Butt - sight * recoil, rifleRotation);
+                ApplyParkContacts();
+                LookAt(aim);
+                return;
             }
-            else Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(LeftGrip), leftRotation, Vector3.zero, null);
-            if (currentFit != null)
-            {
-                if (currentFit.refineSupportGrip) SupportGrip();
-                else Grip(leftFingers, leftThumb, leftIndex, leftLittle, false);
-                Grip(rightFingers, rightThumb, rightIndex, rightLittle, true);
-            }
-            else { Curl(leftFingers, leftIndex, leftLittle, false); Curl(rightFingers, rightIndex, rightLittle, true); }
-
             LookAt(aim);
             if (currentFit != null && head != null)
             {
-                // Settle the head onto the stock instead of moving the butt through the harness.
                 if (currentFit.shoulderedHeadLean != 0f)
                 {
                     var lean = Quaternion.AngleAxis(currentFit.shoulderedHeadLean, head.forward);
@@ -106,6 +118,65 @@ namespace FiveRivers.Combat
                 if (currentFit.shoulderedHeadPitch != 0f)
                     head.rotation *= Quaternion.Euler(currentFit.shoulderedHeadPitch, 0f, 0f);
             }
+
+            bool refineGrip = currentFit != null && currentFit.refineSupportGrip;
+            var shoulder = rightUpper.position + (currentFit != null ? root.TransformDirection(currentFit.shoulderOffset) : root.up * 0.025f);
+            var forward = (aim - shoulder).normalized;
+            var rotation = Quaternion.LookRotation(forward, root.up);
+            if (refineGrip && head != null)
+            {
+                // 턱이 개머리판에 가까워지면 견착점을 오른쪽 앞과 아래로 옮긴다.
+                var headInRifle = Quaternion.Inverse(rotation) * (head.position - shoulder) + Butt;
+                float headLimit = -.069f + .70f * Mathf.Clamp(headInRifle.y - .040f, -.050f, .018f);
+                float clearance = Mathf.Max(0f, headInRifle.x - headLimit);
+                shoulder += rotation * new Vector3(.78f, -.25f, .40f) * clearance;
+                forward = (aim - shoulder).normalized;
+                rotation = Quaternion.LookRotation(forward, root.up);
+            }
+            var animatedAxis = leftHand.position - rightHand.position;
+            var handDelta = Quaternion.FromToRotation(animatedAxis, forward);
+            var rightRotation = handDelta * rightHand.rotation;
+            var leftRotation = handDelta * leftHand.rotation;
+            weapon.SetPositionAndRotation(shoulder - rotation * Butt - forward * recoil, rotation);
+            var rightContact = currentFit != null ? currentFit.ShoulderedTriggerWristGrip : RightGrip;
+            if (refineGrip)
+            {
+                // M1 개머리판의 목을 잡을 때는 손바닥을 방아쇠울 뒤쪽의 목재 옆면에 댄다.
+                rightRotation = Quaternion.LookRotation(weapon.TransformDirection(new Vector3(0f, .28f, 1f)),
+                    weapon.TransformDirection(new Vector3(-1f, -.12f, 0f))) * Quaternion.Inverse(rightPalmFrame);
+            }
+            var rightTarget = weapon.TransformPoint(rightContact);
+            var rightPole = currentFit != null ? root.TransformDirection(currentFit.rightElbowDirection) : Vector3.zero;
+            Solve(rightUpper, rightFore, rightHand, rightTarget, rightRotation, rightPole, currentFit,
+                alignRightElbow: alignRightElbow, lockWristRotation: refineGrip);
+            if (currentFit != null)
+            {
+                leftRotation = SupportRotation(currentFit.supportPalmDirection);
+                var leftTarget = weapon.TransformPoint(currentFit.supportWristGrip);
+                if (refineGrip)
+                {
+                    float reach = Vector3.Distance(leftUpper.position, leftFore.position)
+                        + Vector3.Distance(leftFore.position, leftHand.position) - .001f;
+                    var toGrip = leftTarget - leftUpper.position;
+                    if (toGrip.sqrMagnitude > reach * reach)
+                    {
+                        // 견착으로 전환할 때 팔이 닿는 범위 안에서 앞쪽 목재를 받친다.
+                        float along = Vector3.Dot(toGrip, forward);
+                        float acrossSquared = (toGrip - forward * along).sqrMagnitude;
+                        float reachableAlong = Mathf.Sqrt(Mathf.Max(0f, reach * reach - acrossSquared));
+                        leftTarget -= forward * Mathf.Clamp(along - reachableAlong, 0f, .10f);
+                    }
+                }
+                Solve(leftUpper, leftFore, leftHand, leftTarget, leftRotation, root.TransformDirection(currentFit.leftElbowDirection), currentFit, true);
+            }
+            else Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(LeftGrip), leftRotation, Vector3.zero, null);
+            if (currentFit != null)
+            {
+                if (refineGrip) SupportGrip();
+                else Grip(leftFingers, leftThumb, leftIndex, leftLittle, false);
+                Grip(rightFingers, rightThumb, rightIndex, rightLittle, true, wrapRegularGrip: refineGrip);
+            }
+            else { Curl(leftFingers, leftIndex, leftLittle, false); Curl(rightFingers, rightIndex, rightLittle, true); }
         }
 
         // Standing carry: the ready pose for the opt-in actor, Park's carry profile otherwise.
@@ -119,6 +190,7 @@ namespace FiveRivers.Combat
             }
             if (!fit.correctCarryPose) return false;
             ApplyCarryContacts();
+            ShareParkStandingWristTwist();
             return true;
         }
 
@@ -131,8 +203,27 @@ namespace FiveRivers.Combat
             return true;
         }
 
+        public void ApplyClipCarryGrip()
+        {
+            if (grip == null) return;
+            grip.ApplyToAnimatedArm(true, rightUpper, rightFore, rightHand);
+            grip.ApplyToAnimatedArm(false, leftUpper, leftFore, leftHand);
+        }
+
         void ApplyCarryContacts()
         {
+            if (isPark)
+            {
+                LevelParkShoulders();
+                var bodyRight = ParkShoulderLine();
+                var bodyForward = Vector3.Cross(bodyRight, root.up);
+                // 몸통 앞의 대각선 자세에서 개머리판과 오른팔 사이의 공간을 유지한다.
+                var rotation = Quaternion.LookRotation(bodyForward, root.up) * Quaternion.Euler(-29f, -60f, 0f);
+                var carriedButt = rightUpper.position + bodyForward * .115f - bodyRight * .055f - root.up * .170f;
+                weapon.SetPositionAndRotation(carriedButt - rotation * Butt, rotation);
+                ApplyParkContacts(carrying: true);
+                return;
+            }
             weapon.SetPositionAndRotation(root.TransformPoint(fit.carryPosition), root.rotation * Quaternion.Euler(fit.carryEuler));
             var rightRotation = Quaternion.LookRotation(weapon.TransformDirection(new Vector3(0f, .35f, 1f)), -weapon.right) * Quaternion.Inverse(rightPalmFrame);
             Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(new Vector3(.03f, -.065f, -.19f)), rightRotation, root.TransformDirection(new Vector3(.4f, -.4f, -.1f)), fit, true);
@@ -141,19 +232,75 @@ namespace FiveRivers.Combat
             Grip(rightFingers, rightThumb, rightIndex, rightLittle, true);
         }
 
+        void ApplyParkContacts(bool carrying = false)
+        {
+            var palmAlong = carrying ? new Vector3(-.09f, -.055f, 1f) : new Vector3(0f, .16f, 1f);
+            var rightRotation = Quaternion.LookRotation(weapon.TransformDirection(palmAlong),
+                weapon.TransformDirection(new Vector3(-1f, -.16f, 0f))) * Quaternion.Inverse(rightPalmFrame);
+            var rightPole = weapon.TransformDirection(carrying ? new Vector3(1f, -.9f, -.16f) : new Vector3(.85f, -.58f, -.16f));
+            Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(AlliedRifleFit.ParkRightGrip), rightRotation,
+                rightPole, fit, true, alignRightElbow: true);
+
+            var leftRotation = Quaternion.AngleAxis(-10f, weapon.forward) * SupportRotation(fit.supportPalmDirection);
+            var leftContact = carrying ? AlliedRifleFit.ParkLeftGrip : AlliedRifleFit.ParkAimedLeftGrip;
+            Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(leftContact), leftRotation,
+                root.TransformDirection(fit.leftElbowDirection), fit, true);
+            var thumbContact = ParkSupportThumb + Vector3.forward * (leftContact.z - AlliedRifleFit.ParkLeftGrip.z);
+            Grip(leftFingers, leftThumb, leftIndex, leftLittle, false, thumbTarget: thumbContact);
+            Grip(rightFingers, rightThumb, rightIndex, rightLittle, true, refineTrigger: true);
+        }
+
+        void ShareParkStandingWristTwist()
+        {
+            if (!parkSupportHandRest.HasValue) return;
+            // 총을 받치는 손은 고정하고 손목에 몰린 축 회전만 팔뚝에 나눈다.
+            var contact = leftHand.rotation;
+            var axis = (leftHand.position - leftFore.position).normalized;
+            var delta = contact * Quaternion.Inverse(leftFore.rotation * parkSupportHandRest.Value);
+            float roll = Mathf.Clamp(TwistAngle(delta, axis) * .5f, -45f, 45f);
+            var localAxis = Vector3.Scale(leftHand.localPosition, leftFore.localScale).normalized;
+            leftFore.localRotation *= Quaternion.AngleAxis(roll, localAxis);
+            leftHand.rotation = contact;
+        }
+
+        Vector3 ParkShoulderLine()
+        {
+            var line = Vector3.ProjectOnPlane(rightUpper.position - leftUpper.position, root.up);
+            return line.sqrMagnitude > .001f ? line.normalized : root.right;
+        }
+
+        void LevelParkShoulders()
+        {
+            if (rightClavicle == null || leftClavicle == null || rightUpper == null || leftUpper == null) return;
+            var up = root.up;
+            float mean = Vector3.Dot((rightUpper.position + leftUpper.position) * .5f, up);
+            LevelClavicle(rightClavicle, rightUpper, up, mean);
+            LevelClavicle(leftClavicle, leftUpper, up, mean);
+        }
+
+        static void LevelClavicle(Transform clavicle, Transform upper, Vector3 up, float height)
+        {
+            var offset = upper.position - clavicle.position;
+            float length = offset.magnitude;
+            if (length < .001f) return;
+            var level = Vector3.ProjectOnPlane(offset, up).normalized;
+            float wantedY = Mathf.Clamp(height - Vector3.Dot(clavicle.position, up), -length * .85f, length * .85f);
+            var wanted = level * Mathf.Sqrt(length * length - wantedY * wantedY) + up * wantedY;
+            clavicle.rotation = Quaternion.RotateTowards(Quaternion.identity, Quaternion.FromToRotation(offset, wanted), 20f) * clavicle.rotation;
+        }
+
         void ApplyStandingReady()
         {
             // Only the opt-in standing actor uses these contacts. The source grip placed
             // his MCPs 8 cm ahead of the stock wrist, crushing the palm under the receiver.
-            var shoulder = rightUpper.position + root.TransformDirection(new Vector3(.025f, -.02f, .025f));
+            var shoulder = rightUpper.position + root.TransformDirection(new Vector3(.025f, -.02f, .025f) + fit.standingReadyOffset);
             var rotation = root.rotation * Quaternion.Euler(30f, -10f, 0f);
             weapon.SetPositionAndRotation(shoulder - rotation * Butt, rotation);
             var rightRotation = Quaternion.LookRotation(weapon.TransformDirection(new Vector3(0f, .15f, 1f)), -weapon.right)
                 * Quaternion.Inverse(rightPalmFrame);
             Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(new Vector3(.035f, -.035f, -.22f)), rightRotation,
-                root.TransformDirection(fit.rightElbowDirection), fit, true);
-            AlignStandingRightElbow(rightRotation);
-            Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(new Vector3(-.055f, -.05f, .14f)),
+                root.TransformDirection(fit.rightElbowDirection), fit, true, alignRightElbow: true);
+            Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(fit.standingReadySupportGrip),
                 SupportRotation(new Vector3(1f, .12f, .05f)), root.TransformDirection(fit.leftElbowDirection), fit, true);
             ReadyFingers(leftFingers, leftIndex, leftLittle, false);
             ReadyFingers(rightFingers, rightIndex, rightLittle, true);
@@ -177,7 +324,7 @@ namespace FiveRivers.Combat
             var nativeUpper = Quaternion.LookRotation(upperAxis, hinge.normalized) * Quaternion.Inverse(rightReadyUpperFrame);
             // Full bind alignment removes the collapse but overinflates the sleeve silhouette.
             // Retain part of the authored cloth orientation while fixing the elbow's axial twist.
-            rightUpper.rotation = Quaternion.Slerp(rightUpper.rotation, nativeUpper, .7f);
+            rightUpper.rotation = Quaternion.Slerp(rightUpper.rotation, nativeUpper, isPark ? .9f : .7f);
             rightFore.rotation = rightUpper.rotation * rightReadyForeRest;
             rightFore.rotation = Quaternion.FromToRotation(rightHand.position - rightFore.position,
                 wrist - rightFore.position) * rightFore.rotation;
@@ -185,11 +332,57 @@ namespace FiveRivers.Combat
             // Pronation starts at the mesh's native wrist frame, not the previous
             // animation's rolled palm. Keep the final palm/stock contact exactly fixed.
             var axis = (rightHand.position - rightFore.position).normalized;
-            var currentUp = Vector3.ProjectOnPlane(rightHand.up, axis);
-            var desiredUp = Vector3.ProjectOnPlane(wristRotation * Vector3.up, axis);
-            if (currentUp.sqrMagnitude > .001f && desiredUp.sqrMagnitude > .001f)
-                rightFore.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(currentUp, desiredUp, axis), axis) * rightFore.rotation;
+            if (isPark)
+            {
+                // 손목의 실제 기준 자세에서 팔뚝 축 회전만 분리해 피부가 반 바퀴 꼬이지 않게 한다.
+                var delta = wristRotation * Quaternion.Inverse(rightHand.rotation);
+                rightFore.rotation = Quaternion.AngleAxis(TwistAngle(delta, axis), axis) * rightFore.rotation;
+            }
+            else
+            {
+                var currentUp = Vector3.ProjectOnPlane(rightHand.up, axis);
+                var desiredUp = Vector3.ProjectOnPlane(wristRotation * Vector3.up, axis);
+                if (currentUp.sqrMagnitude > .001f && desiredUp.sqrMagnitude > .001f)
+                    rightFore.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(currentUp, desiredUp, axis), axis) * rightFore.rotation;
+            }
             rightHand.rotation = wristRotation;
+        }
+
+        static float TwistAngle(Quaternion delta, Vector3 axis)
+        {
+            float axial = Vector3.Dot(new Vector3(delta.x, delta.y, delta.z), axis);
+            return Mathf.DeltaAngle(0f, 2f * Mathf.Atan2(axial, delta.w) * Mathf.Rad2Deg);
+        }
+
+        Quaternion? ParkBindRotation(Transform parent, Transform bone)
+        {
+            if (parent == null || bone == null || bone.parent != parent) return null;
+            foreach (var renderer in root.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            {
+                if (renderer.name != "Body_Low" || renderer.sharedMesh == null) continue;
+                var bones = renderer.bones;
+                int parentIndex = System.Array.IndexOf(bones, parent);
+                int boneIndex = System.Array.IndexOf(bones, bone);
+                var bind = renderer.sharedMesh.bindposes;
+                if (parentIndex < 0 || boneIndex < 0 || bind.Length != bones.Length) continue;
+                return (bind[parentIndex] * bind[boneIndex].inverse).rotation;
+            }
+            return null;
+        }
+
+        static Quaternion ParkFaceFromBindPose(Animator animator, Transform headBone)
+        {
+            foreach (var skin in animator.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            {
+                if (skin.name != "Body_Low" || skin.sharedMesh == null) continue;
+                int index = System.Array.IndexOf(skin.bones, headBone);
+                var bind = skin.sharedMesh.bindposes;
+                if (index < 0 || index >= bind.Length) continue;
+                // 박용팔의 얼굴은 모델 정면을 향해도 머리뼈의 로컬 축은 기울어져 있다.
+                var headInModel = animator.transform.worldToLocalMatrix * skin.transform.localToWorldMatrix * bind[index].inverse;
+                return Quaternion.Inverse(headInModel.rotation);
+            }
+            return Quaternion.identity;
         }
 
         static Quaternion SkeletonRotation(Transform bone, SkeletonBone[] skeleton)
@@ -277,19 +470,19 @@ namespace FiveRivers.Combat
             if (leftIndex == null || leftLittle == null) return;
             foreach (var chain in leftFingers)
                 foreach (var bone in chain) if (bone != null) bone.localRotation = fingerRest[bone];
-            foreach (var bone in leftThumb) if (bone != null) bone.localRotation = fingerRest[bone];
             var axis = (leftIndex.position - leftLittle.position).normalized;
             foreach (var chain in leftFingers)
                 for (int joint = 0; joint < chain.Length; joint++)
                     if (chain[joint] != null)
-                        chain[joint].rotation = Quaternion.AngleAxis(joint == 0 ? 6f : joint == 1 ? 14f : 4f, axis) * chain[joint].rotation;
-            if (leftThumb[0] != null && leftThumb[2] != null)
-                leftThumb[0].rotation = Quaternion.FromToRotation(
-                    leftThumb[2].position - leftThumb[0].position,
-                    weapon.TransformDirection(new Vector3(-.05f, 1.3f, 1f))) * leftThumb[0].rotation;
+                        chain[joint].rotation = Quaternion.AngleAxis(joint == 0 ? 7f : joint == 1 ? 27f : 12f, axis) * chain[joint].rotation;
+            // 총구 쪽으로 엄지를 벌리는 대신 검지 옆의 목재 측면에 가깝게 둔다.
+            var indexDistal = leftFingers[0][2];
+            float indexZ = weapon.InverseTransformPoint(indexDistal != null ? indexDistal.position : leftIndex.position).z;
+            ReadyThumb(leftThumb, new Vector3(-.025f, .012f, indexZ + .012f), 36f);
         }
 
-        void Grip(Transform[][] fingers, Transform[] thumb, Transform index, Transform little, bool triggerHand)
+        void Grip(Transform[][] fingers, Transform[] thumb, Transform index, Transform little, bool triggerHand,
+            bool refineTrigger = false, bool wrapRegularGrip = false, Vector3? thumbTarget = null)
         {
             if (index == null || little == null) return;
             // Rebuild from this avatar's neutral joints; never add a second curl to an already gripping clip.
@@ -300,29 +493,92 @@ namespace FiveRivers.Combat
             {
                 var chain = fingers[finger];
                 if (chain[0] == null || chain[1] == null || chain[2] == null) continue;
-                var local = weapon.InverseTransformPoint(chain[0].position);
-                var inward = weapon.TransformPoint(new Vector3(0f, .015f, local.z)) - chain[0].position;
                 float sign = triggerHand ? -1f : 1f;
                 bool trigger = triggerHand && finger == 0;
-                chain[0].rotation = Quaternion.AngleAxis(sign * (trigger ? 18f : 30f), axis) * chain[0].rotation;
-                chain[1].rotation = Quaternion.AngleAxis(sign * (trigger ? 25f : 60f), axis) * chain[1].rotation;
-                chain[2].rotation = Quaternion.AngleAxis(sign * (trigger ? 10f : 25f), axis) * chain[2].rotation;
+                float proximal = trigger ? (refineTrigger ? 2f : 18f) : (refineTrigger ? 32f : 30f);
+                float middle = trigger ? (refineTrigger ? 10f : 25f) : (refineTrigger ? 54f : 60f);
+                float distal = trigger ? (refineTrigger ? 0f : 10f) : (refineTrigger ? 14f : 25f);
+                var flex = wrapRegularGrip ? finger switch
+                {
+                    0 => new Vector3(3f, 7f, 3f),
+                    1 => new Vector3(32f, 54f, 14f),
+                    2 => new Vector3(37f, 58f, 15f),
+                    _ => new Vector3(49f, 60f, 15f),
+                } : new Vector3(proximal, middle, distal);
+                chain[0].rotation = Quaternion.AngleAxis(sign * flex.x, axis) * chain[0].rotation;
+                chain[1].rotation = Quaternion.AngleAxis(sign * flex.y, axis) * chain[1].rotation;
+                chain[2].rotation = Quaternion.AngleAxis(sign * flex.z, axis) * chain[2].rotation;
+                if (!wrapRegularGrip) continue;
+
+                // 검지는 방아쇠울 안으로 향하고 나머지 손가락은 목재의 좁아지는 아래쪽을 감싼다.
+                if (trigger)
+                {
+                    var acrossPalm = Vector3.Cross(axis, chain[1].position - chain[0].position);
+                    chain[0].rotation = Quaternion.AngleAxis(13f, acrossPalm) * chain[0].rotation;
+                }
+                else if (finger == 1 || finger == 3)
+                {
+                    chain[0].rotation = Quaternion.AngleAxis(finger == 1 ? 7f : -28f, weapon.forward) * chain[0].rotation;
+                }
             }
-            if (thumb[0] != null && thumb[1] != null && thumb[2] != null)
+            if (wrapRegularGrip)
             {
-                var contact = weapon.TransformPoint(new Vector3(-.012f, .015f, triggerHand ? -.16f : .25f));
-                var a = Vector3.Distance(thumb[0].position, thumb[1].position); var b = Vector3.Distance(thumb[1].position, thumb[2].position);
-                var delta = contact - thumb[0].position; var along = delta.normalized; float d = Mathf.Clamp(delta.magnitude, Mathf.Abs(a - b) + .0001f, a + b - .0001f);
-                float x = (a * a - b * b + d * d) / (2f * d);
-                var bend = Vector3.ProjectOnPlane(weapon.up, along).normalized;
-                var middle = thumb[0].position + along * x + bend * Mathf.Sqrt(Mathf.Max(0, a * a - x * x));
-                thumb[0].rotation = Quaternion.FromToRotation(thumb[1].position - thumb[0].position, middle - thumb[0].position) * thumb[0].rotation;
-                thumb[1].rotation = Quaternion.FromToRotation(thumb[2].position - thumb[1].position, contact - thumb[1].position) * thumb[1].rotation;
+                // 엄지 끝마디가 개머리판의 목 윗면을 가로지르도록 눕힌다.
+                SetThumbContact(thumb, weapon.TransformPoint(new Vector3(.010f, .026f, -.154f)), weapon.right);
+                var distal = thumb[2];
+                if (distal != null && distal.childCount > 0)
+                {
+                    var tip = distal.GetChild(0).position - distal.position;
+                    var acrossStock = weapon.TransformDirection(new Vector3(-1f, .12f, .10f));
+                    var target = Quaternion.FromToRotation(tip, acrossStock) * distal.rotation;
+                    distal.rotation = Quaternion.RotateTowards(distal.rotation, target, 55f);
+                }
+                return;
             }
+            var thumbContact = refineTrigger ? new Vector3(.025f, .019f, -.156f)
+                : new Vector3(-.012f, .015f, triggerHand ? -.16f : .25f);
+            SetThumbContact(thumb, weapon.TransformPoint(thumbTarget ?? thumbContact), refineTrigger ? weapon.right : weapon.up);
+        }
+
+        static void SetThumbContact(Transform[] thumb, Vector3 contact, Vector3 bendDirection)
+        {
+            if (thumb[0] == null || thumb[1] == null || thumb[2] == null) return;
+            float a = Vector3.Distance(thumb[0].position, thumb[1].position);
+            float b = Vector3.Distance(thumb[1].position, thumb[2].position);
+            var delta = contact - thumb[0].position;
+            var along = delta.normalized;
+            float d = Mathf.Clamp(delta.magnitude, Mathf.Abs(a - b) + .0001f, a + b - .0001f);
+            float x = (a * a - b * b + d * d) / (2f * d);
+            var bend = Vector3.ProjectOnPlane(bendDirection, along).normalized;
+            var middle = thumb[0].position + along * x + bend * Mathf.Sqrt(Mathf.Max(0, a * a - x * x));
+            thumb[0].rotation = Quaternion.FromToRotation(thumb[1].position - thumb[0].position, middle - thumb[0].position) * thumb[0].rotation;
+            thumb[1].rotation = Quaternion.FromToRotation(thumb[2].position - thumb[1].position, contact - thumb[1].position) * thumb[1].rotation;
         }
 
         public void LookAt(Vector3 aim)
         {
+            if (isPark && neck != null && head != null)
+            {
+                // 가슴을 기준으로 얼굴이 돌 수 있는 범위를 정한다.
+                var neutral = neck.parent.rotation * parkNeckRest * parkHeadRest * parkFaceInHead;
+                var direction = Quaternion.Inverse(neutral) * (aim - head.position);
+                if (direction.sqrMagnitude < .001f) return;
+                float yaw = Mathf.Clamp(Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg, -60f, 60f);
+                float pitch = Mathf.Clamp(-Mathf.Atan2(direction.y, new Vector2(direction.x, direction.z).magnitude) * Mathf.Rad2Deg, -16f, 19f);
+                var forward = neutral * Quaternion.Euler(pitch, yaw, 0f) * Vector3.forward;
+                var currentFace = head.rotation * parkFaceInHead;
+                var currentForward = currentFace * Vector3.forward;
+                var currentUp = Vector3.ProjectOnPlane(root.up, currentForward);
+                // 클립의 작은 기울기는 유지하고, 조준 방향이 바뀔 때 추가되는 좌우 기울기는 막는다.
+                var roll = Mathf.Clamp(Vector3.SignedAngle(currentUp, currentFace * Vector3.up, currentForward), -6f, 6f);
+                var targetFace = Quaternion.AngleAxis(roll, forward) * Quaternion.LookRotation(forward, root.up);
+                var turn = targetFace * Quaternion.Inverse(currentFace);
+                // 목이 먼저 시선을 따라가고 머리뼈는 목에 대해 남은 각도만 보정한다.
+                var neckTurn = Quaternion.RotateTowards(Quaternion.identity, Quaternion.Slerp(Quaternion.identity, turn, .70f), 40f);
+                neck.rotation = neckTurn * neck.rotation;
+                head.rotation = targetFace * Quaternion.Inverse(parkFaceInHead);
+                return;
+            }
             // These delivered Mixamo rigs use +Z as the face direction. The source crouch
             // clip looks at the ground, so distribute the gaze correction over neck/head.
             if (head != null)
@@ -367,32 +623,22 @@ namespace FiveRivers.Combat
             }
         }
 
-        static void Solve(Transform upper, Transform fore, Transform hand, Vector3 target, Quaternion rotation, Vector3 elbowDirection, AlliedRifleFit fit, bool palmContact = false)
+        void Solve(Transform upper, Transform fore, Transform hand, Vector3 target, Quaternion rotation,
+            Vector3 elbowDirection, AlliedRifleFit fit, bool palmContact = false, bool alignRightElbow = false,
+            bool lockWristRotation = false)
         {
-            float a = Vector3.Distance(upper.position, fore.position);
-            float b = Vector3.Distance(fore.position, hand.position);
-            var delta = target - upper.position;
-            float distance = Mathf.Clamp(delta.magnitude, Mathf.Abs(a - b) + 0.001f, a + b - 0.001f);
-            var axis = delta.normalized;
-            var bend = Vector3.ProjectOnPlane(fit != null ? elbowDirection : fore.position - upper.position, axis).normalized;
-            if (bend.sqrMagnitude < 0.01f) bend = Vector3.ProjectOnPlane(Vector3.down, axis).normalized;
-            float along = (a * a - b * b + distance * distance) / (2f * distance);
-            float height = Mathf.Sqrt(Mathf.Max(0f, a * a - along * along));
-            var elbow = upper.position + axis * along + bend * height;
-            upper.rotation = Quaternion.FromToRotation(fore.position - upper.position, elbow - upper.position) * upper.rotation;
-            fore.rotation = Quaternion.FromToRotation(hand.position - fore.position, target - fore.position) * fore.rotation;
-            // A world-space wrist snap twists the low-poly sleeve/skin blend into a corkscrew.
-            // Put axial roll on the forearm first, leaving only the small palm swing at the wrist.
-            var foreAxis = (hand.position - fore.position).normalized;
-            var currentUp = Vector3.ProjectOnPlane(hand.up, foreAxis);
-            var desiredUp = Vector3.ProjectOnPlane(rotation * Vector3.up, foreAxis);
-            if (currentUp.sqrMagnitude > 0.001f && desiredUp.sqrMagnitude > 0.001f)
-                {
-                float roll = Vector3.SignedAngle(currentUp, desiredUp, foreAxis);
-                if (fit != null && !palmContact) roll = Mathf.Clamp(roll, -fit.maxForearmRoll, fit.maxForearmRoll);
-                fore.rotation = Quaternion.AngleAxis(roll, foreAxis) * fore.rotation;
-                }
-            hand.rotation = fit != null && !palmContact ? Quaternion.RotateTowards(hand.rotation, rotation, fit.maxWristSwing) : rotation;
+            bool right = hand == rightHand;
+            var targetPosition = grip != null ? grip.AdjustPosition(right, target) : target;
+            var bend = fit != null ? elbowDirection : fore.position - upper.position;
+            bool limitWrist = fit != null && !palmContact;
+            NpcRifleGrip.SolveArm(upper, fore, hand, new Pose(targetPosition, rotation), bend,
+                limitWrist ? fit.maxForearmRoll : 180f, limitWrist && !lockWristRotation ? fit.maxWristSwing : 180f);
+            if (alignRightElbow) AlignStandingRightElbow(rotation);
+            if (grip != null)
+            {
+                var adjusted = grip.Adjust(right, new Pose(target, hand.rotation));
+                if (grip.HasRotationOffset(right)) hand.rotation = adjusted.rotation;
+            }
         }
     }
 }

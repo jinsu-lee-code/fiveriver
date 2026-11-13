@@ -11,10 +11,12 @@ namespace FiveRivers.Combat
         Animator animator;
         Transform rifle;
         Vector3 axisLocalStart, axisLocalEnd;
+        int animatedFrame = -1;
         public bool Holding { get; set; } = true;
         // where the clip put the left hand this frame, before IK (EnemyAgent aims the rifle from this)
         public Vector3 AnimatedLeftHand { get; private set; }
         public bool HasAnimatedHand { get; private set; }
+        internal bool AnimatedThisFrame => animatedFrame == Time.frameCount;
 
         public void Bind(Animator owner, Transform weapon, Vector3 centreLocal, float behind, float ahead)
         {
@@ -34,6 +36,7 @@ namespace FiveRivers.Combat
             var hand = animator.GetIKPosition(AvatarIKGoal.LeftHand);
             AnimatedLeftHand = hand;
             HasAnimatedHand = true;
+            animatedFrame = Time.frameCount;
             var a = rifle.TransformPoint(axisLocalStart);
             var b = rifle.TransformPoint(axisLocalEnd);
             var ab = b - a;
