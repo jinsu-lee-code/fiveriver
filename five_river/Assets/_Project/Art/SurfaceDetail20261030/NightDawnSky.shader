@@ -19,6 +19,7 @@ Shader "FiveRivers/Night Dawn Sky"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma target 3.0
             #include "UnityCG.cginc"
             sampler2D _Night,_Dawn;
             half4 _Night_HDR,_Dawn_HDR,_NightTint;
@@ -33,8 +34,13 @@ Shader "FiveRivers/Night Dawn Sky"
             {
                 float3 direction=normalize(i.direction);
                 float2 uv=float2(.5-atan2(direction.z,direction.x)/(2*UNITY_PI)+_Rotation/360,acos(clamp(direction.y,-1,1))/UNITY_PI);
-                half3 night=DecodeHDR(tex2D(_Night,uv),_Night_HDR)*_NightExposure*_NightTint.rgb;
-                half3 dawn=DecodeHDR(tex2D(_Dawn,uv),_Dawn_HDR)*_DawnExposure;
+                // 2026-11-13: where atan2 wraps (u jumps by 1 across one pixel) the screen derivatives were huge, the
+                // GPU picked the smallest mip and drew a dotted vertical line up the sky. Take the wrap out of the
+                // derivatives so that column samples the same mip as its neighbours.
+                float2 dx=ddx(uv),dy=ddy(uv);
+                dx.x-=round(dx.x);dy.x-=round(dy.x);
+                half3 night=DecodeHDR(tex2Dgrad(_Night,uv,dx,dy),_Night_HDR)*_NightExposure*_NightTint.rgb;
+                half3 dawn=DecodeHDR(tex2Dgrad(_Dawn,uv,dx,dy),_Dawn_HDR)*_DawnExposure;
                 return half4(lerp(night,dawn,_DawnBlend),1);
             }
             ENDCG
