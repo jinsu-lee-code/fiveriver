@@ -134,57 +134,17 @@ namespace FiveRivers.EditorTools
             SetupUtil.SetRef(resupplier, "player", controller);
             SetupUtil.SetRef(resupplier, "weapons", holder);
 
-            // 1인칭 Animator 연결 (팔 · 무기 리그가 오면 m1Animator · bazookaAnimator를 채운다)
             var fpAnim = player.AddComponent<FirstPersonAnimatorBridge>();
             SetupUtil.SetRef(fpAnim, "player", controller);
             SetupUtil.SetRef(fpAnim, "weapons", holder);
             SetupUtil.SetRef(fpAnim, "resupplier", resupplier);
 
-            if (RefinedM1Setup.Available) RefinedM1Setup.Configure(controller);
+            if (RefinedM1Setup.Available)
+            {
+                RefinedM1Setup.Configure(controller);
+                FirstPersonAnimationSetup.Configure(controller);
+            }
             return controller;
-        }
-
-        // 1인칭 팔 + 무기 애니메이션 (ANIM_SPEC 3-3 · 3-4). 클립은 VM 밑 "Arms" · "Model" · 장전 소품 경로를 움직이고
-        // 루트 위치도 (0,0,0)으로 덮어쓰므로, Animator는 VM(조준 · 흔들림은 코드)이 아니라 그 밑 FP_Anim에 둔다.
-        public static Animator FirstPersonRig(Transform vm, string controller, string propFbx, string propName)
-        {
-            const string armsFbx = "Characters/ROK_Arms/SK_CH_ROK_Arms.fbx";
-            var ac = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>("Assets/_Project/Art/Animations/" + controller + ".controller");
-            var model = vm.Find("Model") ?? vm.Find("FP_Anim/Model");
-            if (ac == null || model == null || !GrayboxModels.Exists(armsFbx)) return null;
-
-            var old = vm.Find("FP_Anim");
-            if (old != null)
-            {
-                model.SetParent(vm, false);
-                Object.DestroyImmediate(old.gameObject);
-            }
-            var rig = new GameObject("FP_Anim").transform;
-            rig.SetParent(vm, false);
-            model.SetParent(rig, false);
-
-            var arms = (GameObject)PrefabUtility.InstantiatePrefab(GrayboxModels.LoadFbx(armsFbx), rig);
-            arms.name = "Arms";
-            var armsAnimator = arms.GetComponent<Animator>();
-            if (armsAnimator != null) armsAnimator.enabled = false; // 팔은 위 FP_Anim이 움직인다
-            if (GrayboxModels.Exists(propFbx))
-            {
-                var prop = (GameObject)PrefabUtility.InstantiatePrefab(GrayboxModels.LoadFbx(propFbx), rig);
-                prop.name = propName;
-            }
-            foreach (var r in rig.GetComponentsInChildren<Renderer>(true))
-            {
-                r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                if (r is SkinnedMeshRenderer s) s.updateWhenOffscreen = true;
-            }
-            foreach (var t in rig.GetComponentsInChildren<Transform>(true)) t.gameObject.layer = vm.gameObject.layer;
-
-            var animator = rig.gameObject.AddComponent<Animator>();
-            animator.runtimeAnimatorController = ac;
-            animator.applyRootMotion = false;
-            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-            rig.gameObject.AddComponent<AnimationEventSink>();
-            return animator;
         }
 
         // 1인칭 무기 모델: FBX가 있으면 넣고 true. 그림자 없이 (화면에 붙은 모델)

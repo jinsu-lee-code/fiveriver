@@ -26,6 +26,7 @@ namespace FiveRivers.EditorTools
             var player = Object.FindFirstObjectByType<PlayerController>();
             if (player == null) throw new InvalidOperationException("Open the Dabudong gameplay scene.");
             Configure(player);
+            FirstPersonAnimationSetup.Configure(player);
             EditorSceneManager.MarkSceneDirty(player.gameObject.scene);
             EditorSceneManager.SaveScene(player.gameObject.scene);
             AssetDatabase.SaveAssets();

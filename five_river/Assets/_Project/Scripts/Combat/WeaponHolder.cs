@@ -32,6 +32,8 @@ namespace FiveRivers.Combat
         public bool Reloading => Current == WeaponSlot.M1 ? m1.Reloading : bazooka.Reloading;
 
         public event Action<WeaponSlot> Switched;   // 플레이어가 1 · 2로 바꿨을 때만
+        public event Action<WeaponSlot, float> Lowering;
+        public event Action<WeaponSlot, float> Raising;
         public event Action LoadoutReset;          // 체크포인트 · 새 회차 (소리 없음)
         public event Action BazookaGiven;
 
@@ -92,7 +94,11 @@ namespace FiveRivers.Combat
             }
             if (Switching)
             {
-                if (Time.time >= hideAt) ShowOnly(pending);
+                if (shown != pending && (Time.time >= hideAt || Time.time >= switchEnd))
+                {
+                    ShowOnly(pending);
+                    Raising?.Invoke(pending, Mathf.Max(0f, switchEnd - hideAt));
+                }
                 if (Time.time >= switchEnd)
                 {
                     Switching = false;
@@ -107,6 +113,11 @@ namespace FiveRivers.Combat
             bool weaponCanAct = canAct && !Switching;
             if (Current == WeaponSlot.M1) m1.Tick(weaponCanAct, aim);
             else bazooka.Tick(weaponCanAct, aim);
+            if (Switching && shown != Current)
+            {
+                if (shown == WeaponSlot.M1) m1.Tick(false, false);
+                else bazooka.Tick(false, false);
+            }
 
             float blend = Current == WeaponSlot.M1 ? m1.AimBlend : bazooka.AimBlend;
             float aimFov = Current == WeaponSlot.M1 ? config.m1AimFov : config.bazookaAimFov;
@@ -125,6 +136,7 @@ namespace FiveRivers.Combat
             Switching = true;
             hideAt = Time.time + unequip;
             switchEnd = hideAt + equip;
+            Lowering?.Invoke(Current, unequip);
         }
 
         void ShowOnly(WeaponSlot slot)

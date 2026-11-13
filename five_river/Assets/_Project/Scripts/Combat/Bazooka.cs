@@ -24,6 +24,7 @@ namespace FiveRivers.Combat
         public int Loaded { get; private set; }
         public int Reserve { get; private set; }
         public bool Reloading { get; private set; }
+        public float ReloadDuration => config.bazookaReloadTime;
         public float AimBlend => aimBlend;
         public Transform Model => model;
 

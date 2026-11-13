@@ -11,6 +11,7 @@ namespace FiveRivers.Combat
         [SerializeField] Transform rightHand;
         [SerializeField] Transform rightHandVisual;
         [SerializeField] Transform firingTransform;
+        [SerializeField] Transform animationFrame;
         [SerializeField] AnimationClip firingClip;
         [SerializeField] Quaternion reloadHandRotation=Quaternion.identity;
         [SerializeField] Vector3 clipGripOffset;
@@ -63,6 +64,7 @@ namespace FiveRivers.Combat
         readonly Quaternion[] thumbPose=new Quaternion[3];
         readonly float[] thumbBend=new float[3];
         PlayerController player;
+        WeaponHolder weapons;
         Quaternion previousView;
         Vector2 lookLag;
         float walkPhase;
@@ -73,6 +75,7 @@ namespace FiveRivers.Combat
             if (rifle == null || rightHand == null) { Debug.LogError("M1 presentation requires rifle and corrected hand references.", this); enabled = false; return; }
             if (bolt != null) boltRest = bolt.localPosition;
             player=rifle.GetComponent<PlayerController>();
+            weapons=rifle.GetComponent<WeaponHolder>();
             if(player!=null)previousView=player.CameraPivot.rotation;
             if (rightHand != null) { handRest = rightHand.localPosition; handRotation = rightHand.localRotation; }
             if (loadedClip != null) { clipRestPos = loadedClip.localPosition; clipRestRot = loadedClip.localRotation; }
@@ -116,6 +119,8 @@ namespace FiveRivers.Combat
                 var restNormal=rightHand.parent.InverseTransformDirection(palmNormal);
                 if(restForward.sqrMagnitude>1e-6f&&restNormal.sqrMagnitude>1e-6f)handFrameRest=Quaternion.LookRotation(restForward,restNormal);
             }
+            // fingerOpen 계산 중에 바꾼 자세가 실제 파지의 기준으로 저장되지 않게 한다.
+            ResetFingers();
             BindReloadMotion(visual);
             ResetFingers();
             if(reloadFingers[0,2]!=null)
@@ -193,8 +198,19 @@ namespace FiveRivers.Combat
             }
             float breath=Mathf.Sin(Time.time*1.45f)*.00065f;
             var handling=new Vector3(Mathf.Sin(walkPhase)*.0025f*moving,breath-Mathf.Abs(Mathf.Cos(walkPhase))*.0018f*moving,0)*steadiness;
-            transform.localPosition = ReloadPresentOffset * pose+handling;
-            transform.localRotation = Quaternion.Euler(ReloadPresentEuler.x * pose+lookLag.y*steadiness,ReloadPresentEuler.y*pose+lookLag.x*steadiness,ReloadPresentEuler.z*pose+Mathf.Sin(walkPhase)*.3f*moving*steadiness);
+            var presentPosition = ReloadPresentOffset * pose + handling;
+            var presentRotation = Quaternion.Euler(ReloadPresentEuler.x * pose+lookLag.y*steadiness,ReloadPresentEuler.y*pose+lookLag.x*steadiness,ReloadPresentEuler.z*pose+Mathf.Sin(walkPhase)*.3f*moving*steadiness);
+            if (animationFrame != null)
+            {
+                // 납품 곡선의 장전 동작을 더하되, 확인된 손·클립 접촉과 조준선은 기존 자세를 따른다.
+                float weight = weapons != null && weapons.Switching ? 1f : rifle.Reloading ? .22f : 1f - rifle.AimBlend;
+                var animatedRotation = animationFrame.localRotation;
+                var retainedRotation = Quaternion.Slerp(Quaternion.identity, animatedRotation, weight);
+                var correction = Quaternion.Inverse(animatedRotation);
+                presentPosition = correction * (retainedRotation * presentPosition + animationFrame.localPosition * (weight - 1f));
+                presentRotation = correction * retainedRotation * presentRotation;
+            }
+            transform.SetLocalPositionAndRotation(presentPosition, presentRotation);
             if (bolt != null)
             {
                 float cycle = age >= 0f && age < 0.10f ? Mathf.Sin(age / 0.10f * Mathf.PI) : 0f;
@@ -236,8 +252,9 @@ namespace FiveRivers.Combat
             // during a partial reload the seated clip stays until the hand takes it (ammo is already counted out)
             bool showSeated = rifle.Reloading ? !clipInHand && !oldClipOut : rifle.Magazine!=null&&rifle.Magazine.InClip>0;
             if(chamberRounds!=null)chamberRounds.gameObject.SetActive(showSeated);
-            if(rifle.Reloading&&motionBones!=null&&loadedClip!=null){ResetFingers();ApplyAuthoredFingers(motionP);ThumbContactError=0;}
+            if(rifle.Reloading&&motionBones!=null&&loadedClip!=null){ResetFingers();ApplyAuthoredFingers(motionP, reloadP);ThumbContactError=0;}
             else if(rifle.Reloading)AnimateFingers(reloadP);else{ResetFingers();ThumbContactError=0;}
+            if (rifle.Reloading) AlignReloadFingers(motionBones != null ? motionP : reloadP, reloadP);
         }
 
         // The reload clip shows the same mesh and materials as the clip seated in the rifle, at exactly the seated pose,
@@ -301,20 +318,108 @@ namespace FiveRivers.Combat
         void PlayAuthoredReload(float p, float reloadP)
         {
             reloadMotion.SampleWrist(p,out var wrist,out var wristRotation,out var clipOffset);
-            // ease in from / back to the live grip (over the reload's first 10% and last 5%) so the hand never pops,
-            // also when an empty reload enters the motion part-way
-            float w=Mathf.SmoothStep(0f,1f,Mathf.Clamp01(Mathf.Min(reloadP/.10f,(1f-reloadP)/.05f)));
-            rightHand.SetLocalPositionAndRotation(Vector3.Lerp(handRest,wrist,w),Quaternion.Slerp(handRotation,wristRotation,w));
+            // 오른손이 총 위에서 떨어진 뒤 파지 쪽으로 손목부터 돌아간다.
+            float positionWeight = Window(reloadP, 0f, .10f, .88f, 1f);
+            float rotationWeight = Window(reloadP, 0f, .10f, .76f, .98f);
+            var localRotation = Quaternion.Slerp(handRotation, wristRotation, rotationWeight);
+            float release = Window(p, .73f, .81f, .86f, .94f);
+            if (release > 0f)
+            {
+                var palmFrame = localRotation * Quaternion.Inverse(handRotation) * handFrameRest;
+                var axis = palmFrame * Vector3.forward;
+                var palm = Vector3.ProjectOnPlane(palmFrame * Vector3.up, axis);
+                var down = player != null ? rightHand.parent.InverseTransformDirection(-player.CameraPivot.up) : Vector3.down;
+                var targetPalm = Vector3.ProjectOnPlane(down, axis);
+                float roll = Mathf.Clamp(Vector3.SignedAngle(palm, targetPalm, axis), -66f, 66f);
+                localRotation = Quaternion.AngleAxis(roll * release, axis) * localRotation;
+            }
+            rightHand.SetLocalPositionAndRotation(Vector3.Lerp(handRest, wrist, positionWeight), localRotation);
             loadedClip.SetLocalPositionAndRotation(clipRestPos+clipOffset,clipRestRot);
             ReloadArmWeight=Window(p,.04f,.16f,.72f,.98f);
             // open-hand phases: carrying the clip and resting on the receiver after it is home
             if(palmShape>=0)palmSkin.SetBlendShapeWeight(palmShape,100f*Mathf.Max(Window(p,.22f,.30f,.56f,.62f),Window(p,.62f,.68f,.84f,.90f)));
         }
 
-        void ApplyAuthoredFingers(float p)
+        void ApplyAuthoredFingers(float p, float reloadP)
         {
             for(int i=0;i<motionBones.Length;i++)motionBones[i].localRotation=reloadMotion.SampleBone(i,p);
             RelaxIndex(p);
+            ShapeReloadRelease(p);
+
+            // 접촉 구간을 지난 뒤 손가락 전체를 같은 흐름으로 파지에 돌려보낸다.
+            float authoredWeight = Window(reloadP, 0f, .10f, .74f, .94f);
+            if (authoredWeight >= 1f) return;
+            for (int i = 0; i < motionBones.Length; i++)
+            {
+                var bone = motionBones[i];
+                bone.localRotation = Quaternion.Slerp(motionRest[i], bone.localRotation, authoredWeight);
+            }
+        }
+
+        void AlignReloadFingers(float progress, float reloadProgress)
+        {
+            // 클립을 꺼내고 가져와 넣는 동안 네 손가락을 중지와 나란히 유지합니다.
+            // 원래 중지의 굽힘과 각 손가락의 길이는 남기고 엄지와 손목은 바꾸지 않습니다.
+            float weight = Window(progress, .16f, .24f, .86f, .96f)
+                * Window(reloadProgress, 0f, .10f, .86f, .96f);
+            if (weight <= 0f) return;
+            var middleBase = reloadFingers[2, 0];
+            var middleJoint = reloadFingers[2, 1];
+            var middleTip = reloadFingers[2, 2];
+            if (middleBase == null || middleJoint == null || middleTip == null) return;
+            var proximal = middleJoint.position - middleBase.position;
+            var intermediate = middleTip.position - middleJoint.position;
+            var distal = middleTip.up;
+            for (int finger = 1; finger < 5; finger++)
+            {
+                if (finger == 2) continue;
+                for (int joint = 0; joint < 3; joint++)
+                {
+                    var bone = reloadFingers[finger, joint];
+                    if (bone == null) continue;
+                    var child = joint < 2 ? reloadFingers[finger, joint + 1] : null;
+                    var outgoing = child != null ? child.position - bone.position : bone.up;
+                    var direction = joint == 0 ? proximal : joint == 1 ? intermediate : distal;
+                    if (outgoing.sqrMagnitude < 1e-10f || direction.sqrMagnitude < 1e-10f) continue;
+                    var turn = Quaternion.FromToRotation(outgoing, direction);
+                    bone.rotation = Quaternion.Slerp(Quaternion.identity, turn, weight) * bone.rotation;
+                }
+            }
+        }
+
+        void ShapeReloadRelease(float progress)
+        {
+            // 클립에서 떨어질 때 검지만 펴거나 끝 관절부터 접히지 않도록 한다.
+            float weight = Window(progress, .73f, .80f, .86f, .93f);
+            if (weight <= 0f) return;
+            var index = reloadFingers[1, 0];
+            var middle = reloadFingers[2, 0];
+            var little = reloadFingers[4, 0];
+            if (index == null || middle == null || little == null) return;
+            for (int i = 0; i < motionBones.Length; i++)
+                if (reloadMotion.bones[i].StartsWith("metacarpal", System.StringComparison.Ordinal))
+                    motionBones[i].localRotation = Quaternion.Slerp(motionBones[i].localRotation, motionRest[i], .7f * weight);
+            var hand = rightHandVisual != null ? rightHandVisual : rightHand;
+            var forward = (middle.position - hand.position).normalized;
+            var across = Vector3.ProjectOnPlane(index.position - little.position, forward).normalized;
+            var palm = Vector3.Cross(forward, across);
+            if (palm.sqrMagnitude < .01f) return;
+            for (int finger = 1; finger < 5; finger++)
+            {
+                for (int joint = 0; joint < 3; joint++)
+                {
+                    var bone = reloadFingers[finger, joint];
+                    if (bone == null) continue;
+                    var child = joint < 2 ? reloadFingers[finger, joint + 1] : null;
+                    var outgoing = child != null ? child.position - bone.position : bone.up;
+                    float flex = joint == 0 ? 23f : joint == 1 ? 48f : 62f;
+                    var direction = Quaternion.AngleAxis(flex + finger, -across) * forward
+                        + across * ((2.5f - finger) * .035f);
+                    var turn = Quaternion.FromToRotation(outgoing, direction);
+                    bone.rotation = Quaternion.Slerp(Quaternion.identity, turn, weight) * bone.rotation;
+                }
+            }
+            RelaxThumb(weight);
         }
 
         // Once the clip is home the authored index stays almost straight (knuckle 13° against the middle finger's 74°)
