@@ -23,7 +23,11 @@ namespace FiveRivers.Narrative
         Quaternion rifleLocalRotation;
         Vector3 rifleLocalScale;
         bool mansuLostThisRun;
-        const float MansuFallStart = .72f;
+        LyingBodyRest mansuRest;
+        // Where the fall clip is joined. It stands upright until 0.7 s; joined there (as it was until 2026-11-13) the
+        // kneeling man sprang to his feet in a fifth of a second and only then went down. Joined where the clip has
+        // already buckled at the knees, he sags from his kneel and falls back.
+        const float MansuFallStart = 1.55f, MansuFallBlend = 0.32f;
         Vector3 blanketOriginalPosition;
 
         void OnWestSectionChanged(FlowTransition transition)
@@ -147,7 +151,7 @@ namespace FiveRivers.Narrative
             var output = AnimationPlayableOutput.Create(fallGraph, "Body", animator);
             var fall = AnimationClipPlayable.Create(fallGraph, mansuFall);
             // the clip spends its first 0.7 s standing upright; he is at his post, so start where it starts to go down
-            fall.SetTime(Mathf.Min(MansuFallStart, mansuFall.length * .5f));
+            fall.SetTime(Mathf.Min(MansuFallStart, mansuFall.length * .7f));
             // The clip starts upright and he is usually kneeling at his post: ease out of the pose he is in
             // (the hit straightens him) instead of snapping to the clip's first frame.
             var mixer = AnimationMixerPlayable.Create(fallGraph, 2);
@@ -159,11 +163,13 @@ namespace FiveRivers.Narrative
             output.SetSourcePlayable(mixer);
             fallGraph.Play();
             StartCoroutine(BlendIntoFall(fallGraph, mixer));
+            // the clip ends lying on the plane he knelt on; the trench floor falls away under his legs (2026-11-13)
+            mansuRest = LyingBodyRest.Attach(animator);
         }
 
         IEnumerator BlendIntoFall(PlayableGraph graph, AnimationMixerPlayable mixer)
         {
-            const float blend = 0.28f;
+            const float blend = MansuFallBlend;
             for (float t = 0f; t < blend; t += Time.deltaTime)
             {
                 if (!graph.IsValid()) yield break;
@@ -192,6 +198,8 @@ namespace FiveRivers.Narrative
         void RestoreMansu()
         {
             StopFall();
+            if (mansuRest != null) mansuRest.Release();
+            mansuRest = null;
             if (mansu != null)
             {
                 if (mansuRifle != null && rifleParent != null)

@@ -29,7 +29,7 @@ namespace FiveRivers.Narrative
         Animator subjectAnimator;
         Vector3 origin, look;
         Quaternion frame;
-        float sideSign = 1f;
+        float sideSign = 1f, litSign = 1f;
         bool playedThisRun;
 
         public bool Playing => rig != null && rig.Playing;
@@ -77,7 +77,14 @@ namespace FiveRivers.Narrative
             frame = facing.sqrMagnitude > .01f ? Quaternion.LookRotation(facing) : Quaternion.identity;
             // stay on the side of him the player is on, so the cut does not jump across the line between them
             sideSign = Vector3.Dot(player.transform.position - origin, frame * Vector3.right) >= 0f ? 1f : -1f;
-            look = Local(SideLook);
+            // the first shot stands on the side the moon lights him from: from the other side he was a black
+            // shape against the lit ground and the hit could not be read (2026-11-13)
+            litSign = -sideSign;
+            Light key = null;
+            foreach (var light in FindObjectsByType<Light>(FindObjectsSortMode.None))
+                if (light.type == LightType.Directional && light.enabled && (key == null || light.intensity > key.intensity)) key = light;
+            if (key != null) litSign = Vector3.Dot(frame * Vector3.right, -key.transform.forward) >= 0f ? 1f : -1f;
+            look = Side(SideLook);
             if (!rig.Begin(Duration, HandBack)) return false;
             playedThisRun = true;
             objective.Hide();
@@ -88,6 +95,7 @@ namespace FiveRivers.Narrative
         }
 
         Vector3 Local(Vector3 offset) => origin + frame * new Vector3(offset.x * sideSign, offset.y, offset.z);
+        Vector3 Side(Vector3 offset) => origin + frame * new Vector3(offset.x * litSign, offset.y, offset.z);
 
         void Update()
         {
@@ -99,8 +107,8 @@ namespace FiveRivers.Narrative
             if (time < Shot1)
             {
                 float u = Mathf.InverseLerp(0f, Shot1, time);
-                position = Local(SideCamera) - along * (0.35f * u);
-                target = Vector3.Lerp(Local(SideLook), chest, 0.8f); // follows him down as he falls
+                position = Side(SideCamera) - frame * Vector3.right * (litSign * 0.35f * u);
+                target = Vector3.Lerp(Side(SideLook), chest, 0.8f); // follows him down as he falls
                 fov = Mathf.Lerp(40f, 36f, u);
             }
             else

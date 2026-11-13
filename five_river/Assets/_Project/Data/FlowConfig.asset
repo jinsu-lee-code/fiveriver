@@ -32,8 +32,8 @@ MonoBehaviour:
   forceEndingAt: 495
   allySupportDuration: 5
   hardCap: 540
-  regroupCap: 180
-  westAssaultCap: 240
-  dawnCap: 120
-  hillAssaultCap: 480
-  resultCap: 240
+  regroupCap: 90
+  westAssaultCap: 120
+  dawnCap: 90
+  hillAssaultCap: 300
+  resultCap: 150

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: WaveConfig
   m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.WaveConfig
   scouts: 2
-  mainAssault: 5
-  westAssault: 4
+  mainAssault: 4
+  westAssault: 3
   maxActive: 5
   spawnInterval: 3
   health: 100

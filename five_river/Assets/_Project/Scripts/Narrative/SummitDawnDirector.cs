@@ -39,7 +39,8 @@ namespace FiveRivers.Narrative
             player = playerController;
             dawn = dawnDirector;
             objective = objectiveDisplay;
-            rig = new CutsceneRig(this, flow, playerController, "SummitDawn");
+            // the last shot is ~100 m down in the valley: a cut under the bars, not a flight back up the hill (2026-11-13)
+            rig = new CutsceneRig(this, flow, playerController, "SummitDawn") { CutBack = true };
         }
 
         void Start()

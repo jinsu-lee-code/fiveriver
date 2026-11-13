@@ -93,7 +93,11 @@ namespace FiveRivers.DebugTools
                     flow.AbortToTitle();
                     break;
                 }
+                // 빌드에서도 바퀴 · 궤도가 구르는지 (메시 Read/Write · Burst에 달려 있다, 2026-11-13)
+                var gear = tank.GetComponentInChildren<TankRunningGear>();
+                float rolledBefore = gear != null ? gear.Distance(0) + gear.Distance(1) : 0f;
                 yield return new WaitForSecondsRealtime(1f);
+                Check(run, "tank tracks rolling", gear != null && gear.TrackCount == 2 && gear.Distance(0) + gear.Distance(1) - rolledBefore > 0.5f);
                 var body = tank.transform.GetChild(0);
                 tank.OnRocketHit(body.position, body.position - body.right * 40f);
                 tank.OnRocketHit(body.position, body.position - body.right * 40f);

@@ -27,6 +27,30 @@ namespace FiveRivers.Combat
         // 디딘 발이 초당 1.4 m씩 뒤로 미끄러졌다. 지면 속도에 재생 속도를 맞춘다.
         const float RunClipSpeed = 5.2f, MinRunAnimSpeed = 0.72f, MaxRunAnimSpeed = 1.3f;
         float runFootSpeed = RunClipSpeed;
+        // Advancing on the trench (2026-11-13): the upright sprint clip, slowed to 0.75 to keep its feet from
+        // sliding, read as a slow-motion hop with the rifle held across the chest like a bar. Coming forward
+        // under fire they now run crouched with the rifle at the shoulder (A_KPA_CrouchRun, already in AC_KPA but
+        // only reached from crouched cover). A retreat stays the upright run. CrouchRunClipSpeed is how fast its
+        // planted foot travels at a human scale of 1, measured in play like RunClipSpeed.
+        public static bool CrouchAdvance = true;
+        // 2026-11-13 플레이 중 측정: 1배속으로 3.4 m/s 전진하면 디딘 발이 0.85 m/s 앞으로 미끄러짐 → 적 리그(0.876)에서 2.55 m/s
+        // re-keyed clip (2026-11-13 evening): measured in play the planted foot travels 2.00 m/s at 1x on the enemy rig
+        // (human scale x 0.876) -> 2.28 at human scale 1
+        public static float CrouchRunClipSpeed = 2.28f;
+        const float CrouchRunFrom = 1.2f, MinCrouchAnimSpeed = 0.7f, MaxCrouchAnimSpeed = 2.0f;
+        static readonly int CrouchRunStateId = Animator.StringToHash("CrouchRun");
+        float crouchFootSpeed = 2.55f;
+        // The crouched run clip runs on a diagonal: measured in play its hips face 26 deg to the left of the way it
+        // goes, so driven straight ahead the legs crossed over like a side-step coming down the slope (2026-11-13).
+        // While it plays the model turns that much to the right, so the hips and stride face the way he runs.
+        // 2026-11-13 evening: the clip itself was re-keyed in Blender (source/animation/kpa_crouch_run): hips and feet
+        // now face the way he runs and the hands carry the Mosin like a combat idle (butt by the right hip, muzzle
+        // forward and ~17 deg up). So no turn and no carry override are needed any more; both stay as switches.
+        public static float CrouchRunYaw = 0f;
+        public static bool CrouchCarryOverride = false;
+        public static Vector3 CrouchCarryEuler = new Vector3(24f, -6f, 0f); // only with CrouchCarryOverride
+        Quaternion modelRestRotation = Quaternion.identity;
+        float crouchTurn;
 
         [SerializeField] Transform model;
         [SerializeField] Transform muzzle;
@@ -56,6 +80,17 @@ namespace FiveRivers.Combat
         public static Vector3 TriggerWrist = new Vector3(0.03f, -0.05f, 0f); // trigger wrist from the grip point, rifle space
         Transform rifle, rightHand, leftHand;
         EnemyHandIK handIK;
+
+        // Feet on the ground (2026-11-13). The agent walks on the NavMesh, which lies 13-21 cm above the slopes
+        // (it is a simplified surface), and the run clip itself carries the body a little high: measured in play,
+        // the lowest foot never came within 24 cm of the ground, so every rifleman ran on air. Each frame the
+        // model is lowered (or raised) so the lower sole sits on the real ground under it.
+        public static bool GroundFeet = true;
+        const float GroundRate = 14f, GroundLowest = -0.6f, GroundHighest = 0.25f;
+        Transform leftFoot, rightFoot, leftToes, rightToes;
+        float footSole, toeSole, groundOffset;
+        Vector3 modelRest;
+        Terrain ground;
         Vector3 rifleCentreLocal;
         bool rifleDropped;
 
@@ -77,7 +112,19 @@ namespace FiveRivers.Combat
                 rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
                 leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
                 runFootSpeed = RunClipSpeed * animator.humanScale * animator.transform.lossyScale.y;
+                crouchFootSpeed = CrouchRunClipSpeed * animator.humanScale * animator.transform.lossyScale.y;
+                leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+                rightFoot = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+                leftToes = animator.GetBoneTransform(HumanBodyBones.LeftToes);
+                rightToes = animator.GetBoneTransform(HumanBodyBones.RightToes);
+                // in the prefab's own pose the soles stand on the model's origin: how high the joints sit above them
+                if (leftFoot != null && model != null)
+                {
+                    footSole = Mathf.Clamp(leftFoot.position.y - model.position.y, 0.03f, 0.2f);
+                    toeSole = leftToes != null ? Mathf.Clamp(leftToes.position.y - model.position.y, 0.01f, 0.12f) : footSole;
+                }
             }
+            if (model != null) { modelRest = model.localPosition; modelRestRotation = model.localRotation; }
             var mesh = rifle != null ? rifle.GetComponentInChildren<MeshFilter>() : null;
             if (mesh != null && mesh.sharedMesh != null)
                 rifleCentreLocal = rifle.InverseTransformPoint(mesh.transform.TransformPoint(mesh.sharedMesh.bounds.center));
@@ -91,6 +138,8 @@ namespace FiveRivers.Combat
 
         void LateUpdate()
         {
+            if (handIK != null) handIK.FeetOnSlope = state != State.Dead && GroundFeet;
+            if (state != State.Dead) { TurnCrouchRun(); KeepFeetOnGround(); }
             if (rifle == null || rifleDropped || rightHand == null || leftHand == null) return;
             // The clips hold the hands close together, so the bare hand-to-hand line lies across the chest.
             // Aim the barrel through a point ahead of the support hand instead: the rifle points forward and the
@@ -107,6 +156,11 @@ namespace FiveRivers.Combat
             // The carry eases in and out with the run clip.
             float carry = RunCarryWeight();
             if (carry > 0f) rotation = Quaternion.Slerp(rotation, transform.rotation * Quaternion.Euler(RunCarryEuler), carry);
+            // Crouched run: the clip keeps the rifle shouldered and level, so he came down the slope aiming at the sky
+            // line the whole way. Running he holds it at the low ready instead: butt at the shoulder, muzzle down
+            // and forward along the way he runs (2026-11-13).
+            float crouchCarry = Mathf.SmoothStep(0f, 1f, crouchTurn);
+            if (CrouchCarryOverride && crouchCarry > 0f) rotation = Quaternion.Slerp(rotation, transform.rotation * Quaternion.Euler(CrouchCarryEuler), crouchCarry);
             // Running, the wood passes above and to the left of the trigger wrist: the palm, not the wrist bone, lies
             // on it (with the wrist on the axis the hand sat on top of the receiver). Aiming keeps the clip's grip.
             var grip = rightHand.position + rotation * new Vector3(-TriggerWrist.x * carry, -TriggerWrist.y * carry, GripForward);
@@ -115,8 +169,49 @@ namespace FiveRivers.Combat
             rifle.SetPositionAndRotation(grip - rotation * Vector3.Scale(gripLocal, rifle.lossyScale), rotation);
             // muzzle flash and shot origin follow the barrel end
             if (muzzle != null) muzzle.SetPositionAndRotation(rifle.TransformPoint(rifleCentreLocal + Vector3.forward * MuzzleAhead), rotation);
-            // running: support hand under the fore-end, palms onto the wood, fingers closed round it
-            if (handIK != null) handIK.Shape(carry);
+            // support hand under the fore-end, palms onto the wood, fingers closed round it. First only while running;
+            // seen close in the flare sequence the aiming clips also left the support hand open and floating under
+            // the rifle (2026-11-13), so the hands now always hold it while he is alive.
+            if (handIK != null) handIK.Shape(1f, 1f - Mathf.Max(carry, crouchCarry));
+        }
+
+        void TurnCrouchRun()
+        {
+            if (model == null || animator == null) return;
+            float target = StateWeight(CrouchRunStateId);
+            crouchTurn = Mathf.MoveTowards(crouchTurn, target, Time.deltaTime * 4f);
+            model.localRotation = modelRestRotation * Quaternion.Euler(0f, CrouchRunYaw * Mathf.SmoothStep(0f, 1f, crouchTurn), 0f);
+        }
+
+        // How much of the given state is on screen (follows the controller's cross-fades).
+        float StateWeight(int stateId)
+        {
+            if (animator == null || state == State.Dead) return 0f;
+            bool now = animator.GetCurrentAnimatorStateInfo(0).shortNameHash == stateId;
+            if (!animator.IsInTransition(0)) return now ? 1f : 0f;
+            bool next = animator.GetNextAnimatorStateInfo(0).shortNameHash == stateId;
+            float t = Mathf.SmoothStep(0f, 1f, animator.GetAnimatorTransitionInfo(0).normalizedTime);
+            return now ? (next ? 1f : 1f - t) : next ? t : 0f;
+        }
+
+        void KeepFeetOnGround()
+        {
+            if (!GroundFeet || model == null || leftFoot == null || rightFoot == null) return;
+            if (ground == null) ground = Terrain.activeTerrain;
+            if (ground == null) return;
+            // the bones already include last frame's offset, so this is the gap as it stands now
+            float lowest = Mathf.Min(SoleGap(leftFoot, leftToes), SoleGap(rightFoot, rightToes));
+            float target = Mathf.Clamp(groundOffset - lowest, GroundLowest, GroundHighest);
+            groundOffset = Mathf.Lerp(groundOffset, target, 1f - Mathf.Exp(-GroundRate * Time.deltaTime));
+            model.localPosition = modelRest + model.parent.InverseTransformVector(Vector3.up * groundOffset);
+        }
+
+        float SoleGap(Transform foot, Transform toes)
+        {
+            float sole = foot.position.y - footSole;
+            if (toes != null) sole = Mathf.Min(sole, toes.position.y - toeSole);
+            var p = foot.position;
+            return sole - (ground.SampleHeight(p) + ground.transform.position.y);
         }
 
         // How much of the Run state is on screen (follows the controller's cross-fades).
@@ -260,9 +355,16 @@ namespace FiveRivers.Combat
             {
                 float speed = agent.velocity.magnitude;
                 animator.SetFloat(SpeedId, speed);
+                int current = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+                // 전진은 숙인 달리기, 철수는 선 달리기 (2026-11-13). 멈추면 컨트롤러가 CrouchRun → Crouch_Aim으로 나간다
+                if (CrouchAdvance && !animator.IsInTransition(0))
+                {
+                    if (state == State.Advance && speed > CrouchRunFrom && current != CrouchRunStateId) animator.CrossFade(CrouchRunStateId, 0.2f);
+                    else if (state == State.Retreat && current == CrouchRunStateId) animator.CrossFade(RunStateId, 0.2f);
+                }
                 // 달리기 상태에서만 지면 속도에 재생 속도를 맞춘다 (사격 · 피격 등 다른 동작은 원래 속도)
-                bool running = animator.GetCurrentAnimatorStateInfo(0).shortNameHash == RunStateId;
-                animator.speed = running ? Mathf.Clamp(speed / runFootSpeed, MinRunAnimSpeed, MaxRunAnimSpeed) : 1f;
+                animator.speed = current == RunStateId ? Mathf.Clamp(speed / runFootSpeed, MinRunAnimSpeed, MaxRunAnimSpeed)
+                    : current == CrouchRunStateId ? Mathf.Clamp(speed / crouchFootSpeed, MinCrouchAnimSpeed, MaxCrouchAnimSpeed) : 1f;
                 animator.SetBool(CrouchId, state == State.Cover && !Standing);
                 animator.SetBool(AimId, state == State.Cover);
                 animator.SetBool(RetreatId, state == State.Retreat);
@@ -283,6 +385,18 @@ namespace FiveRivers.Combat
             else if (animator != null) animator.SetTrigger(HitId);
         }
 
+        // A staged death (FlareRevealDirector): falls with the given death clip (AC_KPA DieIndex: 0 Death_01 2.7 s,
+        // 1 Death_02 1.6 s, 2 Death_03 3.2 s) so a short shot sees him reach the ground.
+        public const int QuickDeath = 1;
+        int forcedDeath = -1;
+        public void Kill(int deathIndex)
+        {
+            if (!Alive) return;
+            forcedDeath = deathIndex;
+            health = 0f;
+            Die();
+        }
+
         void Die()
         {
             state = State.Dead;
@@ -294,8 +408,9 @@ namespace FiveRivers.Combat
             if (animator != null)
             {
                 animator.speed = 1f; // 달리다 쓰러져도 사망 동작은 원래 속도로
-                animator.SetInteger(DieIndexId, Random.Range(0, 3));
+                animator.SetInteger(DieIndexId, forcedDeath >= 0 ? forcedDeath : Random.Range(0, 3));
                 animator.SetTrigger(DieId);
+                LyingBodyRest.Attach(animator); // the body comes to rest on the ground, not on the NavMesh above it
             }
             DropRifle();
             Gone?.Invoke(this);

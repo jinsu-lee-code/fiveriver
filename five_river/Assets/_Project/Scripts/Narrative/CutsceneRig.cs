@@ -72,8 +72,8 @@ namespace FiveRivers.Narrative
                 invulnerableBefore = playerHealth.Invulnerable;
                 playerHealth.Invulnerable = true;
             }
-            playerRenderers = player.GetComponentsInChildren<Renderer>(false);
-            foreach (var r in playerRenderers) r.forceRenderingOff = true;
+            playerRenderers = HidePlayer(player);
+            cutDone = false;
             PlayerCamera.enabled = false;
             sequenceCamera.enabled = true;
             bars.gameObject.SetActive(true);
@@ -97,7 +97,19 @@ namespace FiveRivers.Narrative
         public bool Frame(Vector3 position, Quaternion rotation, float fov)
         {
             float back = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(Duration - HandBack, Duration, Time));
-            if (CutBack) back = Time >= Duration - HandBack * .5f ? 1f : 0f;
+            if (CutBack)
+            {
+                back = Time >= Duration - HandBack * .5f ? 1f : 0f;
+                // the cut goes to the player's own camera, rifle and hands included, so nothing pops in when the
+                // bars lift (2026-11-13)
+                if (back >= 1f && !cutDone)
+                {
+                    cutDone = true;
+                    ShowPlayer(player, playerRenderers);
+                    sequenceCamera.enabled = false;
+                    PlayerCamera.enabled = true;
+                }
+            }
             var own = PlayerCamera.transform;
             sequenceCamera.transform.SetPositionAndRotation(Vector3.Lerp(position, own.position, back), Quaternion.Slerp(rotation, own.rotation, back));
             sequenceCamera.fieldOfView = Mathf.Lerp(fov, PlayerCamera.fieldOfView, back);
@@ -118,10 +130,29 @@ namespace FiveRivers.Narrative
                 if (invulnerableBefore || !owner.isActiveAndEnabled) playerHealth.Invulnerable = invulnerableBefore;
                 else owner.StartCoroutine(ReleaseAfterGrace(playerHealth));
             }
-            if (playerRenderers != null) foreach (var r in playerRenderers) if (r != null) r.forceRenderingOff = false;
+            ShowPlayer(player, playerRenderers);
             if (sequenceCamera != null) sequenceCamera.enabled = false;
             if (PlayerCamera != null) PlayerCamera.enabled = true;
             if (bars != null) bars.gameObject.SetActive(false);
+        }
+
+        bool cutDone;
+
+        // The first-person arms and weapons are not part of a staged shot. Shared by every sequence.
+        public static Renderer[] HidePlayer(PlayerController player)
+        {
+            var renderers = player.GetComponentsInChildren<Renderer>(false);
+            foreach (var r in renderers) r.forceRenderingOff = true;
+            var weapons = player.GetComponentInChildren<WeaponHolder>(true);
+            if (weapons != null) weapons.CutsceneHidden = true;
+            return renderers;
+        }
+
+        public static void ShowPlayer(PlayerController player, Renderer[] renderers)
+        {
+            if (renderers != null) foreach (var r in renderers) if (r != null) r.forceRenderingOff = false;
+            var weapons = player != null ? player.GetComponentInChildren<WeaponHolder>(true) : null;
+            if (weapons != null) weapons.CutsceneHidden = false;
         }
 
         System.Collections.IEnumerator ReleaseAfterGrace(PlayerHealth health)

@@ -188,8 +188,7 @@ namespace FiveRivers.Narrative
             }
             objective.Hide();
             // the first-person arms and rifle are not part of the staged shots
-            playerRenderers = player.GetComponentsInChildren<Renderer>(false);
-            foreach (var r in playerRenderers) r.forceRenderingOff = true;
+            playerRenderers = CutsceneRig.HidePlayer(player);
             playerCamera.enabled = false;
             sequenceCamera.enabled = true;
             bars.gameObject.SetActive(true);
@@ -222,7 +221,7 @@ namespace FiveRivers.Narrative
             director.ClockScale = clockBefore;
             if (hud != null) hud.Cinematic = false;
             if (playerHealth != null) playerHealth.Invulnerable = invulnerableBefore;
-            if (playerRenderers != null) foreach (var r in playerRenderers) if (r != null) r.forceRenderingOff = false;
+            CutsceneRig.ShowPlayer(player, playerRenderers);
             if (sequenceCamera != null) sequenceCamera.enabled = false;
             if (playerCamera != null) playerCamera.enabled = true;
             if (bars != null) bars.gameObject.SetActive(false);
@@ -278,10 +277,13 @@ namespace FiveRivers.Narrative
         // Debug: show a take now, from the tank's first appearance.
         public void Preview(int which)
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // the section jump only exists in the editor and development builds (DemoFlow.DebugJumpTo)
             ForceTake = which;
             var flow = director.Flow;
             if (flow.Section == FlowSection.Tank) flow.DebugJumpTo(FlowSection.Silence);
             flow.DebugJumpTo(FlowSection.Tank);
+#endif
         }
 
         public string DebugTitle => "전차 등장 연출";

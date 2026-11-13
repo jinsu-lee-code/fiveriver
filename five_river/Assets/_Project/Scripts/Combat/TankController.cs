@@ -47,6 +47,8 @@ namespace FiveRivers.Combat
         [SerializeField] float destroyedSwapDelay = 0.15f;
 
         Material[] normalMaterials;
+        ShellCraters craters;
+        public ShellCraters Craters => craters;
         Transform gun;
         Quaternion gunRest;
         Quaternion turretBasis;
@@ -83,6 +85,9 @@ namespace FiveRivers.Combat
             turretRest = turret.localRotation;
             // wheels turn and the track belts run with the distance the hull travels (TankRunningGear)
             body.gameObject.AddComponent<TankRunningGear>().Build(body);
+            // where its rounds land the ground is blown out (ShellCraters, undone on a new run or a retry)
+            craters = gameObject.AddComponent<ShellCraters>();
+            craters.Bind(director, config, driveTerrain);
             Hide();
         }
 
@@ -277,6 +282,7 @@ namespace FiveRivers.Combat
                 impact = hit.point;
             effects.Spawn(EffectKind.TankMuzzle, gunMuzzle.position, gunMuzzle.rotation);
             effects.Spawn(EffectKind.CannonBlast, impact, Quaternion.identity);
+            craters.Make(impact);
             if (Vector3.Distance(impact, target) <= config.cannonRadius)
                 playerHealth.TakeDamage(config.cannonDamage * director.EnemyDamageScale, impact);
             CannonFired?.Invoke();
@@ -319,6 +325,7 @@ namespace FiveRivers.Combat
             if (!Scripted) return;
             effects.Spawn(EffectKind.TankMuzzle, gunMuzzle.position, gunMuzzle.rotation);
             effects.Spawn(EffectKind.CannonBlast, impact, Quaternion.identity);
+            craters.Make(impact);
             CannonFired?.Invoke();
         }
 

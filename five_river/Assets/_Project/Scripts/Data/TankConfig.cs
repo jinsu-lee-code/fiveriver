@@ -24,6 +24,12 @@ namespace FiveRivers.Data
         public float cannonRadius;
         public float nearMissOffset;
 
+        [Header("포탄 구덩이 (2026-11-13): 떨어진 자리 지형을 판다, 회차 · 재시도 때 원래대로")]
+        [Tooltip("구덩이 반지름 m (0이면 만들지 않음)")] public float craterRadius = 1.6f;
+        [Tooltip("가운데 깊이 m")] public float craterDepth = 0.55f;
+        [Tooltip("가장자리로 솟는 흙 높이 m")] public float craterRim = 0.15f;
+        [Tooltip("이 거리(m) 안의 참호 모래주머니 벽 토막은 무너진다 (0이면 무너지지 않음)")] public float craterBreach = 1.2f;
+
         [Header("등장 연출 (2026-11-10 시험 제작, 일반판에서만)")]
         [Tooltip("0 = 없음(기존 그대로), 1 = Fable판(코드로 만든 연출), 2 = Blender판(Blender에서 만들어 구운 연출), 3 = 합본(두 판의 좋은 컷 + 카메라 흔들림, 2026-11-12)")]
         public int entranceTake;

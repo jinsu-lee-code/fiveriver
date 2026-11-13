@@ -21,13 +21,18 @@ namespace FiveRivers.Narrative
     public sealed class TankEntranceMixedTake : TankEntranceTake
     {
         const float RoadSpeed = 3.5f;
-        const float CraneEnd = 3.4f, RoadsideEnd = 6.2f, DollyLeast = 3.0f;
+        // DollyMost (2026-11-13): from most of the trench the tank comes round the spur later than from the tank
+        // checkpoint, and the dolly used to stretch to wait for it (the take ran 18 to 28 s depending on where the
+        // player stood). Now the dolly never runs longer than this: the tank starts that much further down its road
+        // instead (headStart), so every shot keeps its length and the take is never longer than about 20.8 s.
+        const float CraneEnd = 3.4f, RoadsideEnd = 6.2f, DollyLeast = 3.0f, DollyMost = 5.8f;
         const float TrenchLead = 2.3f, TrenchHold = 1.2f, FireAfter = 1.7f, ImpactAfter = 0.15f, ImpactHold = 1.4f, Home = 2.0f;
         const float ShakeOff = 1.3f, ShakeFade = 0.6f;   // no shake over the last ShakeOff seconds; it fades out before that
 
         TankEntranceContext level;
         Vector3 road, side;          // along the tank's road towards the trench, and to its right
         float routeLength, hullYaw, trenchSide;
+        float headStart;             // seconds of road the tank has already covered when the take begins
         float seen, shotTrench, shotTurret, fireAt, shotImpact, end;
         Vector3 impact, craneFrom, craneTo, roadsideCamera, toSpur;
         readonly float[] dollyTime = new float[5], trenchTime = new float[4];
@@ -53,7 +58,10 @@ namespace FiveRivers.Narrative
 
             // the trench shots wait for the tank to come into view from the player's place
             var eye = level.playerEye;
-            seen = Mathf.Max(SeenFrom(eye + Vector3.up * 0.25f, routeLength / RoadSpeed), RoadsideEnd + DollyLeast + TrenchLead);
+            headStart = 0f;
+            float onRoad = SeenFrom(eye + Vector3.up * 0.25f, routeLength / RoadSpeed);
+            headStart = Mathf.Max(0f, onRoad - (RoadsideEnd + DollyMost + TrenchLead));
+            seen = Mathf.Max(onRoad - headStart, RoadsideEnd + DollyLeast + TrenchLead);
             shotTrench = seen - TrenchLead;
             shotTurret = seen + TrenchHold;
             fireAt = shotTurret + FireAfter;
@@ -114,10 +122,11 @@ namespace FiveRivers.Narrative
             return lastHidden + 0.4f;
         }
 
-        Vector3 TankAt(float time) => level.tankStart + road * Mathf.Min(RoadSpeed * time, routeLength);
+        Vector3 TankAt(float time) => level.tankStart + road * Mathf.Min(RoadSpeed * (time + headStart), routeLength);
         Vector3 Hull(float time) => level.OnGround(TankAt(time), 1.5f); // about the top of the hull
-        // a place beside the road: metres from its start, metres out on the trench side, metres above the ground
-        Vector3 Along(float distance, float out_, float above) => level.OnGround(level.tankStart + road * distance + side * (out_ * trenchSide), above);
+        // a place beside the road: metres from where the tank starts in this take, metres out on the trench side,
+        // metres above the ground
+        Vector3 Along(float distance, float out_, float above) => level.OnGround(level.tankStart + road * (distance + RoadSpeed * headStart) + side * (out_ * trenchSide), above);
 
         public override TankEntranceFrame Evaluate(float time)
         {

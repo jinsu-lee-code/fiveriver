@@ -14,14 +14,16 @@ namespace FiveRivers.Narrative
     // view leaves the player for a few seconds to show what it lights up — the enemy coming down toward the trench.
     //   shot 1  from behind the trench wall: the flare hanging in the sky, then down to the lit slope
     //   shot 2  long lens from the trench on the enemy nearest the trench, following them down
-    //   shot 3  low on the slope beside them, the flare behind, then back into the player's eyes
+    //   shot 3  close on a rifleman running down: rifle in his hands, face lit by the flare (2026-11-13)
+    //   shot 4  low on the slope: one of them is hit by the trench's fire and goes down, then back into the
+    //           player's eyes under the bars (2026-11-13)
     // While it plays the player has no control and cannot be hurt, and the run clock stands still; the enemy keep
     // moving and keep arriving, so the fight is already on when the view comes back. Once per run, expanded run
     // only (the exhibit run's 9:00 limit has no room for it). Space or Enter skips. Added by NarrativeDirector.
     public sealed class FlareRevealDirector : MonoBehaviour, IDebugPanel
     {
         public static bool Enabled = true;
-        const float Shot1 = 2.6f, Shot2 = 5.9f, Duration = 9.2f, HandBack = 1.3f;
+        const float Shot1 = 2.6f, Shot2 = 4.8f, Shot3 = 7.2f, HitAt = 7.6f, Duration = 10.8f, HandBack = 1.3f;
         const float BarFade = 0.4f, BarHeight = 0.105f, SkipAfter = 0.6f;
 
         FlowDirector director;
@@ -37,12 +39,14 @@ namespace FiveRivers.Narrative
         CanvasGroup bars;
         Terrain terrain;
         float time, clockBefore;
-        bool playedThisRun, pending;
+        bool playedThisRun, pending, cutDone;
         Vector3 flarePoint, eye, slopeFocus, focus, lowCamera;
         Quaternion eyeView;
-        bool lowCameraSet;
+        bool lowCameraSet, closeSet, victimHit;
         FiveRivers.Data.GameText copy;
-        EnemyAgent subject;
+        EnemyAgent subject, victim;
+        Vector3 closeOffset, victimFocus;
+        FiveRivers.Audio.AudioDirector audio;
 
         public bool Playing { get; private set; }
         public float Elapsed => time;
@@ -138,25 +142,66 @@ namespace FiveRivers.Narrative
                 float distance = Mathf.Max(8f, Vector3.Distance(position, focus));
                 fov = Mathf.Clamp(2f * Mathf.Atan(Mathf.Lerp(3.4f, 2.6f, u) / distance) * Mathf.Rad2Deg, 4f, 20f);
             }
+            else if (time < Shot3)
+            {
+                // close on him as he runs: a little ahead and to the side, at chest height, carried along with him
+                if (!closeSet)
+                {
+                    closeSet = true;
+                    subject = Nearest();
+                    if (subject != null) focus = subject.transform.position;
+                    var toTrench = eye - focus; toTrench.y = 0f; toTrench.Normalize();
+                    var side = Vector3.Cross(Vector3.up, toTrench);
+                    closeOffset = toTrench * 2.4f + side * 1.3f;
+                }
+                float u = Mathf.InverseLerp(Shot2, Shot3, time);
+                var chest = Chest(subject, focus);
+                position = OnGround(focus + closeOffset, 0f);
+                position.y = Mathf.Max(position.y + 0.3f, chest.y - 0.15f); // never under the slope
+                rotation = Quaternion.LookRotation(chest + Vector3.down * 0.1f - position);
+                fov = Mathf.Lerp(36f, 32f, u);
+            }
             else
             {
-                // low on the slope beside them, looking across with the flare behind
+                // low on the slope beside another of them: the trench's fire finds him and he goes down
                 if (!lowCameraSet)
                 {
                     lowCameraSet = true;
-                    subject = Nearest();
-                    if (subject != null) focus = subject.transform.position;
-                    var toTrench = eye - focus; toTrench.y = 0f;
-                    var side = Vector3.Cross(Vector3.up, toTrench.normalized);
-                    lowCamera = OnGround(focus + toTrench.normalized * 10f + side * 3f, 0.45f); // ahead of him: he comes down past the lens
+                    victim = Victim();
+                    victimFocus = victim != null ? victim.transform.position : focus;
+                    var toTrench = eye - victimFocus; toTrench.y = 0f; toTrench.Normalize();
+                    var side = Vector3.Cross(Vector3.up, toTrench);
+                    lowCamera = OnGround(victimFocus + toTrench * 3.5f + side * 5.5f, 0.55f); // ahead and beside him
                 }
-                float u = Mathf.InverseLerp(Shot2, Duration - HandBack, time);
-                position = lowCamera + Vector3.up * (0.15f * u);
-                rotation = Quaternion.LookRotation(focus + Vector3.up * 1.1f - position);
-                fov = 38f;
+                if (victim != null) victimFocus = Vector3.Lerp(victimFocus, Hips(victim), 1f - Mathf.Exp(-Time.deltaTime * 6f));
+                if (!victimHit && time >= HitAt)
+                {
+                    victimHit = true;
+                    if (victim != null && victim.Alive)
+                    {
+                        // the shot from the trench that finds him (heard from the trench, as the allies' own fire is)
+                        if (audio == null) audio = FindFirstObjectByType<FiveRivers.Audio.AudioDirector>();
+                        if (audio != null) audio.PlaySpatial("SFX_M1_Fire", eye + (victimFocus - eye).normalized * 6f);
+                        victim.Kill(EnemyAgent.QuickDeath);
+                    }
+                }
+                float u = Mathf.InverseLerp(Shot3, Duration - HandBack, time);
+                position = lowCamera + Vector3.up * (0.1f * u);
+                rotation = Quaternion.LookRotation(victimFocus + Vector3.up * Mathf.Lerp(0.5f, 0.15f, u) - position);
+                fov = Mathf.Lerp(40f, 34f, u);
             }
 
-            float back = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(Duration - HandBack, Duration, time));
+            // the last shot is ~70 m out on the slope: cut back into the player's eyes under the bars instead of
+            // flying the camera back to the trench (2026-11-13, as CutsceneRig.CutBack)
+            float back = time >= Duration - HandBack * 0.5f ? 1f : 0f;
+            if (back >= 1f && !cutDone)
+            {
+                // the cut goes to the player's own camera, rifle and hands included
+                cutDone = true;
+                CutsceneRig.ShowPlayer(player, playerRenderers);
+                sequenceCamera.enabled = false;
+                playerCamera.enabled = true;
+            }
             var own = playerCamera.transform;
             sequenceCamera.transform.SetPositionAndRotation(Vector3.Lerp(position, own.position, back), Quaternion.Slerp(rotation, own.rotation, back));
             sequenceCamera.fieldOfView = Mathf.Lerp(fov, playerCamera.fieldOfView, back);
@@ -176,6 +221,35 @@ namespace FiveRivers.Narrative
                 bestDistance = d; best = e;
             }
             return best;
+        }
+
+        // the one who goes down: someone other than the man in the close shot if there is anyone, nearest the trench
+        EnemyAgent Victim()
+        {
+            EnemyAgent best = null; float bestDistance = float.MaxValue;
+            if (enemies == null) return subject;
+            foreach (var e in enemies.ActiveEnemies)
+            {
+                if (e == null || !e.Alive || e == subject || e.Retreating) continue;
+                float d = (e.transform.position - eye).sqrMagnitude;
+                if (d >= bestDistance) continue;
+                bestDistance = d; best = e;
+            }
+            return best != null ? best : subject;
+        }
+
+        static Vector3 Chest(EnemyAgent e, Vector3 fallback)
+        {
+            var a = e != null ? e.GetComponentInChildren<Animator>() : null;
+            var b = a != null && a.isHuman ? a.GetBoneTransform(HumanBodyBones.Chest) : null;
+            return b != null ? b.position : fallback + Vector3.up * 1.2f;
+        }
+
+        static Vector3 Hips(EnemyAgent e)
+        {
+            var a = e.GetComponentInChildren<Animator>();
+            var b = a != null && a.isHuman ? a.GetBoneTransform(HumanBodyBones.Hips) : null;
+            return b != null ? b.position : e.transform.position + Vector3.up * 0.9f;
         }
 
         Vector3 OnGround(Vector3 p, float above)
@@ -198,7 +272,7 @@ namespace FiveRivers.Narrative
             if (ahead.sqrMagnitude > 1f) player.transform.rotation = Quaternion.LookRotation(ahead);
             subject = Nearest();
             focus = subject != null ? subject.transform.position : slopeFocus;
-            lowCameraSet = false;
+            lowCameraSet = false; closeSet = false; victimHit = false; victim = null;
 
             EnsureCamera();
             EnsureBars();
@@ -217,8 +291,8 @@ namespace FiveRivers.Narrative
                 playerHealth.Invulnerable = true;
             }
             objective.Hide();
-            playerRenderers = player.GetComponentsInChildren<Renderer>(false);
-            foreach (var r in playerRenderers) r.forceRenderingOff = true;
+            playerRenderers = CutsceneRig.HidePlayer(player);
+            cutDone = false;
             playerCamera.enabled = false;
             sequenceCamera.enabled = true;
             bars.gameObject.SetActive(true);
@@ -238,7 +312,7 @@ namespace FiveRivers.Narrative
                 if (invulnerableBefore || !isActiveAndEnabled) playerHealth.Invulnerable = invulnerableBefore;
                 else StartCoroutine(ReleaseAfterGrace());
             }
-            if (playerRenderers != null) foreach (var r in playerRenderers) if (r != null) r.forceRenderingOff = false;
+            CutsceneRig.ShowPlayer(player, playerRenderers);
             if (sequenceCamera != null) sequenceCamera.enabled = false;
             if (playerCamera != null) playerCamera.enabled = true;
             if (bars != null) bars.gameObject.SetActive(false);

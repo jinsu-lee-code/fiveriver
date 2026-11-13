@@ -68,8 +68,13 @@ namespace FiveRivers.Combat
                 if (sp.z > 0f) centre = sp;
             }
             peep.Show(ring, centre);
-            foreach (var r in rearApertures) r.forceRenderingOff = ring > 0.5f;
+            foreach (var r in rearApertures) r.forceRenderingOff = ring > 0.5f || CutsceneHidden;
         }
+
+        // A staged sequence has hidden the first-person body (CutsceneRig.HidePlayer). Without this the line above
+        // switched the rear aperture back on every frame, and it hung alone in the corner of the view as the
+        // sequence camera came back to the player's eyes (2026-11-13).
+        public bool CutsceneHidden { get; set; }
 
         void Update()
         {

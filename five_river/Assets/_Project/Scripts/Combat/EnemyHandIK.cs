@@ -17,6 +17,11 @@ namespace FiveRivers.Combat
         // the trigger palm may be turned from the clip's own pose so the wrist is never wrung round.
         public static Vector3 SupportWrist = new Vector3(-0.09f, -0.047f, 0f);
         public static float SupportAhead = 0.36f, MaxTriggerTurn = 75f;
+        // Aiming (2026-11-13, against a 1944 photo of a Mosin held in the aim): the support hand cradles the fore-end
+        // about a hand's span ahead of the trigger hand, just in front of the magazine, with the elbow straight under
+        // the rifle. With the running values the arm reached almost straight out along the barrel, elbow to the side.
+        public static float AimSupportAhead = 0.27f;
+        public static Vector3 RunElbow = new Vector3(-0.4f, -0.8f, 0.1f), AimElbow = new Vector3(-0.1f, -1f, 0.15f);
         // The stock axis runs through the middle of the whole mesh, and the butt drops: at the fore-end the wood
         // itself is this far above that axis (2026-11-11, measured on the mesh: the wood there spans 0 to 5.5 cm
         // above the axis line the support wrist used to be hung 3 cm under, which left the palm 6 cm off it).
@@ -60,8 +65,47 @@ namespace FiveRivers.Combat
             foreach (var chain in rightFingers) CacheRest(chain, skeleton);
         }
 
+        // Feet on a slope (2026-11-13, "다리 질질끌면서 내려오는 부분"): the clips lift the feet over flat ground, so
+        // running down the hillside the rear foot (uphill, where the ground stands higher) went through the slope
+        // and seemed to drag. Each foot is moved up or down by how much the ground under it differs from the ground
+        // under the body, and turned a little to lie with the slope. EnemyAgent turns it off when he dies.
+        public bool FeetOnSlope { get; set; }
+        public static float FootTilt = 0.6f, MaxFootShift = 0.45f;
+        public static bool SlopeFeet = true; // off = feet as the clip puts them (debug / comparison)
+        Terrain ground;
+
+        void PlaceFeet()
+        {
+            if (ground == null) ground = Terrain.activeTerrain;
+            if (ground == null) return;
+            var root = animator.transform.position;
+            float under = Ground(root);
+            foreach (var goal in new[] { AvatarIKGoal.LeftFoot, AvatarIKGoal.RightFoot })
+            {
+                var p = animator.GetIKPosition(goal);
+                float shift = Mathf.Clamp(Ground(p) - under, -MaxFootShift, MaxFootShift);
+                animator.SetIKPosition(goal, p + Vector3.up * shift);
+                animator.SetIKPositionWeight(goal, 1f);
+                var normal = ground.terrainData.GetInterpolatedNormal(
+                    (p.x - ground.transform.position.x) / ground.terrainData.size.x, (p.z - ground.transform.position.z) / ground.terrainData.size.z);
+                animator.SetIKRotation(goal, Quaternion.FromToRotation(Vector3.up, normal) * animator.GetIKRotation(goal));
+                animator.SetIKRotationWeight(goal, FootTilt);
+            }
+        }
+
+        float Ground(Vector3 p) => ground.SampleHeight(p) + ground.transform.position.y;
+
         void OnAnimatorIK(int layer)
         {
+            if (animator != null)
+            {
+                if (FeetOnSlope && SlopeFeet) PlaceFeet();
+                else
+                {
+                    animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0f); animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0f); animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0f);
+                }
+            }
             if (animator == null || rifle == null || !Holding)
             {
                 if (animator != null) animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0f);
@@ -90,16 +134,18 @@ namespace FiveRivers.Combat
         // fore-end, both palms are turned onto the wood and the fingers closed round it. The aiming and firing
         // clips already grip correctly and are left exactly as they are (weight 0).
         // Call in LateUpdate, after the rifle has been placed.
-        public void Shape(float weight)
+        // aim: 1 when the rifle is in the aim (cover, firing), 0 while it is carried running
+        public void Shape(float weight, float aim = 0f)
         {
             if (weight <= 0f || !Holding || rifle == null || !Shaped) return;
             weight = Mathf.Clamp01(weight);
+            aim = Mathf.Clamp01(aim);
             var a = rifle.TransformPoint(axisLocalStart);
             var along = (rifle.TransformPoint(axisLocalEnd) - a).normalized;
             // the wrist goes under and to the left of the wood, so the palm (not the wrist bone) lies under it
-            var wrist = a + along * SupportAhead + rifle.up * ForeEndAbove + rifle.TransformDirection(SupportWrist);
+            var wrist = a + along * Mathf.Lerp(SupportAhead, AimSupportAhead, aim) + rifle.up * ForeEndAbove + rifle.TransformDirection(SupportWrist);
             Reach(leftUpper, leftFore, leftHand, Vector3.Lerp(leftHand.position, wrist, weight),
-                animator.transform.TransformDirection(new Vector3(-0.4f, -0.8f, 0.1f)));
+                animator.transform.TransformDirection(Vector3.Lerp(RunElbow, AimElbow, aim)));
             // trigger hand: palm against the right of the stock wrist, fingers along the wood and slightly up
             var trigger = Quaternion.LookRotation(rifle.TransformDirection(new Vector3(0f, .35f, 1f)), -rifle.right) * Quaternion.Inverse(rightPalmFrame);
             rightHand.rotation = Quaternion.Slerp(rightHand.rotation, Quaternion.RotateTowards(rightHand.rotation, trigger, MaxTriggerTurn), weight);

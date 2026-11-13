@@ -23,4 +23,8 @@ MonoBehaviour:
   cannonDamage: 150
   cannonRadius: 5
   nearMissOffset: 6
+  craterRadius: 1.6
+  craterDepth: 0.55
+  craterRim: 0.15
+  craterBreach: 1.2
   entranceTake: 3
