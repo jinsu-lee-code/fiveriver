@@ -13,9 +13,8 @@ namespace FiveRivers.Narrative
     {
         // The player walks at 3.2 m/s, so anyone more than JogBeyond behind closes up faster than that.
         public static float WalkSpeed = 1.8f, JogSpeed = 3.6f, JogBeyond = 6f, JogUntil = 3f, RepathEvery = 0.75f, SlotTolerance = 2.5f;
-        // Walk_Tired is authored for about 1.3 m/s, the rifle run (Run_Rifle, from the KPA set) for about 3.4 m/s;
-        // animation speed follows the ground speed so feet do not slide.
-        const float WalkClipSpeed = 1.3f, RunClipSpeed = 3.4f;
+        // The 0.7 s port-arms loop plays at 1.44x during the normal 3.6 m/s chase.
+        const float WalkClipSpeed = 1.3f, RunClipSpeed = 2.5f;
         static readonly Vector3[] Slots = { new Vector3(-3.5f, 0f, -3f), new Vector3(3.5f, 0f, -3.5f), new Vector3(0f, 0f, -6f), new Vector3(-6f, 0f, -6.5f) };
         static readonly int SpeedId = Animator.StringToHash("Speed");
         // Going over the top: the trench faces +Z (PlayerController.frontLineZ). Each man first scrambles straight
@@ -23,12 +22,14 @@ namespace FiveRivers.Narrative
         // kept and the body follows the sandbag tops with an eased rise and drop.
         static readonly Vector3 TrenchFront = Vector3.forward;
         const float WallSearch = 6f, ClearBeyondWall = 2.2f, ClimbSpeed = 1.6f, ClimbRise = 3f, LeadAhead = 1.5f;
+        const float BootClearanceBehindWall = .35f;
 
         sealed class Follower
         {
             public AllyCombatant combat;
             public Transform body;
             public Animator animator;
+            public AlliedTerrainFootPlacement footPlacement;
             public Vector3 homePosition;
             public Quaternion homeRotation;
             public readonly List<Vector3> path = new List<Vector3>();
@@ -59,16 +60,22 @@ namespace FiveRivers.Narrative
                 if (!ally.isActiveAndEnabled) continue; // a fallen man (Choi Man-su) stays where he is
                 var animator = ally.GetComponentInChildren<Animator>();
                 if (animator == null) continue;
+                var climbTo = OverTheTop(ally.transform);
+                var footPlacement = animator.GetComponent<AlliedTerrainFootPlacement>();
+                if (footPlacement == null) footPlacement = animator.gameObject.AddComponent<AlliedTerrainFootPlacement>();
+                footPlacement.enabled = true;
+                footPlacement.ClearingHillWall = climbTo.HasValue;
                 followers.Add(new Follower
                 {
                     combat = ally,
                     body = ally.transform,
                     animator = animator,
+                    footPlacement = footPlacement,
                     homePosition = ally.transform.position,
                     homeRotation = ally.transform.rotation,
                     slot = Slots[i % Slots.Length],
                     nextRepath = Time.time + 0.4f * i, // stagger: they climb out one after another
-                    climbTo = OverTheTop(ally.transform),
+                    climbTo = climbTo,
                 });
                 i++;
             }
@@ -78,6 +85,7 @@ namespace FiveRivers.Narrative
         {
             foreach (var f in followers)
             {
+                if (f.footPlacement != null) f.footPlacement.enabled = false;
                 if (f.body == null) continue;
                 f.body.SetPositionAndRotation(f.homePosition, f.homeRotation);
                 Stop(f);
@@ -170,6 +178,12 @@ namespace FiveRivers.Narrative
             {
                 f.outsideLine = Vector3.Dot(to, TrenchFront);
                 f.climbTo = null;
+                if (f.footPlacement != null)
+                {
+                    f.footPlacement.ClearingHillWall = false;
+                    f.footPlacement.PreparingHillLanding = false;
+                    f.footPlacement.enabled = true;
+                }
                 f.nextRepath = 0f; // plan the way to his slot on the next tick
                 return;
             }
@@ -181,24 +195,36 @@ namespace FiveRivers.Narrative
             }
             float move = ClimbSpeed * Time.deltaTime;
             var next = distance <= move ? new Vector3(to.x, pos.y, to.z) : pos + flat / distance * move;
-            next.y = Mathf.MoveTowards(pos.y, Highest(next, f.body), ClimbRise * Time.deltaTime);
+            float surface = Highest(next, f.body, out bool terrainBelow);
+            next.y = Mathf.MoveTowards(pos.y, surface, ClimbRise * Time.deltaTime);
             f.body.position = next;
+            // 발이 벽에 걸리지 않는 뒷면에서 접지를 시작해 추종 전환 전 착지시킵니다.
+            if (f.footPlacement != null && f.footPlacement.UsesHillWalkContact)
+            {
+                bool landing = terrainBelow && distance < ClearBeyondWall - BootClearanceBehindWall;
+                f.footPlacement.PreparingHillLanding = landing;
+            }
             f.body.rotation = Quaternion.RotateTowards(f.body.rotation, Quaternion.LookRotation(TrenchFront), 300f * Time.deltaTime);
             f.animator.SetFloat(SpeedId, ClimbSpeed);
             f.animator.speed = Mathf.Clamp(ClimbSpeed / WalkClipSpeed, 0.8f, 1.6f);
         }
 
         // Top surface under him (sandbag tops included) for the scramble over the wall.
-        static float Highest(Vector3 p, Transform self)
+        static float Highest(Vector3 p, Transform self, out bool terrainBelow)
         {
             int n = Physics.RaycastNonAlloc(p + Vector3.up * 2.5f, Vector3.down, hits, 5f, ~(1 << 2), QueryTriggerInteraction.Ignore);
             float best = p.y;
             bool found = false;
+            terrainBelow = false;
             for (int i = 0; i < n; i++)
             {
                 if (IsPerson(hits[i].collider, self)) continue;
-                if (!found || hits[i].point.y > best) best = hits[i].point.y;
-                found = true;
+                if (!found || hits[i].point.y > best)
+                {
+                    best = hits[i].point.y;
+                    terrainBelow = hits[i].collider is TerrainCollider;
+                    found = true;
+                }
             }
             return best;
         }

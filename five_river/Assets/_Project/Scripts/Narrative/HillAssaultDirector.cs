@@ -266,6 +266,12 @@ namespace FiveRivers.Narrative
                 climber = dawn.SpawnClimber(hit.position, facing.sqrMagnitude > .01f ? Quaternion.LookRotation(facing) : Quaternion.identity);
                 if (climber == null) return false;
                 climberAnimator = climber.GetComponentInChildren<Animator>();
+                if (climberAnimator != null)
+                {
+                    var placement = climberAnimator.GetComponent<AlliedTerrainFootPlacement>();
+                    if (placement == null) placement = climberAnimator.gameObject.AddComponent<AlliedTerrainFootPlacement>();
+                    placement.ConfigureClimber(climber);
+                }
                 nextClimbPath = 0f;
                 return true;
             }
