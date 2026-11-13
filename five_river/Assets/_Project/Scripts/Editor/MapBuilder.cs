@@ -391,7 +391,7 @@ namespace FiveRivers.EditorTools
         });
 
         public static GameObject RokPrefab() => GrayboxAssets.Prefab("PF_CH_ROK_Soldier", () =>
-            Ally(Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.70f, false, "Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx")));
+            Ally(Person(GrayboxAssets.Rok, GrayboxAssets.RokHelmet, 1.70f, false, "Characters/" + CharacterImportSetup.RegularModel + ".fbx")));
 
         public static GameObject ParkPrefab() => GrayboxAssets.Prefab("PF_CH_ROK_ParkYongpal", () =>
         {
