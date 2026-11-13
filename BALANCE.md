@@ -42,6 +42,17 @@
 | 아군 지원 | 5초 | `FlowConfig.allySupportDuration` |
 | 절대 상한 | 9:00 (540초) | `FlowConfig.hardCap` |
 
+### 1-3b. 일반판 구간 안전 상한 (`legacyExhibitMode = 0`)
+> 2026-11-13 변경 (사용자 지시 "지스타 용으로 보여줄 거로 흐름을 압축… 연출은 빼먹지 말고", 선택 "일반판 순서 유지, 시간만 단축"): 구간 순서와 연출 4개(조명탄 · 최만수 전사 · 전차 등장 · 정상 새벽)는 그대로 두고, 일반판에서만 쓰는 상한과 적 수(2-1번)만 줄였다. S1~S5 상한(1-1번)은 전시판 검산(T1~T7)이 함께 쓰므로 그대로 둔다. 연출이 도는 동안은 회차 시계가 멈춘다.
+
+| 구간 | 안전 상한 | 데이터 키 |
+|---|---|---|
+| 재정비 (보충 · 최만수 대화) | 180초 → 2026-11-13 **90초** | `FlowConfig.regroupCap` |
+| 서쪽 공세 | 240초 → 2026-11-13 **120초** (최만수 전사는 30초 또는 적 정리 때라 그대로 나옴) | `FlowConfig.westAssaultCap` |
+| 고지 탈환 | 480초 → 2026-11-13 **300초** (넘으면 적 철수, 정상까지는 걸어가야 함) | `FlowConfig.hillAssaultCap` |
+| S6 정상의 새벽 | 120초 → 2026-11-13 **90초** | `FlowConfig.dawnCap` |
+| S7 이름과 편지 | 240초 → 2026-11-13 **150초** | `FlowConfig.resultCap` |
+
 ### 1-4. 결과 화면
 | 요소 | 시간 | 데이터 키 |
 |---|---|---|
@@ -58,7 +69,8 @@
 | 항목 | 값 | 데이터 키 |
 |---|---|---|
 | 정찰병 (S2) | 2명 | `WaveConfig.scouts` |
-| 주 공세 신규 적 (S3) | 7명 + 생존 정찰병 | `WaveConfig.mainAssault` |
+| 주 공세 신규 적 (S3) | 7명 + 생존 정찰병 → (에셋 값 5) → 2026-11-13 변경 **4명** + 생존 정찰병 (지스타용 흐름 압축) | `WaveConfig.mainAssault` |
+| 서쪽 공세 적 (일반판) | 4명 → 2026-11-13 변경 **3명** (지스타용 흐름 압축) | `WaveConfig.westAssault` |
 | 동시 활동 적 상한 | 5명 | `WaveConfig.maxActive` |
 | 적 명중률 · 피해 기본값 | → 2026-10-27 1차 값: 어둠 0.10 / 조명탄 아래 0.35, Z 자세 ×0.25, 시야가 막히면(모래주머니 뒤) 무조건 빗나감. 일반 모드 보병탄 피해 35(체력 100에서 연속 3발), 전시 모드 18. 실패 보조 배율은 별도로 적용 | `WaveConfig.accuracyDark` · `accuracyLit` · `crouchedFactor` · `expandedDamage` · `damage` |
 | 출현 간격 · 체력 · 이동 · 철수 속도 | 3초 · 100(M1 한 발) · 3.4 · 4.8 m/s | `WaveConfig.spawnInterval` · `health` · `moveSpeed` · `retreatSpeed` |
@@ -106,6 +118,7 @@
 | 정지까지 측면 명중 | 2 | `TankConfig.hitsToStop` |
 | 접근 속도 · 포탑 회전 | 2.5 m/s → 2026-10-27 3.5 m/s (출발 z=150 → 110으로 당김: 정지 위치까지 40초 → 약 18초, 1차 시도 75초 안에 둔덕 이동 · 2발 여유) · 25 °/s | `TankConfig.approachSpeed` · `turretTurnSpeed` |
 | 주포 간격 · 피해 · 반경 · 빗나감 거리 | 9초 · 150 · 5 m · 6 m (플레이어 근처에 떨어지는 위협 사격. 반경 안이면 한 발에 사망 — 결정 2026-11-09, 실패 보조 ×0.8이 붙어도 체력 100을 넘김) | `TankConfig.fireInterval` · `cannonDamage` · `cannonRadius` · `nearMissOffset` |
+| 포탄 구덩이 · 벽 무너짐 (2026-11-13 추가) | 반지름 1.6 m · 깊이 0.55 m · 흙 둔덕 0.15 m, 1.2 m 안 참호 모래주머니 벽 토막 무너짐. 새 회차 · 재시도 때 원래대로 | `TankConfig.craterRadius` · `craterDepth` · `craterRim` · `craterBreach` |
 
 ## 3. 실패 보조 · 재시도
 | 항목 | 값 | 데이터 키 |
