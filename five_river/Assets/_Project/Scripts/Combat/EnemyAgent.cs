@@ -33,24 +33,24 @@ namespace FiveRivers.Combat
         // only reached from crouched cover). A retreat stays the upright run. CrouchRunClipSpeed is how fast its
         // planted foot travels at a human scale of 1, measured in play like RunClipSpeed.
         public static bool CrouchAdvance = true;
-        // 2026-11-13 플레이 중 측정: 1배속으로 3.4 m/s 전진하면 디딘 발이 0.85 m/s 앞으로 미끄러짐 → 적 리그(0.876)에서 2.55 m/s
-        // re-keyed clip (2026-11-13 evening): measured in play the planted foot travels 2.00 m/s at 1x on the enemy rig
-        // (human scale x 0.876) -> 2.28 at human scale 1
-        public static float CrouchRunClipSpeed = 2.28f;
+        // The enemies play A_KPA_CrouchRun_Charge (shorter contact, longer flight; source/animation/kpa_crouch_run),
+        // so the 3.4 m/s advance plays at about 1.27x. The allies keep A_KPA_CrouchRun for their slower advance.
+        public static float CrouchRunClipSpeed = 3.61f; // measured in play 2026-11-15: at 3.06 the planted foot slid back 0.8 m/s
         const float CrouchRunFrom = 1.2f, MinCrouchAnimSpeed = 0.7f, MaxCrouchAnimSpeed = 2.0f;
         static readonly int CrouchRunStateId = Animator.StringToHash("CrouchRun");
         float crouchFootSpeed = 2.55f;
-        // The crouched run clip runs on a diagonal: measured in play its hips face 26 deg to the left of the way it
-        // goes, so driven straight ahead the legs crossed over like a side-step coming down the slope (2026-11-13).
-        // While it plays the model turns that much to the right, so the hips and stride face the way he runs.
-        // 2026-11-13 evening: the clip itself was re-keyed in Blender (source/animation/kpa_crouch_run): hips and feet
-        // now face the way he runs and the hands carry the Mosin like a combat idle (butt by the right hip, muzzle
-        // forward and ~17 deg up). So no turn and no carry override are needed any more; both stay as switches.
-        public static float CrouchRunYaw = 0f;
-        public static bool CrouchCarryOverride = false;
-        public static Vector3 CrouchCarryEuler = new Vector3(24f, -6f, 0f); // only with CrouchCarryOverride
-        Quaternion modelRestRotation = Quaternion.identity;
-        float crouchTurn;
+        // Advancing, the rifle is carried at port arms by code (CrouchCarryEuler); the clip's own hand line arrives
+        // almost level through the humanoid retarget.
+        public static bool CrouchCarryOverride = true;
+        // crouched run: rock of the carried rifle in degrees (x nod at each footfall, y swing and z roll once a stride)
+        public static Vector3 CrouchRock = new Vector3(4f, 3f, 2f);
+        // crouched run: where the trigger wrist goes from the right shoulder joint (agent axes: right, up, forward).
+        // Measured in play 2026-11-15: this rig's arm is only 0.35 m from shoulder to wrist, so the rifle has to lie
+        // close in and across the body or neither hand reaches it (the support hand hung in the air above it).
+        public static Vector3 CrouchTriggerHand = new Vector3(0f, -0.27f, 0.08f);
+        public static float CrouchTriggerWeight = 0.85f;
+        public static Vector3 CrouchCarryEuler = new Vector3(-22f, -35f, 0f); // port arms: across the body, butt by the right hip, muzzle up and left (2026-11-15)
+        float crouchTurn, advanceCarry;
 
         [SerializeField] Transform model;
         [SerializeField] Transform muzzle;
@@ -124,7 +124,7 @@ namespace FiveRivers.Combat
                     toeSole = leftToes != null ? Mathf.Clamp(leftToes.position.y - model.position.y, 0.01f, 0.12f) : footSole;
                 }
             }
-            if (model != null) { modelRest = model.localPosition; modelRestRotation = model.localRotation; }
+            if (model != null) modelRest = model.localPosition;
             var mesh = rifle != null ? rifle.GetComponentInChildren<MeshFilter>() : null;
             if (mesh != null && mesh.sharedMesh != null)
                 rifleCentreLocal = rifle.InverseTransformPoint(mesh.transform.TransformPoint(mesh.sharedMesh.bounds.center));
@@ -139,13 +139,26 @@ namespace FiveRivers.Combat
         void LateUpdate()
         {
             if (handIK != null) handIK.FeetOnSlope = state != State.Dead && GroundFeet;
-            if (state != State.Dead) { TurnCrouchRun(); KeepFeetOnGround(); }
+            if (state != State.Dead) { FollowCrouchRun(); KeepFeetOnGround(); }
             if (rifle == null || rifleDropped || rightHand == null || leftHand == null) return;
             // The clips hold the hands close together, so the bare hand-to-hand line lies across the chest.
             // Aim the barrel through a point ahead of the support hand instead: the rifle points forward and the
             // left hand stays on the stock.
             // aim from the animated (pre-IK) support hand: the IK pulls that hand onto the rifle, so using the IK'd
             // hand here would feed back and droop the muzzle a little more every frame
+            // Advancing, the rifle is carried at port arms (set here, not by the clip: through the humanoid retarget
+            // the clip's own hand line arrives almost level). The carry is on for the whole advance, the upright
+            // walk of the first steps included; the stoop waits for the crouched run.
+            float run = Mathf.SmoothStep(0f, 1f, crouchTurn);
+            advanceCarry = Mathf.MoveTowards(advanceCarry, CrouchCarryOverride && state == State.Advance && CrouchAdvance ? 1f : 0f, Time.deltaTime * 4f);
+            float crouchCarry = CrouchCarryOverride ? Mathf.Max(run, Mathf.SmoothStep(0f, 1f, advanceCarry)) : 0f;
+            float stride = animator != null ? animator.GetCurrentAnimatorStateInfo(0).normalizedTime * Mathf.PI * 2f : 0f;
+            if (handIK != null && crouchCarry > 0f)
+            {
+                Stoop(run);
+                // the rifle's weight lags the body: the hand sinks a little after each footfall
+                handIK.ReachTrigger(CrouchTriggerHand + Vector3.up * (CrouchHandBob * Mathf.Sin(stride * 2f - 0.6f)), crouchCarry * CrouchTriggerWeight);
+            }
             var support = handIK != null && handIK.HasAnimatedHand ? handIK.AnimatedLeftHand : leftHand.position;
             var along = support + transform.forward * AimAhead - rightHand.position;
             if (along.sqrMagnitude < 0.0025f) return;
@@ -156,11 +169,12 @@ namespace FiveRivers.Combat
             // The carry eases in and out with the run clip.
             float carry = RunCarryWeight();
             if (carry > 0f) rotation = Quaternion.Slerp(rotation, transform.rotation * Quaternion.Euler(RunCarryEuler), carry);
-            // Crouched run: the clip keeps the rifle shouldered and level, so he came down the slope aiming at the sky
-            // line the whole way. Running he holds it at the low ready instead: butt at the shoulder, muzzle down
-            // and forward along the way he runs (2026-11-13).
-            float crouchCarry = Mathf.SmoothStep(0f, 1f, crouchTurn);
-            if (CrouchCarryOverride && crouchCarry > 0f) rotation = Quaternion.Slerp(rotation, transform.rotation * Quaternion.Euler(CrouchCarryEuler), crouchCarry);
+            // advancing: port arms, and it rocks with the stride. The muzzle dips at each footfall and swings toward the leading leg
+            if (crouchCarry > 0f)
+            {
+                var euler = CrouchCarryEuler + new Vector3(CrouchRock.x * Mathf.Sin(stride * 2f), CrouchRock.y * Mathf.Sin(stride), CrouchRock.z * Mathf.Sin(stride));
+                rotation = Quaternion.Slerp(rotation, transform.rotation * Quaternion.Euler(euler), crouchCarry);
+            }
             // Running, the wood passes above and to the left of the trigger wrist: the palm, not the wrist bone, lies
             // on it (with the wrist on the axis the hand sat on top of the receiver). Aiming keeps the clip's grip.
             var grip = rightHand.position + rotation * new Vector3(-TriggerWrist.x * carry, -TriggerWrist.y * carry, GripForward);
@@ -172,15 +186,29 @@ namespace FiveRivers.Combat
             // support hand under the fore-end, palms onto the wood, fingers closed round it. First only while running;
             // seen close in the flare sequence the aiming clips also left the support hand open and floating under
             // the rifle (2026-11-13), so the hands now always hold it while he is alive.
-            if (handIK != null) handIK.Shape(1f, 1f - Mathf.Max(carry, crouchCarry));
+            if (handIK != null) handIK.Shape(1f, 1f - Mathf.Max(carry, crouchCarry), crouchCarry);
         }
 
-        void TurnCrouchRun()
+        // Period footage and accounts (2026-11-15): a 1950 rifleman going forward under fire stoops low and carries
+        // the rifle in both hands across the body (port arms); a butt held in the shoulder on the run is a modern habit.
+        // The clip stands him fairly upright, so the chest is bent forward here and the head lifted back to look
+        // where he runs.
+        public static float CrouchStoop = 12f, CrouchHandBob = 0.012f;
+        Transform stoopSpine, stoopNeck;
+        void Stoop(float weight)
         {
-            if (model == null || animator == null) return;
-            float target = StateWeight(CrouchRunStateId);
-            crouchTurn = Mathf.MoveTowards(crouchTurn, target, Time.deltaTime * 4f);
-            model.localRotation = modelRestRotation * Quaternion.Euler(0f, CrouchRunYaw * Mathf.SmoothStep(0f, 1f, crouchTurn), 0f);
+            if (animator == null || !animator.isHuman || weight <= 0f || CrouchStoop == 0f) return;
+            if (stoopSpine == null) { stoopSpine = animator.GetBoneTransform(HumanBodyBones.Spine); stoopNeck = animator.GetBoneTransform(HumanBodyBones.Neck) ?? animator.GetBoneTransform(HumanBodyBones.Head); }
+            if (stoopSpine == null) return;
+            stoopSpine.rotation = Quaternion.AngleAxis(CrouchStoop * weight, transform.right) * stoopSpine.rotation;
+            if (stoopNeck != null) stoopNeck.rotation = Quaternion.AngleAxis(-CrouchStoop * 0.7f * weight, transform.right) * stoopNeck.rotation;
+        }
+
+        // how far into the crouched run he is, eased (drives the stoop and the port-arms carry)
+        void FollowCrouchRun()
+        {
+            if (animator == null) return;
+            crouchTurn = Mathf.MoveTowards(crouchTurn, StateWeight(CrouchRunStateId), Time.deltaTime * 4f);
         }
 
         // How much of the given state is on screen (follows the controller's cross-fades).
@@ -241,7 +269,9 @@ namespace FiveRivers.Combat
             rb.angularDamping = 0.6f;
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            rb.linearVelocity = -transform.forward * Random.Range(0.4f, 1.0f) + Vector3.up * 0.6f;
+            // thrown clear to one side: dropped straight down (as it was until 2026-11-15) the body came down on top of
+            // it and it lay run through his chest in the flare's last shot
+            rb.linearVelocity = transform.right * (Random.value < 0.5f ? -1f : 1f) * Random.Range(1.7f, 2.3f) + transform.forward * Random.Range(0.2f, 0.7f) + Vector3.up * 1.3f;
             rb.angularVelocity = Random.insideUnitSphere * 2.5f;
             if (body != null) Physics.IgnoreCollision(box, body);
             Destroy(rifle.gameObject, 8f);

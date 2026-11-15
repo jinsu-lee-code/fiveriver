@@ -16,7 +16,7 @@ namespace FiveRivers.Combat
         // below, so the wood lies across the palm), how far ahead of the grip the support hand holds, and how far
         // the trigger palm may be turned from the clip's own pose so the wrist is never wrung round.
         public static Vector3 SupportWrist = new Vector3(-0.09f, -0.047f, 0f);
-        public static float SupportAhead = 0.36f, MaxTriggerTurn = 75f;
+        public static float SupportAhead = 0.36f, MaxTriggerTurn = 130f;
         // Aiming (2026-11-13, against a 1944 photo of a Mosin held in the aim): the support hand cradles the fore-end
         // about a hand's span ahead of the trigger hand, just in front of the magazine, with the elbow straight under
         // the rifle. With the running values the arm reached almost straight out along the barrel, elbow to the side.
@@ -26,14 +26,13 @@ namespace FiveRivers.Combat
         // itself is this far above that axis (2026-11-11, measured on the mesh: the wood there spans 0 to 5.5 cm
         // above the axis line the support wrist used to be hung 3 cm under, which left the palm 6 cm off it).
         public static float ForeEndAbove = 0.061f;
-        // How far each joint of the support hand's fingers bends (knuckle, middle, tip; degrees): up the far side
-        // of the wood and over the top of it. The trigger hand keeps the shallower curl of a hand on the stock wrist.
-        public static Vector3 SupportCurl = new Vector3(75f, 70f, 35f);
         Animator animator;
         Transform rifle;
         Vector3 axisLocalStart, axisLocalEnd;
+        Transform rightUpper, rightFore;
         Transform leftHand, rightHand, leftUpper, leftFore, leftIndex, leftLittle, rightIndex, rightLittle;
         Transform[][] leftFingers, rightFingers;
+        Transform[] leftThumb, rightThumb;
         Quaternion leftPalmFrame, rightPalmFrame;
         readonly Dictionary<Transform, Quaternion> fingerRest = new Dictionary<Transform, Quaternion>();
         public bool Holding { get; set; } = true;
@@ -47,22 +46,29 @@ namespace FiveRivers.Combat
             rifle = weapon;
             axisLocalStart = centreLocal + Vector3.back * behind;
             axisLocalEnd = centreLocal + Vector3.forward * ahead;
+            MeasureSections();
             if (!animator.isHuman) return;
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
             rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
             leftUpper = animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
             leftFore = animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
+            rightUpper = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
+            rightFore = animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
             leftIndex = animator.GetBoneTransform(HumanBodyBones.LeftIndexProximal);
             leftLittle = animator.GetBoneTransform(HumanBodyBones.LeftLittleProximal);
             rightIndex = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal);
             rightLittle = animator.GetBoneTransform(HumanBodyBones.RightLittleProximal);
             leftFingers = Fingers(true);
             rightFingers = Fingers(false);
+            leftThumb = Thumb(true);
+            rightThumb = Thumb(false);
             leftPalmFrame = PalmFrame(leftHand, leftIndex, leftLittle, true);
             rightPalmFrame = PalmFrame(rightHand, rightIndex, rightLittle, false);
             var skeleton = animator.avatar.humanDescription.skeleton;
             foreach (var chain in leftFingers) CacheRest(chain, skeleton);
             foreach (var chain in rightFingers) CacheRest(chain, skeleton);
+            CacheRest(leftThumb, skeleton);
+            CacheRest(rightThumb, skeleton);
         }
 
         // Feet on a slope (2026-11-13, "다리 질질끌면서 내려오는 부분"): the clips lift the feet over flat ground, so
@@ -135,7 +141,12 @@ namespace FiveRivers.Combat
         // clips already grip correctly and are left exactly as they are (weight 0).
         // Call in LateUpdate, after the rifle has been placed.
         // aim: 1 when the rifle is in the aim (cover, firing), 0 while it is carried running
-        public void Shape(float weight, float aim = 0f)
+        // low: 1 while the rifle is carried low at the hip (crouched run). There the support hand takes the wood
+        // just ahead of the magazine: at the running reach the arm could not get down to it and the hand stopped
+        // in the air above the receiver (2026-11-15).
+        public static float LowSupportAhead = 0.18f;
+        public static Vector3 LowElbow = new Vector3(-0.5f, -0.6f, -0.3f);
+        public void Shape(float weight, float aim = 0f, float low = 0f)
         {
             if (weight <= 0f || !Holding || rifle == null || !Shaped) return;
             weight = Mathf.Clamp01(weight);
@@ -143,18 +154,32 @@ namespace FiveRivers.Combat
             var a = rifle.TransformPoint(axisLocalStart);
             var along = (rifle.TransformPoint(axisLocalEnd) - a).normalized;
             // the wrist goes under and to the left of the wood, so the palm (not the wrist bone) lies under it
-            var wrist = a + along * Mathf.Lerp(SupportAhead, AimSupportAhead, aim) + rifle.up * ForeEndAbove + rifle.TransformDirection(SupportWrist);
+            var wrist = a + along * Mathf.Lerp(Mathf.Lerp(SupportAhead, AimSupportAhead, aim), LowSupportAhead, low) + rifle.up * ForeEndAbove + rifle.TransformDirection(SupportWrist);
             Reach(leftUpper, leftFore, leftHand, Vector3.Lerp(leftHand.position, wrist, weight),
-                animator.transform.TransformDirection(Vector3.Lerp(RunElbow, AimElbow, aim)));
-            // trigger hand: palm against the right of the stock wrist, fingers along the wood and slightly up
-            var trigger = Quaternion.LookRotation(rifle.TransformDirection(new Vector3(0f, .35f, 1f)), -rifle.right) * Quaternion.Inverse(rightPalmFrame);
+                animator.transform.TransformDirection(Vector3.Lerp(Vector3.Lerp(RunElbow, AimElbow, aim), LowElbow, low)));
+            // trigger hand: under the small of the stock, palm up, the fingers across to its left side and up round it (2026-11-16:
+            // laid along the wood, as until then, they could only lie flat on its side and never closed round it)
+            var trigger = Quaternion.LookRotation(rifle.TransformDirection(new Vector3(-1f, 0f, .6f)), rifle.up) * Quaternion.Inverse(rightPalmFrame);
             rightHand.rotation = Quaternion.Slerp(rightHand.rotation, Quaternion.RotateTowards(rightHand.rotation, trigger, MaxTriggerTurn), weight);
             // support hand: palm up under the fore-end, fingers wrapping across to the right
             var across = rifle.TransformDirection(new Vector3(1f, .12f, .05f));
             var support = Quaternion.LookRotation(across, Vector3.Cross(rifle.forward, across)) * Quaternion.Inverse(leftPalmFrame);
             leftHand.rotation = Quaternion.Slerp(leftHand.rotation, support, weight);
-            Close(rightFingers, rightIndex, rightLittle, true, weight);
-            Close(leftFingers, leftIndex, leftLittle, false, weight);
+            Close(rightFingers, rightThumb, rightIndex, rightLittle, true, weight);
+            Close(leftFingers, leftThumb, leftIndex, leftLittle, false, weight);
+        }
+
+        // Crouched run (2026-11-15): the clip keeps the trigger hand close in against the chest, so a rifle carried at
+        // the low ready from that hand had its butt behind the shoulder, outside the arm. The trigger wrist is put
+        // where it must be for the butt to pass under the forearm by the hip: 'offset' is in the agent's own axes, from
+        // the shoulder joint. Call in LateUpdate before the rifle is placed from the hand.
+        public static Vector3 CarryElbow = new Vector3(0.25f, -0.5f, -0.8f);
+        public void ReachTrigger(Vector3 offset, float weight)
+        {
+            if (weight <= 0f || !Holding || rightUpper == null || rightFore == null || rightHand == null) return;
+            var root = animator.transform;
+            var target = rightUpper.position + root.TransformDirection(offset);
+            Reach(rightUpper, rightFore, rightHand, Vector3.Lerp(rightHand.position, target, Mathf.Clamp01(weight)), root.TransformDirection(CarryElbow));
         }
 
         // Two-bone reach: the wrist goes to the target, the elbow bends towards the hint.
@@ -176,12 +201,28 @@ namespace FiveRivers.Combat
 
         // Fingers start from the avatar's own straight joints (never a second curl on top of the clip's) and
         // bend towards the wood. The trigger finger stays long, alongside the guard.
-        void Close(Transform[][] fingers, Transform index, Transform little, bool triggerHand, float weight)
+        // The fingers close round the wood (2026-11-16). With one fixed bend per joint (as until then) they hooked
+        // over the top of it like claws, spread wide as in the rest pose, with the thumb left sticking out where the
+        // clip had it. Now each finger is first brought in beside the middle one, then bent - all three joints in
+        // proportion - just until its tip reaches the wood's surface; the thumb is laid round the other side.
+        public static float WoodRadius = 0.024f, FingersTogether = 0.6f;   // WoodRadius: only if the rifle mesh cannot be read
+        static readonly Vector3 CurlShare = new Vector3(1f, 0.95f, 0.6f);
+        void Close(Transform[][] fingers, Transform[] thumb, Transform index, Transform little, bool triggerHand, float weight)
         {
             var axis = (index.position - little.position).normalized;
             // the support hand closes round the fore-end wood, the trigger hand round the stock wrist
             var stockA = rifle.TransformPoint(axisLocalStart) + (triggerHand ? Vector3.zero : rifle.up * ForeEndAbove);
             var stockDirection = rifle.forward;
+            var middle = fingers.Length > 1 && fingers[1][0] != null && fingers[1][1] != null ? fingers[1] : null;
+            var middleWay = Vector3.zero;
+            if (middle != null)
+            {
+                // the middle finger's rest direction, before anything is bent
+                Quaternion m0 = middle[0].localRotation, m1 = middle[1].localRotation;
+                middle[0].localRotation = fingerRest[middle[0]]; middle[1].localRotation = fingerRest[middle[1]];
+                middleWay = (middle[1].position - middle[0].position).normalized;
+                middle[0].localRotation = m0; middle[1].localRotation = m1;
+            }
             for (int finger = 0; finger < fingers.Length; finger++)
             {
                 var chain = fingers[finger];
@@ -189,20 +230,134 @@ namespace FiveRivers.Combat
                 Quaternion clip0 = chain[0].localRotation, clip1 = chain[1].localRotation, clip2 = chain[2].localRotation;
                 foreach (var bone in chain) bone.localRotation = fingerRest[bone];
                 var knuckle = chain[0].position;
-                var onAxis = stockA + stockDirection * Vector3.Dot(knuckle - stockA, stockDirection);
-                var inward = onAxis - knuckle;
+                if (middle != null && chain != middle)
+                {
+                    // in beside the middle finger
+                    var way = (chain[1].position - knuckle).normalized;
+                    chain[0].rotation = Quaternion.FromToRotation(way, Vector3.Slerp(way, middleWay, FingersTogether)) * chain[0].rotation;
+                }
+                var inward = WoodMiddle(knuckle, stockA, stockDirection) - knuckle;
                 float sign = Vector3.Dot(Vector3.Cross(axis, chain[1].position - knuckle), inward) >= 0f ? 1f : -1f;
-                bool triggerFinger = triggerHand && finger == 0;
-                var curl = triggerFinger ? new Vector3(12f, 18f, 8f) : triggerHand ? new Vector3(32f, 58f, 24f) : SupportCurl;
-                chain[0].rotation = Quaternion.AngleAxis(sign * curl.x, axis) * chain[0].rotation;
-                chain[1].rotation = Quaternion.AngleAxis(sign * curl.y, axis) * chain[1].rotation;
-                chain[2].rotation = Quaternion.AngleAxis(sign * curl.z, axis) * chain[2].rotation;
+                if (triggerHand)
+                    // round the narrow wrist of the stock (its section is measured with the trigger guard in it, so the
+                    // trigger hand's fingers take a set curl); the forefinger lies in the guard, less bent
+                    Bend(chain, axis, sign, finger == 0 ? new Vector3(30f, 45f, 25f) : new Vector3(55f, 75f, 45f));
+                else
+                {
+                    var rest0 = chain[0].localRotation;
+                    float best = 0f, bestGap = float.MaxValue;
+                    for (float angle = 10f; angle <= 110f; angle += 5f)
+                    {
+                        chain[0].localRotation = rest0; chain[1].localRotation = fingerRest[chain[1]]; chain[2].localRotation = fingerRest[chain[2]];
+                        Bend(chain, axis, sign, CurlShare * angle);
+                        var tip = chain[2].position + (chain[2].position - chain[1].position) * 0.85f;
+                        float outside = OutsideWood(tip, stockA, stockDirection);
+                        if (Mathf.Abs(outside) < bestGap) { bestGap = Mathf.Abs(outside); best = angle; }
+                        if (outside < 0f) break;   // the tip has come round onto the wood: further only digs in
+                    }
+                    chain[0].localRotation = rest0; chain[1].localRotation = fingerRest[chain[1]]; chain[2].localRotation = fingerRest[chain[2]];
+                    Bend(chain, axis, sign, CurlShare * best);
+                }
                 if (weight >= 1f) continue;
                 // easing in and out of the run: part of the way from the clip's own fingers
                 chain[0].localRotation = Quaternion.Slerp(clip0, chain[0].localRotation, weight);
                 chain[1].localRotation = Quaternion.Slerp(clip1, chain[1].localRotation, weight);
                 chain[2].localRotation = Quaternion.Slerp(clip2, chain[2].localRotation, weight);
             }
+            LayThumb(thumb, stockA, stockDirection, triggerHand, weight);
+        }
+
+        static void Bend(Transform[] chain, Vector3 axis, float sign, Vector3 curl)
+        {
+            chain[0].rotation = Quaternion.AngleAxis(sign * curl.x, axis) * chain[0].rotation;
+            chain[1].rotation = Quaternion.AngleAxis(sign * curl.y, axis) * chain[1].rotation;
+            chain[2].rotation = Quaternion.AngleAxis(sign * curl.z, axis) * chain[2].rotation;
+        }
+
+        // The rifle's cross-section along its length, measured on its mesh when it is bound: the middle and the
+        // half-thickness of what a hand closes round at each place (the stock axis used for the arms runs through
+        // the middle of the whole rifle, which at the wrist of the stock is well below the wood).
+        const int Sections = 96;
+        readonly Vector2[] sectionMiddle = new Vector2[Sections];
+        readonly float[] sectionRadius = new float[Sections];
+        float sectionFrom, sectionStep;
+        bool measured;
+
+        void MeasureSections()
+        {
+            measured = false;
+            if (rifle == null) return;
+            var points = new List<Vector3>();
+            foreach (var filter in rifle.GetComponentsInChildren<MeshFilter>(true))
+            {
+                if (filter.sharedMesh == null || !filter.sharedMesh.isReadable) continue;
+                var toRifle = rifle.worldToLocalMatrix * filter.transform.localToWorldMatrix;
+                foreach (var v in filter.sharedMesh.vertices) points.Add(toRifle.MultiplyPoint3x4(v));
+            }
+            if (points.Count < 50) return;
+            float from = float.MaxValue, to = float.MinValue;
+            foreach (var p in points) { from = Mathf.Min(from, p.z); to = Mathf.Max(to, p.z); }
+            sectionFrom = from; sectionStep = (to - from) / Sections;
+            var low = new Vector2[Sections]; var high = new Vector2[Sections];
+            for (int i = 0; i < Sections; i++) { low[i] = Vector2.one * float.MaxValue; high[i] = Vector2.one * float.MinValue; }
+            foreach (var p in points)
+            {
+                int i = Mathf.Clamp((int)((p.z - from) / sectionStep), 0, Sections - 1);
+                low[i] = Vector2.Min(low[i], new Vector2(p.x, p.y)); high[i] = Vector2.Max(high[i], new Vector2(p.x, p.y));
+            }
+            for (int i = 0; i < Sections; i++)
+            {
+                if (low[i].x > high[i].x) { low[i] = i > 0 ? low[i - 1] : Vector2.zero; high[i] = i > 0 ? high[i - 1] : Vector2.zero; }
+                sectionMiddle[i] = (low[i] + high[i]) * 0.5f;
+                sectionRadius[i] = ((high[i].x - low[i].x) + (high[i].y - low[i].y)) * 0.25f;
+            }
+            measured = true;
+        }
+
+        // The middle of the wood level with a point (the measured section; the arm axis if there is none).
+        Vector3 WoodMiddle(Vector3 point, Vector3 a, Vector3 direction)
+        {
+            if (!measured) return a + direction * Vector3.Dot(point - a, direction);
+            var local = rifle.InverseTransformPoint(point);
+            int i = Mathf.Clamp((int)((local.z - sectionFrom) / sectionStep), 0, Sections - 1);
+            return rifle.TransformPoint(new Vector3(sectionMiddle[i].x, sectionMiddle[i].y, local.z));
+        }
+
+        // How far a point is outside the wood (negative: inside), using the measured section where it is.
+        float OutsideWood(Vector3 point, Vector3 a, Vector3 direction)
+        {
+            if (!measured) return Vector3.Cross(point - a, direction).magnitude - WoodRadius;
+            var local = rifle.InverseTransformPoint(point);
+            int i = Mathf.Clamp((int)((local.z - sectionFrom) / sectionStep), 0, Sections - 1);
+            var offset = new Vector2(local.x, local.y) - sectionMiddle[i];
+            float scale = rifle.lossyScale.x;
+            return (offset.magnitude - sectionRadius[i]) * scale;
+        }
+
+        // The thumb goes round the other side of the wood from the fingers: on the stock wrist over the top of it,
+        // at the fore-end along its near side, pointing a little forward.
+        void LayThumb(Transform[] thumb, Vector3 stockA, Vector3 stockDirection, bool triggerHand, float weight)
+        {
+            if (thumb == null || thumb[0] == null || thumb[1] == null || thumb[2] == null) return;
+            Quaternion clip0 = thumb[0].localRotation, clip1 = thumb[1].localRotation, clip2 = thumb[2].localRotation;
+            foreach (var bone in thumb) bone.localRotation = fingerRest[bone];
+            var root = thumb[0].position;
+            var onAxis = WoodMiddle(root, stockA, stockDirection);
+            var away = root - onAxis; away -= stockDirection * Vector3.Dot(away, stockDirection);
+            var side = triggerHand ? rifle.up : away.normalized;
+            var target = onAxis + side * (WoodRadius + 0.006f) + stockDirection * 0.05f;
+            var tip = thumb[2].position + (thumb[2].position - thumb[1].position) * 0.8f;
+            thumb[0].rotation = Quaternion.FromToRotation(tip - root, target - root) * thumb[0].rotation;
+            if (weight >= 1f) return;
+            thumb[0].localRotation = Quaternion.Slerp(clip0, thumb[0].localRotation, weight);
+            thumb[1].localRotation = Quaternion.Slerp(clip1, thumb[1].localRotation, weight);
+            thumb[2].localRotation = Quaternion.Slerp(clip2, thumb[2].localRotation, weight);
+        }
+
+        Transform[] Thumb(bool left)
+        {
+            int first = (int)(left ? HumanBodyBones.LeftThumbProximal : HumanBodyBones.RightThumbProximal);
+            return new[] { animator.GetBoneTransform((HumanBodyBones)first), animator.GetBoneTransform((HumanBodyBones)(first + 1)), animator.GetBoneTransform((HumanBodyBones)(first + 2)) };
         }
 
         Transform[][] Fingers(bool left)

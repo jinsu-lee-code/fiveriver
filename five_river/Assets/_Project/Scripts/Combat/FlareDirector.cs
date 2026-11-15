@@ -44,9 +44,11 @@ namespace FiveRivers.Combat
                     break;
                 case FlowSection.Assault:
                     Schedule(config.assaultFirstDelay, true);
+                    KpaSignalFlare.Fire(SignalFrom(new Vector3(0f, 0f, 112f)));   // from behind their line on the far slope
                     break;
                 case FlowSection.WestAssault:
                     LaunchWest();
+                    KpaSignalFlare.Fire(SignalFrom(new Vector3(-52f, 0f, 62f)));  // and from the western ridge
                     break;
                 case FlowSection.Title:
                 case FlowSection.Tutorial:
@@ -57,6 +59,14 @@ namespace FiveRivers.Combat
                     nextLaunch = float.PositiveInfinity; // 이미 뜬 조명탄은 다 타고 꺼진다
                     break;
             }
+        }
+
+        // the enemy's own green signal flare goes up from the ground where they form up (see KpaSignalFlare)
+        static Vector3 SignalFrom(Vector3 at)
+        {
+            var terrain = Terrain.activeTerrain;
+            if (terrain != null) at.y = terrain.SampleHeight(at) + terrain.transform.position.y;
+            return at;
         }
 
         void OnRetry(FlowCheckpoint checkpoint)

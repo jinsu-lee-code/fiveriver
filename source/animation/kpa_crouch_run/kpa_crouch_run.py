@@ -51,6 +51,14 @@ CFG = dict(
 )
 
 
+# Variants: --charge  the enemies' run (A_KPA_CrouchRun_Charge.fbx, 2026-11-15). A step of the clip above covers
+# only 0.87 m, so at the 3.4 m/s advance it played at 1.7x and the feet pattered at 4.4 steps a second. The legs are
+# already 98% straight at the ends of the stance, so the stride is lengthened the way a run does it: a shorter
+# contact, a longer flight, the hips a little lower. The allies keep the clip above for their 2.2 m/s advance.
+if '--charge' in sys.argv:
+    CFG.update(stance={'Left': (10, 16), 'Right': (22, 5)}, stance_speed=11.5, hips_drop=7.0)
+
+
 def norm(v):
     v = Vector(v)
     return v.normalized() if v.length > 1e-9 else v
