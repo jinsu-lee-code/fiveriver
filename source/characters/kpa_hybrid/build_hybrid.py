@@ -181,6 +181,7 @@ for hi_, path in enumerate(heads):
     keep_from = hneck * k + off[up] - 0.06   # below the bust's own flat cut (rebake_head.py): nothing is dropped
     # the body's own neck runs inside the bottom of the head's: pushed out 4 mm there the head's skin always lies
     # over it (where both sat on the same surface they flickered through each other as torn shards, 2026-11-16)
+    if hi_ == 0: hv_neck_ring = hv[np.abs(hv[:, up] - (hneck * k + off[up] - 0.02)) < 0.006]
     fade = np.clip((hneck * k + off[up] + 0.01 - hv[:, up]) / 0.02, 0, 1)
     hv = hv + hn * (0.004 * fade)[:, None]
     zj0, zj1 = oj[P + 'Neck'][up], oj[P + 'Head'][up]
@@ -232,6 +233,15 @@ if heads:
     px = np.empty(img.size[0] * img.size[1] * 4, np.float32); img.pixels.foreach_get(px)
     skin_tex = px.reshape(img.size[1], img.size[0], 4)[..., :3]
 neck_axis = (oj[P + 'Neck'] + oj[P + 'Head']) / 2
+neck_r = 0.058
+if heads:
+    # the joints sit toward the back of the neck: the middle of the head's own neck ring at the level is used
+    ring = hv_neck_ring if 'hv_neck_ring' in globals() else None
+    if ring is not None and len(ring) > 20:
+        for k_ in (ax, 3 - ax - up): neck_axis[k_] = (ring[:, k_].max() + ring[:, k_].min()) / 2
+        dd = ring - neck_axis; dd[:, up] = 0; neck_r = float(np.median(np.linalg.norm(dd, axis=1)))
+        print('NECK axis moved to the head ring, radius %.3f' % neck_r)
+facing = float(np.sign((oj[P + 'LeftToeBase'] - oj[P + 'LeftFoot'])[depth]))   # +1 if the toes point along +depth
 def neck_skin(poly, c):
     # skin, or the white of the shirt inside the collar (it showed as a pale sliver beside the head's neck)
     if skin_tex is None or not (zneck - 0.07 < c[up] <= zneck + 0.04): return False
@@ -244,11 +254,21 @@ def neck_skin(poly, c):
 def collar_cloth(poly, c):
     # above the cut level only the stand of the collar may stay: khaki, and outside the neck
     if skin_tex is None or np.linalg.norm((c - neck_axis) * (np.arange(3) != up)) < 0.065: return False
+    # only the back and sides stand up past the level: the front ends of the collar there were loose shards
+    # beside the chin (2026-11-16)
+    if (c - neck_axis)[depth] * facing > -0.01: return False
     uvs = np.array([nuv[li].uv[:] for li in poly.loop_indices]).mean(0)
     h, w = skin_tex.shape[:2]
     r, g, b = skin_tex[min(h - 1, int(uvs[1] % 1 * h)), min(w - 1, int(uvs[0] % 1 * w))]
     return 0.25 < g < 0.75 and abs(r - g) < 0.08 and g - b > 0.05
+def inside_collar(c):
+    # Whatever of the body lies inside the head's neck (which runs 4.5 cm down into the collar) is never meant to
+    # be seen: its lining and the cut ends of the collar's front came through round the neck as dark and pale
+    # shards whatever their colour (2026-11-16). The front ends of the collar near the level go as well.
+    d = c - neck_axis; d[up] = 0; r = np.linalg.norm(d)
+    return zneck - 0.05 < c[up] and r < neck_r - 0.012   # well inside the head's neck only: the collar itself stays
 kept = cut = neckcut = 0
+keep_polys = []
 for poly in nm.data.polygons:
     c = nv[list(poly.vertices)].mean(0)
     if past_wrist(c, 0.012): cut += 1; continue
@@ -256,10 +276,30 @@ for poly in nm.data.polygons:
     # came out in saw teeth); everything else above the level is the body's own head and goes
     if heads and c[up] > zneck + 0.04: cut += 1; continue
     if neck_skin(poly, c): neckcut += 1; continue
+    if heads and inside_collar(c): neckcut += 1; continue
     if heads and c[up] > zneck and not collar_cloth(poly, c): cut += 1; continue
+    keep_polys.append(poly)
+# Shards (2026-11-16): what the cuts round the neck leave behind as small loose pieces of collar - a few faces no
+# longer joined to the jacket - stood out beside the chin. Pieces of fewer than 60 faces near the neck are dropped.
+parent = {}
+def find(x):
+    while parent.setdefault(x, x) != x: parent[x] = parent[parent[x]]; x = parent[x]
+    return x
+for poly in keep_polys:
+    vs = list(poly.vertices)
+    for v in vs[1:]: parent[find(v)] = find(vs[0])
+size = {}
+for poly in keep_polys: r_ = find(poly.vertices[0]); size[r_] = size.get(r_, 0) + 1
+shards = 0
+for poly in keep_polys:
+    c = nv[list(poly.vertices)].mean(0)
+    if heads and size[find(poly.vertices[0])] < 60 and c[up] > zneck - 0.12:
+        d = c - neck_axis; d[up] = 0
+        if np.linalg.norm(d) < 0.16: shards += 1; continue
     ids = [corner('n', nm.data.loops[li].vertex_index, nv[nm.data.loops[li].vertex_index], nn[nm.data.loops[li].vertex_index], tuple(nuv[li].uv), nw[nm.data.loops[li].vertex_index]) for li in poly.loop_indices]
     for k in range(1, len(ids) - 1): subs[0].append((ids[0], ids[k], ids[k + 1]))
     kept += 1
+print('SHARDS dropped %d faces' % shards)
 ouv = om.data.uv_layers.active.data
 mats = [m.name for m in om.data.materials]
 print('OLD MATERIALS', mats)
