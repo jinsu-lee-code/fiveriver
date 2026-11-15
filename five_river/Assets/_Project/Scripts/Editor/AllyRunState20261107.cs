@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace FiveRivers.EditorTools
 {
-    // Gives the ROK riflemen a rifle run for the hill assault (they used to "run" by playing the tired walk at
-    // double speed). The KPA rifle run is a humanoid clip, so it retargets onto the ROK avatars. The state has no
+    // Gives the ROK riflemen a port-arms run for the hill assault. The humanoid clip retargets onto the ROK avatars. The state has no
     // transitions: HillAllies cross-fades into and out of it directly. Safe to run more than once.
     public static class AllyRunState20261107
     {
         public const string State = "Run_Rifle";
-        const string Clip = "Assets/_Project/Art/Animations/KPA/A_KPA_Run_Rifle.fbx";
+        const string Clip = "Assets/_Project/Art/Animations/ROK/A_ROK_Run_PortArms.fbx";
         static readonly string[] Controllers =
         {
             "Assets/_Project/Art/Animations/AC_ROK.controller",
@@ -29,14 +28,17 @@ namespace FiveRivers.EditorTools
                 var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
                 if (controller == null) { Debug.LogWarning("[Ally run] Missing " + path); continue; }
                 var machine = controller.layers[0].stateMachine;
-                bool exists = false;
-                foreach (var s in machine.states) if (s.state.name == State) exists = true;
-                if (exists) continue;
-                var state = machine.AddState(State, new Vector3(500f, 260f, 0f));
+                AnimatorState state = null;
+                foreach (var s in machine.states) if (s.state.name == State) { state = s.state; break; }
+                if (state == null)
+                {
+                    state = machine.AddState(State, new Vector3(500f, 260f, 0f));
+                    state.writeDefaultValues = true;
+                }
                 state.motion = run;
-                state.writeDefaultValues = true;
+                EditorUtility.SetDirty(state);
                 EditorUtility.SetDirty(controller);
-                Debug.Log("[Ally run] Added " + State + " to " + path);
+                Debug.Log("[Ally run] Connected " + State + " in " + path);
             }
             AssetDatabase.SaveAssets();
         }

@@ -111,7 +111,58 @@ def collapse_stats(P, label):
     r = area[rt] / area0[rt]
     return f"{label}: crushed(<0.5)={int((r<0.5).sum())} severe(<0.25)={int((r<0.25).sum())} stretched(>2)={int((r>2).sum())} of {int(rt.sum())}"
 
-top, tw = smooth(W0)
+def anchor_clavicle(indices, weights):
+    # 이 메시의 목뼈 기준 바인드 좌표. 앞쪽은 -Y, 위쪽은 +Z다.
+    chest, neck, head = (B[name] for name in ("Spine2", "Neck", "Head"))
+    neck_origin = np.linalg.inv(BP.astype(np.float32))[neck, :3, 3]
+    mm = (V - neck_origin) * 160_000
+    weights = weights.astype(np.float32)
+
+    def fade(value, start, end):
+        t = np.clip((value - start) / (end - start), 0., 1.)
+        return t * t * (3. - 2. * t)
+
+    skin = np.unique(subs[2])
+    lower = skin[mm[skin, 2] < 159.]
+    assert np.allclose(np.where(indices[lower] == head, weights[lower], 0.).sum(1), 1.)
+    assert all(not np.intersect1d(lower, subs[slot]).size for slot in (0, 1, 3, 4))
+    height = mm[lower, 2]
+    neck_motion = fade(height, 82., 142.)
+    head_motion = fade(height, 115., 159.)
+    rows = np.c_[1. - neck_motion, neck_motion * (1. - head_motion),
+                 neck_motion * head_motion, np.zeros(len(lower))]
+    order = np.argsort(-rows, axis=1, kind='stable')
+    weights[lower] = np.take_along_axis(rows, order, 1)
+    indices[lower] = np.where(weights[lower] > 0., np.array([chest, neck, head, 0])[order], 0)
+
+    # 옷깃 아래는 쇄골처럼 가슴을 따르고, 위로 갈수록 목을 따라 완만하게 굽힌다.
+    # 머리뼈의 큰 회전이 옷깃을 당기면 목 밑동과 옷깃 사이에 꺾임이 생긴다.
+    cloth = np.unique(subs[0])
+    x, y, z = mm[cloth].T
+    transfer = ((1. - fade(abs(x), 65., 171.)) * fade(-y, -58., 7.)
+                * fade(z, -75., 22.) * (1. - fade(z, 167., 213.)))
+    collar = cloth[transfer > .0001]
+    assert all(not np.intersect1d(collar, subs[slot]).size for slot in (1, 2, 3, 4))
+    rows = np.zeros((len(collar), nb), dtype=np.float32)
+    for k in range(4):
+        rows[np.arange(len(collar)), indices[collar, k]] += weights[collar, k]
+    moved = rows[:, [neck, head]] * transfer[transfer > .0001, None]
+    rows[:, [neck, head]] -= moved
+    moved_total = moved.sum(1)
+    neck_share = fade(mm[collar, 2], 40., 154.)
+    rows[:, neck] += moved_total * neck_share
+    rows[:, chest] += moved_total * (1. - neck_share)
+    can_transfer = (moved_total > .0001) & (np.count_nonzero(rows > 0., axis=1) <= 4)
+    collar, rows = collar[can_transfer], rows[can_transfer]
+    order = np.argsort(-rows, axis=1, kind='stable')[:, :4]
+    collar_weights = np.take_along_axis(rows, order, 1)
+    weights[collar] = collar_weights / collar_weights.sum(1, keepdims=True)
+    indices[collar] = np.where(weights[collar] > 0., order, 0)
+    assert np.allclose(weights[np.r_[lower, collar]].sum(1), 1.)
+    return indices, weights
+
+
+top, tw = anchor_clavicle(*smooth(W0))
 W1 = dense(top, tw)
 report = [f"region vertices={int(region.sum())} iter={ITER} lam={LAM}"]
 posed = {}

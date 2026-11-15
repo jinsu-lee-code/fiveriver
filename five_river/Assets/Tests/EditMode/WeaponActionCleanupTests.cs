@@ -167,6 +167,40 @@ namespace FiveRivers.Tests
         }
 
         [Test]
+        public void SwitchingShowsAndRaisesIncomingWeaponOnceBeforeItCanAct()
+        {
+            int lowered = 0, raised = 0;
+            holder.Lowering += (slot, _) =>
+            {
+                Assert.AreEqual(WeaponSlot.M1, slot);
+                Assert.IsTrue(holder.Switching);
+                lowered++;
+            };
+            holder.Raising += (slot, _) =>
+            {
+                Assert.AreEqual(WeaponSlot.Bazooka, slot);
+                Assert.AreEqual(WeaponSlot.M1, holder.Current);
+                Assert.IsTrue(holder.Switching);
+                Assert.IsTrue(bazooka.Model.gameObject.activeSelf);
+                Assert.IsFalse(rifle.Model.gameObject.activeSelf);
+                raised++;
+            };
+            Call(holder, "BeginSwitch", WeaponSlot.Bazooka);
+            Set(holder, "hideAt", Time.time - 1f);
+            Set(holder, "switchEnd", Time.time + 10f);
+            Call(holder, "Update");
+            Call(holder, "Update");
+            Assert.AreEqual(1, lowered);
+            Assert.AreEqual(1, raised);
+            Assert.AreEqual(0, switched);
+            Set(holder, "switchEnd", Time.time - .5f);
+            Call(holder, "Update");
+            Assert.AreEqual(1, raised);
+            Assert.AreEqual(1, switched);
+            Assert.AreEqual(WeaponSlot.Bazooka, holder.Current);
+        }
+
+        [Test]
         public void FullModeBlockerPreservesPendingSwitch()
         {
             Call(holder, "BeginSwitch", WeaponSlot.Bazooka);

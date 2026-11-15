@@ -14,7 +14,7 @@ namespace FiveRivers.Tests
         static readonly string[] Loops =
         {
             "KPA/A_KPA_Idle_Aim", "KPA/A_KPA_Walk_Rifle", "KPA/A_KPA_Run_Rifle", "KPA/A_KPA_CrouchRun", "KPA/A_KPA_Crouch_Aim",
-            "ROK/A_ROK_Idle_Trench", "ROK/A_ROK_Walk_Tired", "ROK/A_ROK_Idle_Stand", "FP/A_FP_M1_Idle", "FP/A_FP_M1_Sprint", "FP/A_FP_Bazooka_Idle",
+            "ROK/A_ROK_Idle_Trench", "ROK/A_ROK_Walk_Tired", "ROK/A_ROK_Idle_Stand", "ROK/A_ROK_Run_PortArms", "FP/A_FP_M1_Idle", "FP/A_FP_M1_Sprint", "FP/A_FP_Bazooka_Idle",
         };
 
         static readonly string[] OneShots =
@@ -40,6 +40,84 @@ namespace FiveRivers.Tests
         public void LoopClips_AreLooping()
         {
             foreach (var rel in Loops) Assert.IsTrue(ClipOf(rel).isLooping, "Loop Time: " + rel);
+        }
+
+        [TestCase("Assets/_Project/Art/Animations/AC_ROK.controller")]
+        [TestCase("Assets/_Project/Art/CharacterVariants/ParkCombatFootPlacement20261106/AC_ROK_ParkCombatFootIK.controller")]
+        public void AllyRun_UsesRokPortArms(string path)
+        {
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+            Assert.IsNotNull(controller, path);
+            var state = controller.layers[0].stateMachine.states.Select(s => s.state).SingleOrDefault(s => s.name == "Run_Rifle");
+            Assert.IsNotNull(state, path + "/Run_Rifle");
+            Assert.AreSame(ClipOf("ROK/A_ROK_Run_PortArms"), state.motion, path);
+        }
+
+        [Test]
+        public void PortArmsRun_HasHumanoidRigTimingAndBakedRoot()
+        {
+            var clip = ClipOf("ROK/A_ROK_Run_PortArms");
+            Assert.IsTrue(clip.isHumanMotion);
+            Assert.GreaterOrEqual(clip.frameRate, 30f);
+            Assert.That(clip.length, Is.InRange(.699f, .801f));
+            var importer = (ModelImporter)AssetImporter.GetAtPath(Dir + "ROK/A_ROK_Run_PortArms.fbx");
+            Assert.IsTrue(importer.clipAnimations.Single().lockRootPositionXZ);
+        }
+
+        [Test]
+        public void ParkStandingFootIK_PreservesOtherStatesAndRegularController()
+        {
+            var park = AssetDatabase.LoadAssetAtPath<AnimatorController>("Assets/_Project/Art/CharacterVariants/ParkCombatFootPlacement20261106/AC_ROK_ParkCombatFootIK.controller");
+            Assert.IsTrue(park.layers[0].iKPass);
+            foreach (var child in park.layers[0].stateMachine.states)
+                Assert.AreEqual(child.state.name == "Idle_Stand" || child.state.name == "Walk_Tired", child.state.iKOnFeet, child.state.name);
+            var regular = AssetDatabase.LoadAssetAtPath<AnimatorController>("Assets/_Project/Art/Animations/AC_ROK.controller");
+            Assert.IsFalse(regular.layers[0].iKPass);
+            Assert.IsTrue(regular.layers[0].stateMachine.states.All(s => !s.state.iKOnFeet));
+        }
+
+        [Test]
+        public void ParkFootGroundSeparation_AllowsStrideOnContinuousSlope()
+        {
+            var normal = Quaternion.Euler(-22f, 0f, 0f) * Vector3.up;
+            var first = Vector3.zero;
+            var second = new Vector3(0f, Mathf.Tan(22f * Mathf.Deg2Rad) * .6f, .6f);
+            Assert.That(GroundSeparation(first, normal, second, normal), Is.LessThan(.00001f));
+        }
+
+        [Test]
+        public void ParkFootGroundSeparation_RejectsStepBetweenFlatSurfaces()
+        {
+            Assert.That(GroundSeparation(Vector3.zero, Vector3.up, new Vector3(0f, .2f, .6f), Vector3.up), Is.GreaterThan(.12f));
+        }
+
+        static float GroundSeparation(Vector3 first, Vector3 firstNormal, Vector3 second, Vector3 secondNormal)
+        {
+            var method = typeof(FiveRivers.Combat.ParkCombatFootPlacement).GetMethod("GroundSeparation", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            Assert.IsNotNull(method, "Slope discontinuity must be measured relative to the support plane.");
+            return (float)method.Invoke(null, new object[] { first, firstNormal, second, secondNormal });
+        }
+
+        [Test]
+        public void ParkStandingDrop_LowersOnlyEnoughForMeasuredSupportLeg()
+        {
+            var hip = new Vector3(-8.291367f, 22.2265034f, 109.358528f);
+            var target = new Vector3(-8.357265f, 21.4618f, 109.2903f);
+            Assert.That(StandingDrop(hip, target, .7008215f), Is.EqualTo(.070339f).Within(.0001f));
+        }
+
+        [Test]
+        public void ParkStandingDrop_LeavesReachableAndHorizontallyUnreachableGoalsAlone()
+        {
+            Assert.That(StandingDrop(Vector3.up, new Vector3(0f, .1f, 0f), 1f), Is.Zero);
+            Assert.That(StandingDrop(Vector3.up, Vector3.right * 2f, 1f), Is.Zero);
+        }
+
+        static float StandingDrop(Vector3 hip, Vector3 target, float length)
+        {
+            var method = typeof(FiveRivers.Combat.ParkCombatFootPlacement).GetMethod("RequiredStandingDrop", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            Assert.IsNotNull(method, "Only the measured support-leg reach shortfall should lower the body.");
+            return (float)method.Invoke(null, new object[] { hip, target, length });
         }
 
         [Test]

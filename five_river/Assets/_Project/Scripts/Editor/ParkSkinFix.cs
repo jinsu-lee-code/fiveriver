@@ -1,4 +1,5 @@
 using System.IO;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -49,16 +50,64 @@ namespace FiveRivers.EditorTools
                 mesh.tangents = updated;
             }
             mesh.name = "ROK_ParkYongpal_SkinFix";
+            TrimSleeveOverlap(mesh);
             Directory.CreateDirectory(Folder);
             var previous = AssetDatabase.LoadAssetAtPath<Mesh>(AssetPath);
             if (previous == null) AssetDatabase.CreateAsset(mesh, AssetPath);
-            else { EditorUtility.CopySerialized(mesh, previous); Object.DestroyImmediate(mesh); mesh = previous; }
+            else
+            {
+                KeepCallShapes(previous, mesh);
+                EditorUtility.CopySerialized(mesh, previous);
+                Object.DestroyImmediate(mesh);
+                mesh = previous;
+            }
             AssetDatabase.SaveAssets();
             renderer.sharedMesh = mesh;
             EditorUtility.SetDirty(renderer);
             EditorSceneManager.MarkSceneDirty(actor.scene);
             EditorSceneManager.SaveScene(actor.scene);
             Debug.Log("[ParkSkinFix] applied: " + AssetPath + " vertices=" + mesh.vertexCount);
+        }
+
+        internal static void TrimSleeveOverlap(Mesh mesh)
+        {
+            const int ArmSkin = 4;
+            // 원본 바인드 자세에서 말린 소매 안쪽에 묻히는 팔 피부만 제거한다.
+            const float InnerSleeveX = .00278125f;
+            if (mesh.vertexCount != 145960 || mesh.subMeshCount != 5)
+                throw new InvalidDataException("Park sleeve trim requires the delivered Park skin topology.");
+
+            var positions = mesh.vertices;
+            var triangles = mesh.GetTriangles(ArmSkin);
+            var visible = new List<int>(triangles.Length);
+            for (int i = 0; i < triangles.Length; i += 3)
+            {
+                int a = triangles[i], b = triangles[i + 1], c = triangles[i + 2];
+                if (Mathf.Abs(positions[a].x) < InnerSleeveX && Mathf.Abs(positions[b].x) < InnerSleeveX
+                    && Mathf.Abs(positions[c].x) < InnerSleeveX) continue;
+                visible.Add(a);
+                visible.Add(b);
+                visible.Add(c);
+            }
+            if (visible.Count != triangles.Length) mesh.SetTriangles(visible, ArmSkin, false);
+        }
+
+        static void KeepCallShapes(Mesh previous, Mesh mesh)
+        {
+            if (previous.blendShapeCount == 0 || previous.vertexCount != mesh.vertexCount) return;
+            var positions = new Vector3[mesh.vertexCount];
+            var normals = new Vector3[mesh.vertexCount];
+            var tangents = new Vector3[mesh.vertexCount];
+            foreach (string name in new[] { "ParkCallOpen", "ParkCallRound" })
+            {
+                int shape = previous.GetBlendShapeIndex(name);
+                if (shape < 0 || mesh.GetBlendShapeIndex(name) >= 0) continue;
+                for (int frame = 0; frame < previous.GetBlendShapeFrameCount(shape); frame++)
+                {
+                    previous.GetBlendShapeFrameVertices(shape, frame, positions, normals, tangents);
+                    mesh.AddBlendShapeFrame(name, previous.GetBlendShapeFrameWeight(shape, frame), positions, normals, tangents);
+                }
+            }
         }
 
         static BoneWeight[] ReadWeights(string path, int count)

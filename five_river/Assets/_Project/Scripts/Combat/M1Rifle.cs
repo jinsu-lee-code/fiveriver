@@ -35,6 +35,7 @@ namespace FiveRivers.Combat
         public ReloadKind ReloadKind { get; private set; }
         public float AimBlend => aimBlend;
         public Transform Model => model;
+        public float ReloadDuration => reloadDuration;
         public float ReloadProgress => Reloading ? Mathf.Clamp01((Time.time - reloadStart) / Mathf.Max(0.01f, reloadDuration)) : 0f;
 
         public event Action Fired;

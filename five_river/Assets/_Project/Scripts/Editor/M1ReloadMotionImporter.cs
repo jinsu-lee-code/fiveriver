@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace FiveRivers.EditorTools
 {
-    // Imports the Blender-authored M1 reload (C:/sk_anim/reload_partial_baked.json) as a Resources asset.
+    // Imports source/animation/reload_partial_baked.json as a Resources asset.
     // The JSON holds Unity-space matrices (column-major) for the grip target and the carried clip,
     // and local rotations (x, y, z, w) for every right-hand bone.
     public static class M1ReloadMotionImporter
     {
-        const string Source = "C:/sk_anim/reload_partial_baked.json";
+        static readonly string Source = Path.GetFullPath(Path.Combine(Application.dataPath, "../../source/animation/reload_partial_baked.json"));
         public const string AssetPath = "Assets/_Project/Art/Resources/M1_ReloadMotion.asset";
 
         [MenuItem("FiveRivers/Animation/Import M1 Reload Motion (Blender)")]

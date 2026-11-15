@@ -5,6 +5,7 @@ using UnityEngine;
 namespace FiveRivers.Combat
 {
     // 탄약 상자 가까이에서 F: M1 예비탄을 가득 채우고, 바주카를 받았으면 로켓도 채운다.
+    [DefaultExecutionOrder(20)]
     public sealed class Resupplier : MonoBehaviour
     {
         [SerializeField] WeaponConfig config;
@@ -37,7 +38,7 @@ namespace FiveRivers.Combat
                 }
             }
 
-            if (Nearby != null && player.Gate.CanAct && player.Controls.Resupply.WasPressedThisFrame())
+            if (Nearby != null && player.Gate.CanAct && !weapons.Switching && player.Controls.Resupply.WasPressedThisFrame())
             {
                 weapons.M1.Magazine.Refill();
                 if (weapons.BazookaUnlocked) weapons.Bazooka.Refill();

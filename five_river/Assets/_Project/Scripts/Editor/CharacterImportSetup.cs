@@ -14,6 +14,7 @@ namespace FiveRivers.EditorTools
     public static class CharacterImportSetup
     {
         public const string ImportTag = "RiggedCharacterModels3";
+        internal const string RegularModel = "ROK_Soldier/SK_CH_ROK_Soldier_Person1";
         const string ModelDir = "Assets/_Project/Art/Models/Characters/";
         const string PrefabDir = "Assets/_Project/Prefabs/";
         static readonly string[] Models = {
@@ -30,7 +31,10 @@ namespace FiveRivers.EditorTools
             foreach (string model in Models) ConfigureModel(ModelDir + model + ".fbx");
             ReplacePrefab("PF_CH_KPA_Rifleman", Models[0], 1.68f, true);
             ReplacePrefab("PF_CH_ROK_ParkYongpal", Models[2], 1.72f, false);
-            ReplacePrefab("PF_CH_ROK_Soldier", Models[3], 1.70f, false); // Regular uniform for allied troops; no student soldiers in this demo.
+            var soldier = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabDir + "PF_CH_ROK_Soldier.prefab");
+            var soldierModel = soldier != null ? soldier.transform.Find("Model") : null;
+            if (soldierModel == null || PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(soldierModel.gameObject) != ModelDir + RegularModel + ".fbx")
+                ReplacePrefab("PF_CH_ROK_Soldier", RegularModel, 1.70f, false);
             CreateVariant("PF_CH_KPA_Rifleman", "PF_CH_KPA_Rifleman_B", Models[1], 1.68f, true);
             CreateVariant("PF_CH_ROK_Soldier", "PF_CH_ROK_Protagonist", Models[3], 1.70f, false);
             AssetDatabase.SaveAssets();

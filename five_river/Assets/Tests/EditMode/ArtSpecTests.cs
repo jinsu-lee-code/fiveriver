@@ -92,17 +92,16 @@ namespace FiveRivers.Tests
         // 이유: 최종 모델이 부위별 재질로 들어왔고, 2칸으로 다시 굽는 것보다 규격을 실제에 맞추는 편이 일정상 안전하다.
         static readonly string[] CharacterSlotParts = { "Body", "Gear", "Head", "Belt", "HandL", "HandR", "Skin" };
 
-        [TestCase("Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx", 1.70f, "M_CH_ROK")]
-        [TestCase("Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx", 1.72f, "M_CH_ROK")]
-        [TestCase("Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx", 1.68f, "M_CH_KPA")]
-        public void Characters_HeightAndSlots(string rel, float height, string slotPrefix)
+        [TestCase("Characters/ROK_Soldier/SK_CH_ROK_Soldier_Person1.fbx", "PF_CH_ROK_Soldier", 1.70f, "M_CH_ROK")]
+        [TestCase("Characters/ROK_ParkYongpal/SK_CH_ROK_ParkYongpal.fbx", "PF_CH_ROK_ParkYongpal", 1.72f, "M_CH_ROK")]
+        [TestCase("Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx", "PF_CH_KPA_Rifleman", 1.68f, "M_CH_KPA")]
+        public void Characters_HeightAndSlots(string rel, string prefabName, float height, string slotPrefix)
         {
             var importer = AssetImporter.GetAtPath(Models + rel) as ModelImporter;
             if (importer != null && importer.userData == "RiggedCharacterModels3")
             {
                 // 납품본은 PBR 재질이 여러 개이며 키와 발 피벗은 게임 프리팹에서 보정한다.
-                string name = System.IO.Path.GetFileNameWithoutExtension(rel).Replace("SK_", "PF_");
-                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Prefabs/" + name + ".prefab");
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/_Project/Prefabs/" + prefabName + ".prefab");
                 Assert.IsNotNull(prefab, "게임용 캐릭터 프리팹 누락");
                 var instance = Object.Instantiate(prefab);
                 try
@@ -115,6 +114,8 @@ namespace FiveRivers.Tests
                     var animator = model.GetComponentInChildren<Animator>(true);
                     Assert.IsNotNull(animator);
                     Assert.IsNotNull(animator.avatar);
+                    if (prefabName == "PF_CH_ROK_Soldier")
+                        Assert.AreEqual(Models + rel, AssetDatabase.GetAssetPath(animator.avatar), "국군 병사 교체 모델 연결");
                     Assert.IsTrue(animator.avatar.isValid && animator.avatar.isHuman, "Humanoid Avatar 유효성");
                     Assert.IsNotNull(animator.runtimeAnimatorController, "기존 애니메이션 컨트롤러 연결");
                     var skins = model.GetComponentsInChildren<SkinnedMeshRenderer>(true);

@@ -46,6 +46,12 @@ namespace FiveRivers.EditorTools
             if (layers.Length == 0) throw new InvalidOperationException("Park base layer missing.");
             layers[0].iKPass = true;
             privateBase.layers = layers;
+            foreach (var child in layers[0].stateMachine.states)
+                if (child.state.name == "Idle_Stand" || child.state.name == "Walk_Tired")
+                {
+                    child.state.iKOnFeet = true;
+                    EditorUtility.SetDirty(child.state);
+                }
             EditorUtility.SetDirty(privateBase);
             AssetDatabase.SaveAssetIfDirty(privateBase);
             var working = new AnimatorOverrideController(privateBase);
@@ -65,7 +71,7 @@ namespace FiveRivers.EditorTools
             EditorUtility.SetDirty(animator);
             PrefabUtility.RecordPrefabInstancePropertyModifications(animator);
             EditorSceneManager.MarkSceneDirty(actor.scene);
-            return "Park only: base IK pass enabled; all " + after.Count + " clip references preserved; root/terrain/arms unchanged; scene needs review and save.";
+            return "Park only: base IK pass and standing/walking Foot IK enabled; all " + after.Count + " clip references preserved; root/terrain/arms unchanged; scene needs review and save.";
         }
 
         static void EnsureFolder(string path)
