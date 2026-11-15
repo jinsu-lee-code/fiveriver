@@ -26,7 +26,7 @@ namespace FiveRivers.Narrative
         // player stood). Now the dolly never runs longer than this: the tank starts that much further down its road
         // instead (headStart), so every shot keeps its length and the take is never longer than about 20.8 s.
         const float CraneEnd = 3.4f, RoadsideEnd = 6.2f, DollyLeast = 3.0f, DollyMost = 5.8f;
-        const float TrenchLead = 2.3f, TrenchHold = 1.2f, FireAfter = 1.7f, ImpactAfter = 0.15f, ImpactHold = 1.4f, Home = 2.0f;
+        const float TrenchLead = 1.4f, TrenchHold = 1.2f, FireAfter = 1.7f, ImpactAfter = 0.15f, ImpactHold = 1.4f, Home = 2.0f;
         const float ShakeOff = 1.3f, ShakeFade = 0.6f;   // no shake over the last ShakeOff seconds; it fades out before that
 
         TankEntranceContext level;
@@ -37,7 +37,7 @@ namespace FiveRivers.Narrative
         Vector3 impact, craneFrom, craneTo, roadsideCamera, toSpur;
         readonly float[] dollyTime = new float[5], trenchTime = new float[4];
         readonly Vector3[] dollyCamera = new Vector3[5], dollyAim = new Vector3[5], trenchCamera = new Vector3[4], trenchAim = new Vector3[4];
-        readonly float[] dollyLens = { 38f, 38f, 40f, 42f, 43f }, trenchLens = { 32f, 24f, 14f, 10.5f };
+        readonly float[] dollyLens = { 38f, 38f, 40f, 42f, 43f }, trenchLens = { 30f, 18f, 12f, 9.5f };
         readonly List<TankEntranceCue> cues = new List<TankEntranceCue>();
 
         public override string Name => "합본";
@@ -166,8 +166,9 @@ namespace FiveRivers.Narrative
             {
                 // behind and above the turret, on the far side from the trench
                 float since = time - shotTurret;
-                var from = level.OnGround(tank - road * (5.6f - 0.4f * since) - side * (1.9f * trenchSide), 3.3f + 0.15f * since);
-                Aim(ref frame, from, Vector3.Lerp(impact, level.OnGround(tank, 2.2f), 0.25f), 40f);
+                // (2026-11-14: a little further back and higher, aimed lower, so the hull is in the frame and not only the turret's roof)
+                var from = level.OnGround(tank - road * (6.6f - 0.4f * since) - side * (2.1f * trenchSide), 4.3f + 0.15f * since);
+                Aim(ref frame, from, Vector3.Lerp(impact, level.OnGround(tank, 1.6f), 0.55f), 40f);
                 most = 0.5f; // riding with it: a steady tremble, not the full pass-by rumble
                 if (time >= fireAt) kick = Mathf.Exp(-(time - fireAt) * 7f);
             }

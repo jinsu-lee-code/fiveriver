@@ -1,0 +1,20 @@
+string tag = System.IO.File.ReadAllText("C:/sk_assets/capture/gear/tag.txt").Trim();
+string dir = "C:/sk_assets/capture/gear/shots/"; System.IO.Directory.CreateDirectory(dir);
+var camGo = UnityEngine.GameObject.Find("BenchCam"); if (camGo == null) camGo = new UnityEngine.GameObject("BenchCam", typeof(UnityEngine.Camera));
+var cam = camGo.GetComponent<UnityEngine.Camera>(); cam.clearFlags = UnityEngine.CameraClearFlags.SolidColor; cam.backgroundColor = new UnityEngine.Color(0.52f, 0.56f, 0.60f); cam.nearClipPlane = 0.05f; cam.farClipPlane = 100f; cam.enabled = false;
+var rt = new UnityEngine.RenderTexture(1600, 900, 24, UnityEngine.RenderTextureFormat.ARGB32);
+var tex = new UnityEngine.Texture2D(1600, 900, UnityEngine.TextureFormat.RGB24, false);
+System.Action<string, UnityEngine.Vector3, UnityEngine.Vector3, float> shot = (name, pos, look, fov) => {
+  var o = UnityEngine.GameObject.Find("GearBench").transform.position; cam.transform.position = pos + o; cam.transform.LookAt(look + o); cam.fieldOfView = fov; cam.targetTexture = rt; cam.Render();
+  UnityEngine.RenderTexture.active = rt; tex.ReadPixels(new UnityEngine.Rect(0, 0, 1600, 900), 0, 0); tex.Apply(); UnityEngine.RenderTexture.active = null;
+  System.IO.File.WriteAllBytes(dir + tag + "_" + name + ".png", UnityEngine.ImageConversion.EncodeToPNG(tex));
+};
+shot("side", new UnityEngine.Vector3(7.2f, 0.9f, 0f), new UnityEngine.Vector3(1.4f, 0.62f, 0f), 40f);
+shot("rear", new UnityEngine.Vector3(3.7f, 0.80f, -2.25f), new UnityEngine.Vector3(1.4f, 0.62f, -1.85f), 34f);
+shot("front", new UnityEngine.Vector3(3.7f, 0.80f, 2.15f), new UnityEngine.Vector3(1.4f, 0.66f, 1.75f), 34f);
+shot("mid", new UnityEngine.Vector3(3.3f, 0.65f, -0.17f), new UnityEngine.Vector3(1.4f, 0.55f, -0.17f), 34f);
+shot("quarter", new UnityEngine.Vector3(3.4f, 0.75f, 4.6f), new UnityEngine.Vector3(1.25f, 0.55f, 1.6f), 30f);
+shot("low", new UnityEngine.Vector3(2.9f, 0.25f, -3.9f), new UnityEngine.Vector3(1.25f, 0.45f, -1.2f), 30f);
+cam.targetTexture = null; UnityEngine.Object.Destroy(rt); UnityEngine.Object.Destroy(tex);
+var g = UnityEngine.GameObject.Find("GearBench").GetComponent<FiveRivers.Combat.TankRunningGear>();
+return "shots " + tag + " dist=" + g.Distance(0) + "," + g.Distance(1);

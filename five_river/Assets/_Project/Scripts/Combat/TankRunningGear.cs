@@ -10,21 +10,24 @@ namespace FiveRivers.Combat
 {
     // Turning wheels and a running track belt for the T-34 (2026-11-12). The model's TrackL / TrackR are each one
     // fused mesh (wheels, sprocket, idler and belt together), so this splits them when the scene loads:
-    //   wheels   every triangle inside a wheel's disc becomes its own small mesh on a child that turns on the axle
-    //            (the disc stops just short of the tyre's rim: the outer ring is round, so it can stand still)
-    //   belt     every triangle in the thin band round the loop becomes one mesh whose vertices are carried round
-    //            the loop's centre line (the belt has no repeating link in its geometry, so it really goes round)
+    //   belt     what lies in the thin band round the loop becomes one mesh whose vertices are carried round the
+    //            loop's centre line (the belt has no repeating link in its geometry, so it really goes round)
+    //   wheels   what lies inside a wheel's disc becomes its own small mesh on a child that turns on the axle. The
+    //            disc ends inside the tyre's flat side wall and short of the belt's band (in this mesh the belt is
+    //            sunk up to 3 cm into the tyres where it lies on them): the ring outside it is round and stands still
     //   the rest stays where it is
+    // The mesh is cut along those edges, not sorted triangle by triangle (2026-11-14, see Cut).
     // Wheel discs and the loop's centre line were measured on the mesh (source/vehicles/t34_running_gear) and are
     // read from Resources/Vehicles/T34_RunningGear.json. Each track is driven by the distance its own side of the
     // hull actually travels, so it works on the approach, in the entrance sequence and when the tank turns on the
     // spot (one side forwards, one back), and stands still when the tank does. Added by TankController.
+    // The loop in the file follows the belt stretch by stretch (512 points), so the generated mesh's dips and bumps
+    // stay where they are and only the links travel.
     public sealed class TankRunningGear : MonoBehaviour
     {
         public const string Resource = "Vehicles/T34_RunningGear";
         const int WheelStride = 4;      // z, y, radius of the disc that turns, radius the belt runs on (tank-body space)
         const int Table = 512;          // samples of the loop's centre line
-        const float SeamOverlap = 0.012f; // metres either side of a wheel disc's edge
         const float Teleport = 1.5f;    // a jump of more than this in one frame is a placement, not driving
 
         [Serializable]
@@ -32,6 +35,7 @@ namespace FiveRivers.Combat
         {
             public float length;
             public float[] loop;        // z, y pairs round the loop, tank-body space
+            public float[] beltFill;    // texture coordinates of one texel in the belt's usual colour (for the core)
         }
 
         [Serializable]
@@ -39,6 +43,7 @@ namespace FiveRivers.Combat
         {
             public float[] wheels;
             public float beltHalf, beltInside, wheelInner, beltInner;
+            public float coreIn, coreOut, coreX0, coreX1;   // the core inside the belt: out from the line, and sideways
             public Side TrackL, TrackR;
         }
 
@@ -52,7 +57,7 @@ namespace FiveRivers.Combat
             public float[] wheelRadius;
             public Vector3 axle;                    // the hull's sideways axis in the track's own space
             public Renderer beltRenderer;
-            public Mesh belt;
+            public Mesh belt, core;
             public float length;
             public float[] loopZ, loopY, tangentZ, tangentY;   // Table + 1 samples, by distance round the loop
             public BeltJob job;                     // the same table and every belt vertex's place on the loop
@@ -105,52 +110,59 @@ namespace FiveRivers.Combat
             track.axle = track.unitX;
             BuildTable(track, side);
 
-            var vertices = mesh.vertices;
-            var normals = mesh.normals;
-            var tangents = mesh.tangents;
-            var uv = mesh.uv;
-            var triangles = mesh.triangles;
-            var inBody = new Vector3[vertices.Length];
-            for (int i = 0; i < vertices.Length; i++) inBody[i] = toBody.MultiplyPoint3x4(vertices[i]);
-
-            // which part each triangle belongs to: 0 the rest, 1.. a wheel, wheels + 1 the belt
+            // The mesh is cut along the parts' edges (a triangle that lies across one is divided there), so every part
+            // ends on a clean line: the belt's band on a line that runs with the loop, a wheel's disc on a circle.
+            // Sorting whole triangles left saw-toothed edges that showed as soon as the parts moved.
+            var cut = new Cut(mesh, toBody);
             int wheels = data.wheels.Length / WheelStride;
             var nearest = NearestGrid(track);
-            var groups = new List<int>[wheels + 2];
-            for (int g = 0; g < groups.Length; g++) groups[g] = new List<int>();
-            for (int t = 0; t < triangles.Length; t += 3)
+
+            // the belt first: where a wheel stands on it the two are fused, and the belt must stay whole
+            var value = new float[cut.Count];
+            for (int v = 0; v < value.Length; v++)
             {
-                var c = (inBody[triangles[t]] + inBody[triangles[t + 1]] + inBody[triangles[t + 2]]) / 3f;
-                float x = c.x * sign;
-                int group = 0;
-                // the belt first: where a wheel stands on it the two are fused, and the belt must stay whole
-                if (x > data.beltInner)
+                var p = cut.body[v];
+                Project(track, nearest, p.z, p.y, out _, out _, out float outward);
+                value[v] = Mathf.Min(outward + data.beltInside, Mathf.Min(data.beltHalf - outward, p.x * sign - data.beltInner));
+            }
+            var beltPart = new List<int>();
+            var rest = new List<int>();
+            cut.Split(new List<int>(mesh.triangles), value, beltPart, rest);
+
+            // then each wheel's disc out of what is left (inside its circle, on the outer side of the track)
+            var discs = new List<int>[wheels];
+            for (int w = 0; w < wheels; w++)
+            {
+                float wz = data.wheels[w * WheelStride], wy = data.wheels[w * WheelStride + 1], turns = data.wheels[w * WheelStride + 2];
+                value = new float[cut.Count];
+                for (int v = 0; v < value.Length; v++)
                 {
-                    Project(track, nearest, c.z, c.y, out _, out float along, out float outward);
-                    if (outward < data.beltHalf && outward > -data.beltInside && Mathf.Abs(along) < data.beltHalf) group = wheels + 1;
+                    float dz = cut.body[v].z - wz, dy = cut.body[v].y - wy;
+                    value[v] = turns - Mathf.Sqrt(dz * dz + dy * dy);
                 }
-                if (group == 0 && x > data.wheelInner)
-                    for (int w = 0; w < wheels; w++)
-                    {
-                        float dz = c.z - data.wheels[w * WheelStride], dy = c.y - data.wheels[w * WheelStride + 1];
-                        float r = data.wheels[w * WheelStride + 2], d = Mathf.Sqrt(dz * dz + dy * dy);
-                        if (d >= r + SeamOverlap) continue;
-                        group = w + 1;
-                        // triangles on the seam are drawn by both sides of it, so no gap opens as the wheel turns
-                        if (d > r - SeamOverlap) groups[0].Add(t);
-                        break;
-                    }
-                groups[group].Add(t);
+                var inside = new List<int>();
+                var outside = new List<int>();
+                cut.Split(rest, value, inside, outside);
+                value = new float[cut.Count];
+                for (int v = 0; v < value.Length; v++) value[v] = cut.body[v].x * sign - data.wheelInner;
+                discs[w] = new List<int>();
+                cut.Split(inside, value, discs[w], outside);
+                rest = outside;
             }
 
+            var vertices = cut.position.ToArray();
+            var normals = cut.normal.ToArray();
+            var tangents = cut.tangent.ToArray();
+            var uv = cut.uv.ToArray();
+            var inBody = cut.body.ToArray();
             var bounds = mesh.bounds;
-            filter.sharedMesh = Part(mesh.name + "_Rest", groups[0], triangles, vertices, normals, tangents, uv, Vector3.zero, out _);
+            filter.sharedMesh = Part(mesh.name + "_Rest", rest, vertices, normals, tangents, uv, Vector3.zero, out _);
             track.wheels = new Transform[wheels];
             track.wheelRadius = new float[wheels];
             for (int w = 0; w < wheels; w++)
             {
                 var centre = toTrack.MultiplyPoint3x4(new Vector3(sign * 1.3f, data.wheels[w * WheelStride + 1], data.wheels[w * WheelStride]));
-                var wheelMesh = Part(mesh.name + "_Wheel" + w, groups[w + 1], triangles, vertices, normals, tangents, uv, centre, out _);
+                var wheelMesh = Part(mesh.name + "_Wheel" + w, discs[w], vertices, normals, tangents, uv, centre, out _);
                 track.wheels[w] = Child(track, "Wheel" + w, wheelMesh, centre).transform;
                 track.wheelRadius[w] = data.wheels[w * WheelStride + 3];
             }
@@ -158,7 +170,7 @@ namespace FiveRivers.Combat
             // the belt: each vertex remembers where it sits on the loop
             // (its moving half, position + normal + tangent, is one vertex stream that the job fills and is copied
             // to the mesh in one go; the texture coordinates sit in a second stream and never change)
-            var whole = Part(mesh.name + "_Belt", groups[wheels + 1], triangles, vertices, normals, tangents, uv, Vector3.zero, out var used);
+            var whole = Part(mesh.name + "_Belt", beltPart, vertices, normals, tangents, uv, Vector3.zero, out var used);
             int count = used.Count;
             track.belt = new Mesh { name = whole.name, indexFormat = whole.indexFormat };
             track.belt.MarkDynamic();
@@ -200,9 +212,71 @@ namespace FiveRivers.Combat
             }
             track.job = job;
             track.beltRenderer = Child(track, "Belt", track.belt, Vector3.zero);
+            track.core = Core(data, side, track, sign, toTrack);
+            if (track.core != null) Child(track, "BeltCore", track.core, Vector3.zero);
             track.material = track.source.sharedMaterial;
             track.last = root.position;
             tracks.Add(track);
+        }
+
+        // A core inside the belt, all the way round the loop, in the belt's usual colour. Where a wheel stands on the
+        // belt the mesh has no inner face (the two are fused), so once the belt runs those places are holes one can
+        // see through; the core is what shows there. It is a box section just inside the belt's own faces, one flat
+        // colour, and so does not need to move.
+        static Mesh Core(Data data, Side side, Track track, float sign, Matrix4x4 toTrack)
+        {
+            if (side.beltFill == null || side.beltFill.Length < 2 || data.coreX1 <= data.coreX0 || data.coreOut <= data.coreIn) return null;
+            const int Faces = 4, PerRow = Faces * 2;
+            int rows = Table + 1;
+            var positions = new Vector3[rows * PerRow];
+            var normals = new Vector3[rows * PerRow];
+            var tangents = new Vector4[rows * PerRow];
+            var uv = new Vector2[rows * PerRow];
+            var fill = new Vector2(side.beltFill[0], side.beltFill[1]);
+            var across = toTrack.MultiplyVector(Vector3.right * sign).normalized;   // away from the hull
+            // each face's two corners (sideways, out from the line) and which way it looks (across, out)
+            float x0 = data.coreX0, x1 = data.coreX1, low = data.coreIn, high = data.coreOut;
+            var corner = new[] { x0, high, x1, high, x0, low, x1, low, x0, low, x0, high, x1, low, x1, high };
+            var looks = new[] { 0f, 1f, 0f, -1f, -1f, 0f, 1f, 0f };
+            for (int k = 0; k < rows; k++)
+            {
+                float tz = track.tangentZ[k], ty = track.tangentY[k];
+                // out from the line is (y, z) = (-tz, ty), as in the belt's job
+                var outward = toTrack.MultiplyVector(new Vector3(0f, -tz, ty)).normalized;
+                for (int c = 0; c < PerRow; c++)
+                {
+                    int v = k * PerRow + c, face = c / 2;
+                    float x = corner[c * 2], offset = corner[c * 2 + 1];
+                    positions[v] = toTrack.MultiplyPoint3x4(new Vector3(sign * x, track.loopY[k] - offset * tz, track.loopZ[k] + offset * ty));
+                    normals[v] = across * looks[face * 2] + outward * looks[face * 2 + 1];
+                    tangents[v] = face < 2 ? new Vector4(across.x, across.y, across.z, 1f) : new Vector4(outward.x, outward.y, outward.z, 1f);
+                    uv[v] = fill;
+                }
+            }
+            var indices = new int[Table * Faces * 6];
+            for (int face = 0, i = 0; face < Faces; face++)
+            {
+                // which way round a triangle must go to face along the normal (the same all along a face)
+                int first = face * 2;
+                bool swap = Vector3.Dot(Vector3.Cross(positions[first + 1] - positions[first], positions[first + PerRow] - positions[first]), normals[first]) < 0f;
+                for (int k = 0; k < Table; k++)
+                {
+                    int a = k * PerRow + first, b = a + 1, c = a + PerRow, d = c + 1;
+                    indices[i++] = a;
+                    indices[i++] = swap ? c : b;
+                    indices[i++] = swap ? b : c;
+                    indices[i++] = b;
+                    indices[i++] = swap ? c : d;
+                    indices[i++] = swap ? d : c;
+                }
+            }
+            var mesh = new Mesh { name = track.root.name + "_Core" };
+            mesh.SetVertices(positions);
+            mesh.SetNormals(normals);
+            mesh.SetTangents(tangents);
+            mesh.SetUVs(0, uv);
+            mesh.SetTriangles(indices, 0);
+            return mesh;
         }
 
         // The loop sampled evenly by distance, with its direction at each sample.
@@ -300,25 +374,113 @@ namespace FiveRivers.Combat
             outward = (z - pz) * ty - (y - py) * tz;
         }
 
-        // A mesh made of some of the source's triangles, its vertices moved by -origin.
-        static Mesh Part(string name, List<int> picked, int[] triangles, Vector3[] vertices, Vector3[] normals, Vector4[] tangents,
+        // The track's mesh while it is taken apart: its vertices (in the track's own space and in the tank body's),
+        // to which Split adds the points where it divides a triangle.
+        sealed class Cut
+        {
+            public readonly List<Vector3> position, normal, body;
+            public readonly List<Vector4> tangent;
+            public readonly List<Vector2> uv;
+            readonly Dictionary<long, int> made = new Dictionary<long, int>();
+
+            public int Count => position.Count;
+
+            public Cut(Mesh mesh, Matrix4x4 toBody)
+            {
+                position = new List<Vector3>(mesh.vertices);
+                normal = new List<Vector3>(mesh.normals);
+                tangent = new List<Vector4>(mesh.tangents);
+                uv = new List<Vector2>(mesh.uv);
+                body = new List<Vector3>(position.Count);
+                for (int i = 0; i < position.Count; i++) body.Add(toBody.MultiplyPoint3x4(position[i]));
+            }
+
+            // Sorts triangles (three indices each) by a value at their corners: `over` gets what lies where it is
+            // above zero, `under` the rest. A triangle with corners on both sides is divided along the line where
+            // the value passes zero. `value` covers every vertex there is when this is called.
+            public void Split(List<int> triangles, float[] value, List<int> over, List<int> under)
+            {
+                made.Clear();
+                for (int t = 0; t < triangles.Count; t += 3)
+                {
+                    int a = triangles[t], b = triangles[t + 1], c = triangles[t + 2];
+                    int above = (value[a] > 0f ? 1 : 0) + (value[b] > 0f ? 1 : 0) + (value[c] > 0f ? 1 : 0);
+                    if (above == 3 || above == 0)
+                    {
+                        var all = above == 3 ? over : under;
+                        all.Add(a);
+                        all.Add(b);
+                        all.Add(c);
+                        continue;
+                    }
+                    // turned so that the corner that is alone on its side comes first (the order round the triangle stays)
+                    bool alone = above == 1;
+                    while (value[a] > 0f != alone)
+                    {
+                        int first = a;
+                        a = b;
+                        b = c;
+                        c = first;
+                    }
+                    int p = Between(a, b, value), q = Between(c, a, value);
+                    var corner = alone ? over : under;
+                    var other = alone ? under : over;
+                    corner.Add(a);
+                    corner.Add(p);
+                    corner.Add(q);
+                    other.Add(p);
+                    other.Add(b);
+                    other.Add(c);
+                    other.Add(p);
+                    other.Add(c);
+                    other.Add(q);
+                }
+            }
+
+            // The point on the edge a-b where the value passes zero, as a new vertex (one per edge, so the two
+            // triangles that share the edge stay joined).
+            int Between(int a, int b, float[] value)
+            {
+                if (a > b)
+                {
+                    int swap = a;
+                    a = b;
+                    b = swap;
+                }
+                long key = ((long)a << 32) | (uint)b;
+                if (made.TryGetValue(key, out int index)) return index;
+                float span = value[a] - value[b];
+                float t = Mathf.Abs(span) > 1e-12f ? Mathf.Clamp01(value[a] / span) : 0.5f;
+                index = position.Count;
+                position.Add(Vector3.Lerp(position[a], position[b], t));
+                body.Add(Vector3.Lerp(body[a], body[b], t));
+                normal.Add(Vector3.Lerp(normal[a], normal[b], t).normalized);
+                var along = Vector3.Lerp(tangent[a], tangent[b], t).normalized;
+                tangent.Add(new Vector4(along.x, along.y, along.z, tangent[a].w));
+                uv.Add(Vector2.Lerp(uv[a], uv[b], t));
+                made[key] = index;
+                return index;
+            }
+        }
+
+        // A mesh made of some triangles (three vertex indices each), its vertices moved by -origin.
+        static Mesh Part(string name, List<int> triangles, Vector3[] vertices, Vector3[] normals, Vector4[] tangents,
             Vector2[] uv, Vector3 origin, out List<int> used)
         {
             var map = new Dictionary<int, int>();
             used = new List<int>();
-            var indices = new int[picked.Count * 3];
-            for (int i = 0; i < picked.Count; i++)
-                for (int c = 0; c < 3; c++)
+            var indices = new int[triangles.Count];
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                int v = triangles[i];
+                if (!map.TryGetValue(v, out int to))
                 {
-                    int v = triangles[picked[i] + c];
-                    if (!map.TryGetValue(v, out int to))
-                    {
-                        to = used.Count;
-                        map[v] = to;
-                        used.Add(v);
-                    }
-                    indices[i * 3 + c] = to;
+                    to = used.Count;
+                    map[v] = to;
+                    used.Add(v);
                 }
+                indices[i] = to;
+            }
             int count = used.Count;
             var p = new Vector3[count];
             var n = new Vector3[count];
@@ -471,6 +633,7 @@ namespace FiveRivers.Combat
                 if (track.running) track.handle.Complete();
                 track.job.Dispose();
                 if (track.belt != null) Destroy(track.belt);
+                if (track.core != null) Destroy(track.core);
                 foreach (var wheel in track.wheels)
                     if (wheel != null) Destroy(wheel.GetComponent<MeshFilter>().sharedMesh);
                 var rest = track.root != null ? track.root.GetComponent<MeshFilter>() : null;
