@@ -44,3 +44,55 @@
 - 호주전쟁기념관 북한군 여름 셔츠 https://www.awm.gov.au/collection/C104125
 - The Armory Life "T-34-85 in the Korean War" https://www.thearmorylife.com/t-34-85-in-the-korean-war/
 - koreanwaronline 바주카 https://koreanwaronline.com/arms/bazooka.htm
+
+## 5. 2026-11-15 추가 대조 (Claude, 사용자 지시 "모두 전투기록에 적힌대로 그대로 만들어")
+
+Appleman 19장 전재본(koreanwaronline)을 다시 읽어 그날 넣은 것들을 대조했다. 인용은 전재본 원문.
+
+| 게임 내용 | 판정 | 근거 | 조치 |
+|---|---|---|---|
+| 전차 길 양쪽의 미루나무 | 확인 | "the poplar-lined Taegu-Sangju road ran northward on a level course in the narrow mountain valley" | 11-15 추가 (`ValleyRoad_Aug1950`) |
+| 길 서쪽의 개울 | 확인 | "A stream on the west closely paralleled it." | 11-15 추가. 서쪽(-x)에 배치. 물은 웅덩이만 남김(가뭄 기록에 따른 해석, 추정) |
+| 풀 색 | **불일치 → 고침** | "as they rumbled down the narrow, green valley". 11-15 오전에는 30년 만의 가뭄 기록(다부동전적기념관)만 보고 짚색으로 만들었다 | 푸른 쪽으로 고침: 풀 healthy 0.34,0.44,0.21 / dry 0.54,0.53,0.29, 풀밭 바닥 색조 0.93,0.97,0.72. 가뭄은 군데군데 마른 색과 드러난 흙으로 남김 |
+| 북한군 녹색 신호탄 | 확인 → **추가** | "The North Koreans used a system of flares to signal various actions and to co-ordinate them ... green flares were used to signal an attack on a given area." | `Combat/KpaSignalFlare.cs`: 주 공세 · 서쪽 공세 시작 때 적 쪽 능선 뒤에서 녹색 신호탄 1발. 조명 판정에는 관여하지 않음 |
+| 달밤 | 확인 | "A bright moon silhouetted enemy tanks against the dark flanking mountains" | 그대로 (달빛 방향광 있음) |
+| 전차 · 자주포가 앞서고 보병이 길 양쪽으로 따름 | 확인(기록) · 게임은 단순화 | "Nine tanks and several SP guns supported the enemy troops in the valley", "moved forward on both sides of the road" | 게임은 전차 1대. 바꾸지 않음(설계 범위) |
+| 지뢰 · 인계철선 조명탄 · 미군 M26 전차 | 확인(기록) · 게임에 없음 | "antipersonnel mines, and trip flares across the road and stream bed", "Pershing M26 tanks of C Company, 73d Tank Battalion" | 넣지 않음. 이들은 미 27연대 진지 것이고 게임은 국군 1사단 참호 |
+| 국군 1사단 위치 | 확인 | "the ROK 1st Division held the high ground on either side of the 27th Infantry positions" | 그대로. 다만 게임 참호는 골짜기 길에서 40 m 거리라 능선보다는 낮다(지형 단순화) |
+| 포격에 부서진 나무 | 확인(증언) | "온전한 나무도 온전한 바위도 없었다"(참전자, 매일신문 2023-06-22) | 11-15 추가 (`ShelledPines_Aug1950`) |
+| 인민군 모습(얼굴 · 군복) | 추정 | 카키 면 여름 군복 · 천 모자(§1). 얼굴은 사료가 아니라 생성 이미지 | 11-15 새 몸 · 새 머리 3종. 각반과 가죽 탄입대는 생성 모델의 것으로, 1950년 8월 북한군 지급품과의 일치는 **미확인** |
+| 전차 형태 | 확인(차종) | T-34-85, 포탑에 숫자 · 별 없음(§1) | 11-15 새 차체도 민짜. 높이를 9% 늘린 것은 사료와 무관한 게임 쪽 타협 |
+
+### 원전 대조 (2026-11-15 저녁)
+
+Appleman 원서를 미 육군 군사사센터 공식 사이트에서 받아 직접 확인했다 (CMH Pub 20-2, `history.army.mil/portals/143/Images/Publications/catalog/20-2.pdf`, 852쪽, 사용자가 브라우저에서 저장; 사본 `C:/sk_assets/sources/appleman_cmh/20-2.pdf`). 위 표의 인용은 **모두 원서에 그대로 있다**. 책 쪽수(PDF 쪽수 - 33):
+
+| 내용 | 원서 쪽 | 원문 |
+|---|---|---|
+| 국군 3.5인치 로켓포 | 353 | "two enemy tanks came through the ROK 1st Division lines twelve miles north of Taegu at Tabu-dong, but ROK 3.5-inch bazooka teams knocked out both of them" (8월 16일) |
+| 국군 1사단은 양쪽 고지 | 355 | "The ROK 1st Division held the high ground on either side of the 27th Infantry positions." |
+| 미루나무 길 · 서쪽 개울 | 355 | "the poplar-lined Taegu-Sangju road ran northward on a level course in the narrow mountain valley. A stream on the west closely paralleled it. The road was nearly straight on a north-south axis" |
+| 유학산 · 가산 높이 | 356 | "Rising abruptly from the valley on the west side was the Yuhak-san mountain mass which swept up to a height of 2,700 feet. On the east, a similar mountain mass rose to a height of 2,400 feet, culminating ... in towering Ka-san, more than 2,900 feet high at its walled summit" |
+| 전차 · 자주포가 앞서고 보병이 따름 | 356 | "Two enemy tanks and a self-propelled gun moved out of the village of Sinjumak ... Infantry followed them, some in trucks and others on foot." (8월 18일 밤, 일곱 번의 야간 공격 중 첫 번째) |
+| 북한군 녹색 신호탄 | 357 | "The North Koreans used a system of flares to signal various actions and to co-ordinate them. ... green flares were used to signal an attack on a given area." 이어서 미 27연대가 같은 녹색 신호탄을 쏴 적을 속였다고 적음 |
+| 지뢰와 조명 | 357 | "The use of mines in front of the defensive positions in the narrow valley became a nightly feature of the battles. ... At such times flares illuminated the scene" |
+| 달밤 · 푸른 골짜기 | 358 | "A bright moon silhouetted enemy tanks against the dark flanking mountains as they rumbled down the narrow, green valley, leading another attack." (8월 20일 밤) |
+
+주의: 이 장면들은 **미 27연대가 지킨 골짜기 바닥(볼링장)** 의 기록이다. 게임의 국군 1사단 참호는 그 양쪽 고지여야 맞고, 원서는 국군 고지 전투를 자세히 적지 않는다. 국군 쪽 세부(수류탄전, 야간 기습)는 국내 자료(§1)에 따른다. 군사편찬연구소 간행물은 여전히 열지 못했다.
+
+## 6. 2026-11-15 한국 측 공간사 대조 (Claude)
+
+출처: 국방부 군사편찬연구소, 『6·25전쟁사 5권 낙동강선 방어작전』(2008), 제3장 제2절 "제11연대의 다부동지역 전투". 군사편찬연구소 누리집 간행물 소개에서 공개 PDF. 사본 `C:/sk_assets/sources/imhc_naktong/naktong_v5.pdf`, 본문 추출 `pages.json`(책 쪽수 = PDF 쪽수 − 10).
+
+| 항목 | 기록 (책 쪽수) | 게임 | 판정 |
+|---|---|---|---|
+| 국군이 길목 골짜기를 지킨 때 | 제11연대 제1대대가 신주막–다부동 골짜기(복곡)를 지키다 8월 18일 미 27연대에 넘기고 400~500 m 능선으로 올라감(167). 8월 26일 03:45 제11연대가 미 27연대 지역을 다시 인수(176) | 참호가 길 옆 낮은 곳 | **근거 있음.** 8월 13~17일 또는 26일 이후의 제11연대라면 길목이 맞다. 참호를 옮길 필요 없음 |
+| 미군이 있던 동안의 배치 | 미 27연대는 5번 도로 중심 1,000 m 안팎, 좌우 감제고지는 제11연대(166). 8월 21일 도로 좌우 고지를 제11연대 1대대와 제15연대 2대대가 장악(168) | — | Appleman 355쪽과 일치 |
+| 국군의 대전차 무기 | "대전차 무기는 최근 지급받은 3.5인치 로켓포가 전부"(160) | 로켓으로 전차 격파 | 일치 |
+| 전차가 길로 옴 | 8월 15일 아침 전차 7대와 장갑차 5대가 제1대대 진지를 뚫고 신주막을 거쳐 수정으로(162). 신주막–다부동은 "적 전차부대의 기동로"(160) | 전차가 길로 내려옴 | 일치 |
+| 조명탄 | 8월 21일 밤 미 27연대가 적 접근 보고를 받고 즉각 조명탄 발사(169) | 조명탄 장면 | 일치 (쏜 쪽은 미군) |
+| 근거리 유인과 수류탄 | 8월 20일 밤 제15연대 2대대가 적을 진전 50 m까지 유인한 뒤 기습사격과 수류탄(168) | 근거리 교전 | 일치 |
+| 능선을 따라 오는 보병 | 8월 21일 밤 접근로 양측 능선으로 각 1개 대대 규모가 은밀히 접근(169) | 서쪽 공세 | 일치 |
+
+- 결정: 참호 위치와 화면 문구("1950년 8월 · 다부동")는 그대로 둔다. 화면에 부대 이름이나 날짜를 더 넣지 않으므로 어긋나는 곳이 없다. 설정을 물으면 "제11연대, 미군 도착 전(8월 13~17일)의 신주막–다부동 길목"으로 답한다.
+- 주의: 미루나무 길과 녹색 신호탄은 이 책에 나오지 않는다(Appleman 기록). 학도병 복장은 이 책에서 확인하지 못했다.
