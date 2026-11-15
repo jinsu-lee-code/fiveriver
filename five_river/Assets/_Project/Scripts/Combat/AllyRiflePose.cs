@@ -134,13 +134,18 @@ namespace FiveRivers.Combat
         // while the body bobbed and bent under it, and the face looked at the ground. While he moves the rifle is
         // carried on the chest so it moves with the body, and he looks where he is going. The run also squares
         // the chest to the slope and leans into it.
-        public bool ApplyPortArms(float advance = 0f, float run = 0f)
+        // ease: 1 once the fighting is over (the dawn on the crest). Standing at the level port arms there he looked
+        // as if he were still covering someone with the rifle (2026-11-15): the muzzle comes down and the rifle hangs
+        // lower in front of him.
+        public static float EasePitch = 34f, EaseYaw = -10f;
+        public static Vector3 EaseOffset = new Vector3(0f, -0.12f, -0.02f);
+        public bool ApplyPortArms(float advance = 0f, float run = 0f, float ease = 0f)
         {
             if (fit == null || !fit.isActiveAndEnabled) return false;
             run = Mathf.Clamp01(run);
             advance = Mathf.Clamp(advance, 0f, 1f - run);
             if (run > 0f) LeanIntoRun(run);
-            ApplyCarryContacts(advance, run);
+            ApplyCarryContacts(advance, run, Mathf.Clamp01(ease) * (1f - advance - run));
             if (advance + run > 0f) FaceAhead(advance, run);
             return true;
         }
@@ -188,10 +193,12 @@ namespace FiveRivers.Combat
             head.rotation = Quaternion.Slerp(head.rotation, Quaternion.LookRotation(direction, root.up), .85f * weight);
         }
 
-        void ApplyCarryContacts(float advance = 0f, float run = 0f)
+        void ApplyCarryContacts(float advance = 0f, float run = 0f, float ease = 0f)
         {
-            var position = root.TransformPoint(fit.carryPosition);
+            var position = root.TransformPoint(fit.carryPosition + EaseOffset * ease);
             var rotation = root.rotation * Quaternion.Euler(fit.carryEuler);
+            // at ease the muzzle tips down about the rifle's own cross axis, wherever the carry points it
+            if (ease > 0f) rotation = Quaternion.AngleAxis(EaseYaw * ease, root.up) * rotation * Quaternion.Euler(EasePitch * ease, 0f, 0f);
             float moving = advance + run;
             if (moving > 0f && hips != null)
             {

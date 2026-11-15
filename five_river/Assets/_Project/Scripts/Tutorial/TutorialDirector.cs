@@ -85,6 +85,12 @@ namespace FiveRivers.Tutorial
             var flow = director.Flow;
             bool inTutorial = active && flow.Section == FlowSection.Tutorial;
             bool leftover = active && flow.Section != FlowSection.Tutorial && tracker != null && !tracker.Complete;
+            // The practice board stands 18 m in front of the trench. It stayed there for the whole night, a black
+            // man-shaped board in the middle of the fighting (2026-11-15). It is kept only while it is needed: on the
+            // title and in the tutorial, and afterwards while the shot at it is still owed.
+            bool showTarget = flow.Section == FlowSection.Title || flow.Section == FlowSection.Tutorial
+                || (leftover && tracker.Remaining.Contains(TutorialStep.ShootTarget));
+            if (target != null && target.gameObject.activeSelf != showTarget) target.gameObject.SetActive(showTarget);
 
             if (active && tracker != null)
             {

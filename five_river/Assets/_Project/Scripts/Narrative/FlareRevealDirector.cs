@@ -151,13 +151,21 @@ namespace FiveRivers.Narrative
                     subject = Nearest();
                     if (subject != null) focus = subject.transform.position;
                     var toTrench = eye - focus; toTrench.y = 0f; toTrench.Normalize();
-                    var side = Vector3.Cross(Vector3.up, toTrench);
-                    closeOffset = toTrench * 2.4f + side * 1.3f;
+                    // ahead and beside along the way he actually runs: placed by the direction of the trench, a man
+                    // coming down on a diagonal ran straight into the lens when the camera had to take the far side
+                    var heading = subject != null ? subject.transform.forward : toTrench;
+                    heading.y = 0f;
+                    heading = heading.sqrMagnitude > 0.01f && Vector3.Dot(heading.normalized, toTrench) > 0f ? heading.normalized : toTrench;
+                    closeOffset = ClearestCloseOffset(heading, Vector3.Cross(Vector3.up, heading));
+                    closeLift = 0f;
                 }
                 float u = Mathf.InverseLerp(Shot2, Shot3, time);
                 var chest = Chest(subject, focus);
                 position = OnGround(focus + closeOffset, 0f);
                 position.y = Mathf.Max(position.y + 0.3f, chest.y - 0.15f); // never under the slope
+                // if cover still comes between them (he turned, or every side was shut), the camera cranes up over it
+                closeLift = Mathf.MoveTowards(closeLift, Covered(position + Vector3.up * closeLift, chest) ? CloseLiftMax : 0f, Time.deltaTime * 2.5f);
+                position.y += closeLift;
                 rotation = Quaternion.LookRotation(chest + Vector3.down * 0.1f - position);
                 fov = Mathf.Lerp(36f, 32f, u);
             }
@@ -171,7 +179,7 @@ namespace FiveRivers.Narrative
                     victimFocus = victim != null ? victim.transform.position : focus;
                     var toTrench = eye - victimFocus; toTrench.y = 0f; toTrench.Normalize();
                     var side = Vector3.Cross(Vector3.up, toTrench);
-                    lowCamera = OnGround(victimFocus + toTrench * 3.5f + side * 5.5f, 0.55f); // ahead and beside him
+                    lowCamera = ClearestLowCamera(toTrench, side); // ahead and beside him
                 }
                 if (victim != null) victimFocus = Vector3.Lerp(victimFocus, Hips(victim), 1f - Mathf.Exp(-Time.deltaTime * 6f));
                 if (!victimHit && time >= HitAt)
@@ -207,6 +215,91 @@ namespace FiveRivers.Narrative
             sequenceCamera.fieldOfView = Mathf.Lerp(fov, playerCamera.fieldOfView, back);
             bars.alpha = Mathf.Min(Mathf.InverseLerp(0f, BarFade, time), Mathf.InverseLerp(Duration, Duration - BarFade, time));
             if (time >= Duration) Finish();
+        }
+
+        // The close shot rides beside the runner, and the slope is dotted with sandbag cover: with the camera always
+        // on the same side he ran past a pile and the bags filled the frame (2026-11-15). The camera takes the side
+        // (and, failing that, the nearer or higher place) from which the stretch he is about to run stays in view.
+        const float CloseLiftMax = 0.9f, CloseRunSpeed = 3.4f;
+        float closeLift;
+
+        Vector3 ClearestCloseOffset(Vector3 heading, Vector3 side)
+        {
+            // 'side' is his right. He carries the rifle across his body with the muzzle up to his left, so from his
+            // left it stands in front of his face: the camera keeps to his right as long as any place there is
+            // clear, from three-quarters on to full profile, and only then crosses over.
+            var candidates = new[]
+            {
+                heading * 1.6f + side * 2.2f, heading * 2.4f + side * 1.3f, heading * 0.5f + side * 2.6f,
+                heading * 1.6f - side * 2.2f,
+            };
+            int best = 0, bestScore = int.MaxValue;
+            for (int i = 0; i < candidates.Length; i++)
+            {
+                int score = 0;
+                for (float t = 0f; t <= Shot3 - Shot2; t += 0.2f)
+                {
+                    var at = focus + heading * (CloseRunSpeed * t);
+                    var chest = OnGround(at, 1.1f);
+                    var camera = OnGround(at + candidates[i], 0f);
+                    camera.y = Mathf.Max(camera.y + 0.3f, chest.y - 0.15f);
+                    if (Covered(camera, chest) || Covered(camera, OnGround(at, 0.45f))) score++; // his legs count too
+                }
+                if (score >= bestScore) continue;
+                bestScore = score; best = i;
+            }
+            return candidates[best];
+        }
+
+        // The low camera stands still on the slope while the others keep running: one of them ran straight through
+        // the lens, and a sandbag pile could stand beside it (2026-11-15). Of a few places ahead and beside the man
+        // who falls, it takes the one with a clear view of where he goes down that no other runner passes close to.
+        Vector3 ClearestLowCamera(Vector3 toTrench, Vector3 side)
+        {
+            var places = new[]
+            {
+                toTrench * 3.5f + side * 5.5f, toTrench * 3.5f - side * 5.5f,
+                toTrench * 1.5f + side * 6f, toTrench * 1.5f - side * 6f,
+                toTrench * 5.5f + side * 3.5f, toTrench * 5.5f - side * 3.5f,
+            };
+            var falls = OnGround(victimFocus + toTrench * 1.2f, 0.4f);
+            int best = 0; float bestScore = float.MaxValue;
+            for (int i = 0; i < places.Length; i++)
+            {
+                var camera = OnGround(victimFocus + places[i], 0.55f);
+                float score = i * 0.01f; // the first is the composed one: it wins a tie
+                if (Covered(camera, falls) || Covered(camera, OnGround(victimFocus, 1.0f))) score += 10f;
+                if (enemies != null)
+                    foreach (var e in enemies.ActiveEnemies)
+                    {
+                        if (e == null || !e.Alive || e == victim) continue;
+                        var from = e.transform.position; var way = e.transform.forward; way.y = 0f;
+                        // how near his run over the rest of the shot takes him to the lens
+                        float along = Mathf.Clamp(Vector3.Dot(camera - from, way), 0f, CloseRunSpeed * (Duration - Shot3));
+                        var gap = camera - (from + way * along); gap.y = 0f;
+                        if (gap.magnitude < 2.5f) score += 2.5f - gap.magnitude;
+                    }
+                if (score >= bestScore) continue;
+                bestScore = score; best = i;
+            }
+            return OnGround(victimFocus + places[best], 0.55f);
+        }
+
+        // Something solid (not one of the enemy) stands between the camera and his chest, or right in front of the lens.
+        static readonly RaycastHit[] coverHits = new RaycastHit[16];
+        static bool Covered(Vector3 camera, Vector3 chest)
+        {
+            var to = chest - camera;
+            float distance = to.magnitude;
+            if (distance < 0.5f) return false;
+            int n = Physics.SphereCastNonAlloc(camera - to / distance * 0.3f, 0.3f, to / distance, coverHits, distance - 0.3f, ~0, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < n; i++)
+            {
+                var c = coverHits[i].collider;
+                if (c == null || c is TerrainCollider || c.GetComponentInParent<EnemyAgent>() != null) continue;
+                return true;
+            }
+            return false;
         }
 
         EnemyAgent Nearest()

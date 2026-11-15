@@ -24,6 +24,7 @@ namespace FiveRivers.Narrative
         Vector3 rifleLocalScale;
         bool mansuLostThisRun;
         LyingBodyRest mansuRest;
+        FallenPose mansuPose;
         // Where the fall clip is joined. It stands upright until 0.7 s; joined there (as it was until 2026-11-13) the
         // kneeling man sprang to his feet in a fifth of a second and only then went down. Joined where the clip has
         // already buckled at the knees, he sags from his kneel and falls back.
@@ -134,53 +135,73 @@ namespace FiveRivers.Narrative
                 mansu.gameObject.SetActive(false);
                 return;
             }
-            // AlliedM1 normally follows both hands in AllyCombatant.LateUpdate. Follow the
-            // firing hand while that controller is suspended so the rifle falls with him.
+            // AlliedM1 normally follows both hands in AllyCombatant.LateUpdate. Until 2026-11-15 it was hung on the
+            // firing hand for the fall, and that hand is flung up and stays up in the clip: the rifle stood in the
+            // air over him for the rest of the scene. He lets go of it when he is hit and it drops where he knelt.
             mansuRifle = mansu.transform.Find("AlliedM1");
-            var hand = animator.GetBoneTransform(HumanBodyBones.RightHand);
-            if (mansuRifle != null && hand != null)
+            if (mansuRifle != null)
             {
                 rifleParent = mansuRifle.parent;
                 rifleLocalPosition = mansuRifle.localPosition;
                 rifleLocalRotation = mansuRifle.localRotation;
                 rifleLocalScale = mansuRifle.localScale;
-                mansuRifle.SetParent(hand, true);
+                if (rifleDrop != null) StopCoroutine(rifleDrop);
+                rifleDrop = StartCoroutine(DropMansuRifle(mansuRifle, mansu.transform));
             }
+            // he goes down from the pose he is in (kneeling at his post), not from the controller's standing default
+            PoseBlendIn.Attach(animator, MansuFallBlend, mansuRifle);
             fallGraph = PlayableGraph.Create("Choi Mansu fall");
             fallGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
             var output = AnimationPlayableOutput.Create(fallGraph, "Body", animator);
             var fall = AnimationClipPlayable.Create(fallGraph, mansuFall);
             // the clip spends its first 0.7 s standing upright; he is at his post, so start where it starts to go down
             fall.SetTime(Mathf.Min(MansuFallStart, mansuFall.length * .7f));
-            // The clip starts upright and he is usually kneeling at his post: ease out of the pose he is in
-            // (the hit straightens him) instead of snapping to the clip's first frame.
-            var mixer = AnimationMixerPlayable.Create(fallGraph, 2);
-            if (animator.runtimeAnimatorController != null)
-                fallGraph.Connect(AnimatorControllerPlayable.Create(fallGraph, animator.runtimeAnimatorController), 0, mixer, 0);
-            fallGraph.Connect(fall, 0, mixer, 1);
-            mixer.SetInputWeight(0, 1f);
-            mixer.SetInputWeight(1, 0f);
-            output.SetSourcePlayable(mixer);
+            output.SetSourcePlayable(fall);
             fallGraph.Play();
-            StartCoroutine(BlendIntoFall(fallGraph, mixer));
             // the clip ends lying on the plane he knelt on; the trench floor falls away under his legs (2026-11-13)
             mansuRest = LyingBodyRest.Attach(animator);
+            // and its last pose is spread-eagled: the arms come down and the head rolls once he is on his back
+            mansuPose = FallenPose.Attach(animator);
         }
 
-        IEnumerator BlendIntoFall(PlayableGraph graph, AnimationMixerPlayable mixer)
+        // The rifle leaves his hands as he is hit: it tips forward out of them, lands flat on the trench floor in
+        // front of where he knelt and rocks once. Scripted rather than a rigid body so the shot is the same every time.
+        Coroutine rifleDrop;
+        public static Vector3 MansuRifleRest = new Vector3(0.45f, 0f, 0.55f); // his right, up, his front
+        public static float MansuRifleDropTime = 0.55f;
+
+        IEnumerator DropMansuRifle(Transform rifle, Transform owner)
         {
-            const float blend = MansuFallBlend;
-            for (float t = 0f; t < blend; t += Time.deltaTime)
+            var fromPosition = rifle.position;
+            var fromRotation = rifle.rotation;
+            var rest = owner.position + owner.right * MansuRifleRest.x + owner.forward * MansuRifleRest.z;
+            var terrain = Terrain.activeTerrain;
+            float ground = terrain != null ? terrain.SampleHeight(rest) + terrain.transform.position.y : owner.position.y;
+            rest.y = ground + 0.035f;
+            // flat on its side, lying roughly the way it pointed, turned a little as it fell
+            var along = Vector3.ProjectOnPlane(fromRotation * Vector3.forward, Vector3.up);
+            if (along.sqrMagnitude < 0.01f) along = owner.forward;
+            var restRotation = Quaternion.LookRotation(Quaternion.AngleAxis(-22f, Vector3.up) * along.normalized, Vector3.up) * Quaternion.Euler(0f, 0f, 84f);
+            for (float t = 0f; t < MansuRifleDropTime; t += Time.deltaTime)
             {
-                if (!graph.IsValid()) yield break;
-                float w = Mathf.SmoothStep(0f, 1f, t / blend);
-                mixer.SetInputWeight(0, 1f - w);
-                mixer.SetInputWeight(1, w);
+                if (rifle == null) yield break;
+                float u = t / MansuRifleDropTime;
+                var p = Vector3.Lerp(fromPosition, rest, u);
+                p.y = Mathf.Lerp(fromPosition.y, rest.y, u * u) + 0.08f * Mathf.Sin(u * Mathf.PI); // falls faster as it goes
+                rifle.SetPositionAndRotation(p, Quaternion.Slerp(fromRotation, restRotation, Mathf.SmoothStep(0f, 1f, u)));
                 yield return null;
             }
-            if (!graph.IsValid()) yield break;
-            mixer.SetInputWeight(0, 0f);
-            mixer.SetInputWeight(1, 1f);
+            // one small bounce of the muzzle end
+            for (float t = 0f; t < 0.22f; t += Time.deltaTime)
+            {
+                if (rifle == null) yield break;
+                float u = t / 0.22f;
+                rifle.SetPositionAndRotation(rest + Vector3.up * (0.025f * Mathf.Sin(u * Mathf.PI)),
+                    restRotation * Quaternion.Euler(-3f * Mathf.Sin(u * Mathf.PI), 0f, 0f));
+                yield return null;
+            }
+            if (rifle != null) rifle.SetPositionAndRotation(rest, restRotation);
+            rifleDrop = null;
         }
 
         void StopWestBeat()
@@ -198,8 +219,11 @@ namespace FiveRivers.Narrative
         void RestoreMansu()
         {
             StopFall();
+            if (rifleDrop != null) { StopCoroutine(rifleDrop); rifleDrop = null; }
             if (mansuRest != null) mansuRest.Release();
             mansuRest = null;
+            if (mansuPose != null) mansuPose.Release();
+            mansuPose = null;
             if (mansu != null)
             {
                 if (mansuRifle != null && rifleParent != null)

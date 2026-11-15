@@ -40,7 +40,11 @@ namespace FiveRivers.Narrative
         }
 
         readonly List<Passenger> passengers = new List<Passenger>();
-        static readonly int SpeedId = Animator.StringToHash("Speed");
+        static readonly int SpeedId = Animator.StringToHash("Speed");
+        static readonly float[] StudentHeights = { 1f, 0.955f, 1.035f, 0.975f };
+        static readonly float[] StudentPace = { 1f, 0.9f, 1.08f, 0.95f };
+        static readonly Vector3[] StudentHeads = { Vector3.zero, new Vector3(6f, -14f, 0f), new Vector3(-4f, 9f, 3f), new Vector3(9f, 4f, -3f) };
+
         Terrain ground;
         Transform joinEnd;
         Vector3 approachStart, approachEnd;
@@ -100,7 +104,12 @@ namespace FiveRivers.Narrative
                     animator.applyRootMotion = false;
                     animator.SetFloat(SpeedId, 0f);
                     animator.Play("Idle_Stand", 0, i * .23f);
-                }
+                }
+                // four copies of one model in a row: each a little taller or shorter, idling at his own pace and
+                // holding his head his own way, so they do not read as one boy four times (2026-11-15)
+                body.localScale *= StudentHeights[i % StudentHeights.Length];
+                body.gameObject.AddComponent<IdleVariation>().Set(StudentPace[i % StudentPace.Length], StudentHeads[i % StudentHeads.Length]);
+
                 var footPlacement = body.gameObject.AddComponent<DawnFootPlacement>();
                 footPlacement.Configure(animator, transform, exitPath[1], exitPath[exitPath.Length - 1], ground);
                 passengers.Add(new Passenger { body = body, animator = animator, footPlacement = footPlacement });

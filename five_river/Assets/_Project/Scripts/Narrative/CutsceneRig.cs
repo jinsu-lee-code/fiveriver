@@ -145,6 +145,7 @@ namespace FiveRivers.Narrative
             foreach (var r in renderers) r.forceRenderingOff = true;
             var weapons = player.GetComponentInChildren<WeaponHolder>(true);
             if (weapons != null) weapons.CutsceneHidden = true;
+            FarShadows(true);
             return renderers;
         }
 
@@ -153,6 +154,47 @@ namespace FiveRivers.Narrative
             if (renderers != null) foreach (var r in renderers) if (r != null) r.forceRenderingOff = false;
             var weapons = player != null ? player.GetComponentInChildren<WeaponHolder>(true) : null;
             if (weapons != null) weapons.CutsceneHidden = false;
+            FarShadows(false);
+        }
+
+        // Shadows are drawn up to a distance from the camera (90 m in the game's settings), and a staged camera
+        // often stands further than that from what it shows: on the flare's long lens the men on the far slope
+        // (93 m off) had no shadow and looked as if they floated (2026-11-14). While any staged moment hides the
+        // player, shadows reach CutsceneShadowDistance; the game's own value comes back with the player.
+        public const float CutsceneShadowDistance = 180f;
+        static int farShadows;
+        static float shadowBefore;
+
+        static void FarShadows(bool on)
+        {
+            var pipeline = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+            if (pipeline == null) return;
+            if (on)
+            {
+                if (farShadows++ == 0)
+                {
+                    shadowBefore = pipeline.shadowDistance;
+                    pipeline.shadowDistance = Mathf.Max(shadowBefore, CutsceneShadowDistance);
+                }
+            }
+            else if (farShadows > 0 && --farShadows == 0) pipeline.shadowDistance = shadowBefore;
+        }
+
+        // the setting lives on an asset: never leave it raised when play stops in the middle of a staged moment
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetFarShadows()
+        {
+            farShadows = 0;
+            Application.quitting -= RestoreShadows;
+            Application.quitting += RestoreShadows;
+        }
+
+        static void RestoreShadows()
+        {
+            if (farShadows <= 0) return;
+            farShadows = 0;
+            var pipeline = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+            if (pipeline != null) pipeline.shadowDistance = shadowBefore;
         }
 
         System.Collections.IEnumerator ReleaseAfterGrace(PlayerHealth health)

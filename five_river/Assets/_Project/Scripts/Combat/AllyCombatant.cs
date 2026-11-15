@@ -239,7 +239,7 @@ namespace FiveRivers.Combat
             {
                 var section = director.Flow.Section;
                 bool portArms = director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
-                    && riflePose.ApplyPortArms(Advancing ? StateWeight(CrouchRunRifleId) : 0f, Advancing ? StateWeight(RunRifleId) : 0f);
+                    && riflePose.ApplyPortArms(Advancing ? StateWeight(CrouchRunRifleId) : 0f, Advancing ? StateWeight(RunRifleId) : 0f, section == FlowSection.Dawn ? 1f : 0f);
                 if (!portArms && !riflePose.TryApplyCarry())
                 {
                     var forward = leftHand.position - rightHand.position;
@@ -247,7 +247,6 @@ namespace FiveRivers.Combat
                     {
                         var rotation = Quaternion.LookRotation(forward, transform.up);
                         weapon.SetPositionAndRotation(rightHand.position - rotation * gripLocal, rotation);
-                        riflePose.ApplyClipCarryGrip();
                     }
                 }
             }
