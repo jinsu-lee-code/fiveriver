@@ -36,7 +36,6 @@ namespace FiveRivers.Narrative
         bool darkLineSaid;
         bool ricochetLineSaid;
         bool resupplied;
-        bool callsDone;
         Coroutine silence;
         WeaponHolder weapons;
         TankEntranceDirector tankEntrance;
@@ -166,7 +165,6 @@ namespace FiveRivers.Narrative
         IEnumerator SilenceSequence()
         {
             resupplied = false;
-            callsDone = false;
             float start = Time.time;
             yield return new WaitUntil(() => Time.time - start >= parkCall1At);
             if (parkAnimator != null) parkAnimator.SetTrigger("Call");
@@ -174,7 +172,6 @@ namespace FiveRivers.Narrative
             yield return new WaitUntil(() => Time.time - start >= parkCall2At);
             subtitles.Say(text.parkCall2);
             yield return new WaitForSeconds(silenceSettleAfterCall);
-            callsDone = true;
             yield return new WaitUntil(() => resupplied);
             silence = null;
             director.Flow.ReportGoalMet(FlowSection.Silence);
