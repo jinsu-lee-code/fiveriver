@@ -34,10 +34,18 @@ Material:
     m_Ints: []
     m_Floats:
     - _DawnBlend: 0
-    - _DawnExposure: 0.7
+    - _DawnExposure: 0.42
     - _NightExposure: 0.13
     - _Rotation: 0
+    - _StarBrightness: 0.4
+    - _StarDensity: 0.016
     m_Colors:
+    - _DawnTint: {r: 0.86, g: 0.92, b: 1.04, a: 1}
+    - _HorizonGlow: {r: 0.014, g: 0.02, b: 0.034, a: 7}
+    - _MoonDir: {r: -0.59966063, g: 0.5299194, b: 0.5996606, a: 0}
+    - _MoonGlow: {r: 0.05, g: 0.065, b: 0.09, a: 48}
     - _NightTint: {r: 0.54999995, g: 0.68, b: 1, a: 1}
+    - _SunDir: {r: -0.85759735, g: 0.1391731, b: 0.49513415, a: 0}
+    - _SunGlow: {r: 1.1, g: 0.5, b: 0.18, a: 5}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

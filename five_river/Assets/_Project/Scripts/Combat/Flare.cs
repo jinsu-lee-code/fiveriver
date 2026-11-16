@@ -51,7 +51,9 @@ namespace FiveRivers.Combat
             float age = Age;
             transform.position = origin + new Vector3(Mathf.Sin(age * 0.7f) * config.swayAmplitude, -config.fallSpeed * age, 0f);
             float b = Brightness;
-            flareLight.intensity = config.lightIntensity * b;
+            // a burning magnesium flare sputters: a few percent of flicker makes the shadows on the slope breathe
+            float sputter = 1f + 0.12f * (Mathf.PerlinNoise(age * 7f, origin.x) - 0.5f);
+            flareLight.intensity = config.lightIntensity * b * sputter;
             flareLight.range = config.lightRange;
             visual.localScale = Vector3.one * Mathf.Lerp(0.05f, 0.4f, b);
         }
