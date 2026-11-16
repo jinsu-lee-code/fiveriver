@@ -15,11 +15,16 @@ namespace FiveRivers.Narrative
     public sealed class SummitDawnDirector : MonoBehaviour, IDebugPanel
     {
         public static bool Enabled = true;
-        public static float Shot1 = 4.2f, Duration = 10.2f, HandBack = 1.4f;
+        // 2026-11-16: shot 2 runs long enough to see the first three of them jump down off the tailgate
+        public static float Shot1 = 4.2f, Duration = 11.4f, HandBack = 1.4f;
+        // the knocked-out tank must never share the frame with the truck (사용자 지시 2026-11-16):
+        // the views toward the truck turn away from the wreck until it is this far off the centre line
+        public static float TankClearAngle = 50f, MaxAimOffset = 16f;
         public static float PanFromPitch = -5f, PanToPitch = 7f, DawnRate = 3f, TruckSlide = 0.8f;
         // camera and its aim in the truck's own frame (x = to its right, y = above the ground, z = ahead of it);
         // the student soldiers stand about 5 m to its right and 13 m behind it
-        public static Vector3 TruckCamera = new Vector3(2.6f, 1.35f, -6.8f), TruckLook = new Vector3(5.4f, 1.3f, -13f);
+        // 2026-11-16: low at the rear quarter on the truck's left, on the tailgate, looking away from the tank
+        public static Vector3 TruckCamera = new Vector3(-5.2f, 1.25f, -10.5f), TruckLook = new Vector3(-.3f, 1.05f, -4.4f);
 
         FlowDirector director;
         PlayerController player;
@@ -135,6 +140,7 @@ namespace FiveRivers.Narrative
             // the way the squad came up: from the crest toward the trench
             downhill = (dawn.TruckStop != null ? dawn.TruckStop.position : eye - toSun * 50f) - eye;
             downhill.y = 0f; downhill.Normalize();
+            downhill = AwayFromTank(eye, downhill);
             truckCameraSet = false;
             var truck = dawn.Truck;
             if (!rig.Begin(truck != null ? Duration : Shot1 + HandBack, HandBack)) return;
@@ -146,8 +152,23 @@ namespace FiveRivers.Narrative
             {
                 var stop = dawn.TruckStop != null ? dawn.TruckStop.position : truck.position;
                 var toward = stop - player.transform.position; toward.y = 0f;
-                if (toward.sqrMagnitude > 1f) player.transform.rotation = Quaternion.LookRotation(toward);
+                if (toward.sqrMagnitude > 1f) player.transform.rotation = Quaternion.LookRotation(AwayFromTank(player.transform.position, toward.normalized));
             }
+        }
+
+        // Turn a flat view direction away from the tank wreck so that the wreck falls outside the frame,
+        // by at most MaxAimOffset so that the truck itself stays in view.
+        static Vector3 AwayFromTank(Vector3 from, Vector3 view)
+        {
+            var tank = FindFirstObjectByType<TankController>(FindObjectsInactive.Include); // the wreck may be a swapped model
+            if (tank == null) return view;
+            var toTank = tank.transform.position - from; toTank.y = 0f;
+            if (toTank.sqrMagnitude < 1f) return view;
+            float signed = Vector3.SignedAngle(view, toTank, Vector3.up);
+            float gap = Mathf.Abs(signed);
+            if (gap >= TankClearAngle) return view;
+            float turn = Mathf.Min(TankClearAngle - gap, MaxAimOffset) * -Mathf.Sign(signed);
+            return Quaternion.Euler(0f, turn, 0f) * view;
         }
 
         public string DebugTitle => "정상 새벽 연출";
