@@ -30,7 +30,7 @@ namespace FiveRivers.Narrative
         [Min(.1f)] public float dismountLength = 1.85f;        // A_ROK_Dismount_Truck
         public float dismountTakeoff = .42f, dismountLand = 1.06f; // feet leave the tailgate / touch the ground (clip time)
         [Min(0f)] public float landingReach = 1.2f;             // how far past the tailgate the feet come down
-        public Vector3 gatherOrigin = new Vector3(2.0f, 0f, -7.4f); // truck-local spot of the first man, the others to his right (away from the summit camera on the left)
+        public Vector3 gatherOrigin = new Vector3(2.6f, 0f, -5.4f); // truck-local spot of the first man, the others to his right; just behind the tailgate so the summit's second shot sees them whole beside the truck (at -7.4 they stood in front of that camera, filling a quarter of the frame)
         public event System.Action Arrived;
         bool arrivalPresented;
         Camera arrivalView;
@@ -390,7 +390,7 @@ namespace FiveRivers.Narrative
                     if (p.pose != null) { p.pose.Crouch = p.pose.Tuck = p.pose.Lean = 0f; p.pose.enabled = false; }
                     p.route.Clear();
                     p.next = 0;
-                    var slot = gatherOrigin + new Vector3(index * 1.05f, 0f, (index % 2) * -.55f);
+                    var slot = gatherOrigin + new Vector3(index * 1.05f, 0f, (index % 2) * .45f);
                     var target = transform.TransformPoint(slot);
                     Ground(ref target);
                     p.route.Add(target);

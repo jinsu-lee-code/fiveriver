@@ -15,6 +15,8 @@ namespace FiveRivers.EditorTools
     // 여러 번 실행해도 결과가 같다. 편집 모드에서만.
     public static class ArtDirectionPass
     {
+        // 밤하늘 그림의 밝은 구역(동쪽) 상한. 어두운 쪽 하늘 밝기의 약 3배 (2026-11-16)
+        internal static float NightCeiling = 0.008f;
         const string NightProfilePath = "Assets/_Project/Art/FrontlinePolish20261102/Frontline_Night_Profile.asset";
         const string DawnProfilePath = "Assets/_Project/Art/FrontlinePolish20261102/Frontline_Dawn_Grade.asset";
         const string SkyPath = "Assets/_Project/Art/FrontlinePolish20261102/Frontline_NightDawnSky.mat";
@@ -48,8 +50,8 @@ namespace FiveRivers.EditorTools
             if (dawn == null) { dawn = ScriptableObject.CreateInstance<VolumeProfile>(); AssetDatabase.CreateAsset(dawn, DawnProfilePath); }
             Grade(dawn, new GradeValues
             {
-                exposure = 1.0f, contrast = 18f, saturation = 2f, temperature = 8f, tint = 0f,
-                shadows = new Color(.42f, .47f, .57f), highlights = new Color(.68f, .56f, .42f), balance = 18f,
+                exposure = 1.0f, contrast = 18f, saturation = -4f, temperature = 4f, tint = 0f, // 11-16 AAA pass: lit sandbags no longer go orange
+                shadows = new Color(.42f, .47f, .57f), highlights = new Color(.63f, .56f, .48f), balance = 14f,
                 bloomThreshold = .95f, bloomIntensity = .7f, bloomScatter = .75f, bloomTint = new Color(1f, .9f, .76f),
                 vignette = .24f, grain = .14f, aberration = .03f, lensFlare = .35f,
             });
@@ -64,11 +66,12 @@ namespace FiveRivers.EditorTools
             var dawnDirector = Object.FindFirstObjectByType<DawnDirector>(FindObjectsInactive.Include);
             var dso = new SerializedObject(dawnDirector);
             dso.FindProperty("dawnGrade").objectReferenceValue = dawnVolume;
-            dso.FindProperty("dawnLight").colorValue = new Color(1f, .72f, .48f);     // low gold sun
-            dso.FindProperty("dawnIntensity").floatValue = 1.55f;
+            dso.FindProperty("dawnLight").colorValue = new Color(1f, .78f, .60f);     // low gold sun (less saturated: burlap read orange)
+            dso.FindProperty("dawnIntensity").floatValue = 1.5f;
             dso.FindProperty("dawnSky").colorValue = new Color(.44f, .50f, .62f);     // the shade side stays blue
             dso.FindProperty("dawnEquator").colorValue = new Color(.52f, .44f, .40f);
-            dso.FindProperty("dawnFog").colorValue = new Color(.70f, .58f, .50f);     // sunlit haze in the valley
+            // 2026-11-16: was (.70, .58, .50), a warm haze brighter than the cool sky above it: the far ridge stood out as a flat cream cut-out. The haze now takes the horizon sky's own grey-blue, a little darker, so the ridge is a soft silhouette.
+            dso.FindProperty("dawnFog").colorValue = new Color(.50f, .50f, .56f);
             dso.ApplyModifiedPropertiesWithoutUndo();
             var sunEuler = dso.FindProperty("dawnLightEuler").vector3Value;
 
@@ -93,6 +96,7 @@ namespace FiveRivers.EditorTools
             sky.SetColor("_HorizonGlow", new Color(.014f, .020f, .034f, 7f));
             sky.SetFloat("_StarBrightness", .4f);
             sky.SetFloat("_StarDensity", .016f);
+            sky.SetFloat("_NightCeiling", NightCeiling);
             sky.SetVector("_MoonDir", -moon.transform.forward);
             sky.SetColor("_MoonGlow", new Color(.05f, .065f, .09f, 48f));
             sky.SetFloat("_DawnExposure", .42f);

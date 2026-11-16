@@ -24,6 +24,8 @@ namespace FiveRivers.Narrative
     {
         public static bool Enabled = true;
         const float Shot1 = 2.6f, Shot2 = 4.8f, Shot3 = 7.2f, HitAt = 7.6f, Duration = 10.8f, HandBack = 1.3f;
+        const float LongLensFog = 0.4f;   // fog density during the long-lens shot, as a share of the night's
+        float fogBefore;
         const float BarFade = 0.4f, BarHeight = 0.105f, SkipAfter = 0.6f;
 
         FlowDirector director;
@@ -210,6 +212,13 @@ namespace FiveRivers.Narrative
                 sequenceCamera.enabled = false;
                 playerCamera.enabled = true;
             }
+            // 2026-11-16: the two close shots stand right under the flare, where the ground burnt out to plain white
+            // (243 of 255). Those shots are stopped down; the trench shots keep the night exposure.
+            EnsureStopDown();
+            stopDown.weight = time >= Shot2 && back < 1f ? 1f : 0f;
+            // 2026-11-16: the long lens looks 50-70 m down the slope through the night haze, which washed it out to a
+            // flat grey. A long lens compresses haze rather than adding it, so the shot thins the fog while it is on.
+            RenderSettings.fogDensity = fogBefore * (time >= Shot1 && time < Shot2 ? LongLensFog : 1f);
             var own = playerCamera.transform;
             sequenceCamera.transform.SetPositionAndRotation(Vector3.Lerp(position, own.position, back), Quaternion.Slerp(rotation, own.rotation, back));
             sequenceCamera.fieldOfView = Mathf.Lerp(fov, playerCamera.fieldOfView, back);
@@ -356,6 +365,7 @@ namespace FiveRivers.Narrative
             playerCamera = player.CameraPivot.GetComponentInChildren<Camera>();
             if (playerCamera == null) return;
             playedThisRun = true;
+            fogBefore = RenderSettings.fogDensity;
             eye = playerCamera.transform.position;
             // the slope under the flare, as seen from the trench
             slopeFocus = OnGround(new Vector3(flarePoint.x, 0f, flarePoint.z), 1f);
@@ -392,8 +402,32 @@ namespace FiveRivers.Narrative
             bars.alpha = 0f;
         }
 
+        // the exposure of the close shots themselves (the night grade is 1.8): about 1.2 stops down
+        public static float CloseShotStops = 0.6f;
+        UnityEngine.Rendering.Volume stopDown;
+
+        void EnsureStopDown()
+        {
+            if (stopDown != null) return;
+            var holder = new GameObject("FlareRevealStopDown");
+            holder.transform.SetParent(transform, false);
+            // on the layer of the scene's own grading volume, so the cameras that see that one see this one
+            var existing = FindFirstObjectByType<UnityEngine.Rendering.Volume>();
+            if (existing != null) holder.layer = existing.gameObject.layer;
+            stopDown = holder.AddComponent<UnityEngine.Rendering.Volume>();
+            stopDown.isGlobal = true;
+            stopDown.priority = 100f;
+            stopDown.weight = 0f;
+            var profile = ScriptableObject.CreateInstance<UnityEngine.Rendering.VolumeProfile>();
+            var grade = profile.Add<ColorAdjustments>(true);
+            grade.postExposure.Override(CloseShotStops);
+            stopDown.profile = profile;
+        }
+
         void Finish()
         {
+            if (stopDown != null) stopDown.weight = 0f;
+            if (fogBefore > 0f) RenderSettings.fogDensity = fogBefore;
             bool inAssault = director.Flow.Section == FlowSection.Assault;
             Playing = false;
             director.InputGate.Unblock(this);

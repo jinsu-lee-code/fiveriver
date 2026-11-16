@@ -18,7 +18,8 @@ namespace FiveRivers.Narrative
         public static float Shot1 = 3.4f, Duration = 7.6f, HandBack = 1.3f;
         // camera offsets in his own frame (x = along the trench, toward the player's side; y = up; z = toward the enemy)
         public static Vector3 SideCamera = new Vector3(2.3f, 1.25f, -0.25f), SideLook = new Vector3(0f, 1.15f, 0.1f);
-        public static Vector3 LowCamera = new Vector3(-2.5f, 0.5f, -1.7f), LowLook = new Vector3(0.2f, 0.3f, -0.9f);
+        // 2026-11-16: the trench floor is 1.8 m wide since the FM 5-15 rebuild; 1.7 m back put the lens inside the rear wall
+        public static Vector3 LowCamera = new Vector3(-2.5f, 0.5f, -1.0f), LowLook = new Vector3(0.2f, 0.3f, -0.5f);
 
         FlowDirector director;
         PlayerController player;

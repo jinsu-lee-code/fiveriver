@@ -13,6 +13,7 @@ Shader "FiveRivers/Night Dawn Sky"
         _HorizonGlow("Night horizon glow (rgb, a=height falloff)",Color)=(0,0,0,6)
         _StarBrightness("Star brightness",Float)=0
         _StarDensity("Star density (0..1)",Range(0,1))=.12
+        _NightCeiling("Night panorama ceiling (luminance, 0=off)",Float)=0
         _MoonDir("Moon direction (world, towards the moon)",Vector)=(0,.5,1,0)
         _MoonGlow("Moon glow (rgb, a=tightness)",Color)=(0,0,0,24)
         _SunDir("Dawn sun direction (world, towards the sun)",Vector)=(0,.1,1,0)
@@ -33,6 +34,7 @@ Shader "FiveRivers/Night Dawn Sky"
             sampler2D _Night,_Dawn;
             half4 _Night_HDR,_Dawn_HDR,_NightTint,_HorizonGlow,_MoonGlow,_SunGlow,_DawnTint;
             float4 _MoonDir,_SunDir;
+            float _NightCeiling;
             float _NightExposure,_DawnExposure,_Rotation,_DawnBlend,_StarBrightness,_StarDensity;
             struct appdata {float4 vertex:POSITION;};
             struct v2f {float4 position:SV_POSITION;float3 direction:TEXCOORD0;};
@@ -74,6 +76,11 @@ Shader "FiveRivers/Night Dawn Sky"
                 dx.x-=round(dx.x);dy.x-=round(dy.x);
                 half3 night=DecodeHDR(tex2Dgrad(_Night,uv,dx,dy),_Night_HDR)*_NightExposure*_NightTint.rgb;
                 half3 dawn=DecodeHDR(tex2Dgrad(_Dawn,uv,dx,dy),_Dawn_HDR)*_DawnExposure*_DawnTint.rgb;
+
+                // 2026-11-16: the night panorama has a bright quarter (its own moon side, to the east here) five times
+                // the rest; shots that looked that way had a daytime sky. Above the ceiling only a little is kept.
+                float nl=dot(night,half3(.3,.6,.1));
+                if(_NightCeiling>0 && nl>_NightCeiling) night*=(_NightCeiling+(nl-_NightCeiling)*.08)/nl;
 
                 float up=saturate(direction.y);
                 // night: a pale band above the ridges so they read as silhouettes, a glow round the moon, stars higher up
