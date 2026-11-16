@@ -50,7 +50,14 @@ namespace FiveRivers.Combat
         float AimYawOffset => AlliedRifleFit.IsParkAvatar(animator) ? -26f : rifleYawOffset;
 
         // Set by HillAllies while he walks up the ridge: no turning or firing, rifle in the carry pose.
-        public bool Advancing { get; set; }
+        public bool Advancing
+        {
+            get => advancing;
+            set { advancing = value; if (value) hasAdvanced = true; }
+        }
+        bool advancing;
+        // Has he moved off once since the section began? Before that he waits in the trench for the off.
+        bool hasAdvanced;
         // Kneeling to fire: HillAllies leaves his facing alone while this is true.
         public bool Engaged => engaged;
 
@@ -59,6 +66,7 @@ namespace FiveRivers.Combat
         public int MuzzleEffectsSpawned { get; private set; }
         public int AudioCuesRequested { get; private set; }
         public string TargetName => target != null ? target.name : "";
+        public string CarryMode { get; private set; } = "";
 #endif
 
         void Start()
@@ -104,6 +112,8 @@ namespace FiveRivers.Combat
         {
             if (!isActiveAndEnabled) return;
             StopFiring();
+            watching = false;
+            hasAdvanced = advancing; // already walking (HillAllies may hear the section change first): keep it
             recoilAt = -100f;
             transform.rotation = restingRotation;
             nextShot = Time.time + Random.Range(config.fireIntervalMin, config.fireIntervalMax) * 0.5f;
@@ -117,6 +127,21 @@ namespace FiveRivers.Combat
             && (director.Flow.Section == FlowSection.Scout || director.Flow.Section == FlowSection.Assault
                 || director.Flow.Section == FlowSection.WestAssault
                 || director.Flow.Section == FlowSection.HillAssault && !Advancing);
+
+        // Halted on the hill assault (expanded run) while the fight is on: kneel and watch the ridge.
+        // Only once he has moved off: before the first move he stands ready in the trench, as before.
+        bool HillWatch => hasAdvanced && director.Flow.IsExpanded && director.Flow.Section == FlowSection.HillAssault && CombatActive;
+        bool watching;
+
+        // A spot on the ground some way up the slope, straight toward the enemy's side of the ridge.
+        Vector3 WatchPoint()
+        {
+            var forward = defensiveForward; forward.y = 0f;
+            var point = transform.position + forward.normalized * 30f;
+            return Physics.Raycast(point + Vector3.up * 80f, Vector3.down, out var hit, 160f, ~0, QueryTriggerInteraction.Ignore)
+                ? hit.point + Vector3.up * 0.8f
+                : point + Vector3.up * 2f;
+        }
 
         // Park keeps his authored standing carry while the player learns the controls.
         bool TutorialCarryPose => director.Flow.Section == FlowSection.Tutorial
@@ -133,10 +158,28 @@ namespace FiveRivers.Combat
             if (Advancing)
             {
                 StopFiring();
+                watching = false;
                 return;
             }
             if (!CombatActive) target = null;
             else if (target == null || !target.Alive || target.Retreating) target = FindTarget();
+            if (target == null && HillWatch)
+            {
+                // Stopped on the open slope of the hill assault with nobody in sight: down on one knee with the
+                // rifle up the slope, the way a man halts in the open under fire, instead of standing upright with
+                // the rifle at the waist (2026-11-16). No rounds: there is nothing to shoot at.
+                CancelCue();
+                suppressing = false;
+                if (!watching) { watching = true; suppressAim = WatchPoint(); }
+                engaged = true;
+                animator.SetBool(CrouchId, true);
+                var look = suppressAim - transform.position; look.y = 0f;
+                if (look.sqrMagnitude > 0.01f)
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation,
+                        Quaternion.LookRotation(look) * Quaternion.Euler(0f, -AimYawOffset, 0f), turnSpeed * 0.5f * Time.deltaTime);
+                return;
+            }
+            watching = false;
             if (target == null && !SuppressActive)
             {
                 StopFiring();
@@ -234,12 +277,16 @@ namespace FiveRivers.Combat
             // Both palms come from the actual crouch/fire clip, including its recoil. While he kneels to fire the rifle
             // stays shouldered even on the frame a target is lost (it used to drop into the standing carry).
             if (engaged)
+            {
                 riflePose.Apply(AimPoint(), 0.022f * Mathf.Exp(-(Time.time - recoilAt) * 24f));
+                NoteCarry(watching ? "watch" : "aim");
+            }
             else if (rightHand != null && leftHand != null && weapon != null)
             {
                 var section = director.Flow.Section;
                 bool portArms = director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
                     && riflePose.ApplyPortArms(Advancing ? StateWeight(CrouchRunRifleId) : 0f, Advancing ? StateWeight(RunRifleId) : 0f, section == FlowSection.Dawn ? 1f : 0f);
+                NoteCarry(portArms ? $"port a{StateWeight(CrouchRunRifleId):0.00} r{StateWeight(RunRifleId):0.00}" : "carry");
                 if (!portArms && !riflePose.TryApplyCarry())
                 {
                     var forward = leftHand.position - rightHand.position;
@@ -270,6 +317,14 @@ namespace FiveRivers.Combat
             ShotsFired++;
             if (flash != null) MuzzleEffectsSpawned++;
             AudioCuesRequested++;
+#endif
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR"), System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        void NoteCarry(string mode)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            CarryMode = mode;
 #endif
         }
 

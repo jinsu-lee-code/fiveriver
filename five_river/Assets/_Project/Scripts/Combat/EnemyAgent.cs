@@ -38,6 +38,8 @@ namespace FiveRivers.Combat
         public static float CrouchRunClipSpeed = 3.61f; // measured in play 2026-11-15: at 3.06 the planted foot slid back 0.8 m/s
         const float CrouchRunFrom = 1.2f, MinCrouchAnimSpeed = 0.7f, MaxCrouchAnimSpeed = 2.0f;
         static readonly int CrouchRunStateId = Animator.StringToHash("CrouchRun");
+        static readonly int CrouchAimStateId = Animator.StringToHash("Crouch_Aim");
+        static readonly int FireCrouchStateId = Animator.StringToHash("Fire_Crouch");
         float crouchFootSpeed = 2.55f;
         // Advancing, the rifle is carried at port arms by code (CrouchCarryEuler); the clip's own hand line arrives
         // almost level through the humanoid retarget.
@@ -87,7 +89,10 @@ namespace FiveRivers.Combat
         // model is lowered (or raised) so the lower sole sits on the real ground under it.
         public static bool GroundFeet = true;
         const float GroundRate = 14f, GroundLowest = -0.6f, GroundHighest = 0.25f;
-        Transform leftFoot, rightFoot, leftToes, rightToes;
+        Transform leftFoot, rightFoot, leftToes, rightToes, leftKnee, rightKnee;
+        // the knee joint sits this far above the ground when the knee rests on it (kneeling to aim and fire)
+        const float KneeClear = 0.07f;
+        float lastKneel; // how much of a kneeling state was on last frame (a man hit kneeling goes down from there)
         float footSole, toeSole, groundOffset;
         Vector3 modelRest;
         Terrain ground;
@@ -117,6 +122,8 @@ namespace FiveRivers.Combat
                 rightFoot = animator.GetBoneTransform(HumanBodyBones.RightFoot);
                 leftToes = animator.GetBoneTransform(HumanBodyBones.LeftToes);
                 rightToes = animator.GetBoneTransform(HumanBodyBones.RightToes);
+                leftKnee = animator.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
+                rightKnee = animator.GetBoneTransform(HumanBodyBones.RightLowerLeg);
                 // in the prefab's own pose the soles stand on the model's origin: how high the joints sit above them
                 if (leftFoot != null && model != null)
                 {
@@ -138,6 +145,11 @@ namespace FiveRivers.Combat
 
         void LateUpdate()
         {
+            if (deathTurning)
+            {
+                if (state != State.Dead || Time.time - deathTime > DeathTurnFor) deathTurning = false;
+                else transform.rotation = Quaternion.RotateTowards(transform.rotation, deathFacing, DeathTurnRate * Time.deltaTime);
+            }
             if (handIK != null) handIK.FeetOnSlope = state != State.Dead && GroundFeet;
             if (state != State.Dead) { FollowCrouchRun(); KeepFeetOnGround(); }
             if (rifle == null || rifleDropped || rightHand == null || leftHand == null) return;
@@ -229,10 +241,28 @@ namespace FiveRivers.Combat
             if (ground == null) return;
             // the bones already include last frame's offset, so this is the gap as it stands now
             float lowest = Mathf.Min(SoleGap(leftFoot, leftToes), SoleGap(rightFoot, rightToes));
+            // Kneeling (aim or fire from a crouch), the down knee is on the ground too. With the feet alone, on a
+            // slope the front toes touched first and the knee and the rear foot hung 20-25 cm in the air (2026-11-16).
+            float kneel = Mathf.Max(StateWeight(CrouchAimStateId), StateWeight(FireCrouchStateId));
+            // The clip holds that knee 8-14 cm above the plane of the front sole, so the body is set down on the
+            // down knee and the toes of that leg instead, and the front foot is kept on top of the ground by the
+            // foot IK (EnemyHandIK.Kneel), bending that knee a little more.
+            if (kneel > 0f && leftKnee != null && rightKnee != null)
+            {
+                float left = KneeGap(leftKnee), right = KneeGap(rightKnee);
+                var downToes = left < right ? leftToes : rightToes;
+                float rest = Mathf.Min(left, right) - KneeClear;
+                if (downToes != null) rest = Mathf.Min(rest, downToes.position.y - toeSole - (ground.SampleHeight(downToes.position) + ground.transform.position.y));
+                lowest = Mathf.Lerp(lowest, rest, kneel);
+            }
+            if (handIK != null) { handIK.Kneel = kneel; handIK.SoleHeight = footSole; }
+            lastKneel = kneel;
             float target = Mathf.Clamp(groundOffset - lowest, GroundLowest, GroundHighest);
             groundOffset = Mathf.Lerp(groundOffset, target, 1f - Mathf.Exp(-GroundRate * Time.deltaTime));
             model.localPosition = modelRest + model.parent.InverseTransformVector(Vector3.up * groundOffset);
         }
+
+        float KneeGap(Transform knee) => knee.position.y - (ground.SampleHeight(knee.position) + ground.transform.position.y);
 
         float SoleGap(Transform foot, Transform toes)
         {
@@ -438,13 +468,64 @@ namespace FiveRivers.Combat
             if (animator != null)
             {
                 animator.speed = 1f; // 달리다 쓰러져도 사망 동작은 원래 속도로
-                animator.SetInteger(DieIndexId, forcedDeath >= 0 ? forcedDeath : Random.Range(0, 3));
+                animator.SetInteger(DieIndexId, forcedDeath >= 0 ? forcedDeath : PickDeath());
                 animator.SetTrigger(DieId);
-                LyingBodyRest.Attach(animator); // the body comes to rest on the ground, not on the NavMesh above it
+                var rest = LyingBodyRest.Attach(animator); // the body comes to rest on the ground, not on the NavMesh above it
+                if (rest != null && lastKneel > 0.5f) rest.HoldKneel(); // hit kneeling: he falls from there, not from standing
             }
             DropRifle();
             Gone?.Invoke(this);
             Destroy(gameObject, 8f);
+        }
+
+        // Where each death clip lays the body, in the man's frame at the moment he is hit (measured 2026-11-16):
+        // Death_01 falls back (head 1.23 m behind), Death_02 and Death_03 fall forward (head 1.05 / 1.37 m, hands
+        // 1.56 m ahead). A man kneeling behind his rock or sandbags faces it, so falling forward he went through it.
+        static readonly Vector3[] DeathReach = { new Vector3(0.2f, 0f, -1.35f), new Vector3(0.45f, 0f, 1.15f), new Vector3(0f, 0f, 1.6f) };
+        static readonly Collider[] fallHits = new Collider[8];
+        static readonly int[] deathOrder = { 0, 1, 2 };
+        static readonly float[] DeathTurns = { 45f, -45f, 90f, -90f, 135f, -135f, 180f };
+        const float DeathTurnRate = 300f, DeathTurnFor = 0.6f;
+        Quaternion deathFacing;
+        bool deathTurning;
+
+        // A clip whose fall stays clear of cover. If every clip is blocked, he twists as he goes down (over the
+        // first 0.4 s, which reads as the hit turning him) toward the nearest way that is clear.
+        int PickDeath()
+        {
+            for (int i = deathOrder.Length - 1; i > 0; i--) { int j = Random.Range(0, i + 1); (deathOrder[i], deathOrder[j]) = (deathOrder[j], deathOrder[i]); }
+            foreach (int clip in deathOrder)
+                if (FallsClear(clip, transform.rotation)) return clip;
+            foreach (float turn in DeathTurns)
+                foreach (int clip in deathOrder)
+                {
+                    var facing = transform.rotation * Quaternion.Euler(0f, turn, 0f);
+                    if (!FallsClear(clip, facing)) continue;
+                    deathFacing = facing;
+                    deathTurning = true;
+                    return clip;
+                }
+            return deathOrder[0];
+        }
+
+        bool FallsClear(int clip, Quaternion facing)
+        {
+            var start = transform.position + Vector3.up * 0.45f;
+            var end = transform.position + facing * DeathReach[clip] + Vector3.up * 0.35f;
+            int n = Physics.OverlapCapsuleNonAlloc(start, end, 0.22f, fallHits, ~(1 << 2), QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < n; i++)
+            {
+                var c = fallHits[i];
+                if (c is TerrainCollider || c.attachedRigidbody != null || c.transform.IsChildOf(transform)) continue;
+                if (c.GetComponentInParent<EnemyAgent>() != null || c.GetComponentInParent<CharacterController>() != null
+                    || c.GetComponentInParent<AllyCombatant>() != null) continue;
+                return false;
+            }
+            // and the art rocks and sandbags that have no collider of their own (CoverVisuals); the one he knelt
+            // right behind does not count against falling the other way
+            for (int k = 2; k <= 6; k++)
+                if (CoverVisuals.Blocks(Vector3.Lerp(start, end, k / 6f), 0.2f, start)) return false;
+            return true;
         }
 
         void Leave()

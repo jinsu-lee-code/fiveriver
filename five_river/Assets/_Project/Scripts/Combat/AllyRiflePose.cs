@@ -159,11 +159,13 @@ namespace FiveRivers.Combat
         // High port: muzzle up past the left shoulder. The roll keeps the support forearm untwisted
         // (at 0 and below its sleeve corkscrewed into a dark band).
         public static Vector3 RunEuler = new Vector3(-38f, -68f, 25f);
-        // Crouched advance: low ready, the rifle in front of the belt pointing ahead and a little left, level
-        // once the bent chest has tipped it (a wider yaw carried it sideways like a bar).
+        // Crouched advance: the same high port as the run (2026-11-16). The crouched gait only shows for the first
+        // steps and the last ones before a halt, so a low ready of its own made the rifle swing to the waist and
+        // back on every start and stop, and on screen it read as a bar held sideways in one hand.
+        // (was: offset (.02, -.27, .17), euler (-14, -30, 20))
         public static float AdvanceFollow = .6f;
-        public static Vector3 AdvanceOffset = new Vector3(.02f, -.27f, .17f);
-        public static Vector3 AdvanceEuler = new Vector3(-14f, -30f, 20f);
+        public static Vector3 AdvanceOffset = new Vector3(.02f, -.25f, .15f);
+        public static Vector3 AdvanceEuler = new Vector3(-38f, -68f, 25f);
         public static float AdvanceLook = -.16f, RunLook = -.08f; // how far below level he looks
         static readonly Vector3 CarryRightElbow = new Vector3(.4f, -.4f, -.1f), CarryLeftElbow = new Vector3(-.3f, -.5f, .05f);
         // Moving: both elbows down and in, close to how the arms hang. With flatter hints Park's longer arms

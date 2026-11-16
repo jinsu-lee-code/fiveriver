@@ -78,6 +78,10 @@ namespace FiveRivers.Combat
         public bool FeetOnSlope { get; set; }
         public static float FootTilt = 0.6f, MaxFootShift = 0.45f;
         public static bool SlopeFeet = true; // off = feet as the clip puts them (debug / comparison)
+        // Set by EnemyAgent: how much of a kneeling state is on, and the ankle height over the sole. Kneeling, the
+        // body is lowered onto the knee, so the planted foot is kept from going down into the ground.
+        public float Kneel { get; set; }
+        public float SoleHeight { get; set; } = 0.08f;
         Terrain ground;
 
         void PlaceFeet()
@@ -90,7 +94,9 @@ namespace FiveRivers.Combat
             {
                 var p = animator.GetIKPosition(goal);
                 float shift = Mathf.Clamp(Ground(p) - under, -MaxFootShift, MaxFootShift);
-                animator.SetIKPosition(goal, p + Vector3.up * shift);
+                var placed = p + Vector3.up * shift;
+                if (Kneel > 0f) placed.y = Mathf.Lerp(placed.y, Mathf.Max(placed.y, Ground(p) + SoleHeight), Kneel);
+                animator.SetIKPosition(goal, placed);
                 animator.SetIKPositionWeight(goal, 1f);
                 var normal = ground.terrainData.GetInterpolatedNormal(
                     (p.x - ground.transform.position.x) / ground.terrainData.size.x, (p.z - ground.transform.position.z) / ground.terrainData.size.z);
