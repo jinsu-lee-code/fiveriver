@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FiveRivers.Combat;
 using UnityEditor;
@@ -18,6 +19,13 @@ namespace FiveRivers.EditorTools
         const string LauncherSleeves = Art + "Models/Characters/ROK_Arms/M_CH_ROK_Bazooka_FP.mat";
         const string Rocket = Art + "Models/Weapons/Bazooka/SM_WP_BazookaRocket.fbx";
         const string Smoke = "eb2412df5134fe749b8468bef9340100";
+        const string SightSteel = Art + "Weapons/M1Handling20261102/M1_SightSteel.mat";
+        // Rear aperture centre height above the bore. The delivered front post tip stands at .209; a rear at .148
+        // tilted the whole launcher 13 degrees nose-down in the aim view (the tube pointed at the ground while the
+        // rocket flew straight). At .203 the sight line rises 1.3 degrees over the bore, a plausible elevation.
+        internal const float RearSightHeight = .203f;
+        internal static bool RearAperture = false;
+        const float BoreTop = .046f; // top of the tube under the rear sight
 
         [MenuItem("FiveRivers/Animation/Connect First Person")]
         public static void Apply()
@@ -109,13 +117,8 @@ namespace FiveRivers.EditorTools
             Reference("reloadFrame", reloadFrame);
             data.FindProperty("reloadPosition").vector3Value = new Vector3(.29f, .045f, .47f);
 
-            var rear = Marker(shot, "Sight_RearCentre", new Vector3(0f, .148f, .235f));
-            var front = Marker(shot, "Sight_FrontTip", new Vector3(0f, .209f, .500f));
-            BuildRearAperture(rear, sightMaterial);
+            FitLauncherSight(shot, data);
             BazookaBoreSetup.OpenRear(shot, sightMaterial);
-            var aimRotation = Quaternion.Inverse(Quaternion.LookRotation(front.localPosition - rear.localPosition, Vector3.up));
-            data.FindProperty("aimViewPosition").vector3Value = Vector3.forward * .14f - aimRotation * rear.localPosition;
-            data.FindProperty("aimViewRotation").quaternionValue = aimRotation;
             if (oldGrip != null) oldGrip.gameObject.SetActive(false);
             if (oldSight != null) oldSight.gameObject.SetActive(false);
 
@@ -184,19 +187,44 @@ namespace FiveRivers.EditorTools
             return material;
         }
 
+        // Rear aperture and the aim pose that puts it 14 cm in front of the eye with the front post tip centred.
+        internal static void FitLauncherSight(Transform shot, SerializedObject data)
+        {
+            var rear = Marker(shot, "Sight_RearCentre", new Vector3(0f, RearSightHeight, .235f));
+            var front = Marker(shot, "Sight_FrontTip", new Vector3(0f, .209f, .500f));
+            // 2026-11-16 사용자 지시 "바주카의 가늠자는 필요없다": 뒷가늠자 고리 · 받침을 만들지 않는다(있던 것은 지운다).
+            // 조준 자세는 그대로 이 표식 자리를 눈앞에 둔다.
+            if (RearAperture) BuildRearAperture(rear, AssetDatabase.LoadAssetAtPath<Material>(SightSteel));
+            else foreach (Transform child in rear.Cast<Transform>().ToArray()) Object.DestroyImmediate(child.gameObject);
+            var aimRotation = Quaternion.Inverse(Quaternion.LookRotation(front.localPosition - rear.localPosition, Vector3.up));
+            data.FindProperty("aimViewPosition").vector3Value = Vector3.forward * .14f - aimRotation * rear.localPosition;
+            data.FindProperty("aimViewRotation").quaternionValue = aimRotation;
+        }
+
         static void BuildRearAperture(Transform rear, Material material)
         {
-            // 얇은 금속 링과 지지대. 중앙에는 앞 가늠쇠를 볼 수 있는 실제 구멍이 있다.
-            for (int i = 0; i < 8; i++)
+            // Round blued-steel ring on a thin leaf standing on the tube, with a hinge block at its foot.
+            // (Replaces the eight-cube octagon and the thick graybox post that blacked out the aim view's centre.)
+            const int Segments = 20;
+            const float Radius = .0098f;
+            var keep = new HashSet<string>();
+            for (int i = 0; i < Segments; i++)
             {
-                float angle = i * 45f;
+                float angle = i * 360f / Segments;
                 var turn = Quaternion.Euler(0f, 0f, angle);
-                Part("Rim_" + i, turn * Vector3.up * .0095f, turn, new Vector3(.0085f, .0021f, .005f));
+                Part($"Ring_{i:00}", turn * Vector3.up * Radius, turn, new Vector3(2f * Mathf.PI * Radius / Segments * 1.1f, .0024f, .0035f));
             }
-            Part("Base", new Vector3(0f, -.0345f, 0f), Quaternion.identity, new Vector3(.0085f, .051f, .010f));
+            float foot = BoreTop - RearSightHeight; // tube top, relative to the aperture centre
+            float upperEnd = -.075f;
+            Part("Leaf_Upper", new Vector3(0f, (-Radius - .0012f + upperEnd) * .5f, 0f), Quaternion.identity, new Vector3(.0022f, -upperEnd - Radius - .0012f, .003f));
+            Part("Leaf_Lower", new Vector3(0f, (upperEnd + foot) * .5f, 0f), Quaternion.identity, new Vector3(.0034f, upperEnd - foot, .0045f));
+            Part("Hinge", new Vector3(0f, foot + .0035f, 0f), Quaternion.identity, new Vector3(.014f, .007f, .012f));
+            foreach (Transform child in rear.Cast<Transform>().ToArray())
+                if (!keep.Contains(child.name)) Object.DestroyImmediate(child.gameObject);
 
             void Part(string name, Vector3 position, Quaternion rotation, Vector3 size)
             {
+                keep.Add(name);
                 var part = rear.Find(name);
                 if (part == null)
                 {
@@ -208,7 +236,10 @@ namespace FiveRivers.EditorTools
                 }
                 part.SetLocalPositionAndRotation(position, rotation);
                 part.localScale = size;
-                if (material != null) part.GetComponent<Renderer>().sharedMaterial = material;
+                part.gameObject.layer = 31;
+                var renderer = part.GetComponent<Renderer>();
+                renderer.shadowCastingMode = ShadowCastingMode.Off;
+                if (material != null) renderer.sharedMaterial = material;
             }
         }
 

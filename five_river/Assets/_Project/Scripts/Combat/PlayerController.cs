@@ -36,6 +36,7 @@ namespace FiveRivers.Combat
         public Transform CameraPivot => cameraPivot;
         public bool Crouched { get; private set; }
         public bool Sprinting { get; private set; }
+        public static bool DebugForceSprint; // capture/review tools only
         public bool Aiming { get; set; }
         public Vector2 MoveInput { get; private set; }
 
@@ -77,7 +78,7 @@ namespace FiveRivers.Combat
 
             MoveInput = gate.CanAct ? Controls.Move.ReadValue<Vector2>() : Vector2.zero;
             if (gate.CanAct && Controls.Stance.WasPressedThisFrame()) SetCrouched(!Crouched);
-            Sprinting = gate.CanAct && Controls.Sprint.IsPressed() && MoveInput.y > 0.1f && !Aiming;
+            Sprinting = gate.CanAct && (Controls.Sprint.IsPressed() && MoveInput.y > 0.1f || DebugForceSprint) && !Aiming;
             if (Sprinting && Crouched) SetCrouched(false);
 
             float speed = Crouched ? config.crouchSpeed : Sprinting ? config.sprintSpeed : config.walkSpeed;

@@ -19,6 +19,10 @@ namespace FiveRivers.Combat
         [SerializeField] Transform leftUpper, leftForearm, leftWrist, leftGrip;
         [SerializeField] Transform rightUpper, rightForearm, rightWrist, rightGrip;
         [SerializeField] Vector3 hipViewPosition = new Vector3(.20f, -.09f, .36f);
+        // Hip carry attitude (pitch, yaw, cant). A level tube pointing straight down the view line sits on the
+        // crosshair and fills the stretched right edge of the 70 degree view; a slight dip, inward yaw and cant reads
+        // as a heavy launcher resting on the shoulder.
+        [SerializeField] Vector3 hipViewEuler;
         [SerializeField] Vector3 aimViewPosition;
         [SerializeField] Quaternion aimViewRotation = Quaternion.identity;
         [SerializeField] Vector3 reloadPosition;
@@ -30,6 +34,15 @@ namespace FiveRivers.Combat
         [SerializeField] Vector3 kickPosition = new Vector3(0f, .004f, -.035f);
         [SerializeField] Vector3 kickEuler = new Vector3(-1.4f, .25f, -.6f);
         [SerializeField, Range(0f, 1f)] float aimedKickScale = .6f;
+        // 2026-11-16 "손이 너무 가늘어": the delivered arms read thin at the launcher's distance from the eye. The
+        // animator writes the arms' root every frame, so the size is put back on here, before the arms are fitted.
+        [SerializeField, Range(1f, 1.6f)] float armScale = 1.38f;
+        Transform armsRoot;
+        [Header("Sprint carry: the tube swings across the body instead of staying at low ready")]
+        [SerializeField] Vector3 sprintOffset = new Vector3(-.06f, -.04f, -.05f);
+        [SerializeField] Vector3 sprintEuler = new Vector3(14f, -28f, 18f);
+        [SerializeField, Min(.01f)] float sprintBlendSeconds = .22f;
+        [SerializeField, Min(0f)] float sprintStepsPerSecond = 3.4f;
         [Header("Short muzzle exhaust; existing rear backblast is retained")]
         [SerializeField, Range(0, 32)] int smokeCount = 12;
         [SerializeField, Min(0f)] float flashIntensity = .65f;
@@ -46,8 +59,11 @@ namespace FiveRivers.Combat
         Quaternion leftGripRotation;
         Quaternion rocketGripRotation;
         AnimationEventSink animationEvents;
+        PlayerController player;
+        float sprintBlend;
         static readonly int Reload = Animator.StringToHash("Reload");
         static readonly int Idle = Animator.StringToHash("Idle");
+        static readonly int Fire = Animator.StringToHash("Fire");
 
         public bool IsReacting => initialized && Time.time - firedAt < settleSeconds;
 
@@ -62,6 +78,7 @@ namespace FiveRivers.Combat
             restPosition = visualFrame.localPosition;
             restRotation = visualFrame.localRotation;
             if (animator != null) animationEvents = animator.GetComponent<AnimationEventSink>();
+            if (weapons != null) player = weapons.GetComponent<PlayerController>();
             if (leftGrip != null)
             {
                 leftGripPosition = leftGrip.localPosition;
@@ -140,17 +157,30 @@ namespace FiveRivers.Combat
             float p = reloading ? Mathf.Clamp01(state.normalizedTime) : 0f;
             float reveal = Ease(.04f, .24f, p) * (1f - Ease(.69f, .98f, p));
             var position = Vector3.Lerp(hipViewPosition, aimViewPosition, bazooka.AimBlend) - transform.localPosition;
-            var rotation = Quaternion.Slerp(Quaternion.identity, aimViewRotation, bazooka.AimBlend);
+            var rotation = Quaternion.Slerp(Quaternion.Euler(hipViewEuler), aimViewRotation, bazooka.AimBlend);
             if (reloading)
             {
                 position += reloadPosition * reveal;
                 rotation *= Quaternion.Euler(reloadEuler * reveal);
             }
-            else if (state.shortNameHash == Idle)
+            else if (state.shortNameHash == Idle || state.shortNameHash == Fire)
             {
                 // 대기의 미세한 흔들림은 견착하면서 줄어들어 실제 가늠쇠가 다시 시선 중앙에 온다.
-                rotation *= Quaternion.Slerp(Quaternion.identity, Quaternion.Inverse(animator.transform.localRotation), bazooka.AimBlend);
-                position -= rotation * (animator.transform.localPosition * bazooka.AimBlend);
+                // The fire clip's shove (6 cm back, 4 degrees up) is authored for the hip; shouldered, only
+                // aimedKickScale of it remains, so the rear ring does not jump into the eye.
+                float settle = bazooka.AimBlend * (state.shortNameHash == Fire ? 1f - aimedKickScale : 1f);
+                rotation *= Quaternion.Slerp(Quaternion.identity, Quaternion.Inverse(animator.transform.localRotation), settle);
+                position -= rotation * (animator.transform.localPosition * settle);
+            }
+            bool sprinting = player != null && player.Sprinting && !reloading && (weapons == null || !weapons.Switching);
+            sprintBlend = Mathf.MoveTowards(sprintBlend, sprinting ? 1f : 0f, Time.deltaTime / sprintBlendSeconds);
+            if (sprintBlend > 0f)
+            {
+                float s = Mathf.SmoothStep(0f, 1f, sprintBlend);
+                float step = Time.time * Mathf.PI * sprintStepsPerSecond;
+                var bob = new Vector3(Mathf.Sin(step) * .012f, -Mathf.Abs(Mathf.Sin(step)) * .018f, 0f);
+                position += (sprintOffset + bob) * s;
+                rotation = Quaternion.Euler(sprintEuler * s) * rotation;
             }
             reloadFrame.SetLocalPositionAndRotation(position, rotation);
 
@@ -173,6 +203,9 @@ namespace FiveRivers.Combat
             var hand = Vector3.Lerp(carrying, clear, Ease(.59f, .72f, p));
             leftGrip.localPosition = Vector3.Lerp(leftGripPosition, hand, reach);
             leftGrip.localRotation = Quaternion.Slerp(leftGripRotation, rocketGripRotation, reach);
+            if (armsRoot == null && leftUpper != null)
+                for (var t = leftUpper; t != null && t != transform; t = t.parent) if (t.name == "Arms") armsRoot = t;
+            if (armsRoot != null) armsRoot.localScale = Vector3.one * armScale;
             FitArm(leftUpper, leftForearm, leftWrist, leftGrip, -.20f);
             FitArm(rightUpper, rightForearm, rightWrist, rightGrip, .20f);
         }
@@ -197,6 +230,7 @@ namespace FiveRivers.Combat
             if (!initialized) return;
             firedAt = float.NegativeInfinity;
             rocketInserted = false;
+            sprintBlend = 0f;
             visualFrame.SetLocalPositionAndRotation(restPosition, restRotation);
             if (reloadFrame != null) reloadFrame.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             if (rocketInHand != null) rocketInHand.gameObject.SetActive(false);

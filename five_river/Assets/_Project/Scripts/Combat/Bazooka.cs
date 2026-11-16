@@ -17,9 +17,14 @@ namespace FiveRivers.Combat
         [SerializeField] Vector3 hipPosition;
         [SerializeField] Vector3 aimPosition;
         [SerializeField] Rocket rocketPrefab;
+        // Presentation only: the sight stays up this long after a shot (while aim is held) so the rocket can be
+        // followed and the recoil reads, instead of the launcher snapping to the hip on the trigger pull.
+        // Reload timing is unchanged (it still starts at the shot).
+        [SerializeField, Min(0f)] float shotAimHold = .35f;
 
         float reloadEnd;
         float aimBlend;
+        float firedAt = float.NegativeInfinity;
 
         public int Loaded { get; private set; }
         public int Reserve { get; private set; }
@@ -40,7 +45,8 @@ namespace FiveRivers.Combat
         public void Tick(bool canAct, bool aim)
         {
             float blendSpeed = config.aimBlendTime > 0f ? Time.deltaTime / config.aimBlendTime : 1f;
-            aimBlend = Mathf.MoveTowards(aimBlend, aim && !Reloading ? 1f : 0f, blendSpeed);
+            bool holdingShot = Reloading && Time.time - firedAt < shotAimHold;
+            aimBlend = Mathf.MoveTowards(aimBlend, aim && (!Reloading || holdingShot) ? 1f : 0f, blendSpeed);
             model.localPosition = Vector3.Lerp(hipPosition, aimPosition, aimBlend);
 
             if (Reloading)
@@ -64,6 +70,7 @@ namespace FiveRivers.Combat
         void Launch()
         {
             Loaded = 0;
+            firedAt = Time.time;
             var rotation = view.transform.rotation;
             var rocket = effects.SpawnTracked(rocketPrefab, muzzle.position, rotation);
             rocket.Launch(config, effects, view.transform.position);
@@ -95,6 +102,7 @@ namespace FiveRivers.Combat
             Reserve = config.bazookaRockets - 1;
             Reloading = false;
             aimBlend = 0f;
+            firedAt = float.NegativeInfinity;
         }
     }
 }
