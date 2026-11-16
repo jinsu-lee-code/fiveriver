@@ -21,7 +21,7 @@ namespace FiveRivers.Combat
         // full height for 0.1-0.4 s before he fell. The hips are held at the height he knelt at and the feet where
         // they were, until the clip comes down past that height by itself; then the legs are handed back to it.
         bool kneelHold;
-        float kneelHips, legPin;
+        float kneelHips, kneelGap, kneelStart, legPin;
         Vector3 leftFootStart, rightFootStart, leftPole, rightPole;
         Quaternion leftFootTurn, rightFootTurn;
         Vector3 clear, cleared; // how far he has to be, and has been, slid out of a rock or sandbag wall he fell into
@@ -74,10 +74,11 @@ namespace FiveRivers.Combat
         // Called by EnemyAgent right after Attach when he was kneeling as he was hit (the pose is still the kneel).
         public void HoldKneel()
         {
-            if (hips == null || leftHip == null || rightHip == null || leftKnee == null || rightKnee == null) return;
+            if (ground == null || hips == null || leftHip == null || rightHip == null || leftKnee == null || rightKnee == null) return;
             kneelHold = true;
             legPin = 1f;
-            kneelHips = Vector3.Dot(hips.position - transform.position, transform.up);
+            kneelStart = kneelHips = Vector3.Dot(hips.position - transform.position, transform.up);
+            kneelGap = Gap(hips.position);
             leftFootStart = leftFoot.position; rightFootStart = rightFoot.position;
             leftFootTurn = leftFoot.rotation; rightFootTurn = rightFoot.rotation;
             leftPole = KneeBend(leftHip, leftKnee, leftFoot);
@@ -95,19 +96,28 @@ namespace FiveRivers.Combat
         void HoldKneelPose()
         {
             float clipHips = Vector3.Dot(hips.position - transform.position, transform.up);
-            float over = clipHips - kneelHips;
-            // no higher than he knelt: the clip's standing start is taken out of the hips, the upper body keeps its motion
-            if (over > 0f) transform.position -= transform.up * over;
+            // no higher than he knelt: the clip's standing start is taken out of the hips, the upper body keeps its
+            // motion. Held both over his own origin and over the ground under the hips, and never back up once he has
+            // sunk lower: the clips carry the hips back over a hillside, Death_01 over ground that falls away (held over
+            // the origin only, 5 cm up off the ground by 0.6 s), Death_00 over ground that rises (held over the ground
+            // only, 5 cm up in the air by 0.9 s) (11-16)
+            float gap = Gap(hips.position);
+            float over = Mathf.Max(0f, Mathf.Max(clipHips - kneelHips, gap - kneelGap));
+            if (over > 0f) transform.position -= Vector3.up * over;
+            kneelHips = Mathf.Min(kneelHips, clipHips - over);
+            kneelGap = Mathf.Min(kneelGap, gap - over);
             // the legs stay as he knelt while the clip is still above that height, and are let go over the 20 cm it
             // takes the clip to come down past it (never faster than 3 per second, so they do not snap)
-            float pin = Mathf.Clamp01((over + 0.2f) / 0.2f);
+            float below = kneelStart - clipHips;
+            float pin = Mathf.Clamp01(1f - below / 0.2f);
             legPin = Mathf.Min(legPin, Mathf.MoveTowards(legPin, pin, Time.deltaTime * 3f));
             if (legPin > 0f)
             {
                 PinLeg(leftHip, leftKnee, leftFoot, leftFootStart, leftFootTurn, leftPole, legPin);
                 PinLeg(rightHip, rightKnee, rightFoot, rightFootStart, rightFootTurn, rightPole, legPin);
             }
-            else if (over < -0.25f) kneelHold = false; // well down by the clip's own fall: nothing left to hold
+            // well down by the clip's own fall and no longer held down: letting go changes nothing on screen
+            else if (below > 0.25f && over <= 0.005f) kneelHold = false;
         }
 
         static void PinLeg(Transform hip, Transform knee, Transform foot, Vector3 start, Quaternion turn, Vector3 pole, float w)
