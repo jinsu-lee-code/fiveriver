@@ -167,7 +167,10 @@ namespace FiveRivers.EditorTools
                 if (m == null) { m = new Material(lit); AssetDatabase.CreateAsset(m, path); }
                 m.shader = lit; f(m); EditorUtility.SetDirty(m); return m;
             }
-            void Emit(Material m, Color c) { m.EnableKeyword("_EMISSION"); m.SetColor("_EmissionColor", c); m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None; }
+            // RealtimeEmissive, not None: the team's URP (Unity 6000.3.25) keeps _EMISSION on only for a material whose
+            // GI flags say it emits, and turned the candle dark when it re-validated these on load (2026-11-17 night).
+            // URP here has no realtime GI, so the flag changes nothing else.
+            void Emit(Material m, Color c) { m.EnableKeyword("_EMISSION"); m.SetColor("_EmissionColor", c); m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive; }
             var mats = new Dictionary<string, Material>
             {
                 // a ration tin gone dull, a little of the flame on it
