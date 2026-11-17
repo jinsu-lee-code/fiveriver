@@ -208,11 +208,34 @@ namespace FiveRivers.Narrative
                     weapons != null && weapons.Current == WeaponSlot.Bazooka && !weapons.Switching);
                 switch (tankObjective.Step)
                 {
-                    case TankObjectiveStep.MoveToMound: objective.Show(text.objectiveTankMove); break;
-                    case TankObjectiveStep.EquipBazooka: objective.Show(text.objectiveTankEquip); break;
-                    case TankObjectiveStep.FireAtSide: objective.Show(tank.SideHits > 0 ? text.objectiveTankFinish : tank.IsMoving ? text.objectiveTankWait : text.objectiveTankFire); break;
+                    case TankObjectiveStep.MoveToMound:
+                        // which way and how far, like the hill guide: the step only ends within moundRadius (1.5 m in the
+                        // scene) of the trench end, and stopped a few metres short the line stayed "go to the trench end"
+                        // with nothing to say how close he was (played through by hand, 2026-11-17 night)
+                        string guide = TankMoveGuide();
+                        if (lastTankGuide != null && objective.Current == lastTankGuide) objective.UpdateText(guide);
+                        else objective.Show(guide);
+                        lastTankGuide = guide;
+                        break;
+                    case TankObjectiveStep.EquipBazooka: lastTankGuide = null; objective.Show(text.objectiveTankEquip); break;
+                    case TankObjectiveStep.FireAtSide: lastTankGuide = null; objective.Show(tank.SideHits > 0 ? text.objectiveTankFinish : tank.IsMoving ? text.objectiveTankWait : text.objectiveTankFire); break;
                 }
             }
+            else lastTankGuide = null;
+        }
+
+        string lastTankGuide;
+
+        string TankMoveGuide()
+        {
+            var delta = points.moundTop.position - player.transform.position;
+            delta.y = 0f;
+            float angle = Vector3.SignedAngle(player.transform.forward, delta, Vector3.up);
+            string heading = Mathf.Abs(angle) < 25f ? text.hillAhead : Mathf.Abs(angle) > 150f ? text.hillBehind : angle > 0 ? text.hillRight : text.hillLeft;
+            // metres one by one close in (the step ends 1.5 m from the end), in fives further off
+            float distance = delta.magnitude;
+            int metres = distance < 7.5f ? Mathf.Max(1, Mathf.RoundToInt(distance)) : Mathf.RoundToInt(distance / 5f) * 5;
+            return string.Format(text.hillNavigation, text.objectiveTankMove, heading, metres);
         }
     }
 }
