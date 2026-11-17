@@ -196,7 +196,7 @@ namespace FiveRivers.Narrative
         // The line just beyond the front wall ahead of him, or -infinity when no wall is close (already outside).
         static float FrontLine(Transform body)
         {
-            int n = Physics.RaycastNonAlloc(body.position + Vector3.up * .5f, TrenchFront, hits, WallSearch, ~(1 << 2), QueryTriggerInteraction.Ignore);
+            int n = Physics.RaycastNonAlloc(body.position + Vector3.up * .5f, TrenchFront, hits, WallSearch, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
             float nearest = float.MaxValue;
             for (int i = 0; i < n; i++)
             {
@@ -208,7 +208,7 @@ namespace FiveRivers.Narrative
             // Past the wall's far face: probe back from beyond it so a thick wall is cleared completely.
             var beyond = body.position + TrenchFront * (nearest + WallSearch);
             float far = nearest;
-            n = Physics.RaycastNonAlloc(beyond + Vector3.up * .5f, -TrenchFront, hits, WallSearch, ~(1 << 2), QueryTriggerInteraction.Ignore);
+            n = Physics.RaycastNonAlloc(beyond + Vector3.up * .5f, -TrenchFront, hits, WallSearch, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < n; i++)
                 if (!IsPerson(hits[i].collider, body)) far = Mathf.Max(far, nearest + WallSearch - hits[i].distance);
             return Vector3.Dot(body.position + TrenchFront * (far + ClearBeyondWall), TrenchFront);
@@ -402,7 +402,7 @@ namespace FiveRivers.Narrative
         static readonly RaycastHit[] hits = new RaycastHit[8];
         static Vector3 Ground(Vector3 p, Transform self)
         {
-            int n = Physics.RaycastNonAlloc(p + Vector3.up * 1.2f, Vector3.down, hits, 3f, ~(1 << 2), QueryTriggerInteraction.Ignore);
+            int n = Physics.RaycastNonAlloc(p + Vector3.up * 1.2f, Vector3.down, hits, 3f, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
             // of the ground surfaces under him, the one closest to where the path puts his feet (not the highest:
             // walking past a cover wall or a truck must not lift him onto it)
             float best = float.NegativeInfinity, bestGap = float.MaxValue;

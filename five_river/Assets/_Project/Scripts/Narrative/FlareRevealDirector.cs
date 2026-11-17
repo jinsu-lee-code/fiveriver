@@ -301,7 +301,7 @@ namespace FiveRivers.Narrative
             var to = chest - camera;
             float distance = to.magnitude;
             if (distance < 0.5f) return false;
-            int n = Physics.SphereCastNonAlloc(camera - to / distance * 0.3f, 0.3f, to / distance, coverHits, distance - 0.3f, ~0, QueryTriggerInteraction.Ignore);
+            int n = Physics.SphereCastNonAlloc(camera - to / distance * 0.3f, 0.3f, to / distance, coverHits, distance - 0.3f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < n; i++)
             {
                 var c = coverHits[i].collider;

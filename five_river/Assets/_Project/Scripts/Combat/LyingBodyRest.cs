@@ -231,13 +231,13 @@ namespace FiveRivers.Combat
         {
             // buried inside a rock mesh there is no surface for an overlap test to cross: look straight down onto
             // the point from above instead; anything but the ground over it means it lies under or inside cover
-            int hitCount = Physics.RaycastNonAlloc(p + Vector3.up * 3f, Vector3.down, above, 2.95f, ~(1 << 2), QueryTriggerInteraction.Ignore);
+            int hitCount = Physics.RaycastNonAlloc(p + Vector3.up * 3f, Vector3.down, above, 2.95f, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < hitCount; i++)
             {
                 var c = above[i].collider;
                 if (IsCover(c)) return c;
             }
-            int n = Physics.OverlapSphereNonAlloc(p, 0.1f, overlaps, ~(1 << 2), QueryTriggerInteraction.Ignore);
+            int n = Physics.OverlapSphereNonAlloc(p, 0.1f, overlaps, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < n; i++)
                 if (IsCover(overlaps[i])) return overlaps[i];
             return null;

@@ -214,7 +214,7 @@ namespace FiveRivers.Combat
             var eye = PlayerEye;
             if (Vector3.Distance(muzzle, eye) > config.sightRange) return;
 
-            bool clear = !Physics.Linecast(muzzle, eye, out var hit, ~0, QueryTriggerInteraction.Ignore)
+            bool clear = !Physics.Linecast(muzzle, eye, out var hit, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
                          || hit.collider.GetComponentInParent<PlayerHealth>() != null;
             float accuracy = Mathf.Lerp(config.accuracyDark, config.accuracyLit, flares.Illumination) * director.EnemyAccuracyScale;
             if (player.Crouched) accuracy *= config.crouchedFactor;
@@ -227,7 +227,7 @@ namespace FiveRivers.Combat
             }
             // 빗나간 탄: 플레이어 근처 흙 · 모래주머니에 튄다
             var miss = eye + new Vector3(Random.Range(-2f, 2f), Random.Range(-1.4f, -0.4f), Random.Range(0.5f, 2.5f));
-            if (Physics.Linecast(muzzle, miss, out var dirt, ~0, QueryTriggerInteraction.Ignore))
+            if (Physics.Linecast(muzzle, miss, out var dirt, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore))
                 effects.Spawn(EffectKind.ImpactDirt, dirt.point, Quaternion.LookRotation(dirt.normal));
             ShotMissedNearPlayer?.Invoke(miss);
         }

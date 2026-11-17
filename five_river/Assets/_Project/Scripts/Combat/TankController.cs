@@ -213,7 +213,7 @@ namespace FiveRivers.Combat
                 // Establish sight of the gun once on each appearance. Later shots still threaten cover.
                 // The player's own rig never blocks the sight line, and the tank stops waiting after 2 s.
                 if (!openedFire && Physics.Linecast(player.CameraPivot.position, gunMuzzle.position,
-                        out var obstruction, ~0, QueryTriggerInteraction.Ignore)
+                        out var obstruction, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
                     && !obstruction.transform.IsChildOf(body) && !obstruction.transform.IsChildOf(player.transform))
                 {
                     if (sightWaitUntil < 0f) sightWaitUntil = Time.time + 2f;
@@ -278,7 +278,7 @@ namespace FiveRivers.Combat
             var target = player.transform.position;
             var offset = Random.insideUnitCircle.normalized * config.nearMissOffset * Random.Range(0.5f, 1.2f);
             var impact = target + new Vector3(offset.x, 0f, offset.y);
-            if (Physics.Raycast(impact + Vector3.up * 20f, Vector3.down, out var hit, 40f, ~0, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(impact + Vector3.up * 20f, Vector3.down, out var hit, 40f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore))
                 impact = hit.point;
             effects.Spawn(EffectKind.TankMuzzle, gunMuzzle.position, gunMuzzle.rotation);
             effects.Spawn(EffectKind.CannonBlast, impact, Quaternion.identity);

@@ -22,7 +22,9 @@ namespace FiveRivers.Core
                 c.enabled = false;
                 skipped.Add(c);
             }
-            GetComponent<NavMeshSurface>().BuildNavMesh();
+            var surface = GetComponent<NavMeshSurface>();
+            surface.layerMask = surface.layerMask & WorldQuery.All; // 플레이어 전용 차단체는 적 · 아군 경로에 넣지 않는다
+            surface.BuildNavMesh();
             foreach (var c in skipped) c.enabled = true;
         }
 

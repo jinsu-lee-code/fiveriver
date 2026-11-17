@@ -512,7 +512,7 @@ namespace FiveRivers.Combat
         {
             var start = transform.position + Vector3.up * 0.45f;
             var end = transform.position + facing * DeathReach[clip] + Vector3.up * 0.35f;
-            int n = Physics.OverlapCapsuleNonAlloc(start, end, 0.22f, fallHits, ~(1 << 2), QueryTriggerInteraction.Ignore);
+            int n = Physics.OverlapCapsuleNonAlloc(start, end, 0.22f, fallHits, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < n; i++)
             {
                 var c = fallHits[i];

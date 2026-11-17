@@ -34,7 +34,7 @@ namespace FiveRivers.Combat
         {
             if (!live) return;
             float step = config.rocketSpeed * Time.deltaTime;
-            if (Physics.Raycast(transform.position, transform.forward, out var hit, step + 0.05f, ~0, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, transform.forward, out var hit, step + 0.05f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore))
             {
                 Impact(hit);
                 return;
@@ -67,7 +67,7 @@ namespace FiveRivers.Combat
         {
             live = false;
             effects.Spawn(EffectKind.RocketExplosion, point, Quaternion.LookRotation(normal));
-            foreach (var col in Physics.OverlapSphere(point, config.rocketBlastRadius, ~0, QueryTriggerInteraction.Ignore))
+            foreach (var col in Physics.OverlapSphere(point, config.rocketBlastRadius, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore))
             {
                 var d = col.GetComponentInParent<IDamageable>();
                 if (d != null && !(d is PlayerHealth)) d.TakeDamage(config.rocketBlastDamage, point);

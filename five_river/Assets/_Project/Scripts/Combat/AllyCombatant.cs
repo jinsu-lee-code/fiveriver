@@ -138,7 +138,7 @@ namespace FiveRivers.Combat
         {
             var forward = defensiveForward; forward.y = 0f;
             var point = transform.position + forward.normalized * 30f;
-            return Physics.Raycast(point + Vector3.up * 80f, Vector3.down, out var hit, 160f, ~0, QueryTriggerInteraction.Ignore)
+            return Physics.Raycast(point + Vector3.up * 80f, Vector3.down, out var hit, 160f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
                 ? hit.point + Vector3.up * 0.8f
                 : point + Vector3.up * 2f;
         }
@@ -231,7 +231,7 @@ namespace FiveRivers.Combat
             forward.y = 0f;
             forward = Quaternion.Euler(0f, Random.Range(-suppressSpread, suppressSpread), 0f) * forward.normalized;
             var point = transform.position + forward * Random.Range(suppressDistance.x, suppressDistance.y);
-            suppressAim = Physics.Raycast(point + Vector3.up * 80f, Vector3.down, out var hit, 160f, ~0, QueryTriggerInteraction.Ignore)
+            suppressAim = Physics.Raycast(point + Vector3.up * 80f, Vector3.down, out var hit, 160f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
                 ? hit.point + Vector3.up * 0.6f
                 : point + Vector3.up * 2f;
         }
@@ -256,7 +256,7 @@ namespace FiveRivers.Combat
             var origin = muzzle.position;
             var aim = candidate.transform.position + Vector3.up * (candidate.Standing ? 1.25f : 0.75f);
             if ((aim - origin).sqrMagnitude > config.sightRange * config.sightRange) return false;
-            return !Physics.Linecast(origin, aim, out var hit, ~0, QueryTriggerInteraction.Ignore)
+            return !Physics.Linecast(origin, aim, out var hit, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
                 || hit.collider.GetComponentInParent<EnemyAgent>() == candidate;
         }
 
@@ -309,7 +309,7 @@ namespace FiveRivers.Combat
             // Suppressing rounds hit nearby ground, never an actor or a gameplay hit target.
             var ground = suppressing ? suppressAim + Random.insideUnitSphere * 1.5f
                 : target.transform.position + target.transform.right * Random.Range(0.7f, 1.4f);
-            if (Physics.Raycast(ground + Vector3.up * 2f, Vector3.down, out var hit, 4f, ~0, QueryTriggerInteraction.Ignore)
+            if (Physics.Raycast(ground + Vector3.up * 2f, Vector3.down, out var hit, 4f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
                 && hit.collider.GetComponentInParent<EnemyAgent>() == null
                 && hit.collider.GetComponentInParent<PlayerHealth>() == null)
                 effects.Spawn(EffectKind.ImpactDirt, hit.point, Quaternion.LookRotation(hit.normal));

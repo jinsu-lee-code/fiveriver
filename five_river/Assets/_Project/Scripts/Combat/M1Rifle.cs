@@ -87,7 +87,7 @@ namespace FiveRivers.Combat
             float spread = aimed ? config.m1AimSpread : config.m1HipSpread;
             var dir = Quaternion.Euler(UnityEngine.Random.Range(-spread, spread) * 0.5f, UnityEngine.Random.Range(-spread, spread) * 0.5f, 0f) * Vector3.forward;
             var ray = new Ray(view.transform.position, view.transform.rotation * dir);
-            if (TryGetShotHit(ray, config.m1Range, hitMask, player.transform, out var hit))
+            if (TryGetShotHit(ray, config.m1Range, hitMask & FiveRivers.Core.WorldQuery.All, player.transform, out var hit))
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(config.m1Damage, view.transform.position);
