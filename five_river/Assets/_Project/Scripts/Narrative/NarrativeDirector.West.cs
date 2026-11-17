@@ -35,6 +35,7 @@ namespace FiveRivers.Narrative
         // fall plays: thrown back, sagging at the knees, down. Standing = hips above this share of his standing height.
         const float MansuFallStartStanding = 0.27f, MansuFallBlendStanding = 0.2f, MansuStandingHips = 0.62f;
         Vector3 blanketOriginalPosition;
+        Quaternion blanketOriginalRotation;
 
         void OnWestSectionChanged(FlowTransition transition)
         {
@@ -60,12 +61,35 @@ namespace FiveRivers.Narrative
                 case FlowSection.Silence:
                     if (mansu != null && mansuLostThisRun)
                     {
-                        blanketBody.transform.position = mansu.transform.position;
+                        CoverWhereHeLies();
                         mansu.gameObject.SetActive(false);
                         StopFall();
                     }
                     break;
             }
+        }
+
+        // The blanket goes over him where he lies and the way he lies. It used to be laid where he had stood, along
+        // the front wall: the body lay 0.7 m away and turned 40 degrees from it, so at the cut to the silence the dead
+        // man jumped aside under his blanket (seen from above, 2026-11-17 night). The blanket's long axis is its
+        // forward, the boot showing at its back end.
+        void CoverWhereHeLies()
+        {
+            var animator = mansu.GetComponentInChildren<Animator>();
+            var head = animator != null && animator.isHuman ? animator.GetBoneTransform(HumanBodyBones.Head) : null;
+            var leftFoot = head != null ? animator.GetBoneTransform(HumanBodyBones.LeftFoot) : null;
+            var rightFoot = head != null ? animator.GetBoneTransform(HumanBodyBones.RightFoot) : null;
+            if (head == null || leftFoot == null || rightFoot == null)
+            {
+                blanketBody.transform.position = mansu.transform.position;
+                return;
+            }
+            var feet = (leftFoot.position + rightFoot.position) * 0.5f;
+            var along = Vector3.ProjectOnPlane(head.position - feet, Vector3.up);
+            var middle = (head.position + feet) * 0.5f;
+            middle.y = TrenchFloor(middle, mansu.transform, null) + 0.04f;
+            blanketBody.transform.SetPositionAndRotation(middle,
+                along.sqrMagnitude > 0.04f ? Quaternion.LookRotation(along.normalized, Vector3.up) : blanketBody.transform.rotation);
         }
 
         void ResolveWestActors()
@@ -77,6 +101,7 @@ namespace FiveRivers.Narrative
                 if (ally.gameObject.name != "Ally_1") continue;
                 mansu = ally;
                 blanketOriginalPosition = blanketBody.transform.position;
+                blanketOriginalRotation = blanketBody.transform.rotation;
                 return;
             }
             Debug.LogError("Western trench rifleman Ally_1 is missing.", this);
@@ -324,7 +349,7 @@ namespace FiveRivers.Narrative
                     mansuRifle.localScale = rifleLocalScale;
                     rifleParent = null;
                 }
-                blanketBody.transform.position = blanketOriginalPosition;
+                blanketBody.transform.SetPositionAndRotation(blanketOriginalPosition, blanketOriginalRotation);
                 mansu.gameObject.SetActive(true);
                 mansu.enabled = true;
                 // His own Title handler may have run while he was disabled; reset him here as well.
