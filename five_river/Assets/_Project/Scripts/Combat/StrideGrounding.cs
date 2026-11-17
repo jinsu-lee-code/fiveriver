@@ -16,6 +16,12 @@ namespace FiveRivers.Combat
         // (the first look after he steps off is shorter, so he is not left in the air for his first strides)
         const float Window = 0.42f, FirstWindow = 0.24f, Rate = 0.8f, MaxDown = 0.22f, MaxUp = 0.10f;
         const float RestLow = 0.03f, RestHigh = 0.07f;
+        // Coming up out of the trench (0.9 m in 0.8 s) the window still held what the ramp had taught (lift him: the
+        // leading toe went into the rising ground), and on the level he ran 15-20 cm over the field for half a second
+        // with his knees up (filmed 2026-11-17 evening). When the body's height has been changing faster than
+        // SlopeRate and then runs level for LevelAfter, the window starts afresh (short), from the offset last
+        // learned on level ground.
+        const float SlopeRate = 0.3f, LevelAfter = 0.08f;
 
         // Set by whoever moves him (HillAllies): true while he is stepping.
         public bool Active { get; set; }
@@ -26,6 +32,8 @@ namespace FiveRivers.Combat
         Transform body, hips, leftToes, rightToes;
         float rest = 0.05f, offset, target, learned, windowLow = float.MaxValue, windowTime, window = FirstWindow;
         bool hasLearned, wasActive;
+        float lastBodyY, levelTime, levelLearned;
+        bool onSlope, hasLevel;
         Vector3 written;
         bool wrote;
 
@@ -57,7 +65,20 @@ namespace FiveRivers.Combat
             wrote = false;
             if (Active)
             {
-                if (!wasActive) { windowLow = float.MaxValue; windowTime = 0f; window = FirstWindow; target = hasLearned ? learned : 0f; }
+                if (!wasActive)
+                {
+                    windowLow = float.MaxValue; windowTime = 0f; window = FirstWindow; target = hasLearned ? learned : 0f;
+                    lastBodyY = body.position.y; onSlope = false; levelTime = 0f;
+                }
+                float climb = Time.deltaTime > 0f ? Mathf.Abs(body.position.y - lastBodyY) / Time.deltaTime : 0f;
+                lastBodyY = body.position.y;
+                if (climb > SlopeRate) { onSlope = true; levelTime = 0f; }
+                else if (onSlope && (levelTime += Time.deltaTime) >= LevelAfter)
+                {
+                    onSlope = false;
+                    windowLow = float.MaxValue; windowTime = 0f; window = FirstWindow;
+                    target = learned = hasLevel ? levelLearned : 0f;
+                }
                 windowLow = Mathf.Min(windowLow, Mathf.Min(Gap(leftToes.position), Gap(rightToes.position)));
                 windowTime += Time.deltaTime;
                 if (windowTime >= window)
@@ -65,6 +86,7 @@ namespace FiveRivers.Combat
                     window = Window;
                     target = learned = Mathf.Clamp(rest - windowLow, -MaxDown, MaxUp);
                     hasLearned = true;
+                    if (!onSlope) { levelLearned = learned; hasLevel = true; }
                     windowLow = float.MaxValue;
                     windowTime = 0f;
                 }

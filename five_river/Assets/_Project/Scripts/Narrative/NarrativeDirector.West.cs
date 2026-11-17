@@ -155,7 +155,10 @@ namespace FiveRivers.Narrative
             }
             // he goes down from the pose he is in (kneeling at his post), not from the controller's standing default
             var hipBone = animator.isHuman ? animator.GetBoneTransform(HumanBodyBones.Hips) : null;
-            bool onHisFeet = hipBone != null && hipBone.position.y - animator.transform.position.y > MansuStandingHips * animator.humanScale;
+            // humanScale is in the avatar's own units; his model is scaled 0.777, so without lossyScale a man standing
+            // (hips 0.71 m over his root) read as kneeling (threshold 0.73) and the plank fall stayed (filmed 2026-11-17 evening)
+            bool onHisFeet = hipBone != null && hipBone.position.y - animator.transform.position.y
+                > MansuStandingHips * animator.humanScale * animator.transform.lossyScale.y;
             PoseBlendIn.Attach(animator, onHisFeet ? MansuFallBlendStanding : MansuFallBlend, mansuRifle);
             fallGraph = PlayableGraph.Create("Choi Mansu fall");
             fallGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
@@ -166,6 +169,15 @@ namespace FiveRivers.Narrative
             fall.SetTime(onHisFeet ? Mathf.Min(MansuFallStartStanding, joinAt) : joinAt);
             output.SetSourcePlayable(fall);
             fallGraph.Play();
+            // From his feet the whole fall plays and carries him back 1.6 m; the rear wall is 1.3 m behind his post, so
+            // he went down against it and lay propped up on it, stiff, boots in the air (filmed 2026-11-17 evening).
+            // Spun by the hit, he turns as he goes down towards where the trench floor has room for him.
+            if (onHisFeet)
+            {
+                float turn = FallTurn(mansu.transform);
+                if (mansuTurn != null) StopCoroutine(mansuTurn);
+                mansuTurn = Mathf.Abs(turn) > 1f ? StartCoroutine(TurnAsHeFalls(mansu.transform, turn)) : null;
+            }
             // the clip ends lying on the plane he knelt on; the trench floor falls away under his legs (2026-11-13)
             mansuRest = LyingBodyRest.Attach(animator);
             // and its last pose is spread-eagled: the arms come down and the head rolls once he is on his back
@@ -174,10 +186,29 @@ namespace FiveRivers.Narrative
             if (mansuPose != null && onHisFeet) mansuPose.Delay = joinAt - MansuFallStartStanding;
         }
 
-        // The rifle leaves his hands as he is hit: it tips forward out of them, lands flat on the trench floor in
-        // front of where he knelt and rocks once. Scripted rather than a rigid body so the shot is the same every time.
+        // The rifle leaves his hands as he is hit: it tips out of them, lands flat on the trench floor at his right
+        // and rocks once. Scripted rather than a rigid body so the shot is the same every time.
         Coroutine rifleDrop;
-        public static Vector3 MansuRifleRest = new Vector3(0.45f, 0f, 0.55f); // his right, up, his front
+        // his right, up, his front (the front wall is ~0.5 m ahead): the butt end lies 0.38 m from where his feet stay
+        public static Vector3 MansuRifleRest = new Vector3(0.75f, 0f, 0.05f);
+
+        // The floor the rifle lands on: the highest solid surface under the point, not the terrain height (the trench is
+        // dug below it), leaving out Choi Mansu himself and the rifle.
+        static readonly RaycastHit[] floorHits = new RaycastHit[12];
+        static float TrenchFloor(Vector3 point, Transform owner, Transform rifle)
+        {
+            int n = Physics.RaycastNonAlloc(point + Vector3.up * 1.2f, Vector3.down, floorHits, 3f, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
+            float best = float.NegativeInfinity;
+            for (int i = 0; i < n; i++)
+            {
+                var t = floorHits[i].collider.transform;
+                if (t.IsChildOf(owner) || (rifle != null && t.IsChildOf(rifle))) continue;
+                best = Mathf.Max(best, floorHits[i].point.y);
+            }
+            if (!float.IsNegativeInfinity(best)) return best;
+            var terrain = Terrain.activeTerrain;
+            return terrain != null ? terrain.SampleHeight(point) + terrain.transform.position.y : owner.position.y;
+        }
         public static float MansuRifleDropTime = 0.55f;
 
         IEnumerator DropMansuRifle(Transform rifle, Transform owner)
@@ -185,13 +216,13 @@ namespace FiveRivers.Narrative
             var fromPosition = rifle.position;
             var fromRotation = rifle.rotation;
             var rest = owner.position + owner.right * MansuRifleRest.x + owner.forward * MansuRifleRest.z;
-            var terrain = Terrain.activeTerrain;
-            float ground = terrain != null ? terrain.SampleHeight(rest) + terrain.transform.position.y : owner.position.y;
-            rest.y = ground + 0.035f;
-            // flat on its side, lying roughly the way it pointed, turned a little as it fell
-            var along = Vector3.ProjectOnPlane(fromRotation * Vector3.forward, Vector3.up);
-            if (along.sqrMagnitude < 0.01f) along = owner.forward;
-            var restRotation = Quaternion.LookRotation(Quaternion.AngleAxis(-22f, Vector3.up) * along.normalized, Vector3.up) * Quaternion.Euler(0f, 0f, 84f);
+            rest.y = TrenchFloor(rest, owner, rifle) + 0.035f;
+            // Flat on its side along the trench, muzzle away from him. Laid the way it pointed (at the front wall, which
+            // is half a metre in front of him) and at the terrain height above the trench, the barrel went into the wall
+            // and only the butt stood up out of it; laid muzzle towards him it reached back under his boots (both
+            // filmed 2026-11-17 evening).
+            var along = Vector3.ProjectOnPlane(owner.right, Vector3.up).normalized;
+            var restRotation = Quaternion.LookRotation(Quaternion.AngleAxis(-10f, Vector3.up) * along, Vector3.up) * Quaternion.Euler(0f, 0f, 84f);
             for (float t = 0f; t < MansuRifleDropTime; t += Time.deltaTime)
             {
                 if (rifle == null) yield break;
@@ -214,6 +245,55 @@ namespace FiveRivers.Narrative
             rifleDrop = null;
         }
 
+        // How far he is turned as he falls from his feet: the smallest turn (either way, up to MansuMaxTurn) whose
+        // backward line is clear for MansuFallRoom along the trench floor at shin height; else the clearest one.
+        Coroutine mansuTurn;
+        public static float MansuFallRoom = 2.0f, MansuMaxTurn = 75f, MansuTurnFor = 0.55f;
+        static readonly RaycastHit[] roomHits = new RaycastHit[12];
+
+        static float FallTurn(Transform body)
+        {
+            var origin = body.position;
+            var start = new Vector3(origin.x, TrenchFloor(origin, body, null) + 0.35f, origin.z);
+            var back = Vector3.ProjectOnPlane(-body.forward, Vector3.up).normalized;
+            float bestTurn = 0f, bestRoom = Room(start, back, body);
+            if (bestRoom >= MansuFallRoom) return 0f;
+            for (float turn = 15f; turn <= MansuMaxTurn + 0.1f; turn += 15f)
+                foreach (float sign in new[] { 1f, -1f })
+                {
+                    float room = Room(start, Quaternion.AngleAxis(sign * turn, Vector3.up) * back, body);
+                    if (room >= MansuFallRoom) return sign * turn;
+                    if (room > bestRoom) { bestRoom = room; bestTurn = sign * turn; }
+                }
+            return bestTurn;
+        }
+
+        static float Room(Vector3 start, Vector3 direction, Transform body)
+        {
+            int n = Physics.RaycastNonAlloc(start, direction, roomHits, MansuFallRoom + 1f, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
+            float room = MansuFallRoom + 1f;
+            for (int i = 0; i < n; i++)
+                if (!roomHits[i].collider.transform.IsChildOf(body)) room = Mathf.Min(room, roomHits[i].distance);
+            return room;
+        }
+
+        // Turns him about where he stands over the first part of the fall (the knees are going, he staggers round).
+        IEnumerator TurnAsHeFalls(Transform body, float degrees)
+        {
+            var pivot = body.position;
+            float done = 0f;
+            for (float t = 0f; t < MansuTurnFor; t += Time.deltaTime)
+            {
+                if (body == null) yield break;
+                float step = degrees * Mathf.SmoothStep(0f, 1f, t / MansuTurnFor) - done;
+                body.RotateAround(pivot, Vector3.up, step);
+                done += step;
+                yield return null;
+            }
+            if (body != null) body.RotateAround(pivot, Vector3.up, degrees - done);
+            mansuTurn = null;
+        }
+
         void StopWestBeat()
         {
             if (westBeat == null) return;
@@ -230,6 +310,7 @@ namespace FiveRivers.Narrative
         {
             StopFall();
             if (rifleDrop != null) { StopCoroutine(rifleDrop); rifleDrop = null; }
+            if (mansuTurn != null) { StopCoroutine(mansuTurn); mansuTurn = null; }
             if (mansuRest != null) mansuRest.Release();
             mansuRest = null;
             if (mansuPose != null) mansuPose.Release();

@@ -300,8 +300,9 @@ namespace FiveRivers.Combat
             rb.interpolation = RigidbodyInterpolation.Interpolate;
             rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             // thrown clear to one side: dropped straight down (as it was until 2026-11-15) the body came down on top of
-            // it and it lay run through his chest in the flare's last shot
-            rb.linearVelocity = transform.right * (Random.value < 0.5f ? -1f : 1f) * Random.Range(1.7f, 2.3f) + transform.forward * Random.Range(0.2f, 0.7f) + Vector3.up * 1.3f;
+            // it and it lay run through his chest in the flare's last shot. Only a little upward: tossed up at 1.3 m/s
+            // it hung at head height for a third of a second after the man was already down (2026-11-17 evening).
+            rb.linearVelocity = transform.right * (Random.value < 0.5f ? -1f : 1f) * Random.Range(1.7f, 2.3f) + transform.forward * Random.Range(0.2f, 0.7f) + Vector3.up * 0.35f;
             rb.angularVelocity = Random.insideUnitSphere * 2.5f;
             if (body != null) Physics.IgnoreCollision(box, body);
             Destroy(rifle.gameObject, 8f);
@@ -466,7 +467,10 @@ namespace FiveRivers.Combat
         static readonly float[] DeathJoin = { 0.27f, 0.22f, 0.04f };
         // Death_03 then staggers on the spot for half a second (hips level until 0.6 s) before the legs go: fine for a
         // man shot standing, but one shot on the run stopped and swayed. Running, it is joined just before the drop.
-        static readonly float[] DeathJoinRunning = { 0.27f, 0.22f, 0.42f };
+        // Filmed again frame by frame (2026-11-17 evening): joined at 0.27 / 0.22 / 0.42 s a man hit in the crouched
+        // run still straightened up 5-9 cm and stood 0.30-0.57 s before he went down. Joined where each clip's hips
+        // start to fall (0.70 / 0.42 / 0.60 s) he folds out of the run within 0.10-0.17 s and never rises.
+        static readonly float[] DeathJoinRunning = { 0.70f, 0.42f, 0.60f };
         const float DeathBlendRunning = 0.16f, DeathBlendStill = 0.12f;
         // A running man does not stop dead where he is hit: he is carried on a little way as he falls.
         const float RunningAbove = 1.5f, CarryShare = 0.55f, CarryFade = 0.18f, CarryFor = 0.6f, CarryReach = 0.35f;
