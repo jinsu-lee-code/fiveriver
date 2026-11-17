@@ -65,6 +65,9 @@ namespace FiveRivers.Combat
             var controls = player.Controls;
             if (controls.Reload.WasPressedThisFrame()) TryReload();
             else if (controls.Fire.WasPressedThisFrame() && Loaded > 0) Launch();
+            // The tube empty with rockets in reserve (the last one was fired with none left, then he resupplied):
+            // the trigger did nothing and only R loaded it. Pulling it now loads, like the rifle's dry fire.
+            else if (controls.Fire.WasPressedThisFrame()) TryReload();
         }
 
         void Launch()
