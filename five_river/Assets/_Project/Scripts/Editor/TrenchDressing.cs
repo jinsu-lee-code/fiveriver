@@ -16,11 +16,14 @@ namespace FiveRivers.EditorTools
     //    the old 2 m sandbag walls, which showed one buried course that read as rocks, are hidden (their colliders
     //    stay, so cover, bullets and movement are as before)
     //  - parados: one course of the same row behind the rear berm
-    //  - wooden revetment at the firing places and the ammunition niches: planks (brown_planks_04 scan) and posts
-    //    (RL_Wood), built on the wall faces as the terrain actually lies there
+    //  - wooden revetment only where it holds something up: the back walls of the ammunition niches (planks from the
+    //    brown_planks_04 scan, posts of the same). 2026-11-17 (user: the boards in front mean nothing, remove them):
+    //    the plank panels on the front wall, the two extra rear runs and the niche panel at the trench's west end
+    //    (it stood out of the ramp on its own) are no longer made
     //  - the rest of the walls: an earth facing (dirt_floor scan, the floor's own texture and scale) laid 1 cm off the
     //    terrain with UVs in metres, so the steep wall no longer shows the terrain texture stretched down it
-    //  - a few torn sacks (SandbagTorn scan) where the parapet was hit
+    //  - no torn sacks: scaled up on the parapet the SandbagTorn scan read as a heap of rubble from the player's eye
+    //    (user, 2026-11-17), so they are no longer placed
     // No colliders on anything added (the NavMesh is baked from colliders). Re-running rebuilds the same result.
     public static class TrenchDressing
     {
@@ -29,9 +32,9 @@ namespace FiveRivers.EditorTools
         const string Art = "Assets/_Project/Art/";
 
         // firing places along the front wall (squad, Park, the player) and other short runs of planks; x ranges
-        static readonly (float a, float b)[] FrontPlanks = { (-15.4f, -12.6f), (-7.9f, -5.1f), (-1.5f, 1.5f), (3.6f, 6.0f), (9.6f, 12.4f), (14.6f, 17.4f) };
-        static readonly (float a, float b)[] RearPlanksExtra = { (-12.2f, -10.4f), (8.0f, 9.6f) };
-        static readonly float[] TornSacks = { -10.2f, 2.6f, 13.1f, 19.2f };
+        static readonly (float a, float b)[] FrontPlanks = { };
+        static readonly (float a, float b)[] RearPlanksExtra = { };
+        const float NicheEndMargin = 1.5f;   // niche panels stop this far short of the trench ends (there they stood out of the ramp)
 
         [MenuItem("FiveRivers/Setup/Trench Dressing (Existing Assets)")]
         public static string Apply()
@@ -100,16 +103,7 @@ namespace FiveRivers.EditorTools
                 float z = zr - TrenchDig.WallRunZ - RowDepth * .5f - .02f;
                 PlaceRow(gSand, x, z + R(-.03f, .03f), Pre(x, z) + TrenchDig.ParadosHeight * TrenchDig.EndFade(x) + .02f, .5f * R(.95f, 1.03f), R(-3f, 3f));
             }
-            var torn = AssetDatabase.LoadAssetAtPath<GameObject>(Art + "Megascans20261107/SandbagTorn/PF_MS_SandbagTorn.prefab");
-            foreach (var x in TornSacks)
-            {
-                var go = (GameObject)PrefabUtility.InstantiatePrefab(torn, gSand);
-                float z = frontZ + .05f;
-                go.transform.SetPositionAndRotation(new Vector3(x, Pre(x, frontZ) + TrenchDig.ParapetHeight + .02f, z), Quaternion.Euler(R(-8f, 8f), R(0f, 360f), R(-6f, 6f)));
-                go.transform.localScale = Vector3.one * R(1.4f, 1.8f);
-                foreach (var c in go.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(c);
-            }
-            report.AppendLine($"sandbag rows {rows}, torn sacks {TornSacks.Length}");
+            report.AppendLine($"sandbag rows {rows}, torn sacks 0");
 
             // 3. wall faces. surfaceZ: where the wall face is at height h above the floor, found on the terrain itself
             float FloorY(float x) => H(x, (TrenchDig.FrontFloorZ + TrenchDig.RearFloorZ(x)) * .5f);
@@ -314,7 +308,9 @@ namespace FiveRivers.EditorTools
 
             var frontRuns = FrontPlanks.ToList();
             // niche planks only on the niche's own back wall, inside the 0.3 m where it curves out to the trench wall
-            var rearRuns = TrenchDig.AmmoNiches.Select(n => (n.x - n.half + .1f, n.x + n.half - .1f)).Concat(RearPlanksExtra).OrderBy(r => r.Item1).ToList();
+            var rearRuns = TrenchDig.AmmoNiches
+                .Select(n => (Mathf.Max(n.x - n.half + .1f, TrenchDig.TrenchWest + NicheEndMargin), Mathf.Min(n.x + n.half - .1f, TrenchDig.TrenchEast - NicheEndMargin)))
+                .Where(r => r.Item2 - r.Item1 > 1.2f).Concat(RearPlanksExtra).OrderBy(r => r.Item1).ToList();
             int pi = 0, boards = 0;
             void Planks(List<(float, float)> runs, bool front)
             {
