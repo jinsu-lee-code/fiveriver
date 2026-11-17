@@ -258,35 +258,86 @@ PW, PH, PT = 0.067, 0.100, 0.028      # pocket width (along the strip), height (
 STRIP = 6 * PW + 0.02
 
 
-def pocket(name, center, parent, rng, open_flap):
-    """One cotton pocket: a soft pillow, the flap over its mouth (+Y) or turned back, and a snap."""
-    bm = cube((PW - 0.004, PH - 0.02, PT), bevel=0.0075)
-    # soften: push the top face centre up a little (stuffed with a clip)
+def soft_box(size, rng, cuts=6, round_=0.45, wrinkle=0.0009, sag=0.0):
+    """A stuffed cotton shape: a finely divided box blended toward an ellipsoid (pillow), with shallow folds across it.
+    sag pulls the long ends down, as cloth lying over something does."""
+    bm = bmesh.new()
+    bmesh.ops.create_cube(bm, size=1.0)
+    bmesh.ops.subdivide_edges(bm, edges=list(bm.edges), cuts=cuts, use_grid_fill=True)
+    sx, sy, sz = size
+    ph = [rng.uniform(0, 6.28) for _ in range(4)]
+    fr = [rng.uniform(55, 95), rng.uniform(120, 170), rng.uniform(40, 70)]
     for v in bm.verts:
-        if v.co.z > 0:
-            v.co.z += 0.0025 * (1 - (2 * v.co.x / PW) ** 2) * (1 - (2 * v.co.y / PH) ** 2)
+        c = v.co * 2.0                                   # -1..1
+        e = c.normalized() * 1.18 if c.length > 1e-6 else c
+        e = Vector((max(-1, min(1, e.x)), max(-1, min(1, e.y)), max(-1, min(1, e.z))))
+        c = c.lerp(e, round_)
+        x, y, z = c.x * sx / 2, c.y * sy / 2, c.z * sz / 2
+        # folds: mostly across the short way, deeper toward the edges where the cloth is gathered by the stitching
+        edge = max(abs(c.x), abs(c.y)) ** 2
+        w = math.sin(x * fr[0] + ph[0]) * 0.6 + math.sin((x + y) * fr[1] + ph[1]) * 0.25 + math.sin(y * fr[2] + ph[2]) * 0.4
+        z += wrinkle * w * (0.35 + 0.65 * edge) * (1 if c.z >= 0 else 0.3)
+        z -= sag * (c.x ** 2)
+        v.co = Vector((x, y, z))
+    bm.normal_update()
+    return bm
+
+
+def strip(length, width, thick, rng, wave=0.0012, drape=None):
+    """A flat cotton strip (backing, flap, strap) with a slack wave along it. drape(x, y) adds to z."""
+    bm = bmesh.new()
+    bmesh.ops.create_cube(bm, size=1.0)
+    long_cuts = max(4, int(length / 0.012))
+    bmesh.ops.subdivide_edges(bm, edges=[e for e in bm.edges if abs((e.verts[0].co - e.verts[1].co).x) > 0.5], cuts=long_cuts)
+    bmesh.ops.subdivide_edges(bm, edges=[e for e in bm.edges if abs((e.verts[0].co - e.verts[1].co).y) > 0.5], cuts=3)
+    p0, p1, f0 = rng.uniform(0, 6.28), rng.uniform(0, 6.28), rng.uniform(38, 60)
+    for v in bm.verts:
+        x, y, z = v.co.x * length, v.co.y * width, v.co.z * thick
+        z += wave * (math.sin(x * f0 + p0) + 0.5 * math.sin(x * f0 * 2.3 + y * 40 + p1))
+        if drape is not None:
+            z += drape(x, y)
+        v.co = Vector((x, y, z))
+    bm.normal_update()
+    return bm
+
+
+def pocket(name, center, parent, rng, open_flap):
+    """One cotton pocket: a stuffed pillow gathered at its seams, the flap over its mouth (+Y) or turned back, a snap."""
+    bm = soft_box((PW - 0.002, PH - 0.02, PT), rng, round_=0.42 if not open_flap else 0.5,
+                  wrinkle=0.0011, sag=0.0)
+    if open_flap:
+        # the clip has been drawn half out: the pocket is slack and lower toward its mouth
+        for v in bm.verts:
+            if v.co.z > 0:
+                v.co.z *= 0.72 - 0.18 * max(0.0, v.co.y / (PH / 2))
     uv_box(bm, 0.22)
     bmesh.ops.translate(bm, vec=Vector(center), verts=bm.verts)
     bm.normal_update()
     new_object(name, bm, "Cloth", parent)
     cx, cy, cz = center
     if not open_flap:
-        f = cube((PW - 0.006, 0.036, 0.003), bevel=0.0012)
+        # the flap comes over the mouth and down the face: it follows the pillow, its free edge lifts a little
+        def over(x, y):
+            return -0.0016 * (2 * x / PW) ** 2 + (0.0012 if y < -0.012 else 0.0)
+        f = strip(PW - 0.008, 0.038, 0.0022, rng, wave=0.0005, drape=over)
         uv_box(f, 0.22)
-        bmesh.ops.translate(f, vec=Vector((cx, cy + PH / 2 - 0.028, cz + PT / 2 + 0.003)), verts=f.verts)
+        bmesh.ops.rotate(f, verts=f.verts, cent=Vector(), matrix=Matrix.Rotation(math.radians(rng.uniform(-2.0, 2.0)), 3, "Z"))
+        bmesh.ops.translate(f, vec=Vector((cx, cy + PH / 2 - 0.028, cz + PT / 2 + 0.0022)), verts=f.verts)
         new_object(name + "Flap", f, "Cloth", parent)
-        cylinder(name + "Snap", 0.0055, 0.0025, (cx, cy + PH / 2 - 0.036, cz + PT / 2 + 0.0055), "Iron", parent, segments=12)
+        cylinder(name + "Snap", 0.0055, 0.0025, (cx, cy + PH / 2 - 0.036, cz + PT / 2 + 0.0045), "Iron", parent, segments=12)
     else:
         # the flap is the backing strip carried on over the mouth; unsnapped, it lies open beyond the mouth at the
         # backing's level (inner face up, with the snap's socket), and the clip comes out over it
-        f = cube((PW - 0.006, 0.036, 0.003), bevel=0.0012)
+        def curl(x, y):
+            return 0.004 * max(0.0, y / 0.019) ** 2
+        f = strip(PW - 0.008, 0.036, 0.0022, rng, wave=0.0006, drape=curl)
         uv_box(f, 0.22)
         bmesh.ops.rotate(f, verts=f.verts, cent=Vector(), matrix=Matrix.Rotation(math.radians(2 + rng.uniform(-2, 2)), 3, "X"))
         bmesh.ops.translate(f, vec=Vector((cx, cy + PH / 2 + 0.008, cz - PT / 2 + 0.0035)), verts=f.verts)
         new_object(name + "Flap", f, "Cloth", parent)
         cylinder(name + "Snap", 0.0055, 0.0022, (cx, cy + PH / 2 + 0.016, cz - PT / 2 + 0.0061), "Iron", parent, segments=12)
         # the stud it snapped onto, on the pocket's face
-        cylinder(name + "Stud", 0.0042, 0.002, (cx, cy + PH / 2 - 0.036, cz + PT / 2 + 0.0035), "Iron", parent, segments=12)
+        cylinder(name + "Stud", 0.0042, 0.002, (cx, cy + PH / 2 - 0.036, cz + PT / 2 * 0.6 + 0.002), "Iron", parent, segments=12)
         # the clip slot: mouth of the pocket, +Y out of it, clip lying flat (its thickness up)
         s = empty(name + "_ClipSlot", parent)
         s.location = (cx, cy + PH / 2 - 0.02, cz + 0.002)
@@ -296,17 +347,20 @@ def bandoleer(name, origin, rng, open_flaps):
     root = empty(name, None)
     root.location = origin
     ox = -STRIP / 2 + 0.01 + PW / 2
-    # backing strip under the pockets
-    back = cube((STRIP, PH - 0.016, 0.004), bevel=0.0012)
+    # backing strip under the pockets, a little slack
+    back = strip(STRIP, PH - 0.016, 0.003, rng, wave=0.0006)
     uv_box(back, 0.22)
     bmesh.ops.translate(back, vec=Vector((0, 0, -PT / 2 + 0.002)), verts=back.verts)
     new_object(name + "Back", back, "Cloth", root)
     for i in range(6):
         pocket(f"{name}Pocket{i}", (ox + i * PW, 0.0, 0.0), root, rng, open_flaps)
     if not open_flaps:
-        # the folded shoulder strap lying across the pockets
-        for k, (y, z) in enumerate(((-0.018, PT / 2 + 0.006), (0.012, PT / 2 + 0.0085))):
-            s = cube((STRIP - 0.03, 0.021, 0.0022), bevel=0.0007)
+        # the folded shoulder strap lying across the pockets: it sinks into the seams between them
+        def seams(x, y):
+            u = ((x + STRIP / 2 - 0.01) / PW) % 1.0
+            return -0.0030 * (math.cos(u * 2 * math.pi) * 0.5 + 0.5) ** 2
+        for k, (y, z) in enumerate(((-0.018, PT / 2 + 0.0052), (0.012, PT / 2 + 0.0074))):
+            s = strip(STRIP - 0.03, 0.021, 0.0020, rng, wave=0.0007, drape=seams)
             uv_box(s, 0.22)
             bmesh.ops.rotate(s, verts=s.verts, cent=Vector(), matrix=Matrix.Rotation(math.radians(rng.uniform(-2.5, 2.5)), 3, "Z"))
             bmesh.ops.translate(s, vec=Vector((0, y, z)), verts=s.verts)

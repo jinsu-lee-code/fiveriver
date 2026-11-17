@@ -10,10 +10,12 @@ namespace FiveRivers.EditorTools
     // 2026-11-16 (user: "참호에 있는 탄약상자들이 너무 대충 만든 것 같은데, 열어 둔 상태에서 탄약상자에 탄약이 예쁘게 들어
     // 있는 모습으로 만들어봐"). The trench's ammunition boxes become M1917 packing boxes of .30 cal M2 ball in 8-round M1
     // clips packed in six-pocket cotton bandoleers (models: source/props/ammo_crate_m1917, background Blender):
-    //   gameplay crates (PF_PR_AmmoCrate, F resupply): a closed box with an opened one on it; in the opened box the back
-    //   bandoleer of the top layer has its flaps back and its clips half out toward the trench, the lid leans on the front. Inside the old 0.70 x 0.40 m
-    //   footprint, no new colliders (the prefab's BoxCollider and the NavMesh stay as they were).
-    //   the decorative pile in the trench: the same boxes, the old block hidden (its colliders kept).
+    //   gameplay crates (PF_PR_AmmoCrate, F resupply): one opened box standing on the floor; the back bandoleer of its
+    //   top layer has its flaps back and its clips half out toward the trench, the lid leans on the box's end, a
+    //   bandoleer lies in front. Inside the old 0.70 x 0.40 m footprint, no new colliders (the prefab's BoxCollider
+    //   and the NavMesh stay as they were).
+    //   the decorative pile in the trench: closed boxes lying on their backs, an opened one beside; the old block
+    //   hidden (its colliders kept).
     // Re-running rebuilds the same result.
     public static class AmmoCrateM1917Setup
     {
@@ -51,34 +53,34 @@ namespace FiveRivers.EditorTools
             float yaw = FrontYaw(open, mats["Stencil"], report);
             bool tipPlusZ = ClipTipAlongPlusZ(clip, report);
 
-            // ---- gameplay set: closed box, the opened one on it, lid leaning on the +X end, lantern spot at -X ----------
+            // ---- gameplay set (2026-11-17: the two-high stack read as a tower): one opened box standing on the floor,
+            //      its lid stood on its short edge leaning on the +X end, a bandoleer dropped in front, lantern spot at -X
             var set = new GameObject(VisualName);
             var rot = Quaternion.Euler(0f, yaw, 0f);
-            Place(closed, set.transform, "BoxBelow", new Vector3(0f, 0f, 0f), rot);
-            float top = H + LidT + 0.004f;                                        // on the closed box's lid (wing nuts beside)
+            const float boxX = -0.05f;
             var openRot = Quaternion.Euler(0f, yaw + 3.5f, 0f);
-            var openBox = Place(open, set.transform, "BoxOpen", new Vector3(-0.012f, top, 0.006f), openRot);
+            var openBox = Place(open, set.transform, "BoxOpen", new Vector3(boxX, 0f, 0f), openRot);
             Pack(openBox.transform, bOpen, bClosed, fill, clip, yaw + 3.5f, tipPlusZ, report);
-            // the lid stands on its short edge on the floor against the +X end, leaning 11 degrees onto it
-            // the lid stands on its long edge on the floor, leaning back 14 degrees onto the lower box's front, stencil to the trench
             var lidGo = Place(lid, set.transform, "LidLeaning", Vector3.zero, Quaternion.identity);
-            lidGo.transform.rotation = Quaternion.Euler(0f, 4f, 0f) * Quaternion.Euler(76f, 0f, 0f) * rot;
-            Lean(lidGo.transform, new Vector3(0.01f, 0f, W / 2f + 0.003f));
+            LeanOnEnd(lidGo.transform, rot, boxX + L / 2f, 3f);
+            // no bandoleer on the floor in front: lying flat it read as a wooden board (user, 2026-11-17)
             var spot = new GameObject("LanternSpot").transform;
             spot.SetParent(set.transform, false);
-            spot.localPosition = new Vector3(-L / 2f - 0.11f, 0f, 0.05f);
+            spot.localPosition = new Vector3(boxX - L / 2f - 0.12f, 0f, 0.04f);
             SaveSet(set, SetPrefab);
 
-            // ---- decorative pile: two closed boxes, one more on top askew, an opened box beside on the floor --------------
+            // ---- decorative pile: closed boxes lying on their backs (stencilled side up), two side by side and a third
+            //      across them, an opened box standing beside with its lid leaning on its end ----------------------------
             var pile = new GameObject("M1917_DecoPile");
-            Place(closed, pile.transform, "Box0", new Vector3(-0.62f, 0f, 0f), rot);
-            Place(closed, pile.transform, "Box1", new Vector3(-0.13f, 0f, 0.01f), Quaternion.Euler(0f, yaw - 2f, 0f));
-            Place(closed, pile.transform, "Box2", new Vector3(-0.38f, top, -0.01f), Quaternion.Euler(0f, yaw + 7f, 0f));
-            var deco = Place(open, pile.transform, "BoxOpen", new Vector3(0.42f, 0f, 0.03f), Quaternion.Euler(0f, yaw - 5f, 0f));
+            var lying = Quaternion.Euler(-90f, 0f, 0f);                           // front (stencil) up, lid toward -Z
+            float lieY = W / 2f + 0.010f, lieZ = H / 2f;                           // side posts stand 1 cm proud
+            Place(closed, pile.transform, "Box0", new Vector3(-0.66f, lieY, lieZ), rot * lying);
+            Place(closed, pile.transform, "Box1", new Vector3(-0.14f, lieY, lieZ + 0.015f), Quaternion.Euler(0f, yaw - 2.5f, 0f) * lying);
+            Place(closed, pile.transform, "Box2", new Vector3(-0.41f, lieY * 3f, lieZ - 0.02f), Quaternion.Euler(0f, yaw + 8f, 0f) * lying);
+            var deco = Place(open, pile.transform, "BoxOpen", new Vector3(0.44f, 0f, 0.03f), Quaternion.Euler(0f, yaw - 5f, 0f));
             Pack(deco.transform, bOpen, bClosed, fill, clip, yaw - 5f, tipPlusZ, report);
             var lid2 = Place(lid, pile.transform, "Lid", Vector3.zero, Quaternion.identity);
-            lid2.transform.rotation = Quaternion.Euler(0f, -3f, 0f) * Quaternion.Euler(74f, 0f, 0f) * rot;
-            Lean(lid2.transform, new Vector3(-0.13f, 0f, 0.01f + W / 2f + 0.003f));
+            LeanOnEnd(lid2.transform, rot, 0.44f + L / 2f, -4f);
             SaveSet(pile, DecoPrefab);
 
             // ---- the gameplay crate prefab shows the set; its BoxCollider, AmmoCrate and position are untouched ---------
@@ -132,9 +134,7 @@ namespace FiveRivers.EditorTools
             var lspot = crate0 != null ? crate0.Find(VisualName + "/LanternSpot") : null;
             if (lantern != null && lspot != null)
             {
-                var lb = Bounds(lantern);
-                var floorY = crate0.position.y;
-                lantern.position += new Vector3(lspot.position.x - lb.center.x, floorY - lb.min.y, lspot.position.z - lb.center.z);
+                Lantern(lantern, new Vector3(lspot.position.x, crate0.position.y, lspot.position.z), report);
                 report.AppendLine($"lantern on the floor beside the boxes at {lantern.position.ToString("F2")}");
             }
             EditorSceneManager.MarkSceneDirty(scene);
@@ -142,6 +142,53 @@ namespace FiveRivers.EditorTools
             AssetDatabase.SaveAssets();
             System.IO.File.WriteAllText("Temp/ammo_crate_setup.txt", report.ToString());
             return "crates";
+        }
+
+        // The supply bay lantern (2026-11-17): the old one was a 12 cm dark box frame round a cylinder and read as a black
+        // plate from the player's eye. Replaced by a hurricane lantern (source/props/lantern/make_lantern.py): fount,
+        // burner, glowing globe, crown, air tubes, guard wires, bail. The light stays on the lantern's root, which is
+        // put at the middle of the globe; the model hangs below it and stands on the floor.
+        const string LanternFbx = "Assets/_Project/Art/Models/Props/Lantern/SM_PR_HurricaneLantern.fbx";
+        const float GlobeHeight = 0.155f;
+        static void Lantern(Transform lantern, Vector3 floorPoint, StringBuilder report)
+        {
+            var lit = Shader.Find("Universal Render Pipeline/Lit");
+            Material M(string name, System.Action<Material> f)
+            {
+                string path = $"Assets/_Project/Art/Models/Props/Lantern/M_PR_Lantern_{name}.mat";
+                var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+                if (m == null) { m = new Material(lit); AssetDatabase.CreateAsset(m, path); }
+                m.shader = lit; f(m); EditorUtility.SetDirty(m); return m;
+            }
+            void Emit(Material m, Color c) { m.EnableKeyword("_EMISSION"); m.SetColor("_EmissionColor", c); m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None; }
+            // worn galvanised tin, light enough to read against the dark floor by moonlight; a little of the flame on it
+            var steel = M("Steel", m => { m.SetColor("_BaseColor", new Color(.36f, .38f, .36f)); m.SetFloat("_Metallic", .55f); m.SetFloat("_Smoothness", .42f); Emit(m, new Color(.030f, .017f, .006f)); });
+            var glass = M("Glass", m => { m.SetColor("_BaseColor", new Color(.95f, .62f, .28f)); m.SetFloat("_Metallic", 0f); m.SetFloat("_Smoothness", .85f); Emit(m, new Color(2.6f, 1.25f, .38f)); });
+            var flame = M("Flame", m => { m.SetColor("_BaseColor", new Color(1f, .85f, .5f)); Emit(m, new Color(9f, 5.5f, 1.8f)); });
+            if (AssetImporter.GetAtPath(LanternFbx) is ModelImporter mi)
+            {
+                mi.importAnimation = false; mi.importCameras = false; mi.importLights = false;
+                mi.importNormals = ModelImporterNormals.Calculate; mi.normalSmoothingAngle = 50f;
+                mi.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
+                mi.materialLocation = ModelImporterMaterialLocation.InPrefab;
+                mi.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), "Steel"), steel);
+                mi.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), "Glass"), glass);
+                mi.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), "Flame"), flame);
+                mi.SaveAndReimport();
+            }
+            var asset = AssetDatabase.LoadAssetAtPath<GameObject>(LanternFbx);
+            if (asset == null) { report.AppendLine("missing " + LanternFbx); return; }
+            for (int i = lantern.childCount - 1; i >= 0; i--) Object.DestroyImmediate(lantern.GetChild(i).gameObject);
+            foreach (var r in lantern.GetComponents<Renderer>()) r.enabled = false;
+            lantern.SetPositionAndRotation(floorPoint + Vector3.up * GlobeHeight, Quaternion.identity);
+            var go = (GameObject)PrefabUtility.InstantiatePrefab(asset, lantern);
+            go.name = "Lantern_Model";
+            go.transform.position = floorPoint;
+            go.transform.rotation = Quaternion.Euler(0f, 35f, 0f);
+            foreach (var r in go.GetComponentsInChildren<Renderer>(true)) r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            foreach (var c in go.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(c);
+            var b = Bounds(go.transform);
+            report.AppendLine($"lantern model {b.size.ToString("F3")} base at {b.min.y:0.000} (floor {floorPoint.y:0.000})");
         }
 
         // ---------------------------------------------------------------------------------------------------------------
@@ -173,7 +220,7 @@ namespace FiveRivers.EditorTools
             Texture2D T(string p) => AssetDatabase.LoadAssetAtPath<Texture2D>(p);
             var d = new Dictionary<string, Material>();
             // seasoned pine, unpainted, a little paler and warmer than the weathered plank scan
-            d["Wood"] = M("Wood", m => { m.SetTexture("_BaseMap", T(WoodD)); m.SetColor("_BaseColor", new Color(.93f, .82f, .66f)); m.SetTexture("_BumpMap", T(WoodN)); m.SetFloat("_BumpScale", .8f); m.EnableKeyword("_NORMALMAP"); m.SetFloat("_Smoothness", .16f); m.SetFloat("_Metallic", 0f); });
+            d["Wood"] = M("Wood", m => { m.SetTexture("_BaseMap", T(WoodD)); m.SetColor("_BaseColor", new Color(1.32f, 1.13f, .86f)); m.SetTexture("_BumpMap", T(WoodN)); m.SetFloat("_BumpScale", .8f); m.EnableKeyword("_NORMALMAP"); m.SetFloat("_Smoothness", .16f); m.SetFloat("_Metallic", 0f); });
             d["Iron"] = M("Iron", m => { m.SetTexture("_BaseMap", null); m.SetColor("_BaseColor", new Color(.17f, .17f, .16f)); m.SetFloat("_Metallic", .8f); m.SetFloat("_Smoothness", .32f); });
             d["Brass"] = M("Brass", m => { m.SetTexture("_BaseMap", null); m.SetColor("_BaseColor", new Color(.64f, .48f, .24f)); m.SetFloat("_Metallic", 1f); m.SetFloat("_Smoothness", .5f); });
             d["Cloth"] = M("Cloth", m => { m.SetTexture("_BaseMap", T(TexDir + "/T_PR_Bandoleer_BaseColor.png")); m.SetColor("_BaseColor", Color.white); m.SetTexture("_BumpMap", T(TexDir + "/T_PR_Bandoleer_Normal.png")); m.SetFloat("_BumpScale", .7f); m.EnableKeyword("_NORMALMAP"); m.SetFloat("_Smoothness", .07f); m.SetFloat("_Metallic", 0f); });
@@ -318,6 +365,16 @@ namespace FiveRivers.EditorTools
             var parent = t.parent;
             var worldAt = parent.TransformPoint(at);
             t.position += new Vector3(worldAt.x - b.center.x, parent.position.y - b.min.y, worldAt.z - b.min.z);
+        }
+
+        // a lid stood on its short edge on the floor, leaning 24 degrees onto the +X end of an opened box (clear of the
+        // wire handle), stencilled face outward
+        static void LeanOnEnd(Transform t, Quaternion rot, float boxEndX, float twist)
+        {
+            t.localRotation = Quaternion.Euler(0f, twist, 0f) * Quaternion.Euler(0f, 0f, -66f) * rot;
+            var b = Bounds(t);
+            var parent = t.parent;
+            t.position += new Vector3(parent.position.x + boxEndX + 0.004f - b.min.x, parent.position.y - b.min.y, parent.position.z - b.center.z);
         }
 
         static void SaveSet(GameObject go, string path)
