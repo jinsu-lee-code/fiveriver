@@ -24,10 +24,24 @@ namespace FiveRivers.Core
         void Awake()
         {
             Flow = new DemoFlow(config, tankConfig, assistConfig);
+            DemoFlow.ListenerFailed = Debug.LogException; // keep the run going, but never hide the error
             Flow.PauseReleased += ResumeTime;
             Flow.SectionChanged += OnSectionChanged;
             inputGate.Mode = InputGate.ModeFor(Flow.Section, Flow.IsExpanded);
         }
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        // 점검용: -fiverivers-autostart 는 타이틀에서 3초 뒤 회차를 시작한다 (무입력 완주 시간 측정).
+        void Start()
+        {
+            if (System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-fiverivers-autostart") >= 0)
+            {
+                Application.runInBackground = true;
+                Invoke(nameof(AutoStart), 3f);
+            }
+        }
+        void AutoStart() { if (!Flow.IsRunning) Flow.StartRun(); }
+#endif
 
         // 평소 게임 시간 배율. 점검 모드(SmokeRunner)만 바꾼다.
         public float BaseTimeScale { get; set; } = 1f;
@@ -57,6 +71,9 @@ namespace FiveRivers.Core
         {
             if (!Flow.Paused) Time.timeScale = BaseTimeScale;
             inputGate.Mode = InputGate.ModeFor(t.To, Flow.IsExpanded);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            Debug.Log($"[Flow] {t.From} -> {t.To} ({t.Reason}) run {t.Time:0.0}s real {Time.realtimeSinceStartup:0.0}s");
+#endif
         }
     }
 }

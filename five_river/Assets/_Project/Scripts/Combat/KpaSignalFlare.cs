@@ -31,7 +31,13 @@ namespace FiveRivers.Combat
             Destroy(ball.GetComponent<Collider>());
             ball.transform.SetParent(go.transform, false);
             flare.star = ball.transform;
-            flare.starMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+            // a player build strips shaders no material asset uses, so Unlit can be missing there (2026-11-17 smoke run):
+            // fall back to shaders that are always in the build instead of throwing in the middle of a section change
+            var shader = Shader.Find("Universal Render Pipeline/Unlit") ?? Shader.Find("Universal Render Pipeline/Particles/Unlit")
+                ?? Shader.Find("Sprites/Default") ?? Shader.Find("Universal Render Pipeline/Lit");
+            flare.starMaterial = new Material(shader);
+            if (flare.starMaterial.HasProperty("_Color")) flare.starMaterial.SetColor("_Color", Green * 3f);
+            if (flare.starMaterial.HasProperty("_EmissionColor")) { flare.starMaterial.EnableKeyword("_EMISSION"); flare.starMaterial.SetColor("_EmissionColor", Green * 3f); }
             flare.starMaterial.SetColor("_BaseColor", Green * 3f);
             var renderer = ball.GetComponent<Renderer>();
             renderer.sharedMaterial = flare.starMaterial;

@@ -399,7 +399,21 @@ namespace FiveRivers.Core
                 forcedSilence = reason == TransitionReason.ForcedTank;
             }
             if (to == (IsExpanded ? FlowSection.Result : FlowSection.Dawn)) EndingStarted = true;
-            SectionChanged?.Invoke(new FlowTransition(from, to, reason, clock.Elapsed));
+            Raise(new FlowTransition(from, to, reason, clock.Elapsed));
+        }
+
+        // One listener throwing must not stop the others from hearing the section change: in the 2026-11-17
+        // player build a missing shader in the signal flare threw here and the run stalled in that section.
+        public static Action<Exception> ListenerFailed;
+        void Raise(FlowTransition transition)
+        {
+            var handlers = SectionChanged;
+            if (handlers == null) return;
+            foreach (Action<FlowTransition> handler in handlers.GetInvocationList())
+            {
+                try { handler(transition); }
+                catch (Exception e) { ListenerFailed?.Invoke(e); }
+            }
         }
 
         void RequestRetreatIfCombat()

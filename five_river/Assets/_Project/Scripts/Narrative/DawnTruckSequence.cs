@@ -367,7 +367,11 @@ namespace FiveRivers.Narrative
                     {
                         p.animator.speed = 1f;
                         p.animator.SetFloat(SpeedId, 0f);
-                        p.animator.CrossFadeInFixedTime(dismountState, .1f);
+                        string pose = p.animator.isInitialized && !p.animator.HasState(0, Animator.StringToHash(dismountState)) ? "Idle_Stand" : dismountState; // an instance may still carry the removed "Dismount" state name
+                        if (p.animator.isInitialized && p.animator.HasState(0, Animator.StringToHash(pose))) p.animator.CrossFadeInFixedTime(pose, .1f);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                        else Debug.LogWarning($"[DawnTruck] dismount pose state '{pose}' (asked '{dismountState}') unavailable: initialized {p.animator.isInitialized} controller {(p.animator.runtimeAnimatorController != null ? p.animator.runtimeAnimatorController.name : "none")} active {p.animator.isActiveAndEnabled}");
+#endif // the state may be missing on a variant rig: keep the current pose rather than log an error every frame
                     }
                     if (p.pose != null) p.pose.enabled = true;
                     return;

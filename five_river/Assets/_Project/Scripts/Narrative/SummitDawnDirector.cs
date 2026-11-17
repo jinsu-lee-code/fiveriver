@@ -16,7 +16,12 @@ namespace FiveRivers.Narrative
     {
         public static bool Enabled = true;
         // 2026-11-16: shot 2 runs long enough to see the first three of them jump down off the tailgate
-        public static float Shot1 = 4.2f, Duration = 11.4f, HandBack = 1.4f;
+        // 2026-11-17: 11.4 -> 10.2. the last second had the student soldiers walking into the lens
+        public static float Shot1 = 4.2f, Duration = 10.2f, HandBack = 1.4f;
+        // 2026-11-17: the students stand with the dawn behind them and their faces were black: a low warm fill from the camera's side
+        public static float FillIntensity = 5f, FillRange = 22f, FillAngle = 70f;
+        public static Color FillColor = new Color(1f, .86f, .72f);
+        Light fill;
         // the knocked-out tank must never share the frame with the truck (사용자 지시 2026-11-16):
         // the views toward the truck turn away from the wreck until it is this far off the centre line
         public static float TankClearAngle = 50f, MaxAimOffset = 16f;
@@ -56,6 +61,7 @@ namespace FiveRivers.Narrative
         void OnDestroy()
         {
             if (rig != null) rig.End();
+            if (fill != null) Destroy(fill.gameObject);
             if (director != null && director.Flow != null) director.Flow.SectionChanged -= OnSectionChanged;
         }
 
@@ -99,6 +105,19 @@ namespace FiveRivers.Narrative
                     truckSide = Vector3.Cross(Vector3.up, forward);
                     truckFocus = OnGround(truck.position + forward * TruckLook.z + truckSide * TruckLook.x, TruckLook.y);
                     truckCamera = OnGround(truck.position + forward * TruckCamera.z + truckSide * TruckCamera.x, TruckCamera.y);
+                    if (fill == null && FillIntensity > 0f)
+                    {
+                        fill = new GameObject("SummitDawnFill").AddComponent<Light>();
+                        fill.type = LightType.Spot;
+                        fill.shadows = LightShadows.None;
+                        fill.color = FillColor;
+                        fill.range = FillRange;
+                        fill.spotAngle = FillAngle;
+                        fill.innerSpotAngle = FillAngle * .5f;
+                        fill.intensity = FillIntensity;
+                        var from = truckCamera + Vector3.up * 0.6f;
+                        fill.transform.SetPositionAndRotation(from, Quaternion.LookRotation(truckFocus + Vector3.up * 0.4f - from));
+                    }
                 }
                 if (truckCameraSet)
                 {
@@ -127,6 +146,7 @@ namespace FiveRivers.Narrative
         void Finish()
         {
             dawn.DawnRate = 1f;
+            if (fill != null) { Destroy(fill.gameObject); fill = null; }
             rig.End();
         }
 

@@ -31,6 +31,7 @@ namespace FiveRivers.DebugTools
             // -fiverivers-smoke-runs 10 : 회차 수 (2-6 합격 기준 10회)
             int i = System.Array.IndexOf(args, "-fiverivers-smoke-runs");
             if (i >= 0 && i + 1 < args.Length && int.TryParse(args[i + 1], out int n)) runs = n;
+            Application.runInBackground = true; // an unfocused window would otherwise stall the check
             StartCoroutine(Run());
         }
 
