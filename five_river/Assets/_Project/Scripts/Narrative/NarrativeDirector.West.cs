@@ -147,8 +147,11 @@ namespace FiveRivers.Narrative
                     yield return new WaitUntil(() => !mansuCut.Playing || mansuCut.Elapsed >= MansuFallDirector.HitAt);
                 ShowMansuLoss();
             }
+            // ... and until his sequence has played out. A quick shot clears the wave before he is hit; the section then
+            // ended as soon as the line was spoken, three seconds into the 7.6 s sequence, and the cut went straight
+            // from the man falling to the blanket (played through by hand, 2026-11-17 night).
             yield return new WaitUntil(() => westEnemies.WestWaveCleared &&
-                !subtitles.Speaking && !director.Flow.Paused);
+                !subtitles.Speaking && !director.Flow.Paused && (mansuCut == null || !mansuCut.Playing));
             westBeat = null;
             director.Flow.ReportGoalMet(FlowSection.WestAssault);
         }
