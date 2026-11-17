@@ -161,7 +161,7 @@ namespace FiveRivers.EditorTools
             // khaki: every cloth pixel of the elbow area gets the cloth colour, at the forearm sleeve's brightness less
             // RollDarken (the fill light lifts it back), its own folds kept as relative shading. The change fades in over
             // RollFeather px from the edge of the area so there is no seam against the upper sleeve.
-            const float RollDarken = .87f, RollFeather = 10f;
+            const float RollDarken = .68f, RollFeather = 14f; // 2026-11-17: .87 still read 1.5x the sandbags behind it in the sprint view
             var inRoll = new bool[W * Hh];
             foreach (int i in rollIdx) inRoll[i] = true;
             var edge = new float[W * Hh];
