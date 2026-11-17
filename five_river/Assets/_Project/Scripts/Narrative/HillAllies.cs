@@ -16,12 +16,16 @@ namespace FiveRivers.Narrative
         // Ground speeds: WalkSpeed is the crouched advance between covers, JogSpeed the upright run that closes
         // a gap. The player walks at 3.2 m/s, so anyone more than JogBeyond behind closes up faster than that.
         // Both sit close to the pace their clips were made for, so the legs neither spin nor drag.
-        public static float WalkSpeed = 2.2f, JogSpeed = 4.4f, JogBeyond = 6f, JogUntil = 3f, RepathEvery = 0.75f, SlotTolerance = 2.5f;
-        // How fast the planted foot travels in each clip for a rig of human scale 1 (measured in play with a
-        // planted-foot slip meter on the delivered rigs, 2026-11-10: about 2.3 and 4.8 m/s on the riflemen).
-        // Animation speed follows ground speed / (this * rig scale) so feet do not slide.
-        const float AdvanceClipSpeed = 2.5f, RunClipSpeed = 5.2f, TiredWalkClipSpeed = 0.95f;
-        const float MinAnimSpeed = 0.75f, MaxAnimSpeed = 1.3f;
+        // JogSpeed was 4.4 until 2026-11-17: the run clip's legs cover 2.8 m/s on these rigs (see RunClipSpeed), so at
+        // 4.4 the planted foot skated forward 1.8 m/s, a third of a metre every step. 3.7 is what the clip reaches at
+        // 1.3x, still faster than the walking player.
+        public static float WalkSpeed = 2.2f, JogSpeed = 3.7f, JogBeyond = 6f, JogUntil = 3f, RepathEvery = 0.75f, SlotTolerance = 2.5f;
+        // How fast the planted foot travels in each clip for a rig of human scale 1. Animation speed follows
+        // ground speed / (this * rig scale) so feet do not slide. Measured in play frame by frame on the riflemen
+        // (rig scale 0.918): the crouched advance 2.3 m/s (2026-11-10, still right 2026-11-17), the run 2.8 m/s
+        // (2026-11-17 night; it was taken as 4.8 from the clip delivered before the 11-16 animation merge).
+        const float AdvanceClipSpeed = 2.5f, RunClipSpeed = 3.1f, TiredWalkClipSpeed = 0.95f;
+        const float MinAnimSpeed = 0.75f, MaxAnimSpeed = 1.32f;
         // Between the two gaits' ranges: above this ground speed the run clip takes over, below it gives way again.
         const float RunGaitAbove = 3.3f, RunGaitBelow = 2.9f;
         // Starting, turning and stopping: he turns towards his way before stepping off, picks up and loses speed

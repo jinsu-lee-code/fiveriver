@@ -25,7 +25,10 @@ namespace FiveRivers.Combat
         // A_KPA_Run_Rifle의 디딘 발은 사람 크기 1인 리그 기준 약 5.2 m/s로 움직인다 (2026-11-10 플레이 중 측정,
         // HillAllies.RunClipSpeed와 같은 값. 적 리그 0.88에서는 약 4.6 m/s). 전진(3.4 m/s)을 원래 속도로 재생하면
         // 디딘 발이 초당 1.4 m씩 뒤로 미끄러졌다. 지면 속도에 재생 속도를 맞춘다.
-        const float RunClipSpeed = 5.2f, MinRunAnimSpeed = 0.72f, MaxRunAnimSpeed = 1.3f;
+        // 2026-11-17 밤 다시 측정 (11-16 애니메이션 병합 뒤의 클립): 적 리그 0.876에서 디딘 발은 약 3.0 m/s (사람 크기 1 기준 3.4).
+        // 5.2로 두었더니 후퇴(4.8 m/s)에서 디딘 발이 걸음마다 초당 1.6 m씩 앞으로 미끄러졌다. 재생 속도 상한도 1.3 → 1.45
+        // (그 이상은 다리가 헛도는 것처럼 보인다. 4.8 m/s에서 남는 미끄러짐은 초당 0.4 m쯤).
+        const float RunClipSpeed = 3.4f, MinRunAnimSpeed = 0.72f, MaxRunAnimSpeed = 1.45f;
         float runFootSpeed = RunClipSpeed;
         // Advancing on the trench (2026-11-13): the upright sprint clip, slowed to 0.75 to keep its feet from
         // sliding, read as a slow-motion hop with the rifle held across the chest like a bar. Coming forward
@@ -444,7 +447,10 @@ namespace FiveRivers.Combat
             if (!Alive) return;
             health -= amount;
             if (health <= 0f) Die();
-            else if (animator != null) animator.SetTrigger(HitId);
+            // HitReact is a standing clip: played on a man kneeling behind cover it stood him up in three frames and
+            // held him there 0.7 s (filmed 2026-11-17 night with a 1-point hit). Every weapon kills with one hit now, so
+            // this only matters if that changes: kneeling, he keeps his kneel.
+            else if (animator != null && lastKneel < 0.5f) animator.SetTrigger(HitId);
         }
 
         // A staged death (FlareRevealDirector): falls with the given death clip (AC_KPA DieIndex: 0 Death_01 2.7 s,
