@@ -68,6 +68,7 @@ namespace FiveRivers.Narrative
             public Quaternion settle;           // facing to ease into after arriving
             public float settleUntil;
             public float frontLine = float.NegativeInfinity; // just beyond the trench front wall ahead of his post
+            public StrideGrounding stride;      // sets the running body down onto its feet (the clips run 6-12 cm high)
         }
 
         readonly List<Follower> followers = new List<Follower>();
@@ -100,6 +101,7 @@ namespace FiveRivers.Narrative
                     rigScale = animator.humanScale * animator.transform.lossyScale.y,
                     hasAdvance = animator.HasState(0, AdvanceState),
                     frontLine = FrontLine(ally.transform),
+                    stride = StrideGrounding.Attach(animator, ally.transform),
                 });
             }
             followers.Sort((a, b) => Flat(a.body.position - exit).CompareTo(Flat(b.body.position - exit)));
@@ -360,6 +362,7 @@ namespace FiveRivers.Narrative
             f.animator.speed = stepping ? Mathf.Clamp(f.speed / (clip * f.rigScale), MinAnimSpeed, MaxAnimSpeed) : 1f;
             // The controller's own Idle <-> Walk_Tired transitions listen to Speed: only the old walk may use it.
             f.animator.SetFloat(SpeedId, stepping && state == TiredWalkState ? f.speed : 0f);
+            if (f.stride != null) f.stride.Active = stepping;
         }
 
         static void Play(Animator animator, int state, float fade)
@@ -388,6 +391,7 @@ namespace FiveRivers.Narrative
             f.speed = 0f;
             f.path.Clear();
             f.corner = 0;
+            if (f.stride != null) f.stride.Active = false;
             if (f.animator != null && f.animator.isActiveAndEnabled)
             {
                 f.animator.speed = 1f;

@@ -19,6 +19,8 @@ namespace FiveRivers.Combat
         Transform hips, head, neck, leftShoulder, rightShoulder;
         Transform leftUpper, leftFore, leftHand, rightUpper, rightFore, rightHand;
         float time;
+        // Seconds added before the arms start to drop (a fall that takes longer to reach the ground).
+        public float Delay { get; set; }
 
         public static FallenPose Attach(Animator animator)
         {
@@ -42,7 +44,7 @@ namespace FiveRivers.Combat
         void LateUpdate()
         {
             time += Time.deltaTime;
-            float w = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(From, Until, time));
+            float w = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(From + Delay, Until + Delay, time));
             if (w <= 0f || hips == null || head == null || leftUpper == null || rightUpper == null) return;
             // his lying frame, from the body itself
             var headward = (head.position - hips.position).normalized;

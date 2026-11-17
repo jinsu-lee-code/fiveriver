@@ -114,17 +114,25 @@ namespace FiveRivers.Combat
         void OnM1Reloaded() => ResetSpeed(m1Animator);
         void OnBazookaReloaded() => ResetSpeed(bazookaAnimator);
 
+        // Which part of each clip has the weapon on screen (share of the clip, measured frame by frame 2026-11-17):
+        // the lowering clips have it out of view after two thirds, the raising clips only bring it into view after
+        // 0.40 (M1) and 0.48 (bazooka). Played whole, the hands were empty for 0.47 s going to the bazooka and
+        // 0.33 s coming back. The visible part is now spread over the same switch time (WeaponConfig, unchanged),
+        // so one weapon goes down as the other comes up.
+        const float UnequipVisible = .70f, M1EquipFrom = .36f, BazookaEquipFrom = .44f;
+
         void OnLowering(WeaponSlot slot, float duration)
         {
             reloadQueued = false;
             Play(AnimatorFor(slot), Unequip,
-                slot == WeaponSlot.M1 ? "A_FP_M1_Unequip" : "A_FP_Bazooka_Unequip", duration, .035f);
+                slot == WeaponSlot.M1 ? "A_FP_M1_Unequip" : "A_FP_Bazooka_Unequip", duration, .035f, 0f, UnequipVisible);
         }
 
         void OnRaising(WeaponSlot slot, float duration)
         {
             Play(AnimatorFor(slot), Equip,
-                slot == WeaponSlot.M1 ? "A_FP_M1_Equip" : "A_FP_Bazooka_Equip", duration);
+                slot == WeaponSlot.M1 ? "A_FP_M1_Equip" : "A_FP_Bazooka_Equip", duration, 0f,
+                slot == WeaponSlot.M1 ? M1EquipFrom : BazookaEquipFrom);
         }
 
         void OnSwitched(WeaponSlot slot) => ResetSpeed(AnimatorFor(slot));
@@ -152,13 +160,14 @@ namespace FiveRivers.Combat
 
         float Length(string clip) => clipLengths.TryGetValue(clip, out float length) ? length : 0f;
 
-        void Play(Animator animator, int state, string clip, float seconds = 0f, float blend = 0f)
+        // from / to: the share of the clip that is played over 'seconds' (the whole clip by default)
+        void Play(Animator animator, int state, string clip, float seconds = 0f, float blend = 0f, float from = 0f, float to = 1f)
         {
             if (!IsActive(animator)) return;
-            float length = Length(clip);
+            float length = Length(clip) * Mathf.Max(.05f, to - from);
             animator.speed = seconds > 0f && length > 0f ? length / Mathf.Max(.01f, seconds) : 1f;
-            if (blend > 0f) animator.CrossFadeInFixedTime(state, blend, 0, 0f);
-            else animator.Play(state, 0, 0f);
+            if (blend > 0f) animator.CrossFadeInFixedTime(state, blend, 0, from * Length(clip));
+            else animator.Play(state, 0, from);
         }
 
         Animator AnimatorFor(WeaponSlot slot) => slot == WeaponSlot.M1 ? m1Animator : bazookaAnimator;

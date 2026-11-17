@@ -319,9 +319,33 @@ namespace FiveRivers.Narrative
 
         // ---- jump-down arrival -------------------------------------------------------------------------
         // gather on the edge, push off, legs drawn up in the air, a deep squat on landing, up again (seconds)
-        public static readonly AnimationCurve CrouchCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(.28f, .45f), new Keyframe(.42f, .08f), new Keyframe(.75f, 0f), new Keyframe(1.06f, 1f), new Keyframe(1.32f, .8f), new Keyframe(1.85f, 0f));
-        public static readonly AnimationCurve TuckCurve = new AnimationCurve(new Keyframe(.42f, 0f), new Keyframe(.62f, .75f), new Keyframe(.92f, .45f), new Keyframe(1.06f, 0f));
-        public static readonly AnimationCurve LeanCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(.28f, .35f), new Keyframe(.42f, .2f), new Keyframe(.75f, .25f), new Keyframe(1.06f, .7f), new Keyframe(1.32f, .5f), new Keyframe(1.85f, 0f));
+        // 2026-11-17, measured frame by frame: with the old curves he was already in the full squat in the air (hips
+        // 0.33 m over his feet at touchdown), then sat there for half a second, and the last 13 cm came back in one
+        // frame when the walk began. Now he comes down with the legs nearly straight (0.30), the landing drives him
+        // into the squat over 0.14 s (0.92 at 1.20 s), and he rises out of it as he steps off; what is left when the
+        // walk begins is let out gradually (EaseOutOfSquat). Keys are smoothed so the motion does not pause on each.
+        public static readonly AnimationCurve CrouchCurve = Smooth(new Keyframe(0f, 0f), new Keyframe(.28f, .45f), new Keyframe(.42f, .08f), new Keyframe(.75f, .12f), new Keyframe(1.06f, .30f), new Keyframe(1.20f, .92f), new Keyframe(1.38f, .78f), new Keyframe(1.65f, .30f), new Keyframe(1.85f, 0f));
+        public static readonly AnimationCurve TuckCurve = Smooth(new Keyframe(.42f, 0f), new Keyframe(.62f, .75f), new Keyframe(.90f, .40f), new Keyframe(1.06f, 0f));
+        public static readonly AnimationCurve LeanCurve = Smooth(new Keyframe(0f, 0f), new Keyframe(.28f, .35f), new Keyframe(.42f, .2f), new Keyframe(.75f, .3f), new Keyframe(1.06f, .5f), new Keyframe(1.22f, 1f), new Keyframe(1.40f, .8f), new Keyframe(1.65f, .35f), new Keyframe(1.85f, 0f));
+        const float SquatRelease = 2.2f; // per second, once he is walking
+
+        static AnimationCurve Smooth(params Keyframe[] keys)
+        {
+            var curve = new AnimationCurve(keys);
+            for (int i = 0; i < curve.length; i++) curve.SmoothTangents(i, 0f);
+            return curve;
+        }
+
+        // the rest of the landing squat goes out of him over his first steps instead of in one frame
+        static void EaseOutOfSquat(Passenger p, float deltaTime)
+        {
+            if (p.pose == null || !p.pose.enabled) return;
+            p.pose.Tuck = 0f;
+            p.pose.Crouch = Mathf.MoveTowards(p.pose.Crouch, 0f, SquatRelease * deltaTime);
+            p.pose.Lean = Mathf.MoveTowards(p.pose.Lean, 0f, SquatRelease * deltaTime);
+            if (p.pose.Crouch <= 0f && p.pose.Lean <= 0f) p.pose.enabled = false;
+        }
+
         void TickJumpDown(float deltaTime, float duration)
         {
             float start = duration + stopSettle;
@@ -387,11 +411,10 @@ namespace FiveRivers.Narrative
                     Vector3 position = Vector3.Lerp(p.jumpFrom, p.jumpTo, Mathf.SmoothStep(0f, 1f, air / flight));
                     position.y = t >= dismountLand ? p.jumpTo.y : p.jumpFrom.y + up * air - .5f * 9.81f * air * air;
                     p.body.position = position;
-                    if (p.pose != null) { p.pose.Crouch = CrouchCurve.Evaluate(t); p.pose.Tuck = TuckCurve.Evaluate(t); p.pose.Lean = LeanCurve.Evaluate(t); }
+                    if (p.pose != null) { p.pose.Crouch = Mathf.Clamp01(CrouchCurve.Evaluate(t)); p.pose.Tuck = Mathf.Clamp01(TuckCurve.Evaluate(t)); p.pose.Lean = Mathf.Clamp01(LeanCurve.Evaluate(t)); }
                     if (t >= dismountLand && JoinedCount == 0 && index == 0) Arrived?.Invoke();
                     if (t < dismountLength - .2f) return;
-                    p.stage = 2;
-                    if (p.pose != null) { p.pose.Crouch = p.pose.Tuck = p.pose.Lean = 0f; p.pose.enabled = false; }
+                    p.stage = 2; // the pose stays on: EaseOutOfSquat lets the rest of the squat out as he walks
                     p.route.Clear();
                     p.next = 0;
                     var slot = gatherOrigin + new Vector3(index * 1.05f, 0f, (index % 2) * .45f);
@@ -402,6 +425,7 @@ namespace FiveRivers.Narrative
                     return;
                 }
                 case 2:
+                    EaseOutOfSquat(p, deltaTime);
                     if (!WalkRoute(p, deltaTime, true)) return;
                     p.stage = 3;
                     JoinedCount++;
@@ -411,6 +435,7 @@ namespace FiveRivers.Narrative
                     p.face = Quaternion.LookRotation(Quaternion.Euler(0f, JoinYaw[index % JoinYaw.Length], 0f) * face);
                     return;
                 case 3:
+                    EaseOutOfSquat(p, deltaTime);
                     // turn on the spot to face the line, at a walking turn rate instead of a one-frame snap
                     p.body.rotation = Quaternion.RotateTowards(p.body.rotation, p.face, 120f * deltaTime);
                     return;

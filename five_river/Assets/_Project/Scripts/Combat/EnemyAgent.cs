@@ -340,6 +340,7 @@ namespace FiveRivers.Combat
         {
             if (state == State.Dead)
             {
+                CarryOn();
                 // 그레이박스 쓰러짐: 0.6초 동안 뒤로 눕는다 (A_KPA_Death_01 대신)
                 if (animator == null)
                     model.localRotation = Quaternion.Euler(Mathf.Lerp(0f, -88f, Mathf.Clamp01((Time.time - deathTime) / 0.6f)), 0f, 0f);
@@ -457,8 +458,38 @@ namespace FiveRivers.Combat
             Die();
         }
 
+        // The death clips all begin with the man standing upright and still (Death_01 for 0.30 s, Death_02 for 0.25 s;
+        // Death_03 reacts from 0.05 s). Joined at their start over 0.05 s, a man shot on the run sprang to attention
+        // and stood for a third of a second before he went down (seen frame by frame, 2026-11-17). Each clip is now
+        // joined where its body starts to give way, cross-faded from the pose he was in.
+        static readonly int[] DeathStateIds = { Animator.StringToHash("Death_01"), Animator.StringToHash("Death_02"), Animator.StringToHash("Death_03") };
+        static readonly float[] DeathJoin = { 0.27f, 0.22f, 0.04f };
+        // Death_03 then staggers on the spot for half a second (hips level until 0.6 s) before the legs go: fine for a
+        // man shot standing, but one shot on the run stopped and swayed. Running, it is joined just before the drop.
+        static readonly float[] DeathJoinRunning = { 0.27f, 0.22f, 0.42f };
+        const float DeathBlendRunning = 0.16f, DeathBlendStill = 0.12f;
+        // A running man does not stop dead where he is hit: he is carried on a little way as he falls.
+        const float RunningAbove = 1.5f, CarryShare = 0.55f, CarryFade = 0.18f, CarryFor = 0.6f, CarryReach = 0.35f;
+        Vector3 carry;
+        bool hitRunning;
+
+        void CarryOn()
+        {
+            if (carry.sqrMagnitude < 0.0004f || Time.time - deathTime > CarryFor) return;
+            var from = transform.position;
+            var to = from + carry * Time.deltaTime;
+            // keep his height over the ground as it was (he stood on the NavMesh, a little above the slope)
+            if (ground != null) to.y += ground.SampleHeight(to) - ground.SampleHeight(from);
+            transform.position = to;
+            carry *= Mathf.Exp(-Time.deltaTime / CarryFade);
+        }
+
         void Die()
         {
+            var moving = agent.enabled ? agent.velocity : Vector3.zero; moving.y = 0f;
+            hitRunning = moving.magnitude > RunningAbove;
+            carry = hitRunning ? moving * CarryShare : Vector3.zero;
+            if (ground == null) ground = Terrain.activeTerrain;
             state = State.Dead;
             deathTime = Time.time;
             agent.isStopped = true;
@@ -468,8 +499,11 @@ namespace FiveRivers.Combat
             if (animator != null)
             {
                 animator.speed = 1f; // 달리다 쓰러져도 사망 동작은 원래 속도로
-                animator.SetInteger(DieIndexId, forcedDeath >= 0 ? forcedDeath : PickDeath());
-                animator.SetTrigger(DieId);
+                int clip = forcedDeath >= 0 ? forcedDeath : PickDeath();
+                animator.SetInteger(DieIndexId, clip);
+                if (clip >= 0 && clip < DeathStateIds.Length && animator.HasState(0, DeathStateIds[clip]))
+                    animator.CrossFadeInFixedTime(DeathStateIds[clip], hitRunning ? DeathBlendRunning : DeathBlendStill, 0, hitRunning ? DeathJoinRunning[clip] : DeathJoin[clip]);
+                else animator.SetTrigger(DieId); // a controller without these states: its own Any State transition
                 var rest = LyingBodyRest.Attach(animator); // the body comes to rest on the ground, not on the NavMesh above it
                 if (rest != null && lastKneel > 0.5f) rest.HoldKneel(); // hit kneeling: he falls from there, not from standing
             }
@@ -494,6 +528,13 @@ namespace FiveRivers.Combat
         int PickDeath()
         {
             for (int i = deathOrder.Length - 1; i > 0; i--) { int j = Random.Range(0, i + 1); (deathOrder[i], deathOrder[j]) = (deathOrder[j], deathOrder[i]); }
+            // shot on the run he pitches forward the way he was going: the fall onto his back (Death_01) comes last
+            if (hitRunning)
+            {
+                int back = System.Array.IndexOf(deathOrder, 0);
+                for (int i = back; i < deathOrder.Length - 1; i++) deathOrder[i] = deathOrder[i + 1];
+                deathOrder[deathOrder.Length - 1] = 0;
+            }
             foreach (int clip in deathOrder)
                 if (FallsClear(clip, transform.rotation)) return clip;
             foreach (float turn in DeathTurns)
@@ -512,6 +553,7 @@ namespace FiveRivers.Combat
         {
             var start = transform.position + Vector3.up * 0.45f;
             var end = transform.position + facing * DeathReach[clip] + Vector3.up * 0.35f;
+            if (hitRunning) end += carry.normalized * CarryReach; // he is carried on this far as he falls
             int n = Physics.OverlapCapsuleNonAlloc(start, end, 0.22f, fallHits, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < n; i++)
             {

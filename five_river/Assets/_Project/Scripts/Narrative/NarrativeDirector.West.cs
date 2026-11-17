@@ -29,6 +29,11 @@ namespace FiveRivers.Narrative
         // kneeling man sprang to his feet in a fifth of a second and only then went down. Joined where the clip has
         // already buckled at the knees, he sags from his kneel and falls back.
         const float MansuFallStart = 1.55f, MansuFallBlend = 0.32f;
+        // Hit on his feet (nobody in his sights at that moment, so he was not kneeling): joined that late, the clip had
+        // 0.45 s left and he went from upright to flat on his back in six frames, like a plank (seen frame by frame,
+        // 2026-11-17). Standing, the clip is joined where its body first gives way (0.27 s of 1.5 s), so the whole
+        // fall plays: thrown back, sagging at the knees, down. Standing = hips above this share of his standing height.
+        const float MansuFallStartStanding = 0.27f, MansuFallBlendStanding = 0.2f, MansuStandingHips = 0.62f;
         Vector3 blanketOriginalPosition;
 
         void OnWestSectionChanged(FlowTransition transition)
@@ -149,19 +154,24 @@ namespace FiveRivers.Narrative
                 rifleDrop = StartCoroutine(DropMansuRifle(mansuRifle, mansu.transform));
             }
             // he goes down from the pose he is in (kneeling at his post), not from the controller's standing default
-            PoseBlendIn.Attach(animator, MansuFallBlend, mansuRifle);
+            var hipBone = animator.isHuman ? animator.GetBoneTransform(HumanBodyBones.Hips) : null;
+            bool onHisFeet = hipBone != null && hipBone.position.y - animator.transform.position.y > MansuStandingHips * animator.humanScale;
+            PoseBlendIn.Attach(animator, onHisFeet ? MansuFallBlendStanding : MansuFallBlend, mansuRifle);
             fallGraph = PlayableGraph.Create("Choi Mansu fall");
             fallGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
             var output = AnimationPlayableOutput.Create(fallGraph, "Body", animator);
             var fall = AnimationClipPlayable.Create(fallGraph, mansuFall);
             // the clip spends its first 0.7 s standing upright; he is at his post, so start where it starts to go down
-            fall.SetTime(Mathf.Min(MansuFallStart, mansuFall.length * .7f));
+            float joinAt = Mathf.Min(MansuFallStart, mansuFall.length * .7f);
+            fall.SetTime(onHisFeet ? Mathf.Min(MansuFallStartStanding, joinAt) : joinAt);
             output.SetSourcePlayable(fall);
             fallGraph.Play();
             // the clip ends lying on the plane he knelt on; the trench floor falls away under his legs (2026-11-13)
             mansuRest = LyingBodyRest.Attach(animator);
             // and its last pose is spread-eagled: the arms come down and the head rolls once he is on his back
             mansuPose = FallenPose.Attach(animator);
+            // from his feet he reaches the ground that much later: the arms go slack only once he is down
+            if (mansuPose != null && onHisFeet) mansuPose.Delay = joinAt - MansuFallStartStanding;
         }
 
         // The rifle leaves his hands as he is hit: it tips forward out of them, lands flat on the trench floor in
