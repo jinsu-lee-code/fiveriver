@@ -4,6 +4,7 @@ using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace FiveRivers.EditorTools
 {
@@ -17,6 +18,13 @@ namespace FiveRivers.EditorTools
     //   the decorative pile in the trench: closed boxes lying on their backs, an opened one beside; the old block
     //   hidden (its colliders kept).
     // Re-running rebuilds the same result.
+    //
+    // 2026-11-17 (user: "미국하고 우리나라 원본 기록 찾아서 그대로 만들어놔"): remade against TM 9-1990 Small-Arms
+    // Ammunition (War Department, 1942, with C2 1943): par. 23 boxes dark brown (chocolate) with yellow stencils,
+    // par. 24 and fig. 12.6 the markings, par. 28 six wing nuts and the metal liner, par. 30 the olive-drab six-pocket
+    // bandoleer with webbing strap, safety pin, reference card and one carton with an 8-round clip in each pocket,
+    // fig. 13 the opening sequence. The clips go into the pockets bullets first. The supply bay's light is a candle
+    // (no record of a lamp in a 1950 ROK trench was found; see source/props/ammo_crate_m1917/README.md).
     public static class AmmoCrateM1917Setup
     {
         const string Dir = "Assets/_Project/Art/Models/Props/AmmoCrateM1917";
@@ -69,14 +77,12 @@ namespace FiveRivers.EditorTools
             spot.localPosition = new Vector3(boxX - L / 2f - 0.12f, 0f, 0.04f);
             SaveSet(set, SetPrefab);
 
-            // ---- decorative pile: closed boxes lying on their backs (stencilled side up), two side by side and a third
-            //      across them, an opened box standing beside with its lid leaning on its end ----------------------------
+            // ---- decorative pile: closed boxes standing upright as they are carried and stacked (lid and wing nuts up,
+            //      markings readable on the side and ends), two side by side and a third on them, an opened box beside ----
             var pile = new GameObject("M1917_DecoPile");
-            var lying = Quaternion.Euler(-90f, 0f, 0f);                           // front (stencil) up, lid toward -Z
-            float lieY = W / 2f + 0.010f, lieZ = H / 2f;                           // side posts stand 1 cm proud
-            Place(closed, pile.transform, "Box0", new Vector3(-0.66f, lieY, lieZ), rot * lying);
-            Place(closed, pile.transform, "Box1", new Vector3(-0.14f, lieY, lieZ + 0.015f), Quaternion.Euler(0f, yaw - 2.5f, 0f) * lying);
-            Place(closed, pile.transform, "Box2", new Vector3(-0.41f, lieY * 3f, lieZ - 0.02f), Quaternion.Euler(0f, yaw + 8f, 0f) * lying);
+            var box0 = Place(closed, pile.transform, "Box0", new Vector3(-0.68f, 0f, 0.02f), rot);
+            Place(closed, pile.transform, "Box1", new Vector3(-0.19f, 0f, 0.035f), Quaternion.Euler(0f, yaw - 2.5f, 0f));
+            Place(closed, pile.transform, "Box2", new Vector3(-0.43f, Bounds(box0.transform).max.y, 0.02f), Quaternion.Euler(0f, yaw + 4f, 0f));
             var deco = Place(open, pile.transform, "BoxOpen", new Vector3(0.44f, 0f, 0.03f), Quaternion.Euler(0f, yaw - 5f, 0f));
             Pack(deco.transform, bOpen, bClosed, fill, clip, yaw - 5f, tipPlusZ, report);
             var lid2 = Place(lid, pile.transform, "Lid", Vector3.zero, Quaternion.identity);
@@ -134,8 +140,8 @@ namespace FiveRivers.EditorTools
             var lspot = crate0 != null ? crate0.Find(VisualName + "/LanternSpot") : null;
             if (lantern != null && lspot != null)
             {
-                Lantern(lantern, new Vector3(lspot.position.x, crate0.position.y, lspot.position.z), report);
-                report.AppendLine($"lantern on the floor beside the boxes at {lantern.position.ToString("F2")}");
+                Candle(lantern, new Vector3(lspot.position.x, crate0.position.y, lspot.position.z), report);
+                report.AppendLine($"candle on the floor beside the boxes at {lantern.position.ToString("F2")}");
             }
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -144,51 +150,70 @@ namespace FiveRivers.EditorTools
             return "crates";
         }
 
-        // The supply bay lantern (2026-11-17): the old one was a 12 cm dark box frame round a cylinder and read as a black
-        // plate from the player's eye. Replaced by a hurricane lantern (source/props/lantern/make_lantern.py): fount,
-        // burner, glowing globe, crown, air tubes, guard wires, bail. The light stays on the lantern's root, which is
-        // put at the middle of the globe; the model hangs below it and stands on the floor.
-        const string LanternFbx = "Assets/_Project/Art/Models/Props/Lantern/SM_PR_HurricaneLantern.fbx";
-        const float GlobeHeight = 0.155f;
-        static void Lantern(Transform lantern, Vector3 floorPoint, StringBuilder report)
+        // The supply bay's light (2026-11-17, second pass). The hurricane lantern had no source: no record of a lamp in a
+        // 1950 ROK front-line trench was found. The one photograph found of a light in a Korean front-line dugout
+        // (Samichon Valley, 1952, koreanwaronline.com/history/Ron/Frame/small-15.htm) shows a candle, so the light is a
+        // candle stub (source/props/candle/make_candle.py); the upturned tin under it is our own choice. The scene object
+        // keeps its name and its Light; its root is put at the flame and the model stands on the floor below it.
+        const string CandleFbx = "Assets/_Project/Art/Models/Props/Candle/SM_PR_CandleOnTin.fbx";
+        const float FlameHeight = 0.1315f;
+        static void Candle(Transform lantern, Vector3 floorPoint, StringBuilder report)
         {
             var lit = Shader.Find("Universal Render Pipeline/Lit");
             Material M(string name, System.Action<Material> f)
             {
-                string path = $"Assets/_Project/Art/Models/Props/Lantern/M_PR_Lantern_{name}.mat";
+                string path = $"Assets/_Project/Art/Models/Props/Candle/M_PR_Candle_{name}.mat";
                 var m = AssetDatabase.LoadAssetAtPath<Material>(path);
                 if (m == null) { m = new Material(lit); AssetDatabase.CreateAsset(m, path); }
                 m.shader = lit; f(m); EditorUtility.SetDirty(m); return m;
             }
             void Emit(Material m, Color c) { m.EnableKeyword("_EMISSION"); m.SetColor("_EmissionColor", c); m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None; }
-            // worn galvanised tin, light enough to read against the dark floor by moonlight; a little of the flame on it
-            var steel = M("Steel", m => { m.SetColor("_BaseColor", new Color(.36f, .38f, .36f)); m.SetFloat("_Metallic", .55f); m.SetFloat("_Smoothness", .42f); Emit(m, new Color(.030f, .017f, .006f)); });
-            var glass = M("Glass", m => { m.SetColor("_BaseColor", new Color(.95f, .62f, .28f)); m.SetFloat("_Metallic", 0f); m.SetFloat("_Smoothness", .85f); Emit(m, new Color(2.6f, 1.25f, .38f)); });
-            var flame = M("Flame", m => { m.SetColor("_BaseColor", new Color(1f, .85f, .5f)); Emit(m, new Color(9f, 5.5f, 1.8f)); });
-            if (AssetImporter.GetAtPath(LanternFbx) is ModelImporter mi)
+            var mats = new Dictionary<string, Material>
+            {
+                // a ration tin gone dull, a little of the flame on it
+                ["Steel"] = M("Steel", m => { m.SetColor("_BaseColor", new Color(.33f, .34f, .31f)); m.SetFloat("_Metallic", .6f); m.SetFloat("_Smoothness", .38f); Emit(m, new Color(.020f, .011f, .004f)); }),
+                // tallow-white wax, the flame glowing a little through it
+                ["Wax"] = M("Wax", m => { m.SetColor("_BaseColor", new Color(.80f, .76f, .64f)); m.SetFloat("_Metallic", 0f); m.SetFloat("_Smoothness", .46f); Emit(m, new Color(.085f, .045f, .014f)); }),
+                ["Wick"] = M("Wick", m => { m.SetColor("_BaseColor", new Color(.05f, .045f, .04f)); m.SetFloat("_Metallic", 0f); m.SetFloat("_Smoothness", .1f); }),
+                ["Flame"] = M("Flame", m => { m.SetColor("_BaseColor", new Color(1f, .70f, .30f)); Emit(m, new Color(6.0f, 2.6f, .55f)); }),
+            };
+            if (AssetImporter.GetAtPath(CandleFbx) is ModelImporter mi)
             {
                 mi.importAnimation = false; mi.importCameras = false; mi.importLights = false;
                 mi.importNormals = ModelImporterNormals.Calculate; mi.normalSmoothingAngle = 50f;
                 mi.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
                 mi.materialLocation = ModelImporterMaterialLocation.InPrefab;
-                mi.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), "Steel"), steel);
-                mi.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), "Glass"), glass);
-                mi.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), "Flame"), flame);
+                foreach (var kv in mats) mi.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), kv.Key), kv.Value);
                 mi.SaveAndReimport();
             }
-            var asset = AssetDatabase.LoadAssetAtPath<GameObject>(LanternFbx);
-            if (asset == null) { report.AppendLine("missing " + LanternFbx); return; }
+            var asset = AssetDatabase.LoadAssetAtPath<GameObject>(CandleFbx);
+            if (asset == null) { report.AppendLine("missing " + CandleFbx); return; }
             for (int i = lantern.childCount - 1; i >= 0; i--) Object.DestroyImmediate(lantern.GetChild(i).gameObject);
             foreach (var r in lantern.GetComponents<Renderer>()) r.enabled = false;
-            lantern.SetPositionAndRotation(floorPoint + Vector3.up * GlobeHeight, Quaternion.identity);
+            lantern.SetPositionAndRotation(floorPoint + Vector3.up * FlameHeight, Quaternion.identity);
             var go = (GameObject)PrefabUtility.InstantiatePrefab(asset, lantern);
-            go.name = "Lantern_Model";
+            go.name = "Candle_Model";
             go.transform.position = floorPoint;
             go.transform.rotation = Quaternion.Euler(0f, 35f, 0f);
-            foreach (var r in go.GetComponentsInChildren<Renderer>(true)) r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             foreach (var c in go.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(c);
+            // The bay light sits in the flame, a few centimetres from the wax and the tin: it lit them to white.
+            // Rendering layers: the bay light keeps the world (bit 0), the candle model is on bit 1 only, which the moon
+            // and its bounce also light; a weak light of its own gives the wax and the tin the flame's warmth.
+            const uint World = 1u, Self = 2u;
+            foreach (var r in go.GetComponentsInChildren<Renderer>(true)) { r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; r.renderingLayerMask = Self; }
+            var bay = lantern.GetComponent<Light>();
+            if (bay != null) { bay.GetUniversalAdditionalLightData().renderingLayers = World; EditorUtility.SetDirty(bay); }
+            foreach (var l in Object.FindObjectsByType<Light>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                if (l.type == LightType.Directional) { var d = l.GetUniversalAdditionalLightData(); d.renderingLayers |= Self; EditorUtility.SetDirty(d); }
+            var selfGo = new GameObject("Candle_SelfLight");
+            selfGo.transform.SetParent(lantern, false);
+            selfGo.transform.localPosition = new Vector3(0f, .012f, 0f);
+            var self = selfGo.AddComponent<Light>();
+            self.type = LightType.Point; self.shadows = LightShadows.None; self.range = .30f; self.intensity = .004f;
+            self.color = new Color(1f, .62f, .30f);
+            self.GetUniversalAdditionalLightData().renderingLayers = Self;
             var b = Bounds(go.transform);
-            report.AppendLine($"lantern model {b.size.ToString("F3")} base at {b.min.y:0.000} (floor {floorPoint.y:0.000})");
+            report.AppendLine($"candle model {b.size.ToString("F3")} base at {b.min.y:0.000} (floor {floorPoint.y:0.000})");
         }
 
         // ---------------------------------------------------------------------------------------------------------------
@@ -198,7 +223,7 @@ namespace FiveRivers.EditorTools
             {
                 if (AssetImporter.GetAtPath(path) is TextureImporter ti) { f(ti); ti.SaveAndReimport(); }
             }
-            Set(TexDir + "/T_PR_M1917_Stencil.png", ti => { ti.textureType = TextureImporterType.Default; ti.sRGBTexture = true; ti.alphaIsTransparency = true; ti.wrapMode = TextureWrapMode.Clamp; ti.mipmapEnabled = true; ti.maxTextureSize = 2048; });
+            Set(TexDir + "/T_PR_M1917_Stencil.png", ti => { ti.textureType = TextureImporterType.Default; ti.sRGBTexture = true; ti.alphaIsTransparency = true; ti.wrapMode = TextureWrapMode.Clamp; ti.mipmapEnabled = true; ti.maxTextureSize = 4096; ti.anisoLevel = 12; ti.mipMapsPreserveCoverage = false; ti.mipMapBias = -.5f; ti.filterMode = FilterMode.Trilinear; });
             Set(TexDir + "/T_PR_Bandoleer_BaseColor.png", ti => { ti.textureType = TextureImporterType.Default; ti.sRGBTexture = true; ti.wrapMode = TextureWrapMode.Repeat; ti.anisoLevel = 4; });
             Set(TexDir + "/T_PR_Bandoleer_Normal.png", ti => { ti.textureType = TextureImporterType.NormalMap; ti.wrapMode = TextureWrapMode.Repeat; ti.anisoLevel = 4; });
             if (AssetImporter.GetAtPath(WoodN) is TextureImporter wn && wn.textureType != TextureImporterType.NormalMap) { wn.textureType = TextureImporterType.NormalMap; wn.SaveAndReimport(); }
@@ -219,18 +244,43 @@ namespace FiveRivers.EditorTools
             }
             Texture2D T(string p) => AssetDatabase.LoadAssetAtPath<Texture2D>(p);
             var d = new Dictionary<string, Material>();
-            // seasoned pine, unpainted, a little paler and warmer than the weathered plank scan
-            d["Wood"] = M("Wood", m => { m.SetTexture("_BaseMap", T(WoodD)); m.SetColor("_BaseColor", new Color(1.32f, 1.13f, .86f)); m.SetTexture("_BumpMap", T(WoodN)); m.SetFloat("_BumpScale", .8f); m.EnableKeyword("_NORMALMAP"); m.SetFloat("_Smoothness", .16f); m.SetFloat("_Metallic", 0f); });
+            // TM 9-1990 par. 23 (C2): "painted or stained dark brown (chocolate)" -- the plank scan stained down to it
+            d["Wood"] = M("Wood", m => { m.SetTexture("_BaseMap", T(WoodD)); m.SetColor("_BaseColor", new Color(.86f, .60f, .43f)); m.SetTexture("_BumpMap", T(WoodN)); m.SetFloat("_BumpScale", .8f); m.EnableKeyword("_NORMALMAP"); m.SetFloat("_Smoothness", .16f); m.SetFloat("_Metallic", 0f); });
+            // the cut ends of the fingers at the box's corners take the stain darker
+            d["EndGrain"] = M("EndGrain", m => { m.SetTexture("_BaseMap", T(WoodD)); m.SetColor("_BaseColor", new Color(.62f, .42f, .30f)); m.SetFloat("_Smoothness", .10f); m.SetFloat("_Metallic", 0f); });
+            // the liner (terne or zinc sheet, dulled) and the chipboard of the cartons and the reference card
+            // 2026-11-17: at metallic .30 / smoothness .22 the sheet mirrored the night sky and turned blue up close. A
+            // dulled, oxidised terne sheet: barely metallic, rough, a warm grey, and no sky-probe reflection (the candle
+            // and the moon still light it and give it a soft highlight).
+            d["Zinc"] = M("Zinc", m =>
+            {
+                m.SetTexture("_BaseMap", null); m.SetColor("_BaseColor", new Color(.215f, .185f, .140f));
+                m.SetFloat("_Metallic", .08f); m.SetFloat("_Smoothness", .14f); m.SetFloat("_Cull", 0f); m.doubleSidedGI = true;
+                m.SetFloat("_EnvironmentReflections", 0f); m.EnableKeyword("_ENVIRONMENTREFLECTIONS_OFF");
+            });
+            d["Card"] = M("Card", m => { m.SetTexture("_BaseMap", null); m.SetColor("_BaseColor", new Color(.60f, .50f, .35f)); m.SetFloat("_Metallic", 0f); m.SetFloat("_Smoothness", .12f); m.SetFloat("_Cull", 0f); });
             d["Iron"] = M("Iron", m => { m.SetTexture("_BaseMap", null); m.SetColor("_BaseColor", new Color(.17f, .17f, .16f)); m.SetFloat("_Metallic", .8f); m.SetFloat("_Smoothness", .32f); });
             d["Brass"] = M("Brass", m => { m.SetTexture("_BaseMap", null); m.SetColor("_BaseColor", new Color(.64f, .48f, .24f)); m.SetFloat("_Metallic", 1f); m.SetFloat("_Smoothness", .5f); });
-            d["Cloth"] = M("Cloth", m => { m.SetTexture("_BaseMap", T(TexDir + "/T_PR_Bandoleer_BaseColor.png")); m.SetColor("_BaseColor", Color.white); m.SetTexture("_BumpMap", T(TexDir + "/T_PR_Bandoleer_Normal.png")); m.SetFloat("_BumpScale", .7f); m.EnableKeyword("_NORMALMAP"); m.SetFloat("_Smoothness", .07f); m.SetFloat("_Metallic", 0f); });
+            d["Cloth"] = M("Cloth", m => { m.SetTexture("_BaseMap", T(TexDir + "/T_PR_Bandoleer_BaseColor.png")); m.SetColor("_BaseColor", Color.white); m.SetTexture("_BumpMap", T(TexDir + "/T_PR_Bandoleer_Normal.png")); m.SetFloat("_BumpScale", 1.15f); m.EnableKeyword("_NORMALMAP"); m.SetFloat("_Smoothness", .07f); m.SetFloat("_Metallic", 0f); });
+            // two more dye lots of the same cotton (2026-11-17): a sun-faded pocket and a darker, greener one
+            void Lot(string name, Color tint) => d[name] = M(name, m => { m.CopyPropertiesFromMaterial(d["Cloth"]); m.SetColor("_BaseColor", tint); m.EnableKeyword("_NORMALMAP"); });
+            Lot("ClothB", new Color(1.12f, 1.07f, .96f));
+            Lot("ClothC", new Color(.84f, .88f, .78f));
             d["ClothDark"] = M("ClothDark", m => { m.SetTexture("_BaseMap", T(TexDir + "/T_PR_Bandoleer_BaseColor.png")); m.SetColor("_BaseColor", new Color(.5f, .5f, .5f)); m.SetFloat("_Smoothness", .05f); m.SetFloat("_Metallic", 0f); });
             d["Stencil"] = M("Stencil", m =>
             {
                 m.SetTexture("_BaseMap", T(TexDir + "/T_PR_M1917_Stencil.png")); m.SetColor("_BaseColor", Color.white);
-                m.SetFloat("_AlphaClip", 1f); m.SetFloat("_Cutoff", .45f); m.EnableKeyword("_ALPHATEST_ON");
+                // 2026-11-17: alpha-tested, the thin letters dropped out below the cut-off a few metres away (whole side
+                // blank from standing height). Painted lettering is a blended decal: it thins with distance instead.
+                m.SetFloat("_AlphaClip", 0f); m.DisableKeyword("_ALPHATEST_ON");
+                m.SetFloat("_Surface", 1f); m.SetFloat("_Blend", 0f); m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+                m.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha); m.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                m.SetFloat("_SrcBlendAlpha", (float)UnityEngine.Rendering.BlendMode.One); m.SetFloat("_DstBlendAlpha", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                m.SetFloat("_ZWrite", 0f); m.SetOverrideTag("RenderType", "Transparent");
+                m.SetShaderPassEnabled("DepthOnly", false); m.SetShaderPassEnabled("ShadowCaster", false);
                 m.SetFloat("_Smoothness", .12f); m.SetFloat("_Metallic", 0f);
-                m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                m.SetFloat("_EnvironmentReflections", 0f); m.EnableKeyword("_ENVIRONMENTREFLECTIONS_OFF");
+                m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
             });
             return d;
         }
@@ -296,9 +346,10 @@ namespace FiveRivers.EditorTools
             return plus < minus;
         }
 
-        // bandoleers inside an opened box: packed layers, then a top layer of two closed ones with their pocket mouths
-        // toward the front (the trench), flaps and snaps showing; an opened one lies on top of the back one, its flaps
-        // unsnapped and laid forward and each clip half out of its pocket, lying over the near bandoleer, bullets forward
+        // bandoleers inside an opened box: packed layers, then a top layer of two full ones with their open pocket
+        // mouths toward the front (the trench), the cartons and the steel backs of the clips showing; one being emptied
+        // lies on top of the back one, each clip half drawn from its pocket. A clip goes into its pocket bullets first
+        // (TM 9-1990 fig. 13 C; the bandoleer photographs), so what comes out is the clip's back and the case heads.
         static void Pack(Transform box, GameObject bOpen, GameObject bClosed, GameObject fill, GameObject clip, float yaw, bool tipPlusZ, StringBuilder report)
         {
             float layerTop = H - 0.013f - PT;                 // the top layer lies just under the rim
@@ -313,14 +364,14 @@ namespace FiveRivers.EditorTools
             // the opened one rests on the back one (cloth gives 3 mm), mouths just past the gap so its flaps lie on the near one
             float rest = Bounds(under.transform).max.y - box.position.y - 0.003f;
             var back = Place(bOpen, box, "BandoleerOpen", -modelFront * 0.038f + Vector3.up * (rest + PT / 2f), Quaternion.AngleAxis(-1.2f, Vector3.up) * turn);
-            float clearY = Bounds(near.transform).max.y + 0.0065f;   // over the near bandoleer and the laid-out flaps with their snaps
+            float clearY = Bounds(near.transform).max.y + 0.003f;    // over the near bandoleer and its folded strap
 
             var tipW = back.transform.TransformDirection(-modelFront); tipW.y = 0f; tipW.Normalize();   // out of its mouths
             var axis = Vector3.Cross(Vector3.up, tipW).normalized;
             var mesh = clip.GetComponentsInChildren<MeshFilter>(true).First().sharedMesh;
             var mb = mesh.bounds; var verts = mesh.vertices;
             float clipLen = mb.size.z;
-            var baseBottom = new Vector3(mb.min.x, mb.center.y, tipPlusZ ? mb.min.z : mb.max.z);   // x ends up pointing up
+            var tipBottom = new Vector3(mb.min.x, mb.center.y, tipPlusZ ? mb.max.z : mb.min.z);    // the bullet end, inside the pocket; x ends up pointing up
             var slots = back.GetComponentsInChildren<Transform>(true).Where(t => t.name.EndsWith("_ClipSlot")).OrderBy(t => t.name).ToArray();
             var rng = new System.Random(48);
             var lifts = new List<string>();
@@ -331,19 +382,19 @@ namespace FiveRivers.EditorTools
                 c.name = "Clip" + k;
                 var mf = c.GetComponentInChildren<MeshFilter>(true).transform;
                 var rel = Quaternion.Inverse(c.transform.rotation) * mf.rotation;
-                // lying flat (its two-round thickness up), bullets out of the mouth
-                var zDir = tipPlusZ ? tipW : -tipW;
+                // lying flat (its two-round thickness up), bullets into the pocket, the clip's back out of the mouth
+                var zDir = tipPlusZ ? -tipW : tipW;
                 var flat = Quaternion.LookRotation(zDir, axis);
                 if ((flat * Vector3.right).y < 0f) flat = Quaternion.LookRotation(zDir, -axis);
                 var mouth = s.position + tipW * 0.02f;                                          // the slot sits 2 cm inside
                 float outLen = .046f + (float)rng.NextDouble() * .012f;                          // how much of it is out
-                var baseAt = mouth - tipW * (clipLen - outLen); baseAt.y = s.position.y - 0.012f; // base end on the pocket floor
+                var baseAt = mouth - tipW * (clipLen - outLen); baseAt.y = s.position.y - 0.012f; // bullet tips on the pocket floor
                 float lift = 0f;
                 for (lift = 1f; lift <= 40f; lift += .5f)
                 {
                     var rm = Quaternion.AngleAxis(-lift, axis) * flat;
                     c.transform.rotation = rm * Quaternion.Inverse(rel);
-                    c.transform.position += baseAt - mf.TransformPoint(baseBottom);
+                    c.transform.position += baseAt - mf.TransformPoint(tipBottom);
                     float minY = float.MaxValue;
                     foreach (var v in verts)
                     {
@@ -355,7 +406,7 @@ namespace FiveRivers.EditorTools
                 lifts.Add(lift.ToString("0.0"));
                 k++;
             }
-            report.AppendLine($"{box.name}: {k} clips half out of the open bandoleer, lying over the near one (lift {string.Join("/", lifts)} deg); top layer at {layerTop:0.000} m");
+            report.AppendLine($"{box.name}: {k} clips half drawn (bullets inside) from the open bandoleer, over the near one (lift {string.Join("/", lifts)} deg); top layer at {layerTop:0.000} m");
         }
 
         // a leaning lid: lowest point on the floor, centred on at.x, its back (top edge) touching the box face at at.z
@@ -367,8 +418,7 @@ namespace FiveRivers.EditorTools
             t.position += new Vector3(worldAt.x - b.center.x, parent.position.y - b.min.y, worldAt.z - b.min.z);
         }
 
-        // a lid stood on its short edge on the floor, leaning 24 degrees onto the +X end of an opened box (clear of the
-        // wire handle), stencilled face outward
+        // a lid stood on its short edge on the floor, leaning 24 degrees onto the +X end of an opened box
         static void LeanOnEnd(Transform t, Quaternion rot, float boxEndX, float twist)
         {
             t.localRotation = Quaternion.Euler(0f, twist, 0f) * Quaternion.Euler(0f, 0f, -66f) * rot;

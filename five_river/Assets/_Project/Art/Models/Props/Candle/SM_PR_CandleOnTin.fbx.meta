@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 88a49786c7b6b1e47abb4d83e26ce640
+guid: f62f750df83c09d4f9569c38c20eac11
 ModelImporter:
   serializedVersion: 24300
   internalIDToNameTable: []
@@ -8,17 +8,22 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Flame
-    second: {fileID: 2100000, guid: 3a0e46e0b2893234eb839fca79fc60d8, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Glass
-    second: {fileID: 2100000, guid: 071b09d2d2f8c314f93605d6631d2eb3, type: 2}
+    second: {fileID: 2100000, guid: b50fa8bec7b4d2a4cb0d7bd803077aea, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Steel
-    second: {fileID: 2100000, guid: 37ddcc4ed2b183141a362940385d2b78, type: 2}
+    second: {fileID: 2100000, guid: a6e69b32b676172499a70767df4b1384, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wax
+    second: {fileID: 2100000, guid: f8f3c363abed1984bb297f97d1f88928, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wick
+    second: {fileID: 2100000, guid: 227f8b3f4e640cc4dbb8ef93d5f9fa43, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

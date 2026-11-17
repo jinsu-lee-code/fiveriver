@@ -12,13 +12,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Card
+    second: {fileID: 2100000, guid: 24fd80cedcca5c940b483aeea8f04f96, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Cloth
     second: {fileID: 2100000, guid: 2d361a3c1518dcd4cb7b0a1fe7a472ad, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: ClothB
+    second: {fileID: 2100000, guid: e046c832f81250b42a5ebc15dc310e31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ClothC
+    second: {fileID: 2100000, guid: e984085db364f774590c1b46c66bbfb5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: ClothDark
     second: {fileID: 2100000, guid: 18e371c6fbe2e5c45ac1e86edf9ebc32, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: EndGrain
+    second: {fileID: 2100000, guid: 19415a74a3c2baf47a595ecaf56bf257, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -34,6 +54,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Wood
     second: {fileID: 2100000, guid: 0c47149bc614c00489a3f867263bb755, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Zinc
+    second: {fileID: 2100000, guid: 05e44d9419a223646a585a17e7018336, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
