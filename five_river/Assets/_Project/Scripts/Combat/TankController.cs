@@ -149,7 +149,10 @@ namespace FiveRivers.Combat
             for (int i = 0; i < bodyRenderers.Length; i++) bodyRenderers[i].sharedMaterial = normalMaterials[i];
             openedFire = false;
             sightWaitUntil = -1f;
-            nextFire = Time.time + config.fireInterval * 0.6f;
+            // a full interval before the first shot (it was 0.6 of one, 5.4 s): from getting control back he needs
+            // about 6 s to reach the trench end, change to the bazooka and aim, so the first shell, which kills about
+            // every other time, always came before he could fire (played through by hand, 2026-11-17 night)
+            nextFire = Time.time + config.fireInterval;
             allyBlastsLeft = 0;
         }
 
@@ -340,10 +343,20 @@ namespace FiveRivers.Combat
             // SampleApproach drives the straight run over the first 75% of the time and turns on the spot after
             float duration = route.magnitude / config.approachSpeed;
             approachElapsed = along * 0.75f * duration;
-            state = along >= 1f ? State.Holding : State.Approach;
+            // The take can leave the tank on its stopping place still heading down the road. Handed straight to Holding
+            // it never made the turn that shows its side: from the trench end the game sends the player to, he stood 35
+            // degrees off its front and every rocket glanced off, until a death or the attempt limit put the tank back in
+            // its hold pose (played through by hand, 2026-11-17 night). It holds only once it has turned.
+            var holdHeading = Vector3.ProjectOnPlane(points.tankHold.forward, Vector3.up);
+            var heading = Vector3.ProjectOnPlane(body.forward, Vector3.up);
+            bool turned = Vector3.Angle(heading, holdHeading) < 2f;
+            state = along >= 1f && turned ? State.Holding : State.Approach;
             openedFire = false;
             sightWaitUntil = -1f;
-            nextFire = Time.time + config.fireInterval * 0.6f;
+            // a full interval before the first shot (it was 0.6 of one, 5.4 s): from getting control back he needs
+            // about 6 s to reach the trench end, change to the bazooka and aim, so the first shell, which kills about
+            // every other time, always came before he could fire (played through by hand, 2026-11-17 night)
+            nextFire = Time.time + config.fireInterval;
         }
 
         public void OnRocketHit(Vector3 point, Vector3 shooterPosition)
