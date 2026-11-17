@@ -73,6 +73,7 @@ namespace FiveRivers.Combat
         void Awake()
         {
             if (rifle == null || rightHand == null) { Debug.LogError("M1 presentation requires rifle and corrected hand references.", this); enabled = false; return; }
+            ViewmodelFill.Confine(transform, "M1_MoonFill"); // its fill light lit the trench walls around him too
             if (bolt != null) boltRest = bolt.localPosition;
             player=rifle.GetComponent<PlayerController>();
             weapons=rifle.GetComponent<WeaponHolder>();

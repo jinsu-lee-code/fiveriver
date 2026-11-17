@@ -77,6 +77,7 @@ namespace FiveRivers.Combat
             }
             restPosition = visualFrame.localPosition;
             restRotation = visualFrame.localRotation;
+            ViewmodelFill.Confine(visualFrame, "Bazooka_MoonFill"); // it lit the sandbags in front white
             if (animator != null) animationEvents = animator.GetComponent<AnimationEventSink>();
             if (weapons != null) player = weapons.GetComponent<PlayerController>();
             if (leftGrip != null)
