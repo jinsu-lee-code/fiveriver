@@ -129,6 +129,10 @@ music, melody, speech, modern gun, synth, laser, cartoon
 | B | `SFX_Tank_MG_01.wav`, `SFX_Tank_MG_02.wav` | 전차 기관총 연사 | VARCO Sound 효과음 | S5 |
 | B | `SFX_Tank_Smoke_Loop.wav` | 손상 연기 (측면 1발) | VARCO Sound 효과음 + 루프 | S5 |
 | B | `SFX_Artillery_Distant_01~03.wav` | 먼 포격 | VARCO Sound 효과음 | S1~S4 |
+| B | `SFX_Artillery_Incoming_01~03.wav` | 날아오는 포탄 (2026-11-18 추가) | VARCO Sound 효과음 | S1~S3 · 서쪽 · 전차 · 고지 |
+| B | `SFX_Artillery_Near_01~03.wav` | 가까운 포탄 폭발 (2026-11-18 추가) | VARCO Sound 효과음 | S1~S3 · 서쪽 · 전차 · 고지 |
+| B | `SFX_Debris_Fall_01~03.wav` | 흙 · 돌 떨어지는 소리 (2026-11-18 추가) | VARCO Sound 효과음 | 위와 같음 · 탄막 뒤 숨 고르기 |
+| B | `SFX_Ear_Ring.wav` | 귀 먹먹함의 이명 (2026-11-18 추가) | VARCO Sound 효과음 | 가까운 낙탄 뒤 |
 | B | `SFX_Foot_Dirt_Run_01~04.wav` | 발걸음 (흙, 달리기) | VARCO Sound 효과음 | 전 구간 |
 | B | `SFX_Stance_Change_01.wav`, `SFX_Stance_Change_02.wav` | 자세 바꾸기 (Z) | VARCO Sound 효과음 | 전 구간 |
 | B | `BGM_Title_Loop.wav` | 시작 화면 | VARCO Sound 음악 + 루프 | Title |
@@ -700,6 +704,89 @@ music, melody, speech, modern gun, synth, laser, cartoon
 
 ### 3-4. 폴리
 
+
+#### 26-1. 날아오는 포탄 — `SFX_Artillery_Incoming`  [B] (2026-11-18 추가)
+
+- **파일**: `SFX_Artillery_Incoming_01.wav`, `SFX_Artillery_Incoming_02.wav`, `SFX_Artillery_Incoming_03.wav`
+- **위치**: `Assets/_Project/Audio/SFX/Env/`
+- **도구**: VARCO Sound 효과음  ·  **쓰는 구간**: 가까운 포격 · 탄막 (정적 · 새벽 제외)
+- **규격**: 모노 · 1.5초. **끝 0.1초 안에 끊겨야 한다**(폭발이 바로 이어 붙는다). 3D로 재생, 최대 거리 320 m
+- **그레이박스 임시본 (2026-11-18 합성)**: 공진 필터를 건 잡음이 2.3 kHz → 380 Hz로 내려오며 커지는 소리 + 그 밑의 바람 소리. 중심 주파수 약 740 Hz, 1.3~1.4초에 가장 크고 끝에서 끊김. **귀로 들어 확인하지 않았다** (파형 · 스펙트럼 수치로만 판단)
+
+프롬프트:
+```text
+single artillery shell incoming, descending tearing whistle through the air getting louder for one and a half seconds, cuts off abruptly at the end, 1950 war, no explosion, no music, no voices
+```
+제외(네거티브):
+```text
+explosion, music, melody, speech, cartoon whistle, firework, synth, laser
+```
+
+검수 — 공통 체크 S 전부, 그리고:
+- 끝이 0.1초 안에 끊기는가 (폭발과 겹칠 때 꼬리가 남지 않는가)
+- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모:
+
+#### 26-2. 가까운 포탄 폭발 — `SFX_Artillery_Near`  [B] (2026-11-18 추가)
+
+- **파일**: `SFX_Artillery_Near_01.wav`, `SFX_Artillery_Near_02.wav`, `SFX_Artillery_Near_03.wav`
+- **위치**: `Assets/_Project/Audio/SFX/Env/`
+- **도구**: VARCO Sound 효과음  ·  **쓰는 구간**: 가까운 포격 · 탄막
+- **규격**: 모노 · 3.6초 · 피크 −1 dBFS. 3D로 재생, 최대 거리 420 m (거리 감쇠는 코드가 더 준다)
+- **그레이박스 임시본 (2026-11-18)**: 합성만으로는 장난감 같아(첫 합성은 80 Hz 아래가 66%로 웅웅거리기만 함) **기존 폭발음(`SFX_Rocket_HitSide_01/02`, `SFX_Tank_Cannon`)을 0.76배 속도로 늦춰 뼈대로 쓰고** 찢는 첫 충격 · 낮은 울림 · 되울림을 합성해 얹었다. 결과: 공격 15~60 ms, −20 dB까지 0.8~1.5초, −40 dB까지 2.2~3.1초, 80~250 Hz 비중 28~52% (원본 로켓 폭발 35~65%와 비슷한 무게). **귀로 들어 확인하지 않았다**
+
+프롬프트:
+```text
+artillery shell exploding close by in open dirt field, sharp crack then heavy chest thump, dirt and stones thrown, long rolling rumble echoing in a valley, 1950 war, no music, no voices, starts immediately
+```
+제외(네거티브):
+```text
+music, melody, speech, modern, synth, laser, cartoon, metallic ring, glass
+```
+
+검수 — 공통 체크 S 전부, 그리고:
+- 같은 장면의 전차 포(`SFX_Tank_Cannon`)와 다르게 들리는가 (전차 포는 발사음, 이것은 떨어지는 폭발)
+- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모:
+
+#### 26-3. 흙 · 돌 떨어지는 소리 — `SFX_Debris_Fall`  [B] (2026-11-18 추가)
+
+- **파일**: `SFX_Debris_Fall_01.wav`, `SFX_Debris_Fall_02.wav`, `SFX_Debris_Fall_03.wav`
+- **위치**: `Assets/_Project/Audio/SFX/Env/`
+- **도구**: VARCO Sound 효과음  ·  **쓰는 구간**: 폭발 0.5~0.9초 뒤 · 탄막 뒤 숨 고르기
+- **규격**: 모노 · 1.8초. 3D, 최대 거리 130 m
+- **그레이박스 임시본 (2026-11-18 합성)**: 처음에 쏟아지고 굵은 덩이 몇 개가 늦게 떨어지는 알갱이 소리 + 흙 쏟아지는 낮은 잡음. **귀로 들어 확인하지 않았다**
+
+프롬프트:
+```text
+dirt clods and small stones raining down on ground and helmet after a nearby explosion, pattering then a few late heavier clods, close, no explosion, no music, no voices
+```
+제외(네거티브):
+```text
+explosion, rain water, gravel footsteps, music, speech, glass
+```
+
+검수 — 공통 체크 S 전부
+- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모:
+
+#### 26-4. 귀 먹먹함의 이명 — `SFX_Ear_Ring`  [B] (2026-11-18 추가)
+
+- **파일**: `SFX_Ear_Ring.wav`
+- **위치**: `Assets/_Project/Audio/SFX/Env/`
+- **도구**: VARCO Sound 효과음  ·  **쓰는 구간**: 22 m 안 폭발 · 진지 바로 앞 낙탄
+- **규격**: 모노 · 4초, 끝 0.8초에 걸쳐 사라짐. 2D. **리스너의 먹먹함(저역 통과)을 거치지 않고** 들린다(머릿속 소리). 음량 0.1(낮게)
+- **그레이박스 임시본 (2026-11-18 합성)**: 4,180 Hz + 4,243 Hz 두 사인파(맥놀이)가 천천히 줄어듦. **귀로 들어 확인하지 않았다** — 실제 헤드폰으로 크기 확인 필요(불쾌하면 안 된다)
+
+프롬프트:
+```text
+tinnitus ear ringing after explosion, single high pitched tone slowly fading over four seconds, subtle, no music, no voices
+```
+제외(네거티브):
+```text
+music, beep, alarm, phone, electronic melody, harsh
+```
+
+검수 — 공통 체크 S 전부, 그리고:
+- 실제 헤드폰으로 들어 불쾌하지 않은가
+- 결과: ⬜ 합격 / ⬜ 수정 요청 — 메모:
 
 #### 27. 발걸음 (흙, 걷기) — `SFX_Foot_Dirt`  [A]
 

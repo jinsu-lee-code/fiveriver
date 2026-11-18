@@ -19,6 +19,13 @@ namespace FiveRivers.Combat
 
         public int Count { get; private set; }
         public Vector3 LastPoint { get; private set; }
+        // Where this run's shells have landed (tank rounds and the shelling): nothing is dropped twice on one spot.
+        public System.Collections.Generic.IReadOnlyList<Vector3> Points => points;
+        readonly System.Collections.Generic.List<Vector3> points = new System.Collections.Generic.List<Vector3>();
+        // Craters that were there before the night began (BattlefieldTraces, 2026-11-18). They are dug into the
+        // same runtime copy when the scene starts and again after every restore, so the terrain asset stays clean.
+        BattlefieldTraces traces;
+        public int OldCount { get; private set; }
         public int Breaches => breached.Count;
 
         // The trench's sandbag wall is laid in 2 m sections (Trench_Sandbag_Walls_*/<n>/Model). A round landing on or
@@ -40,11 +47,26 @@ namespace FiveRivers.Combat
             if (director == null) return;
             director.Flow.SectionChanged += OnSectionChanged;
             director.Flow.RetryRequested += OnRetry;
+            traces = FindFirstObjectByType<BattlefieldTraces>();
+            DigOld();
+        }
+
+        void DigOld()
+        {
+            OldCount = 0;
+            if (traces == null || terrain == null) return;
+            foreach (var c in traces.oldCraters)
+            {
+                var p = new Vector3(c.position.x, 0f, c.position.y);
+                p.y = terrain.SampleHeight(p) + terrain.transform.position.y;
+                Dig(p, c.radius, c.depth, c.rim, c.scorch, c.seed);
+                OldCount++;
+            }
         }
 
         void OnDestroy()
         {
-            Restore();
+            Restore(false);
             if (director == null || director.Flow == null) return;
             director.Flow.SectionChanged -= OnSectionChanged;
             director.Flow.RetryRequested -= OnRetry;
@@ -57,28 +79,52 @@ namespace FiveRivers.Combat
 
         void OnRetry(FlowCheckpoint checkpoint) => Restore();
 
-        // Back to the terrain as authored.
-        public void Restore()
+        // Back to the terrain as authored (with the old craters dug again, unless the scene is closing).
+        public void Restore(bool keepOld = true)
         {
             foreach (var g in breached) if (g != null) g.SetActive(true);
             breached.Clear();
             foreach (var g in rubble) if (g != null) Destroy(g);
             rubble.Clear();
+            points.Clear();
+            Count = 0;
             if (copy == null || terrain == null) return;
+            // nothing but the old craters has been dug since the last restore: the copy is already as it should be
+            if (keepOld && !dirty) return;
             terrain.terrainData = original;
             if (terrainCollider != null) terrainCollider.terrainData = original;
             Destroy(copy);
             copy = null;
-            Count = 0;
+            dirty = false;
+            if (keepOld) DigOld();
         }
+
+        bool dirty;
 
         public void Make(Vector3 point)
         {
-            if (terrain == null || config == null || config.craterRadius <= 0f) return;
+            if (config == null || config.craterRadius <= 0f) return;
+            Make(point, config.craterRadius, config.craterDepth, config.craterRim, config.craterBreach);
+        }
+
+        // A crater of the given size (the shelling digs shallower ones in the open field than a tank round).
+        public void Make(Vector3 point, float radius, float depthMetres, float rimMetres, float breach)
+        {
+            if (terrain == null || radius <= 0f) return;
+            Dig(point, radius, depthMetres, rimMetres, 1f, Random.Range(0f, 100f));
+            dirty = true;
+            Count++;
+            LastPoint = point;
+            points.Add(point);
+            if (breach > 0f) Breach(point, breach);
+        }
+
+        void Dig(Vector3 point, float radius, float depthMetres, float rimMetres, float scorch, float seed)
+        {
             var data = Writable();
             var size = data.size;
             var origin = terrain.transform.position;
-            float radius = config.craterRadius, rimOut = radius * 1.35f;
+            float rimOut = radius * 1.35f;
 
             // heights: a bowl of the given depth, a lip just outside it
             int res = data.heightmapResolution;
@@ -91,9 +137,8 @@ namespace FiveRivers.Combat
             int w = x1 - x0 + 1, h = z1 - z0 + 1;
             if (w < 2 || h < 2) return;
             var heights = data.GetHeights(x0, z0, w, h);
-            float depth = config.craterDepth / size.y, rim = config.craterRim / size.y;
+            float depth = depthMetres / size.y, rim = rimMetres / size.y;
             // a torn, uneven edge rather than a drawn circle: the radius wanders with the direction
-            float seed = Random.Range(0f, 100f);
             float Wobble(float dx, float dz)
             {
                 float a = Mathf.Atan2(dz, dx);
@@ -113,7 +158,7 @@ namespace FiveRivers.Combat
             data.SyncHeightmap();
 
             // paint: scorched earth inside, fading out over the lip
-            if (scorchLayer >= 0)
+            if (scorchLayer >= 0 && scorch > 0f)
             {
                 int ares = data.alphamapResolution;
                 int ax = Mathf.RoundToInt((point.x - origin.x) / size.x * ares), az = Mathf.RoundToInt((point.z - origin.z) / size.z * ares);
@@ -127,21 +172,17 @@ namespace FiveRivers.Combat
                     {
                         float wx = origin.x + (ax0 + x + 0.5f) * size.x / ares, wz = origin.z + (az0 + z + 0.5f) * size.z / ares;
                         float d = new Vector2(wx - point.x, wz - point.z).magnitude / (rimOut * 1.2f * Wobble(wx - point.x, wz - point.z));
-                        float k = 1f - Mathf.SmoothStep(0.55f, 1f, d);
+                        float k = (1f - Mathf.SmoothStep(0.55f, 1f, d)) * scorch;
                         if (k <= 0f) continue;
                         for (int l = 0; l < layers; l++) maps[z, x, l] *= 1f - k;
                         maps[z, x, scorchLayer] += k;
                     }
                 data.SetAlphamaps(ax0, az0, maps);
             }
-            Count++;
-            LastPoint = point;
-            Breach(point);
         }
 
-        void Breach(Vector3 point)
+        void Breach(Vector3 point, float reach)
         {
-            if (config.craterBreach <= 0f) return;
             if (wallSections == null)
             {
                 var list = new System.Collections.Generic.List<Renderer>();
@@ -157,7 +198,7 @@ namespace FiveRivers.Combat
             {
                 if (r == null || !r.gameObject.activeInHierarchy) continue;
                 var b = r.bounds;
-                if (Vector3.Distance(b.ClosestPoint(point), point) > config.craterBreach) continue;
+                if (Vector3.Distance(b.ClosestPoint(point), point) > reach) continue;
                 // the section's own object (Model's parent, e.g. Rear_22) goes; a squashed, tipped copy of its bags stays
                 var section = r.transform.parent != null ? r.transform.parent.gameObject : r.gameObject;
                 var heap = Instantiate(r.gameObject, r.transform.position, r.transform.rotation);

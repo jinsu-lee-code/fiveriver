@@ -21,6 +21,9 @@ namespace FiveRivers.Data
         public string findTaeSeok = "올라오는 보충병 윤태석을 맞아라";
         public string meetTaeSeok = "F  윤태석과 대화";
 
+        // 2026-11-18 큰 탄막(정찰 뒤 · 주 공세 직전)의 외침. 새로 쓴 대사: 기획(D) 확인 필요.
+        public Line shellingIncoming = new Line { speaker = "분대장", text = "포격이다! 머리 숙여!", duration = 2.2f };
+
         public Line parkDeparts = ParkLine("전차는 잡았다. 날 새기 전에 능선 되찾는다잉. 오른쪽 참호 끝으로!");
         public Line parkLower = ParkLine("첫 엄폐물 앞에 하나 있다! 소총으로 눌러!");
         public Line parkUpper = ParkLine("저 위 두 번째 엄폐선이다. 오른쪽 비탈로 붙어!");

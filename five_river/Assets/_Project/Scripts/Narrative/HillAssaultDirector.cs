@@ -431,6 +431,13 @@ namespace FiveRivers.Narrative
             if (defender == null)
                 pendingDefenders.Add(cover);
             else defenders.Add(defender);
+            // 2026-11-18 (general run): the ridge is held by more than one man a cover; the others kneel in the open
+            // beside it. The squad's fire brings these down (EnemyDirector.AllyShotAt), the last one is the player's.
+            for (int i = 0; i < enemies.HillExtraDefenders; i++)
+            {
+                var extra = enemies.SpawnDefenderBeside(cover);
+                if (extra != null) defenders.Add(extra);
+            }
         }
 
 

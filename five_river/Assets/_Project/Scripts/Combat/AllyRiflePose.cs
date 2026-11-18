@@ -67,6 +67,12 @@ namespace FiveRivers.Combat
             CacheFingerRest(leftThumb, skeleton); CacheFingerRest(rightThumb, skeleton);
         }
 
+        // Set by AllyIdleLife while an idle clip plays over the standing carry: how far the chest has moved and turned
+        // from where the carry was fitted. The rifle is turned about RidePivot and shifted by the same, so it stays on
+        // the body instead of hanging in the air in front of the root while the man shifts his weight.
+        public Vector3 RidePivot, RideShift;
+        public Quaternion RideTurn = Quaternion.identity;
+
         public void Apply(Vector3 aim, float recoil)
         {
             // Park (carry profile) shoulders the rifle with the same contacts as the others: his delivered fire-arm
@@ -215,6 +221,9 @@ namespace FiveRivers.Combat
                 position = Vector3.Lerp(position, mid + torso * Vector3.Lerp(AdvanceOffset, RunOffset, gait), moving);
                 rotation = Quaternion.Slerp(rotation, movingRotation, moving);
             }
+            // an idle clip is moving his chest: the carried rifle rides with it (AllyIdleLife; identity otherwise)
+            position = RidePivot + RideTurn * (position - RidePivot) + RideShift;
+            rotation = RideTurn * rotation;
             weapon.SetPositionAndRotation(position, rotation);
             var rightRotation = Quaternion.LookRotation(weapon.TransformDirection(new Vector3(0f, .35f, 1f)), -weapon.right) * Quaternion.Inverse(rightPalmFrame);
             Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(new Vector3(.03f, -.065f, -.19f)), rightRotation, root.TransformDirection(Vector3.Lerp(CarryRightElbow, RunRightElbow, moving)), fit, true);
@@ -228,7 +237,7 @@ namespace FiveRivers.Combat
             // Only the opt-in standing actor uses these contacts. The source grip placed
             // his MCPs 8 cm ahead of the stock wrist, crushing the palm under the receiver.
             var shoulder = rightUpper.position + root.TransformDirection(new Vector3(.025f, -.02f, .025f));
-            var rotation = root.rotation * Quaternion.Euler(30f, -10f, 0f);
+            var rotation = RideTurn * root.rotation * Quaternion.Euler(30f, -10f, 0f); // the shoulder already moves with the chest
             weapon.SetPositionAndRotation(shoulder - rotation * Butt, rotation);
             var rightRotation = Quaternion.LookRotation(weapon.TransformDirection(new Vector3(0f, .15f, 1f)), -weapon.right)
                 * Quaternion.Inverse(rightPalmFrame);
@@ -448,6 +457,12 @@ namespace FiveRivers.Combat
                 chain[2].rotation = Quaternion.AngleAxis(sign * 20f, axis) * chain[2].rotation;
             }
         }
+
+        // Rigify clips (2026-11-18, AllyClipPlayer): put a hand that holds the rifle in the clip back on its grip. The
+        // elbow keeps the plane the clip bends it in (no fit: the bend comes from the current elbow), the wrist the
+        // clip's own turn.
+        public static void SolveArm(Transform upper, Transform fore, Transform hand, Vector3 target, Quaternion handRotation) =>
+            Solve(upper, fore, hand, target, handRotation, Vector3.zero, null);
 
         static void Solve(Transform upper, Transform fore, Transform hand, Vector3 target, Quaternion rotation, Vector3 elbowDirection, AlliedRifleFit fit, bool palmContact = false)
         {

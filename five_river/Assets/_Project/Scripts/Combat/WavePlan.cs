@@ -1,6 +1,7 @@
 namespace FiveRivers.Combat
 {
     // 한 공세의 출현 계획. 동시 활동 적은 maxActive를 넘지 않는다 (CLAUDE.md 핵심 설계 규칙 5).
+    // 2026-11-18: maxActive는 구간마다 다르다 (EnemyDensity.For: 일반판은 구간별 유연 상한, 전시용은 5명).
     // S2 생존 정찰병이 주 공세에 합류하면 처음부터 활동 수에 넣는다.
     public sealed class WavePlan
     {

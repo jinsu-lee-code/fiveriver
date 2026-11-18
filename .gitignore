@@ -385,3 +385,10 @@ Thumbs.db
 /five_river/Assets/_Project/Art/Weapons/M1Refined/Source/Art/VarcoV12/Weapons/M1_UserAssembly/EmptyClip/M1_EmptyClip_MetallicSmoothness.png.meta
 /five_river/Assets/_Project/Art/Weapons/M1Refined/Source/Art/VarcoV12/Weapons/M1_UserAssembly/EmptyClip/M1_EmptyClip_Normal.png
 /five_river/Assets/_Project/Art/Weapons/M1Refined/Source/Art/VarcoV12/Weapons/M1_UserAssembly/EmptyClip/M1_EmptyClip_Normal.png.meta
+
+# VARCO 원본 동작 FBX (모델 · 텍스처 포함, 개당 약 30MB). 게임에는 뼈대와 동작만 다시 내보낸 것을 넣는다.
+source/anim/varco_rok_idle_20261118/raw/
+
+# Rigify 동작 작업 중간 파일 (약 75MB). 게임에 넣는 것은 export/ 의 FBX 와 JSON 이다.
+source/anim/rigify_rok_20261118/work/
+source/anim/rigify_rok_20261118/scripts/__pycache__/

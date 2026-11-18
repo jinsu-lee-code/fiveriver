@@ -30,6 +30,10 @@ namespace FiveRivers.EditorTools
             public bool spatial, loop;
             public float cooldown;
             public Func<float, Random, float> synth; // (t초, 난수) → -1~1
+            // 기존 소리를 변형해 만드는 항목 (2026-11-18): 변형마다 이 파일들을 차례로 읽어 느리게(무겁게) 돌리고
+            // 합성한 층을 더한다. 귀로 들어 승인된 폭발음을 뼈대로 삼으면 합성만으로 만든 것보다 덜 장난감 같다.
+            public string[] sources;
+            public float sourcePitch = 1f, sourceGain = 1f;
         }
 
         static readonly List<Spec> Specs = new List<Spec>();
@@ -76,6 +80,15 @@ namespace FiveRivers.EditorTools
             S("SFX_Flare_Launch", E, 0, 2.0f, SoundBus.Sfx, (t, r) => Thump(t, 90f, 0.15f) * 0.7f + Tone(t, 600f + t * 900f, 99f) * 0.15f * Env(t, 0.2f, 1.6f));
             S("SFX_Flare_Burn_Loop", E, 0, 4f, SoundBus.Sfx, (t, r) => Noise(r) * 0.15f, loop: true);
             S("SFX_Artillery_Distant", E, 3, 4.0f, SoundBus.Sfx, (t, r) => Brown(r) * Env(t, 0.05f, 3.5f) * 0.4f, stereo: true, volume: 0.6f);
+            // 가까운 포격 (2026-11-18, SOUND_LIST 3-3 추가분): 날아오는 소리 → 폭발 → 흙 · 파편 떨어지는 소리, 귀 먹먹함
+            S("SFX_Artillery_Incoming", E, 3, 1.5f, SoundBus.Sfx, Incoming, spatial: true, maxDistance: 320f, volume: 0.7f);
+            S("SFX_Artillery_Near", E, 3, 3.6f, SoundBus.Sfx, NearBlast, spatial: true, maxDistance: 420f);
+            Specs[Specs.Count - 1].sources = new[] { Root + W + "SFX_Rocket_HitSide_01.wav", Root + W + "SFX_Rocket_HitSide_02.wav", Root + T + "SFX_Tank_Cannon.wav" };
+            Specs[Specs.Count - 1].sourcePitch = 0.76f;
+            Specs[Specs.Count - 1].sourceGain = 1.5f;
+            S("SFX_Debris_Fall", E, 3, 1.8f, SoundBus.Sfx, DebrisFall, spatial: true, maxDistance: 130f, volume: 0.6f);
+            // 4초: 진지 바로 앞 낙탄 뒤 2~4초 이명이 남는다 (짧은 먹먹함에서는 재생 쪽에서 일찍 줄인다)
+            S("SFX_Ear_Ring", E, 0, 4.0f, SoundBus.Sfx, (t, r) => (Tone(t, 4180f, 99f) * 0.55f + Tone(t, 4243f, 99f) * 0.35f) * Env(t, 0.03f, 5.5f) * Mathf.Clamp01((4f - t) / 0.8f), volume: 0.1f);
             // 폴리 (3-4)
             S("SFX_Foot_Dirt", F, 4, 0.25f, SoundBus.Sfx, (t, r) => Brown(r) * Env(t, 0.003f, 0.15f) * 0.35f, volume: 0.5f);
             S("SFX_Foot_Dirt_Run", F, 4, 0.25f, SoundBus.Sfx, (t, r) => Brown(r) * Env(t, 0.003f, 0.18f) * 0.5f, volume: 0.6f);
@@ -129,6 +142,68 @@ namespace FiveRivers.EditorTools
         static float Hum(float t, float hz) => Mathf.Sin(2f * Mathf.PI * hz * t) * 0.6f + Mathf.Sin(2f * Mathf.PI * hz * 2.03f * t) * 0.3f + Mathf.Sin(2f * Mathf.PI * hz * 3.1f * t) * 0.15f;
         static float Chirp(float t, float hz, float every) => (t % every) < 0.06f ? Mathf.Sin(2f * Mathf.PI * hz * t) : 0f;
 
+        // 공진 필터 (샘플마다 한 번 부른다): 잡음에서 한 음역만 남긴다. damp가 작을수록 휘파람처럼 운다.
+        static float bandLow, bandMid, lowState, low2State;
+        static float Band(float input, float hz, float damp)
+        {
+            float f = 2f * Mathf.Sin(Mathf.PI * Mathf.Min(hz, Rate * 0.16f) / Rate);
+            bandLow += f * bandMid;
+            float high = input - bandLow - damp * bandMid;
+            bandMid += f * high;
+            return bandMid;
+        }
+        static float Low(float input, float hz)
+        {
+            lowState += (1f - Mathf.Exp(-2f * Mathf.PI * hz / Rate)) * (input - lowState);
+            return lowState;
+        }
+        static float Low2(float input, float hz)
+        {
+            low2State += (1f - Mathf.Exp(-2f * Mathf.PI * hz / Rate)) * (input - low2State);
+            return low2State;
+        }
+
+        // 날아오는 포탄: 공기를 찢는 소리가 높은 데서 낮은 데로 내려오며 커지다가, 터지기 직전에 끊긴다.
+        static float Incoming(float t, Random r)
+        {
+            const float Fall = 1.38f;
+            float u = Mathf.Clamp01(t / Fall);
+            float hz = Mathf.Lerp(2300f, 380f, u * (0.5f + 0.5f * u));
+            // the filter passes more the higher it is tuned: keep the level even as it falls
+            float tear = Band(Noise(r), hz, 0.4f) * (700f / hz);
+            float rush = Low(Low2(Noise(r), 1400f), 700f) * 2.2f; // the wind of it under the whistle
+            float env = Mathf.Pow(u, 2.2f) * (t > Fall ? Mathf.Exp(-(t - Fall) * 70f) : 1f);
+            return (tear * 0.5f + rush) * env;
+        }
+
+        // 가까운 폭발에 더하는 층 (뼈대는 기존 폭발음을 느리게 돌린 것): 찢는 첫 충격, 가슴을 치는 낮은 울림,
+        // 길게 굴러가는 여운과 골짜기의 되울림.
+        static float NearBlast(float t, Random r)
+        {
+            float crack = Noise(r) * Env(t, 0.0015f, 0.06f) * 0.5f;
+            float punch = Band(Noise(r), 520f - 260f * Mathf.Clamp01(t * 1.5f), 0.9f) * Env(t, 0.003f, 0.5f) * 0.3f;
+            float boom = Thump(t, 88f, 0.4f) * 0.55f + Mathf.Sin(2f * Mathf.PI * 46f * t) * Mathf.Exp(-t / 0.6f) * Mathf.Clamp01(t / 0.03f) * 0.2f;
+            float rumble = Low(Brown(r), 520f) * Env(t, 0.008f, 2.2f) * 0.3f;
+            float echo = t > 0.48f ? Low2(Brown(r), 300f) * Env(t - 0.48f, 0.12f, 2.2f) * 0.22f : 0f;
+            return crack + punch + boom + rumble + echo;
+        }
+
+        // 폭발 뒤 흙과 돌이 떨어진다: 처음에는 쏟아지고, 굵은 덩이 몇 개가 늦게 떨어진다.
+        static float grainAt = -1f, grainLevel, grainHz;
+        static float DebrisFall(float t, Random r)
+        {
+            float density = Mathf.Exp(-t / 0.5f);
+            if (r.NextDouble() < 0.004 * density + 0.00012)
+            {
+                grainAt = t;
+                grainLevel = 0.35f + 0.65f * (float)r.NextDouble();
+                grainHz = 500f + 2600f * (float)r.NextDouble();
+            }
+            float grain = grainAt >= 0f ? Band(Noise(r), grainHz, 0.7f) * Mathf.Exp(-(t - grainAt) / 0.012f) * grainLevel : 0f;
+            float pour = Low(Brown(r), 900f) * Env(t, 0.06f, 0.9f) * 0.22f;
+            return grain * 0.9f + pour;
+        }
+
         // ---- 파일 쓰기 ----
         static IEnumerable<string> Names(Spec s)
         {
@@ -162,17 +237,30 @@ namespace FiveRivers.EditorTools
 
         static void WriteWav(string path, Spec s, int variant)
         {
-            var rng = new Random(path.GetHashCode() & 0x7fffffff);
+            var rng = new Random(StableHash(path));
             brown = 0f;
+            bandLow = bandMid = lowState = low2State = 0f;
+            grainAt = -1f;
             int channels = s.stereo ? 2 : 1;
             int frames = Mathf.Max(1, Mathf.RoundToInt(s.seconds * Rate));
             float pitch = 1f + (variant - 1) * 0.06f;
             var data = new short[frames * channels];
             float peak = 0f;
             var samples = new float[frames];
+            float[] source = null;
+            int sourceRate = Rate;
+            if (s.sources != null && s.sources.Length > 0) source = ReadWav(s.sources[(variant - 1) % s.sources.Length], out sourceRate);
             for (int i = 0; i < frames; i++)
             {
                 float v = s.synth(i / (float)Rate * pitch, rng);
+                if (source != null)
+                {
+                    // the source played slower (and each variant a little differently), fading out at the end of the file
+                    float at = i * (float)sourceRate / Rate * s.sourcePitch * (1f + (variant - 1) * 0.045f);
+                    int k = (int)at;
+                    if (k + 1 < source.Length) v += Mathf.Lerp(source[k], source[k + 1], at - k) * s.sourceGain;
+                    v *= Mathf.Clamp01((frames - 1 - i) / (Rate * 0.25f));
+                }
                 if (s.loop) v *= Mathf.Clamp01(Mathf.Min(i, frames - 1 - i) / (Rate * 0.05f)); // 이음새 부드럽게
                 samples[i] = v;
                 peak = Mathf.Max(peak, Mathf.Abs(v));
@@ -191,6 +279,52 @@ namespace FiveRivers.EditorTools
                 w.Write(Rate); w.Write(Rate * channels * 2); w.Write((short)(channels * 2)); w.Write((short)16);
                 w.Write("data".ToCharArray()); w.Write(bytes);
                 foreach (var v in data) w.Write(v);
+            }
+        }
+
+        // 16비트 PCM WAV 한 채널로 읽기 (기존 소리를 변형할 때)
+        static float[] ReadWav(string path, out int rate)
+        {
+            rate = Rate;
+            if (!File.Exists(path)) return null;
+            var bytes = File.ReadAllBytes(path);
+            int channels = 1, bits = 16, at = 12;
+            while (at + 8 <= bytes.Length)
+            {
+                string id = System.Text.Encoding.ASCII.GetString(bytes, at, 4);
+                int size = BitConverter.ToInt32(bytes, at + 4);
+                if (id == "fmt ")
+                {
+                    channels = BitConverter.ToInt16(bytes, at + 10);
+                    rate = BitConverter.ToInt32(bytes, at + 12);
+                    bits = BitConverter.ToInt16(bytes, at + 22);
+                }
+                else if (id == "data")
+                {
+                    if (bits != 16) return null;
+                    int count = Mathf.Min(size, bytes.Length - at - 8) / (2 * channels);
+                    var result = new float[count];
+                    for (int i = 0; i < count; i++)
+                    {
+                        float sum = 0f;
+                        for (int c = 0; c < channels; c++) sum += BitConverter.ToInt16(bytes, at + 8 + (i * channels + c) * 2) / 32768f;
+                        result[i] = sum / channels;
+                    }
+                    return result;
+                }
+                at += 8 + size + (size & 1);
+            }
+            return null;
+        }
+
+        // string.GetHashCode는 실행마다 달라질 수 있다: 같은 이름이면 언제 만들어도 같은 소리가 되게 한다.
+        static int StableHash(string text)
+        {
+            unchecked
+            {
+                int h = 23;
+                foreach (char c in text) h = h * 31 + c;
+                return h & 0x7fffffff;
             }
         }
 

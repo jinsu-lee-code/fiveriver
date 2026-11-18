@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_ENV_Ridge_Near
+  m_Shader: {fileID: 4800000, guid: 18360c77494e9c04983999e40ae2513f, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2602
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 004b8c4c6ffc1154f8e1382ba77a9641, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DawnContrast: 0.5
+    - _DawnHaze: 0.26
+    - _DawnSaturation: 0.55
+    - _FadeHigh: 0.95
+    - _FadeLow: 0.15
+    - _NightContrast: 0.52
+    - _Shade: 0.32
+    - _SunGain: 0.22
+    m_Colors:
+    - _DawnColor: {r: 0.2, g: 0.2, b: 0.205, a: 1}
+    - _NightColor: {r: 0.055, g: 0.08, b: 0.145, a: 1}
+    - _NightHaze: {r: 0.016, g: 0.024, b: 0.044, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

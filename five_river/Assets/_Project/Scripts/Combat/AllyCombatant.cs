@@ -7,6 +7,9 @@ namespace FiveRivers.Combat
 {
     // Defensive supporting fire is presentation only: it cannot damage, kill, or advance a goal.
     // Cadence and range share WaveConfig; no extra difficulty or progression system is introduced.
+    // 2026-11-18 (general run only): each aimed round is reported to EnemyDirector.AllyShotAt, which may let it bring
+    // down a man beyond the player's share of the assault (never one who is firing at the player). The exhibit run
+    // is unchanged: there the squad's fire still cannot kill.
     public sealed class AllyCombatant : MonoBehaviour
     {
         [SerializeField] FlowDirector director;
@@ -41,6 +44,9 @@ namespace FiveRivers.Combat
         EnemyAgent target;
         float nextShot, cueAt, nextPick = float.MaxValue;
         bool pending, engaged, suppressing;
+        [SerializeField, Tooltip("교전 중 표적을 놓친 뒤 무릎 사격 자세로 그 자리를 겨누고 기다리는 시간(초)")] float holdAimAfterTarget = 4f;
+        float lastTargetAt = -100f;
+        Vector3 lastAim;
         Vector3 suppressAim;
         AllyRiflePose riflePose;
         AlliedRifleFit rifleFit;
@@ -60,6 +66,10 @@ namespace FiveRivers.Combat
         bool hasAdvanced;
         // Kneeling to fire: HillAllies leaves his facing alone while this is true.
         public bool Engaged => engaged;
+        // AllyIdleLife lets the carried rifle ride the chest while an idle clip plays (null until Start).
+        public AllyRiflePose RiflePose => riflePose;
+        // Rigify clips (2026-11-18): set by AllyClipPlayer when it attaches to his animator (null without the clip data).
+        internal AllyClipPlayer Clips { get; set; }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         public int ShotsFired { get; private set; }
@@ -99,6 +109,8 @@ namespace FiveRivers.Combat
 
         void OnDisable()
         {
+            // a director takes him over (Choi Man-su's fall): the clip graph lets go of his animator at once
+            if (Clips != null) Clips.Release();
             if (animator != null) StopFiring();
         }
 
@@ -113,6 +125,8 @@ namespace FiveRivers.Combat
             if (!isActiveAndEnabled) return;
             StopFiring();
             watching = false;
+            lastTargetAt = -100f;
+            if (resetCounts && takingCover) { takingCover = false; LookUp(); }
             hasAdvanced = advancing; // already walking (HillAllies may hear the section change first): keep it
             recoilAt = -100f;
             transform.rotation = restingRotation;
@@ -132,6 +146,43 @@ namespace FiveRivers.Combat
         // Only once he has moved off: before the first move he stands ready in the trench, as before.
         bool HillWatch => hasAdvanced && director.Flow.IsExpanded && director.Flow.Section == FlowSection.HillAssault && CombatActive;
         bool watching;
+
+        // Under the barrage (2026-11-18): down on one knee behind the parapet, head bowed, no firing. ShellingDirector
+        // sets it for the barrage and the breather after it; LookUp lifts the head again as the dust thins.
+        bool takingCover;
+        FiveRivers.Narrative.HeadBow coverBow;
+        public bool TakingCover => takingCover;
+
+        public void TakeCover(bool on)
+        {
+            if (takingCover == on) return;
+            takingCover = on;
+            if (on)
+            {
+                CancelCue();
+                target = null;
+                watching = false; // picks the low cover aim on the next frame
+                if (isActiveAndEnabled && animator != null) coverBow = FiveRivers.Narrative.HeadBow.On(transform, 30f, 0.45f);
+            }
+            else
+            {
+                LookUp();
+                watching = false; // aims up the field again
+            }
+        }
+
+        public void LookUp()
+        {
+            if (coverBow != null) coverBow.Release(1.1f);
+            coverBow = null;
+        }
+
+        // Behind the parapet, a few metres out and below its top: where the rifle points while he keeps his head down.
+        Vector3 CoverPoint()
+        {
+            var forward = defensiveForward; forward.y = 0f;
+            return transform.position + forward.normalized * 5f - Vector3.up * 0.6f;
+        }
 
         // A spot on the ground some way up the slope, straight toward the enemy's side of the ridge.
         Vector3 WatchPoint()
@@ -161,16 +212,17 @@ namespace FiveRivers.Combat
                 watching = false;
                 return;
             }
-            if (!CombatActive) target = null;
+            if (!CombatActive || takingCover) target = null;
             else if (target == null || !target.Alive || target.Retreating) target = FindTarget();
-            if (target == null && HillWatch)
+            if (target == null && (HillWatch || takingCover))
             {
                 // Stopped on the open slope of the hill assault with nobody in sight: down on one knee with the
                 // rifle up the slope, the way a man halts in the open under fire, instead of standing upright with
                 // the rifle at the waist (2026-11-16). No rounds: there is nothing to shoot at.
                 CancelCue();
                 suppressing = false;
-                if (!watching) { watching = true; suppressAim = WatchPoint(); }
+                // under the barrage the muzzle comes down below the parapet: hunched low behind the sandbags, head bowed
+                if (!watching) { watching = true; suppressAim = takingCover ? CoverPoint() : WatchPoint(); }
                 engaged = true;
                 animator.SetBool(CrouchId, true);
                 var look = suppressAim - transform.position; look.y = 0f;
@@ -180,6 +232,23 @@ namespace FiveRivers.Combat
                 return;
             }
             watching = false;
+            if (target != null) { lastTargetAt = Time.time; lastAim = AimPoint(); }
+            // Lost his man for a moment (behind cover, retargeting) while the fight is on: stays on one knee with the
+            // rifle on the last spot instead of dropping out of the aim. Without this, in the western assault he went
+            // up to fire, down to the low wait and up again every 1-1.5 s, or stood up in the trench (2026-11-18).
+            // While men are still out on the slope (in cover, out of his sight) he stays up too; down only once it is clear.
+            if (target == null && !SuppressActive && engaged && CombatActive && (Time.time - lastTargetAt < holdAimAfterTarget || EnemyOutThere()))
+            {
+                CancelCue();
+                suppressing = false;
+                suppressAim = lastAim; // LateUpdate aims through AimPoint(): the rifle stays on that spot
+                animator.SetBool(CrouchId, true);
+                var hold = lastAim - transform.position; hold.y = 0f;
+                if (hold.sqrMagnitude > 0.01f)
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation,
+                        Quaternion.LookRotation(hold) * Quaternion.Euler(0f, -AimYawOffset, 0f), turnSpeed * 0.5f * Time.deltaTime);
+                return;
+            }
             if (target == null && !SuppressActive)
             {
                 StopFiring();
@@ -196,6 +265,8 @@ namespace FiveRivers.Combat
             var aimRotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0f, -AimYawOffset, 0f);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, aimRotation, turnSpeed * Time.deltaTime);
             if (pending || Time.time < nextShot || Quaternion.Angle(transform.rotation, aimRotation) > 8f) return;
+            // still coming up from the low wait to one knee (AllyClipPlayer): the rifle is not at his shoulder yet
+            if (Clips != null && Clips.HoldsFire) return;
             if (!suppressing && !CanSee(target)) { target = FindTarget(); nextShot = Time.time + 0.25f; return; }
             animator.SetTrigger(FireId);
             pending = true;
@@ -236,6 +307,14 @@ namespace FiveRivers.Combat
                 : point + Vector3.up * 2f;
         }
 
+        bool EnemyOutThere()
+        {
+            float range = config.sightRange * config.sightRange;
+            foreach (var e in enemies.ActiveEnemies)
+                if (e != null && e.Alive && !e.Retreating && (e.transform.position - transform.position).sqrMagnitude < range) return true;
+            return false;
+        }
+
         EnemyAgent FindTarget()
         {
             EnemyAgent nearest = null;
@@ -244,6 +323,8 @@ namespace FiveRivers.Combat
             {
                 if (candidate == null || !candidate.Alive || candidate.Retreating) continue;
                 float d = (candidate.transform.position - transform.position).sqrMagnitude;
+                // the men firing at the player are the player's: the squad takes the others first (2026-11-18)
+                if (enemies.AimsAtPlayer(candidate)) d *= 6f;
                 if (d >= distance || !CanSee(candidate)) continue;
                 nearest = candidate;
                 distance = d;
@@ -274,9 +355,13 @@ namespace FiveRivers.Combat
         void LateUpdate()
         {
             if (director.Flow.Paused) return;
+            // Rigify clips (2026-11-18, AllyClipPlayer): while a trench clip has the whole pose, the rifle follows the
+            // clip's own track and the hands hold it as the clip has them. The aim, the carry and the tutorial look rest.
+            bool clipRifle = Clips != null && Clips.OwnsRifle;
+            if (clipRifle) NoteCarry("clip");
             // Both palms come from the actual crouch/fire clip, including its recoil. While he kneels to fire the rifle
             // stays shouldered even on the frame a target is lost (it used to drop into the standing carry).
-            if (engaged)
+            else if (engaged)
             {
                 riflePose.Apply(AimPoint(), 0.022f * Mathf.Exp(-(Time.time - recoilAt) * 24f));
                 NoteCarry(watching ? "watch" : "aim");
@@ -284,8 +369,12 @@ namespace FiveRivers.Combat
             else if (rightHand != null && leftHand != null && weapon != null)
             {
                 var section = director.Flow.Section;
+                float advance = Advancing ? StateWeight(CrouchRunRifleId) : 0f, run = Advancing ? StateWeight(RunRifleId) : 0f;
+                // the new run clips carry the rifle in both hands themselves: port arms only for what is left of standing
+                bool clipRun = Clips != null && Clips.RunClipsInstalled, clipAdvance = Clips != null && Clips.AdvanceClipsInstalled;
                 bool portArms = director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
-                    && riflePose.ApplyPortArms(Advancing ? StateWeight(CrouchRunRifleId) : 0f, Advancing ? StateWeight(RunRifleId) : 0f, section == FlowSection.Dawn ? 1f : 0f);
+                    && riflePose.ApplyPortArms(clipAdvance ? 0f : advance, clipRun ? 0f : run, section == FlowSection.Dawn ? 1f : 0f);
+                if (portArms && (clipRun || clipAdvance)) Clips.HoldMovingRifle(weapon, clipRun ? run : 0f, clipAdvance ? advance : 0f);
                 NoteCarry(portArms ? $"port a{StateWeight(CrouchRunRifleId):0.00} r{StateWeight(RunRifleId):0.00}" : "carry");
                 if (!portArms && !riflePose.TryApplyCarry())
                 {
@@ -297,7 +386,10 @@ namespace FiveRivers.Combat
                     }
                 }
             }
-            if (!engaged && (director.Flow.Section == FlowSection.Title || director.Flow.Section == FlowSection.Tutorial))
+            // going into or out of a clip: what was done above is kept in proportion (nothing when no clip plays)
+            if (Clips != null) Clips.HoldRifle(weapon);
+            if (!engaged && (Clips == null || Clips.RifleWeight <= 0f)
+                && (director.Flow.Section == FlowSection.Title || director.Flow.Section == FlowSection.Tutorial))
                 riflePose.LookAt(transform.position + defensiveForward * 60f + Vector3.up * 1.4f);
             if (!pending || Time.time < cueAt) return;
             pending = false;
@@ -313,6 +405,7 @@ namespace FiveRivers.Combat
                 && hit.collider.GetComponentInParent<EnemyAgent>() == null
                 && hit.collider.GetComponentInParent<PlayerHealth>() == null)
                 effects.Spawn(EffectKind.ImpactDirt, hit.point, Quaternion.LookRotation(hit.normal));
+            if (!suppressing) enemies.AllyShotAt(target);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             ShotsFired++;
             if (flash != null) MuzzleEffectsSpawned++;

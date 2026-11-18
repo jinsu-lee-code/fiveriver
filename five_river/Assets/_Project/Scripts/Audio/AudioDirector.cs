@@ -41,12 +41,32 @@ namespace FiveRivers.Audio
         readonly AudioLowPassFilter[] artilleryMuffle = new AudioLowPassFilter[3];
         readonly float[] artilleryLevel = new float[3];
         int artilleryVoice;
-        int salvoLeft;
+        // Fighting on the neighbouring positions (2026-11-18): the existing rifle and machine-gun clips, played far
+        // off to one side through a low-pass, so the battle is heard to be wider than this trench.
+        readonly AudioSource[] farGuns = new AudioSource[3];
+        readonly AudioLowPassFilter[] farGunMuffle = new AudioLowPassFilter[3];
+        readonly float[] farGunLevel = new float[3];
+        // A shell bursting close by leaves the ears dull for a moment: a low-pass on the listener that opens again.
+        AudioLowPassFilter earMuffle;
+        // The ringing is heard inside the head: it does not pass through the muffling on the listener.
+        AudioSource earRing;
+        float deafUntil, deafFor, ringLevel;
+        bool deafDead;
+        // DeadCutoff: a round right in front of the trench. Almost nothing is left but the ringing.
+        const float DeafCutoff = 700f, DeadCutoff = 260f, OpenCutoff = 22000f;
+        // After the barrage: his own breath, whether he ran or not.
+        float breathHoldUntil, breathHold;
         float duck = 1f;
         float stepDistance;
         float lastMoved;
-        float nextArtillery;
         bool wasPaused;
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        // 점검용: 무엇이 언제 얼마나 크게 났는지 (정적 구간이 실제로 조용한지 재생 기록으로 확인)
+        public struct Played { public float time; public string id; public float volume; public FlowSection section; }
+        public static readonly List<Played> PlayLog = new List<Played>();
+        public static bool LogPlays;
+#endif
 
         void Awake()
         {
@@ -55,10 +75,18 @@ namespace FiveRivers.Audio
             music = NewSource("Music", transform);
             voice = NewSource("Voice", transform);
             breath = NewSource("Breath", transform);
+            earRing = NewSource("EarRing", transform);
+            earRing.bypassListenerEffects = true;
+            earRing.bypassEffects = true;
             for (int i = 0; i < artillery.Length; i++)
             {
                 artillery[i] = NewSource("DistantArtillery_" + i, transform);
                 artilleryMuffle[i] = artillery[i].gameObject.AddComponent<AudioLowPassFilter>();
+            }
+            for (int i = 0; i < farGuns.Length; i++)
+            {
+                farGuns[i] = NewSource("DistantGunfire_" + i, transform);
+                farGunMuffle[i] = farGuns[i].gameObject.AddComponent<AudioLowPassFilter>();
             }
         }
 
@@ -163,8 +191,6 @@ namespace FiveRivers.Audio
                     }
                     break;
             }
-            if (ArtilleryAllowed(t.To)) ScheduleArtillery();
-            else StopArtillery();
             SetTankLoops();
         }
 
@@ -204,8 +230,7 @@ namespace FiveRivers.Audio
             {
                 wasPaused = director.Flow.Paused;
                 Play2D("UI_Menu_Click");
-                if (wasPaused) StopArtillery();
-                else if (ArtilleryAllowed(director.Flow.Section)) ScheduleArtillery();
+                if (wasPaused) StopDistant();
             }
             // Approach -> Holding changes without a section transition.
             SetTankLoops();
@@ -225,6 +250,9 @@ namespace FiveRivers.Audio
             tankDamage.volume = Volume("sfx") * VolumeOf(tankDamage.clip) * duck;
             for (int i = 0; i < artillery.Length; i++)
                 artillery[i].volume = Volume("sfx") * VolumeOf(artillery[i].clip) * artilleryLevel[i] * duck;
+            for (int i = 0; i < farGuns.Length; i++)
+                farGuns[i].volume = Volume("sfx") * VolumeOf(farGuns[i].clip) * farGunLevel[i] * duck;
+            UpdateDeafness();
 
             if (clipRemovePending && (!weapons.M1.Reloading || weapons.M1.ReloadProgress >= .31f))
             {
@@ -233,7 +261,6 @@ namespace FiveRivers.Audio
             }
             UpdateFootsteps();
             UpdateBreath();
-            UpdateArtillery();
         }
 
         void UpdateFootsteps()
@@ -258,54 +285,136 @@ namespace FiveRivers.Audio
         {
             sprintTime = player.Sprinting ? sprintTime + Time.deltaTime : Mathf.Max(0f, sprintTime - Time.deltaTime * 0.6f);
             float target = Mathf.Clamp01((sprintTime - 2f) / 3f);
+            if (Time.time < breathHoldUntil) target = Mathf.Max(target, breathHold);
             breathLevel = Mathf.MoveTowards(breathLevel, target, Time.deltaTime / (target > breathLevel ? 2f : 3f));
             if (breathLevel > 0f && !breath.isPlaying) SetLoop(breath, "SFX_Player_Breath_Run_Loop");
             if (breathLevel <= 0f && breath.isPlaying) breath.Stop();
             breath.volume = Volume("sfx") * VolumeOf(breath.clip) * breathLevel * duck;
         }
 
-        // Preserve the existing tutorial/silence ambience and include the tank battle.
-        static bool ArtilleryAllowed(FlowSection section) => (section >= FlowSection.Tutorial && section <= FlowSection.Tank)
-            || section == FlowSection.WestAssault || section == FlowSection.HillAssault;
-
-        void ScheduleArtillery()
-        {
-            nextArtillery = Time.time + Random.Range(config.artilleryMin, config.artilleryMax);
-            salvoLeft = Random.value < 0.4f ? Random.Range(1, 3) : 0; // sometimes 2-3 shells land close together
-        }
-
-        void StopArtillery()
+        void StopDistant()
         {
             foreach (var a in artillery) a.Stop();
-            nextArtillery = float.PositiveInfinity;
-            salvoLeft = 0;
+            foreach (var g in farGuns) g.Stop();
         }
 
-        void UpdateArtillery()
+        // The breather after a barrage: the far guns fall silent at once.
+        public void HushDistant() => StopDistant();
+
+        // Heavy breathing for a while, as after a run (the moment after the shells stop).
+        public void ForceBreath(float seconds, float level)
         {
-            var s = director.Flow.Section;
-            if (!ArtilleryAllowed(s) || director.Flow.Paused || Time.time < nextArtillery) return;
-            FireDistantShell(s);
-            if (salvoLeft > 0)
-            {
-                salvoLeft--;
-                nextArtillery = Time.time + Random.Range(0.35f, 1.6f);
-            }
-            else ScheduleArtillery();
+            breathHoldUntil = Time.time + seconds;
+            breathHold = Mathf.Clamp01(level);
         }
 
-        void FireDistantShell(FlowSection section)
+        // One distant shell (ShellingDirector decides when: the horizon flashes first, the report follows).
+        // far01: 0 = the nearer ridge, 1 = far down the valley. pan: -1 left .. 1 right as the player faces now.
+        public void PlayDistantShell(float far01, float pan, float level)
         {
             int i = artilleryVoice;
             artilleryVoice = (artilleryVoice + 1) % artillery.Length;
             var source = artillery[i];
             Play("SFX_Artillery_Distant", null, targetSource: source);
-            float far = Random.value; // 0 = the nearer ridge, 1 = far down the valley
-            artilleryLevel[i] = Mathf.Lerp(0.38f, 0.14f, far) * (section == FlowSection.Silence ? 0.6f : 1f);
-            artilleryMuffle[i].cutoffFrequency = Mathf.Lerp(1400f, 450f, far);
-            source.panStereo = Random.Range(-0.75f, 0.75f);
-            source.pitch *= Mathf.Lerp(1f, 0.85f, far);
+            artilleryLevel[i] = Mathf.Lerp(0.38f, 0.14f, far01) * level;
+            artilleryMuffle[i].cutoffFrequency = Mathf.Lerp(1400f, 450f, far01);
+            source.panStereo = Mathf.Clamp(pan, -0.85f, 0.85f);
+            source.pitch *= Mathf.Lerp(1f, 0.85f, far01);
             source.volume = Volume("sfx") * VolumeOf(source.clip) * artilleryLevel[i] * duck;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // the entry logged by Play() carries the clip's own level: record what is actually heard
+            if (LogPlays && PlayLog.Count > 0 && PlayLog[PlayLog.Count - 1].id == "SFX_Artillery_Distant")
+            {
+                var last = PlayLog[PlayLog.Count - 1];
+                last.volume = source.volume;
+                PlayLog[PlayLog.Count - 1] = last;
+            }
+#endif
+        }
+
+        // Rifle or machine-gun fire from a neighbouring position, far off to one side.
+        // voice: shots of one burst share a voice (and so its side and muffling) and may overlap each other.
+        public void PlayDistantGunfire(string id, float pan, float level, float cutoff, int voice, float pitch)
+        {
+            var e = library.Find(id);
+            var clip = e != null ? Pick(e) : null;
+            if (clip == null) return;
+            int i = Mathf.Abs(voice) % farGuns.Length;
+            var source = farGuns[i];
+            source.clip = clip; // for the level look-up in Update; the shot itself is a one-shot so that shots overlap
+            source.loop = false;
+            source.spatialBlend = 0f;
+            source.pitch = pitch;
+            source.panStereo = Mathf.Clamp(pan, -0.9f, 0.9f);
+            farGunLevel[i] = level;
+            farGunMuffle[i].cutoffFrequency = cutoff;
+            source.volume = Volume("sfx") * e.volume * level * duck;
+            source.PlayOneShot(clip);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (LogPlays) PlayLog.Add(new Played { time = Time.unscaledTime, id = id + "(far)", volume = source.volume, section = director.Flow.Section });
+#endif
+        }
+
+        // A close burst: everything goes dull for a moment, then the hearing opens again.
+        // dead: a round right in front. The world goes almost silent, the ringing stays, and it comes back slowly.
+        public void Deafen(float seconds, float amount, bool dead = false)
+        {
+            if (seconds <= 0f || amount <= 0f) return;
+            // a weaker burst does not cut a deeper deafness short
+            if (earMuffle != null && earMuffle.enabled && deafDead && !dead && deafUntil - Time.unscaledTime > seconds) return;
+            if (earMuffle == null)
+            {
+                var listener = FindFirstObjectByType<AudioListener>();
+                if (listener == null) return;
+                earMuffle = listener.GetComponent<AudioLowPassFilter>();
+                if (earMuffle == null) earMuffle = listener.gameObject.AddComponent<AudioLowPassFilter>();
+            }
+            deafFor = seconds;
+            deafDead = dead;
+            deafFrom = Mathf.Lerp(OpenCutoff, dead ? DeadCutoff : DeafCutoff, Mathf.Clamp01(amount));
+            deafUntil = Time.unscaledTime + seconds;
+            earMuffle.enabled = true;
+            earMuffle.cutoffFrequency = deafFrom;
+            var ring = library.Find("SFX_Ear_Ring");
+            var clip = ring != null ? Pick(ring) : null;
+            if (clip == null) return;
+            ringLevel = BusVolume(ring.bus) * ring.volume * Mathf.Clamp01(amount) * (dead ? 1.6f : 1f);
+            earRing.clip = clip;
+            earRing.loop = false;
+            earRing.spatialBlend = 0f;
+            earRing.pitch = 1f;
+            earRing.volume = ringLevel;
+            earRing.Play();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (LogPlays) PlayLog.Add(new Played { time = Time.unscaledTime, id = dead ? "SFX_Ear_Ring(dead)" : "SFX_Ear_Ring", volume = ringLevel, section = director.Flow.Section });
+#endif
+        }
+
+        float deafFrom;
+
+        void UpdateDeafness()
+        {
+            if (earMuffle == null || !earMuffle.enabled) return;
+            float left = deafUntil - Time.unscaledTime;
+            if (left <= 0f) { earMuffle.cutoffFrequency = OpenCutoff; earMuffle.enabled = false; return; }
+            // stays dull at first, then opens (the cutoff is heard on a log scale). After a round right in front
+            // it stays shut for the first third and then comes back slowly.
+            float u = 1f - left / Mathf.Max(0.01f, deafFor);
+            float open = deafDead ? Mathf.Pow(Mathf.InverseLerp(0.33f, 1f, u), 1.6f) : u * u;
+            earMuffle.cutoffFrequency = Mathf.Exp(Mathf.Lerp(Mathf.Log(deafFrom), Mathf.Log(OpenCutoff), open));
+            // the ringing dies away as the hearing returns
+            if (earRing.isPlaying) earRing.volume = ringLevel * Mathf.Clamp01(1.15f - u);
+        }
+
+        void ClearDeafness()
+        {
+            deafUntil = 0f;
+            deafDead = false;
+            breathHoldUntil = 0f;
+            if (earRing != null) earRing.Stop();
+            if (earMuffle == null) return;
+            earMuffle.cutoffFrequency = OpenCutoff;
+            earMuffle.enabled = false;
         }
 
         float Volume(string bus)
@@ -368,6 +477,9 @@ namespace FiveRivers.Audio
         // A world-space M1 uses the same non-verbal clip and mixer settings as the player's rifle.
         public void PlaySpatial(string id, Vector3 position) => Play(id, position, true);
 
+        // A one-shot at a level below the entry's own (a shell bursting far across the field).
+        public void PlayAt(string id, Vector3 position, float gain) => Play(id, position, false, null, gain);
+
         readonly Dictionary<AudioSource, float> poolGain = new Dictionary<AudioSource, float>();
 
         void Play(string id, Vector3? position, bool forceSpatial = false, AudioSource targetSource = null, float gain = 1f)
@@ -392,7 +504,11 @@ namespace FiveRivers.Audio
             source.transform.position = position ?? Vector3.zero;
             float duckable = e.bus == SoundBus.Sfx || e.bus == SoundBus.Amb ? duck : 1f;
             source.volume = BusVolume(e.bus) * e.volume * duckable * gain;
+            source.panStereo = 0f;
             source.Play();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (LogPlays) PlayLog.Add(new Played { time = Time.unscaledTime, id = id, volume = source.volume, section = director.Flow.Section });
+#endif
         }
 
         AudioSource FreeSource()
@@ -439,13 +555,13 @@ namespace FiveRivers.Audio
             StopVoice();
             breath.Stop();
             sprintTime = breathLevel = 0f;
-            foreach (var a in artillery) a.Stop();
+            StopDistant();
+            ClearDeafness();
             lastPlayed.Clear();
             lastVariant.Clear();
             stepDistance = 0f;
             lastMoved = player.MovedDistance;
             duck = 1f;
-            ScheduleArtillery();
         }
 
         void StopVoice() => voice.Stop();

@@ -105,6 +105,7 @@ namespace FiveRivers.Combat
         public Transform Cover { get; private set; }
         public bool Alive => state != State.Dead;
         public bool Retreating => state == State.Retreat;
+        public bool Advancing => state == State.Advance;
         public bool IsScout { get; set; }
         public bool Standing { get; private set; }
 
@@ -308,7 +309,43 @@ namespace FiveRivers.Combat
             rb.linearVelocity = transform.right * (Random.value < 0.5f ? -1f : 1f) * Random.Range(1.7f, 2.3f) + transform.forward * Random.Range(0.2f, 0.7f) + Vector3.up * 0.35f;
             rb.angularVelocity = Random.insideUnitSphere * 2.5f;
             if (body != null) Physics.IgnoreCollision(box, body);
-            Destroy(rifle.gameObject, 8f);
+            // 2026-11-18: the rifle stays where it fell for the rest of the run (EnemyDirector clears it with the body).
+            if (owner == null) Destroy(rifle.gameObject, 8f);
+        }
+
+        // ---- the fallen stay (2026-11-18): the fight leaves its dead on the field until the run ends ----
+        public float FellAt => deathTime;
+        public bool Settled { get; private set; }
+        public bool Fallen { get; private set; }
+
+        // Once he has come to rest the pose is frozen: no animator, no foot or hand solving, no physics on the rifle.
+        public void Settle()
+        {
+            if (Settled) return;
+            Settled = true;
+            if (animator != null)
+            {
+                var rest = animator.GetComponent<LyingBodyRest>();
+                if (rest != null) rest.enabled = false;
+                if (handIK != null) handIK.enabled = false;
+                animator.enabled = false;
+                foreach (var skin in animator.GetComponentsInChildren<SkinnedMeshRenderer>()) skin.updateWhenOffscreen = false;
+            }
+            if (rifle != null && rifleDropped)
+            {
+                var rb = rifle.GetComponent<Rigidbody>();
+                if (rb != null) Destroy(rb);
+                var box = rifle.GetComponent<BoxCollider>();
+                if (box != null) Destroy(box);
+            }
+            enabled = false;
+        }
+
+        // Removes the body and the rifle he dropped.
+        public void Remove()
+        {
+            if (rifle != null && rifleDropped) Destroy(rifle.gameObject);
+            Destroy(gameObject);
         }
 
         public void Init(EnemyDirector director, WaveConfig waveConfig, Transform cover)
@@ -316,13 +353,14 @@ namespace FiveRivers.Combat
             owner = director;
             config = waveConfig;
             health = config.health;
-            agent.speed = config.moveSpeed;
+            agent.speed = config.moveSpeed * (owner != null ? owner.SpeedScale() : 1f);
             MoveToCover(cover);
         }
 
         public void MoveToCover(Transform cover)
         {
             if (!Alive || Retreating) return;
+            if (owner != null) owner.ReleaseAim(this);
             Cover = cover;
             state = State.Advance;
             Standing = true;
@@ -333,6 +371,7 @@ namespace FiveRivers.Combat
         public void Retreat(Transform point)
         {
             if (!Alive || Retreating) return;
+            if (owner != null) owner.ReleaseAim(this);
             state = State.Retreat;
             Standing = true;
             agent.speed = config.retreatSpeed;
@@ -379,6 +418,8 @@ namespace FiveRivers.Combat
         void UpdateCover()
         {
             FacePlayer();
+            // under the barrage and in the breather after it nobody fires: he keeps down
+            if (owner.HoldFire) { shotPending = false; nextShot = Mathf.Max(nextShot, Time.time + Random.Range(0.6f, 1.6f)); }
             if (!shotPending && Time.time >= nextShot)
             {
                 Standing = true; // 일어나서 쏜다 (엄폐물 위로 몸이 보인다)
@@ -400,9 +441,11 @@ namespace FiveRivers.Combat
             }
         }
 
+        // He faces whoever he is firing at: the player, or (when enough rifles are on the player already) the
+        // nearest man in the trench.
         void FacePlayer()
         {
-            var to = owner.PlayerEye - transform.position;
+            var to = owner.AimPointFor(this) - transform.position;
             to.y = 0f;
             if (to.sqrMagnitude > 0.01f)
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(to), 240f * Time.deltaTime);
@@ -518,8 +561,12 @@ namespace FiveRivers.Combat
                 if (rest != null && lastKneel > 0.5f) rest.HoldKneel(); // hit kneeling: he falls from there, not from standing
             }
             DropRifle();
+            Fallen = true;
             Gone?.Invoke(this);
-            Destroy(gameObject, 8f);
+            // 2026-11-18: he lies where he fell until the run ends (or a retry of this section); EnemyDirector keeps
+            // the count within bounds. Without a director (a staged body) he is cleared after a while as before.
+            if (owner != null) owner.KeepBody(this);
+            else Destroy(gameObject, 8f);
         }
 
         // Where each death clip lays the body, in the man's frame at the moment he is hit (measured 2026-11-16):

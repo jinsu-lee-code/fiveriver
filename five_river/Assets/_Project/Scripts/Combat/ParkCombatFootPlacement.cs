@@ -30,6 +30,8 @@ namespace FiveRivers.Combat
             internal float GroundHeight, Gap;
         }
 
+        AllyClipPlayer clipPlayer;
+
         void Awake()
         {
             animator = GetComponent<Animator>();
@@ -118,7 +120,11 @@ namespace FiveRivers.Combat
             var normal = ground.transform.TransformDirection(ground.terrainData.GetInterpolatedNormal(local.x / size.x, local.z / size.z)).normalized;
             var aligned = Quaternion.FromToRotation(rotation * Vector3.up, normal) * rotation;
             var targetRotation = Quaternion.RotateTowards(rotation, aligned, 18f);
-            TargetSole = new Vector3(sole.x, height + soleClearance, sole.z);
+            // the swapped kneeling clip is lowered onto the floor after this pass (AllyClipPlayer.KneelDropNow, 2026-11-18):
+            // aim that much higher so the foot ends on the ground
+            if (clipPlayer == null) clipPlayer = animator.GetComponent<AllyClipPlayer>();
+            float drop = clipPlayer != null ? clipPlayer.KneelDropNow : 0f;
+            TargetSole = new Vector3(sole.x, height + soleClearance - drop, sole.z);
             animator.SetIKPosition(AvatarIKGoal.LeftFoot, TargetSole - targetRotation * soleOffset);
             animator.SetIKRotation(AvatarIKGoal.LeftFoot, targetRotation);
             animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, weight);

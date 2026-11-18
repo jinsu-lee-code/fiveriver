@@ -1,0 +1,303 @@
+# 국군 아군 동작 — Rigify 조절 리그로 직접 만든 클립 (2026-11-18)
+
+사용자 지시: Rigify 기초 강좌(메타리그를 모델에 맞춤 → Generate Rig → 모델을 리그에 묶음)를 보고 아군 동작을 다시 만든다. 조건 "이상하면 안 돼" — 어색한 동작은 내보내지 않는다.
+추가 지시: 비슷한 강좌를 찾아 배운 것을 적용하고, **소총 들고 달리는 동작**을 두 번째 우선순위로 다시 맞춘다.
+
+- 확인: 내보낸 FBX를 다시 불러(`04_verify_export.py`) 모두 56뼈 · 최상위 `Root` 하나 · `Head<Neck<UpperChest<Chest<Spine<Hips<Root` 계층 · 테이크 이름 = 파일명 · 30fps · 프레임 수가 표와 같음 · 반복 클립 첫 · 끝 차 0을 확인했다. 출발 클립은 `work/rejected/`로 뺐다.
+- 이 폴더는 Blender 작업 결과만 담는다. **Unity(`five_river/Assets`)에는 아무것도 넣지 않았다**(다른 작업자가 에디터 사용 중). 넣는 일은 아래 6번.
+- 백그라운드 Blender 5.2.2(`blender -b`)만 썼다. 사용자 GUI Blender · Unity 명령 파일은 쓰지 않았다.
+- **`work/`는 커밋 제외**(중간 .blend · 렌더 타일 · 진단 파일, 약 수백 MB가 될 수 있음). 커밋할 것은 `export/` · `preview/` · `rig/` · `scripts/` · `README.md`.
+
+## 1. 결과 요약
+
+| 구분 | 클립 | 상태 |
+|---|---|---|
+| A 참호 대기(기본) | `A_ROK_Trench_Ready_Idle` (반복 5초) | 내보냄 |
+| 달리기 | `A_ROK_Run_Rifle` (반복 0.67초) · `A_ROK_CrouchRun_Rifle` (반복 0.73초) · `A_ROK_Run_Stop` (0.6초) | 내보냄 |
+| 달리기 | `A_ROK_Run_Start` (0.5초) | **11-18 둘째 묶음에서 다시 만들어 내보냄** (9번). 처음 판은 쪼그려 뛰는 것처럼 보여 뺐음(7번) |
+| 달리다 무릎 사격 | `A_ROK_Run_To_FireCrouch` (0.8초) | 내보냄 (9번) |
+| B 서기 ↔ A | `A_ROK_Stand_To_TrenchReady` (1.5초) · `A_ROK_TrenchReady_To_Stand` (1.5초) | 내보냄 |
+| C A → 무릎 사격 | `A_ROK_TrenchReady_To_FireCrouch` (0.67초) | 내보냄 |
+| D A 위 변화 | `A_ROK_Trench_PeekOver` (3.5초) · `A_ROK_Trench_CheckRifle` (3.6초) · `A_ROK_Trench_WipeBrow` (2.8초) · `A_ROK_Trench_LookSide` (2.2초) · `A_ROK_Trench_ShiftKnee` (3.0초) | 내보냄 |
+| E 포탄에 숙이기 | `A_ROK_Trench_Duck` (1.6초) | 내보냄 |
+| F 시신 곁 무릎 | `A_ROK_Kneel_Mourn_In` (2.0초) · `A_ROK_Kneel_Mourn_Loop` (반복 4초) | 내보냄 (9번) |
+| G 엎드려 겨눔 | `A_ROK_GoProne_In` (2.0초) · `A_ROK_Prone_Aim_Loop` (반복 4초) | 내보냄 (9번) |
+| 적 달리기 | `A_KPA_Run_Rifle` · `A_KPA_CrouchRun` 새 버전 | 내보냄 — **`../rigify_kpa_20261118/`** (적 모델에 리그를 따로 만듦) |
+| 1인칭 달리기 | `A_FP_M1_Sprint` | 고치지 않음 — 진단만 (9-6) |
+| 기준 자세 | `A_ROK_Rigify_TPose.fbx` (동작 없음, Humanoid 아바타용) | 내보냄 |
+| 학도병 지친 걸음 | `A_ROK_Walk_Tired_v2` (반복 1.13초, 학도병 리그) · 학도병 기준 자세 `A_ROK_Student_Rigify_TPose.fbx` | **11-18 저녁 내보냄** (10번) |
+
+모든 클립: 30fps, 뼈대 + 동작만(메시 없음), 클립(테이크) 이름 = 파일명, 제자리(루트 원점 고정), 손은 소총에 IK로 붙임, 소총 뼈 `Rifle` 포함.
+
+## 2. 리그를 만든 방법 (강좌 흐름을 스크립트로)
+
+| 단계 | 스크립트 | 내용 |
+|---|---|---|
+| 0 | `scripts/00_inspect.py` | 원본 FBX의 뼈 · 치수 출력 |
+| 1 | `scripts/01_build_rig.py` | **메타리그 맞추기 → Generate Rig → 묶기 → 소총 · 참호 · 내보내기 뼈대** → `work/rok_rig_base.blend` |
+| 2 | `scripts/02_extract_ref.py` | 기존 클립(`A_ROK_Idle_Stand` · `Idle_Trench` · `Fire_Crouch`)의 자세를 같은 뼈대로 옮겨 관절 각도 · 위치 추출 → `work/ref_poses.json` |
+| 3 | `scripts/03_make_clips.py -- <클립,…|all> [render] [export] [tpose] [blend]` | 클립 키 → 내보내기 뼈대에 굽기 → 수치 → 렌더 · 모음 이미지 → FBX · 소총 궤적 JSON · 리그 .blend |
+| 4 | `scripts/04_verify_export.py` | 내보낸 FBX를 다시 불러 뼈 이름 · 계층 · 프레임 · 반복 이음매 확인 |
+| 5 | `scripts/05_metrics_table.py` | `work/metrics.json` → 아래 표 |
+| 도우미 | `rok_common.py`(경로 · 상수 · 뼈 이름표) · `rok_rig.py`(리그 조작 · 굽기 · 측정) · `rok_poses.py`(주요 자세) · `rok_timeline.py`(키 · 지연 · 숨) · `rok_clips.py`(클립 정의) · `rok_run.py`(달리기 사이클) · `rok_render.py` · `sheet.py` | |
+
+다시 만들기(같은 결과): `blender -b --factory-startup --python scripts/01_build_rig.py` → `blender -b --python scripts/02_extract_ref.py` → `blender -b --python scripts/03_make_clips.py -- all render export tpose blend`. 모음 이미지에는 `uv`(pillow)가 필요하다.
+
+- **병사 모델**: 게임 프리팹 `PF_CH_ROK_Soldier`가 쓰는 `Art/Models/Characters/ROK_Soldier/SK_CH_ROK_Soldier_Person1.fbx`(mixamorig 52뼈, 메시 2개)를 **프리팹의 스케일 0.7774를 적용해 게임 크기로**(철모 꼭대기 1.60 m, 엉덩이 0.84 m) 불러 만들었다. 모든 수치는 이 크기 기준이다.
+- **Rigify**: Blender 5.2에 내장 애드온(`addons_core/rigify`)으로 들어 있어 `addon_utils.enable("rigify")`로 켰다(내려받기 없음). 인간형 메타리그(`armature_human_metarig_add`)에서 얼굴 · 가슴 · 골반 보조 · 손바닥 뼈를 지우고, 목을 한 마디로 합친 뒤, **원본 뼈대의 관절 좌표에 메타리그 뼈의 머리 · 꼬리를 하나씩 놓았다**(손가락 15마디 포함). 뼈 롤은 기본 메타리그의 굽힘 축을 그대로 맞췄고(`align_roll`), 팔 · 다리는 원본과 1:1이 되게 분절 1개로 했다. 뒤꿈치 표식은 발 너비 · 뒤꿈치 바닥에 놓았다.
+- **Generate Rig** → 조절 리그 354뼈(팔 · 다리 IK/FK, torso · hips · chest, neck · head, 발 롤, 손가락). IK로 고정(`IK_FK` 0), 늘어남 끔(`IK_Stretch` 0), 무릎 · 팔꿈치는 방향 조절기(pole)로 지정, 목 · 머리는 몸통을 따라가지 않게(follow 0) 했다.
+  - **고친 문제**: Rigify가 IK 사슬 뼈에 `ik_stretch 0.1`을 두어, 목표가 가까우면 굽히는 대신 뼈를 2~4% 눌러 줄였다. 그러면 길이를 바꿀 수 없는 Humanoid 뼈대로 옮길 때 손 · 발이 1~1.5 cm 어긋났다 → 모든 사슬 뼈의 `ik_stretch`를 0으로. 이후 변형 뼈와 내보내기 뼈대의 관절 위치 차는 모든 프레임에서 0.1 mm 이하(`def_err_max`).
+- **묶기**: 원본 메시의 가중치 그룹 이름을 대응하는 `DEF-` 뼈로 바꾸고 Armature 모디파이어를 리그로 돌렸다(자동 가중치 대신 원본 가중치를 그대로 씀 → 게임에서 보이는 살 변형과 같음). 무릎 꿇기 · 웅크리기 · 팔 들기 자세를 렌더해 살이 찢어지거나 꼬인 곳이 없는지 봤다(아래 미리보기).
+- **소총**: `SM_WP_M1Garand.fbx`(1.10 m)를 게임 `AlliedM1` 원점과 같은 자리(총구 +0.724 m, 개머리 끝 -0.376 m, 총강 높이 0.026)에 맞춰 `rifle` 뼈에 붙였다. `rifle` 뼈 아래에 손잡이 표식 `grip.R`(개머리 손목) · `grip.L`(총열덮개)을 두고, **양손 IK 조절기(`hand_ik.L/R`)에 Copy Transforms 제약 `RifleGrip`**을 걸어 표식을 따라가게 했다. 손을 떼는 구간은 그 제약의 영향력을 0으로 키를 넣고, 영향력을 내리기 직전 손 목표를 그 순간의 손잡이 자리로 맞춰 튀지 않게 했다. 소총은 가슴 공간(가슴과 함께 움직임)에 둔다.
+- **참호 단면**(렌더용 상자): 바닥, 앞벽(캐릭터 원점에서 0.42 m 앞, 높이 0.90 m), 그 위 팔꿈치 받침 0.30 m(지면 높이), 그 앞 흉장 높이 0.30 m(바닥에서 1.20 m, 빨간 선) — 게임의 FM 5-15 단면(TASKS 11-16)과 같은 치수.
+- **내보내기 뼈대**: Rigify의 DEF 뼈는 계층이 끊겨 있어(예: `DEF-thigh`의 부모가 `ORG-spine`) 그대로 Humanoid로 내보낼 수 없다. 원본 모델의 뼈대를 복사해 `Root → Hips → Spine → Chest → UpperChest → Neck → Head`, `…Shoulder → UpperArm → LowerArm → Hand → 손가락(Thumb/Index/Middle/Ring/Little Proximal·Intermediate·Distal)`, `UpperLeg → LowerLeg → Foot → Toes` 이름으로 바꾸고(원본 52뼈 + `Root` · `Rifle` · `Rifle_Muzzle` · `Rifle_Top` = 56뼈), 매 프레임 **DEF 뼈의 "기준 자세 대비 월드 변화"**를 이 뼈대에 옮겨 키를 넣었다(굽기). 기준 자세가 같아 스키닝 결과가 똑같다.
+
+## 3. 강좌 · 자료 조사와 적용
+
+영상 본문은 직접 볼 수 없어 공식 문서 · 글로 된 자료를 읽었다(내려받기 없음). 【확인】 = 페이지를 열어 읽음, 【검색요약】 = 검색 결과 요약만 봄.
+
+| 배운 것 | 출처 | 어떻게 적용했나 |
+|---|---|---|
+| 사용자가 본 강좌: Na Merge "블렌더 리깅 - rigify 기초 part01". part02 이후는 검색으로 찾지 못함(채널 페이지 본문이 읽히지 않음) | https://www.youtube.com/watch?v=4iJ9Esm2TQs | 강좌의 세 단계(메타리그 맞추기 → Generate → 묶기)를 `01_build_rig.py`로 그대로 스크립트화 |
+| 【확인】 메타리그는 관절 위치에 맞추고, 무릎 · 팔꿈치는 굽힘 방향을 알 수 있게 살짝 굽혀 둔다. heel 뼈는 발 너비 · 뒤꿈치 접지점. 재생성해도 모디파이어 · 제약 유지 | https://docs.blender.org/manual/en/dev/addons/rigify/basics.html · https://docs.blender.org/manual/en/dev/addons/rigify/bone_positioning.html | 원본 관절 좌표에 그대로 놓음(원본 T자세의 무릎이 이미 0.5~2 cm 앞으로 굽어 있음), 롤은 기본 메타리그의 굽힘 축 유지, heel 위치 지정 |
+| 【확인】 `IK_FK` 0 = IK, `IK_Stretch` 0 = 최대 길이 제한, pole 전환, Neck/Head Follow | https://docs.blender.org/manual/en/3.6/addons/rigging/rigify/rig_features.html · https://docs.blender.org/manual/en/dev/addons/rigify/rig_types/limbs.html | IK 고정 · 늘어남 끔 · 고전 pole 사용 · follow 0. (늘어남을 꺼도 사슬 뼈의 `ik_stretch 0.1` 때문에 뼈가 줄어드는 것을 따로 발견해 0으로 고침) |
+| 【확인】 Child Of / Copy Transforms 영향력을 키로 잡아 부모를 시간에 따라 바꾼다. 무기를 들면 손 IK 목표를 무기의 자식(표식)으로 둔다(언리얼 마네킹 관례) | https://docs.blender.org/manual/en/dev/animation/constraints/relationship/child_of.html · https://forums.unrealengine.com/t/explanation-of-the-mannequin-ik-bones/45166 · https://blenderartists.org/t/move-arms-using-the-weapon-they-are-holding/1392023 | `rifle` 뼈 아래 손잡이 표식 + 손 IK에 Copy Transforms. 손을 뗄 때만 영향력 1→0 |
+| 【확인】 달리기: 속도 = 한 주기 거리 ÷ 주기 시간. 30fps 기준 조깅 20프레임 · 1.8 m. 14프레임보다 빠르면 우스워 보임. 순서: 골반 상하 · 회전 → 다리 → 척추 · 어깨(골반과 반대) → 머리(늦게). 착지 쪽 골반이 내려감. 접지 발은 월드에 고정 | https://theodox.github.io/pages/pub/one_foot_in_front · https://gamedeveloper.com/art/animating-the-run-cycle | 20프레임(0.67초) · 한 주기 2.0 m(3.0 m/s). **접지 발은 매 프레임 같은 거리(0.1 m)를 뒤로** — 측정 2.999~3.000 m/s. 골반 상하 · 좌우 · 회전, 가슴 반대 회전, 머리는 늦게 받음 |
+| 【검색요약】 무거운 물건은 몸보다 늦게 따라오고 진폭은 작게 | https://polycount.com/discussion/comment/2349278 (열지 않음) | 소총을 가슴 공간에 두고, 착지 뒤 0.1주기 늦게 1.2 cm 내려앉고 걸음마다 ±3도 기울게 |
+| 【확인】 무게중심은 지지면 위. 발을 떼기 전에 골반이 먼저 지지발 위로. 무거운 동작은 빠르게 시작해 천천히 정착. 포즈 투 포즈 | https://cursa.app/en/page/character-animation-starter-kit-balance-center-of-gravity-and-ground-contact · https://www.gamedeveloper.com/production/the-12-principles-of-animation-in-video-games | 전환은 "무게를 디딘 발로 옮김(예비) → 발 → 골반 → 가슴(0.05초 늦게) → 팔 · 소총(0.07초) → 머리(0.10초)". 끝에 1~2 cm 더 내려앉았다 돌아오는 정착 키. 숙이기는 0.2초에 들어가 0.6초에 걸쳐 나옴 |
+| 【확인】 DEF 뼈 계층이 끊기는 것은 Rigify의 설계상 한계. 해결은 내보내기용 뼈대에 굽기(Game Rig Tools · Rigify-To-Unity 방식) | https://forum.blender.org/t/rigify-parent-bones-of-some-def-bones/14745 · https://github.com/vignedev/Rigify-To-Unity | 원본 뼈대 복사본에 매 프레임 굽기 |
+| 【확인】 FBX: Add Leaf Bones 끔, Bake Key All Bones · Force Start/End, Simplify 0, -Z 앞 · Y 위 | https://app.cinevva.com/guides/blender-to-unity-export-checklist | 그 값으로 고정(`export()` in `03_make_clips.py`) |
+| 【확인/엇갈림】 Humanoid 클립에서 매핑 밖 뼈(무기 뼈)는 임포트의 Mask Transform에서 켜야 커브가 남는다는 답이 많지만, 켜도 안 움직였다는 보고도 있음. 미러 재생에서는 안 됨 | https://discussions.unity.com/threads/extra-bone-on-humanoid-not-applying-rotation.662563/ · https://issuetracker.unity3d.com/issues/additional-non-mecanim-controlled-bones-specified-using-the-skeleton-mask-dont-work-when-mirrored | 그래서 소총 궤적을 **JSON으로도** 따로 냄(6번) |
+| 【확인】 FM 23-5(1951) 무릎쏴: 오른 무릎을 땅에 대고 오른 발뒤꿈치에 앉음, 왼발은 앞, 체중은 왼다리. 엎드려쏴: 몸과 총의 각 30도 이하, 다리 벌림, 왼 팔꿈치는 총 아래 | https://archive.org/download/fm-23.5-u.s.-rifle-caliber-.30-m1-1951/FM_23-5_U.S._Rifle_Caliber_.30%2C_M1_1951_djvu.txt | A 자세 · 무릎 사격 전환이 오른 무릎을 꿇고 엉덩이를 오른 발뒤꿈치 쪽으로 내림. 현대식 하이레디 · C-클램프 그립 쓰지 않음(총은 가슴 앞에 비스듬히, 총구는 왼 어깨 위) |
+
+못 찾은 것: 1950년 전후 교범(FM 22-5)의 앞에총 · 구보 때 소총 드는 법 원문. 달리기 앞에총은 게임에 이미 있는 고지 돌격 자세(`AllyRiflePose.RunEuler`: 총구가 왼 어깨 위로)를 따랐다.
+
+## 4. 클립 표와 검사 수치
+
+| 클립 | 프레임(초) | 반복 첫·끝 차 | 엉덩이 높이 | 머리 꼭대기 최고(흉장 1.2 m 대비) | 눈 최고 | 손-총 최대(왼/오) | 소총 최저점 · 머리와 간격 | 꿇은 무릎 최저 | 발 |
+|---|---|---|---|---|---|---|---|---|---|
+| A_ROK_Trench_Ready_Idle | 151 (5.00) | 0.00° / 0.0 mm | 0.351~0.353 | 1.084 (-0.116) | 0.944 | 0.0 mm / 0.0 mm | 0.350 · 0.323 | 0.066 | 디딘 발 이동 최대 왼 0.0 · 오 0.0 mm |
+| A_ROK_Stand_To_TrenchReady | 46 (1.50) | (전환) | 0.330~0.805 | 1.561 (+0.361) | 1.426 | 0.0 mm / 0.0 mm | 0.319 · 0.326 | 0.053 | 디딘 발 이동 최대 왼 0.4 · 오 0.1 mm |
+| A_ROK_TrenchReady_To_Stand | 46 (1.50) | (전환) | 0.352~0.805 | 1.561 (+0.361) | 1.426 | 0.0 mm / 0.0 mm | 0.351 · 0.326 | 0.071 | 디딘 발 이동 최대 왼 0.1 · 오 0.0 mm |
+| A_ROK_TrenchReady_To_FireCrouch | 21 (0.67) | (전환) | 0.352~0.385 | 1.091 (-0.109) | 0.954 | 0.0 mm / 0.0 mm | 0.351 · 0.190 | 0.058 | 디딘 발 이동 최대 왼 0.0 · 오 0.1 mm |
+| A_ROK_Trench_PeekOver | 106 (3.50) | (전환) | 0.341~0.586 | 1.320 (+0.120) | 1.197 | 0.0 mm / 0.0 mm | 0.336 · 0.326 | 0.058 | 디딘 발 이동 최대 왼 0.1 · 오 0.1 mm |
+| A_ROK_Trench_CheckRifle | 109 (3.60) | (전환) | 0.352~0.353 | 1.080 (-0.120) | 0.941 | 0.0 mm / 0.0 mm | 0.351 · 0.319 | 0.071 | 디딘 발 이동 최대 왼 0.0 · 오 0.0 mm |
+| A_ROK_Trench_WipeBrow | 85 (2.80) | (전환) | 0.352~0.353 | 1.081 (-0.119) | 0.941 | 0.0 mm / 0.0 mm | 0.322 · 0.268 | 0.071 | 디딘 발 이동 최대 왼 0.0 · 오 0.0 mm |
+| A_ROK_Trench_LookSide | 67 (2.20) | (전환) | 0.352~0.357 | 1.089 (-0.111) | 0.954 | 0.0 mm / 0.0 mm | 0.351 · 0.326 | 0.071 | 디딘 발 이동 최대 왼 0.0 · 오 0.0 mm |
+| A_ROK_Trench_ShiftKnee | 91 (3.00) | (전환) | 0.334~0.452 | 1.191 (-0.009) | 1.056 | 0.0 mm / 0.0 mm | 0.327 · 0.318 | 0.046 | 디딘 발 이동 최대 왼 0.0 · 오 0.5 mm |
+| A_ROK_Trench_Duck | 49 (1.60) | (전환) | 0.297~0.352 | 1.080 (-0.120) | 0.941 | 0.0 mm / 0.0 mm | 0.255 · 0.287 | 0.045 | 디딘 발 이동 최대 왼 0.0 · 오 0.0 mm |
+| A_ROK_Run_Rifle | 21 (0.67) | 0.00° / 0.0 mm | 0.764~0.812 | 1.553 (+0.353) | 1.416 | 0.0 mm / 0.0 mm | 0.758 · 0.419 | 0.396 | 접지 발볼 속도 왼 3.00(3.00~3.00) · 오 3.00(3.00~3.00) m/s, 접지 중 발볼 뜸 최대 0.1 mm |
+| A_ROK_CrouchRun_Rifle | 23 (0.73) | 0.00° / 0.0 mm | 0.647~0.683 | 1.387 (+0.187) | 1.266 | 0.0 mm / 0.0 mm | 0.621 · 0.458 | 0.278 | 접지 발볼 속도 왼 2.20(2.18~2.20) · 오 2.20(2.18~2.20) m/s, 접지 중 발볼 뜸 최대 1.6 mm |
+| A_ROK_Run_Stop | 19 (0.60) | (전환) | 0.777~0.805 | 1.561 (+0.361) | 1.426 | 0.0 mm / 0.0 mm | 0.831 · 0.402 | 0.428 | 접지 발볼 속도 왼 1.45(0.00~2.87) · 오 0.40(0.00~1.47) m/s, 접지 중 발볼 뜸 최대 1.2 mm |
+
+| 클립 | 왼손이 총에 붙은 프레임 | 오른손이 총에 붙은 프레임 | 시작 자세 차 | 끝 자세 차 |
+|---|---|---|---|---|
+| A_ROK_Trench_Ready_Idle | 1~151 | 1~151 | - | - |
+| A_ROK_Stand_To_TrenchReady | 1~46 | 1~46 | A_ROK_Idle_Stand (기존, 몸통 · 다리): 44.0° (LeftUpperLeg) | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) |
+| A_ROK_TrenchReady_To_Stand | 1~46 | 1~46 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Idle_Stand (기존, 몸통 · 다리): 44.0° (LeftUpperLeg) |
+| A_ROK_TrenchReady_To_FireCrouch | 1~21 | 1~21 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Idle_Trench (기존, 몸통 · 다리): 45.2° (LeftLowerLeg) |
+| A_ROK_Trench_PeekOver | 1~106 | 1~106 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) |
+| A_ROK_Trench_CheckRifle | 1~109 | 1~49, 89~109 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) |
+| A_ROK_Trench_WipeBrow | 1~12, 68~85 | 1~85 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) |
+| A_ROK_Trench_LookSide | 1~67 | 1~67 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) |
+| A_ROK_Trench_ShiftKnee | 1~91 | 1~91 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) |
+| A_ROK_Trench_Duck | 1~1, 39~49 | 1~49 | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) | A_ROK_Trench_Ready_Idle 첫 프레임: 0.0° (UpperChest) |
+| A_ROK_Run_Rifle | 1~21 | 1~21 | - | - |
+| A_ROK_CrouchRun_Rifle | 1~23 | 1~23 | - | - |
+| A_ROK_Run_Stop | 1~19 | 1~19 | A_ROK_Run_Rifle 첫 프레임: 6.0° (LeftFoot) | A_ROK_Idle_Stand (기존, 몸통 · 다리): 44.0° (LeftUpperLeg) |
+
+- 높이는 참호 바닥(발바닥) 기준 m. "머리 꼭대기"는 철모(전투모) 꼭대기, 괄호는 흉장 위(1.20 m)와의 차(음수 = 흉장 아래).
+- "손-총"은 손이 총에 붙은 프레임에서 손목과 손잡이 표식 사이의 거리(IK 오차). 렌더에서 손이 총을 감싼 것을 눈으로 확인했다.
+- "디딘 발 이동"은 발 목표가 멈춘 구간에서 실제 발목 · 발볼이 처음 자리에서 벗어난 최대값(0.5 cm 기준 → 모두 0.5 mm 이하).
+- 달리기 "접지 발볼 속도"는 발볼이 땅(서 있을 때 높이 + 1 cm 안)에 닿은 프레임 사이의 속도. 일정해야 미끄러지지 않는다.
+- "시작 · 끝 자세 차"는 이어지는 자세와의 관절 회전 최대 차(몸통 · 다리 뼈, 새 클립끼리는 팔 포함). 새 클립끼리는 0.0도(`Run_Stop` 시작만 `Run_Rifle` 첫 프레임과 왼발 6도 차: 착지 순간 발끝 든 각도를 평평하게 시작함). **기존 클립(`A_ROK_Idle_Stand` · `Idle_Trench`)과의 차 17~45도는 거의 전부 다리 뼈의 "제 축 비틀림"**이다(뼈가 향하는 방향 차는 0~0.5도, 무릎 · 발목 위치 같음). 기존 클립은 리타깃 원본에서 허벅지 · 정강이가 제 축으로 17~44도 비틀려 있다. Unity 전환(0.2~0.3초)에서 무릎 앞면이 조금 돌아 보일 수 있다 — 확인 필요.
+- 무릎 사격 끝(`TrenchReady_To_FireCrouch`)의 꿇은 오른발은 기존 `Idle_Trench`와 33도 다르다: 기존 클립의 발 각도를 그대로 쓰면 무릎이 땅 밑 1 cm로 들어가고 발볼이 8 cm 떠서(기존 클립 쪽 문제), 무릎과 발볼이 모두 땅에 닿게 다시 놓았다.
+
+미리보기(연속 프레임 모음, 줄마다 옆 · 앞 · 앞쪽 3/4): `preview/<클립>.jpg`. 참호 클립은 0.25초(5초 클립은 0.25초, 그 이상은 0.3초) 간격, 달리기는 한 주기의 모든 프레임.
+
+## 5. 기존 달리기 진단 (렌더 · 수치)
+
+기존 클립을 게임 크기 병사에 옮겨 렌더 · 측정했다(`work/diag_run/`, 진단 도중 작업자가 사용량 한도로 멈춰 1인칭 진단은 못 함).
+
+| 클립 | 한 주기 | 접지 발 속도(게임 크기) | 눈으로 본 것 · 수치 |
+|---|---|---|---|
+| `A_ROK_Run_PortArms`(고지 돌격 아군) | 0.70초(21프레임) | 2.65 m/s, 접지 중 속도 흔들림 ±0.16~0.20 m/s | 팔이 쟁반을 든 것처럼 가슴 앞에 뻗어 고정(소총 없는 맨손 자세 — 게임이 총을 코드로 따로 붙임), 상체가 거의 움직이지 않음. 한 주기의 절반(11/21프레임)이 두 발 모두 공중, 두 발 중 낮은 발도 평균 3.4 cm · 최대 8.5 cm 떠 있음(TASKS 11-17의 "달리는 내내 발이 6~12 cm 뜸"과 같은 원인) |
+| `A_KPA_Run_Rifle`(적) | 0.70초 | 2.65 m/s, 흔들림 ±0.45 m/s | 앞숙임 15도. 접지 중 발 속도가 고르지 않아 미끄러짐 |
+| `A_KPA_CrouchRun_Charge`(적) | 0.77초 | 2.29 m/s, 흔들림 ±1.5 m/s | 앞숙임 25도. 접지 중 발이 앞뒤로 오감(미끄러짐 큼) |
+
+새 `A_ROK_Run_Rifle`: 접지 발 속도 3.000 m/s(2.999~3.000, 흔들림 0.001 m/s 이하), 접지 중 발볼 뜸 0.1 mm, 두 발 모두 공중인 프레임은 걸음마다 3~4프레임. 양손이 소총에 붙어 있고 소총은 가슴과 함께 흔들린다.
+
+**게임 속도와 맞추기**: `HillAllies`는 `animator.speed = 지면 속도 / (RunClipSpeed × rigScale)`(0.75~1.32로 제한)로 발 미끄러짐을 맞춘다. 새 클립의 접지 발 속도는 엉덩이 높이 0.84 m 병사 기준 3.0 m/s → **`RunClipSpeed` ≈ 3.0 / 0.84 = 3.57**(지금 기존 클립용 3.1). `CrouchRun_Rifle`은 2.2 m/s → **`AdvanceClipSpeed` ≈ 2.62**(지금 2.5). JogSpeed 3.7이면 재생 속도 1.23(주기 0.54초) — 지친 병사로는 빠르다. 3.2~3.4 m/s로 낮추면 1.07~1.13. (rigScale이 엉덩이 높이와 같다는 것은 기존 값 3.1 × 0.84 ≈ 측정 2.65로 맞춰 본 추정이다 — Unity에서 확인 필요.)
+
+**1인칭 `A_FP_M1_Sprint`**: 11-18 둘째 묶음에서 진단함 → 9-6. (아래는 첫 작업자의 원래 메모) 렌더 · 진단하지 못했다(사용량 한도). 고치는 방법 제안: 1인칭 팔은 Generic 뼈대이므로 같은 방식(양손 IK를 소총 표식에 붙이고 소총을 카메라 · 가슴 공간에서 박자에 맞춰 흔듦)으로 하려면 1인칭 팔 뼈대에 맞는 리그를 따로 만들어야 한다(Rigify 인간형 메타리그는 몸이 없는 팔에 맞지 않아 `limbs.arm` 두 개만 쓰는 메타리그를 새로 짜야 함).
+
+## 6. Unity에 넣을 때 할 일 (제안)
+
+1. **파일 넣기**: `export/*.fbx`를 `Assets/_Project/Art/Animations/ROK/`에 복사. Rig = Humanoid, 아바타는 `A_ROK_Rigify_TPose.fbx`에서 만들고(Create From This Model) 나머지 클립은 그 아바타 복사. 기준 자세는 병사 모델의 바인드 자세(팔이 16도 내려간 T자) — Configure에서 Enforce T-Pose 필요할 수 있음. 손가락까지 자동 매핑되는 이름이다(확인 필요). `Root` · `Rifle*`는 Humanoid에 매핑하지 않는다.
+2. **임포트 설정**: 반복 클립(`Trench_Ready_Idle` · `Run_Rifle` · `CrouchRun_Rifle`)만 Loop Time. 첫 · 끝 프레임이 같으므로 Loop Pose는 끔. 루트 회전 · 높이 · 수평 위치는 Bake Into Pose(Based Upon Original). 압축은 기존 클립과 같게. 클립 이름 = 파일명.
+3. **연결 순서**: 서기 → `Stand_To_TrenchReady` → `Trench_Ready_Idle`(반복) ↔ 변화 동작(모두 A 첫 프레임에서 시작해 A 첫 프레임으로 끝남, 전환 0초로 이어 붙여도 됨) → 교전 시작 때 `TrenchReady_To_FireCrouch` → 기존 `Fire_Crouch`. 일어설 때 `TrenchReady_To_Stand` → 기존 `Idle_Stand`. 포격이 가까우면 `Trench_Duck`. 달리기: `Run_Rifle`/`CrouchRun_Rifle` → 멈출 때 `Run_Stop`(시작 = `Run_Rifle` 첫 프레임 · 왼발 착지, 끝 = 서기). `AC_ROK` 매개변수는 변경 금지(ANIM_SPEC 1-5)이므로 상태 추가 · 코드 재생(PlayableGraph 등)은 결정 필요.
+4. **소총을 클립이 몰게 하려면** — 지금 `AllyCombatant.LateUpdate`는 서 있으면 `AllyRiflePose.TryApplyCarry`/`ApplyPortArms`, 교전 중이면 `Apply`로 **소총 위치를 코드가 정하고 양팔을 그 소총에 IK로 푼다**. 새 클립의 팔 · 소총을 살리려면 둘 중 하나:
+   - (가, 권장) **소총 궤적 JSON 사용**: `export/<클립>_rifle.json`에 프레임마다 루트 기준 소총 위치(`pos`, Unity 좌표 x 오른쪽 · y 위 · z 앞, m) · 방향(`forward` = 총구 쪽, `up`) · 손 접촉(`grip_L`/`grip_R` 0~1)이 있다. `AlliedM1.position = root.TransformPoint(pos)`, `AlliedM1.rotation = root.rotation * LookRotation(forward, up)`로 놓고, 기존 `Solve(...)`로 접촉이 1인 손만 손잡이(오른손 `(.03,-.065,-.19)` 부근 · 왼손 `supportWristGrip`)에 맞추고, 0인 손은 클립 자세를 그대로 둔다(0~1 사이는 섞음). 박용팔처럼 체격이 다른 아바타는 `pos`에 (그 아바타 엉덩이 높이 / 0.84)를 곱한다. 이 방식은 Humanoid가 손 위치를 조금 바꿔도 손이 총에서 떨어지지 않는다.
+   - (나) **`Rifle` 뼈 커브 사용**: 임포트 Animation 탭 Mask의 Transform에서 `Root/Rifle`을 켜면 Humanoid 클립에도 추가 뼈 커브가 남을 수 있다(자료가 엇갈림 — 확인 필요). 모델 쪽에도 같은 이름 · 계층의 `Rifle` 뼈가 있어야 한다. 방향은 `Rifle_Muzzle` · `Rifle_Top` 자식 뼈의 위치로 `LookRotation(muzzle - rifle, top - rifle)`을 만들어 쓰면 Blender↔Unity 뼈 축 차이를 신경 쓰지 않아도 된다.
+   - 어느 쪽이든 이 클립이 도는 동안에는 `TryApplyCarry` · `ApplyPortArms`의 소총 배치를 끄고, `LookAt`(튜토리얼에서 머리를 앞으로 돌림)도 꺼야 클립의 고개 동작이 산다.
+5. **원점 · 참호 거리**: 클립은 루트 원점 기준이다. A 자세에서 왼 발끝은 원점 앞 0.38 m, 왼 무릎은 0.23 m — 참호 앞벽(0.9 m 깊이)에서 0.45~0.5 m 떨어진 자리에 루트를 두면 렌더와 같다. 흉벽 위 1.2 m 기준으로 A 자세의 머리 꼭대기는 12 cm 아래, 살피기(`PeekOver`)의 눈은 흉장 높이까지 올라온다.
+6. **주의**: 무릎 사격 자세(`Idle_Trench`/`Fire_Crouch`)는 이 단면에서 총이 지면(0.9 m)보다 낮다(렌더에서 총구가 앞벽 흙에 닿음). 게임은 코드가 조준 방향으로 총을 들어 올리므로 지금 게임에서는 문제 아닐 수 있다 — 확인 필요.
+
+## 7. 내보내지 않은 것 · 만들지 않은 것과 이유
+
+| 클립 | 이유 |
+|---|---|
+| `A_ROK_Run_Start` (첫 판) | 렌더에서 0.25~0.35초 사이 두 무릎이 함께 굽은 채 왼발이 오래 떠 있어 제자리에서 쪼그려 뛰는 것처럼 보였다. 첫 판 FBX는 `work/rejected/`. **둘째 묶음에서 새로 만들어 내보냄(9-3)** |
+| ~~`A_ROK_Run_To_FireCrouch` · F · G~~ | 둘째 묶음에서 만들어 내보냄(9번) |
+| 적 `A_KPA_*` 새 버전 | 둘째 묶음에서 적 모델에 리그를 따로 만들어 내보냄 → `../rigify_kpa_20261118/README.md` |
+| 1인칭 `A_FP_M1_Sprint` | 고치지 않음. 진단 결과는 9-6 |
+
+## 8. 확인하지 못한 것
+
+- **Unity에서 재생해 보지 않았다**(지시대로 Unity를 건드리지 않음). Humanoid 자동 매핑, 리타깃 뒤 손-총 거리, `Rifle` 뼈 커브가 Humanoid 클립에 남는지, 기존 클립과의 전환(특히 다리 비틀림 차 17~45도)이 어떻게 보이는지, 박용팔 아바타에서의 모습.
+- 렌더는 Workbench(그림자 없음, 작은 해상도 220×270)로 봤다. 손가락이 총을 감싼 세부, 소매 · 옷깃의 변형은 이 크기에서 확인하지 못했다.
+- 게임 조명 · 거리에서 대기 동작(숨 · 무게 이동)이 충분히 보이는지. 이전 VARCO 적용 때 잔잔한 동작이 화면에서 안 보였던 일이 있어 A 클립은 숨 2.2도 · 좌우 1.6 cm · 고개 4.5도로 키웠지만, 게임 화면에서는 보지 못했다.
+- `CheckRifle`에서 오른손이 만지는 곳은 변형된 메시에서 찾은 오른쪽 앞 탄입대(재질 `Pauch`)다. M1 클립 주머니가 실제로 그 자리인지는 모델 그림만으로 판단했다. 노리쇠 손잡이 당기기는 소총 메시의 노리쇠가 움직이지 않아 넣지 않았다.
+- `ShiftKnee` · `LookSide`는 동작이 작다(오른 무릎을 4~10 cm 들었다 놓음, 고개 58도 · 가슴 16도). 게임 거리에서 보이는지 미확인.
+- 기존 달리기 클립의 렌더 · 수치는 진단 작업자의 중간 결과(`work/diag_run/`)이며 그 작업자의 최종 보고는 받지 못했다.
+
+
+## 9. 둘째 묶음 (2026-11-18 오후): F 무릎 애도 · G 엎드려 겨눔 · 출발 다시 · 달리다 무릎 사격 · 적 · 1인칭 진단
+
+같은 리그 · 같은 굽기 · 같은 검사 수치로 만들었다. 새 클립 정의는 `scripts/rok_clips_more.py`, 실행은 같다:
+`blender -b --python scripts/03_make_clips.py -- all render export tpose blend` (새 클립만: `-- A_ROK_Kneel_Mourn_In,A_ROK_Kneel_Mourn_Loop,A_ROK_GoProne_In,A_ROK_Prone_Aim_Loop,A_ROK_Run_Start,A_ROK_Run_To_FireCrouch render export`).
+다시 내보낸 기존 클립 FBX는 바이트 크기까지 이전과 같다(동작 바뀜 없음).
+
+### 9-1. 도구에 더한 것
+
+| 무엇 | 어디 | 왜 |
+|---|---|---|
+| 손 목표 공간 `"rifle"` (소총을 따라가는 손 목표) | `rok_rig.Rig.apply` | 세운 소총을 오른손이 총열덮개에서 쥐고 같이 움직여야 함(F). 값 = 소총 뼈 기준, 기준 자세의 손잡이 표식 = `rest_rifle⁻¹ @ rest_grip`이라 제약을 풀어도 튀지 않음 |
+| 메시 접지 검사 `mesh_low` · `rifle_low` | `03_make_clips.make` | 무릎 꿇기 · 엎드리기에서 몸 · 개머리판이 땅에 박히거나 뜨는지(평가된 메시 최저점, 땅 = 0) |
+| 출발 · 멈춤의 "루트 이동" 곡선 `root_travel`와 디딘 발 미끄러짐 `slip_vs_root_max` | `rok_clips_more` · `03.foot_metrics` | 제자리 클립에서 디딘 발은 루트가 가는 만큼 뒤로 가야 한다. 소총 궤적 JSON에 프레임마다 `root_forward_m`(루트가 그때까지 앞으로 가야 할 거리)을 넣었다 |
+| 루트 이동을 반영한 렌더 | `03.render` | 루트 고정 렌더로는 출발이 "제자리 쪼그려 뜀"처럼 보인다(첫 판을 뺀 이유의 일부). 렌더 때만 루트 이동만큼 몸을 옮겨, 디딘 발이 화면에서 멈춰 보이는지로 판단 |
+| 이어지는 반복 클립과의 **골반 높이 보정 맞춤**(`start_drop_ref` · `end_drop_ref`) | `03.reach_fix` | `Run_Rifle`은 다리가 닿도록 골반을 프레임마다 0~2 cm 내린다. 이걸 무시하고 비교하면 이음매 차가 3.3도로 나왔다 → 출발 끝 · 멈춤 시작 6프레임을 그 값에 맞춤. 비교 기준도 보정된 실제 프레임으로 바꿈 |
+| 다음 · 이전 프레임 차(속도 이음) | `03.summarize` `connect_extra` | 첫 프레임만 같고 속도가 꺾이면 이음매가 튄다 |
+| 땅 위 렌더 · 위에서 보기(`topx`) · 자세 하나 시험 렌더 | `03.render`, `rok_render.VIEWS`, `work/pose_test.py` | F · G는 참호 벽 없이 땅 위에서. 엎드리기는 위에서 본 모습 추가 |
+
+### 9-2. 새 클립 표와 검사 수치
+
+| 클립 | 프레임(초) | 반복 첫·끝 차 | 엉덩이 높이 | 머리 꼭대기 최고 | 손-총 최대(왼/오) | 소총 최저 · 머리와 간격 | 메시 최저(땅 = 0) | 발 |
+|---|---|---|---|---|---|---|---|---|
+| A_ROK_Kneel_Mourn_In | 61 (2.00) | (전환) | 0.411~0.805 | 1.561 | 0.0 / 0.0 mm | 0.002 · 0.140 | -8.6 mm (무릎이 닿는 순간) · 소총 0.0 mm | 디딘 발 이동 최대 왼 0.0 · 오 0.1 mm |
+| A_ROK_Kneel_Mourn_Loop | 121 (4.00) | 0.00° / 0.0 mm | 0.411~0.415 | 1.070 | (오른손은 소총 기준 목표) | 0.002 · 0.159 | +0.5 mm · 소총 0.0 mm | 0.0 mm |
+| A_ROK_GoProne_In | 61 (2.00) | (전환) | 0.166~0.805 | 1.561 | 0.0 / 0.0 mm | 0.052 · 0.107 | -11 mm (왼손바닥을 짚는 0.95초) | 디딘 발 이동 최대 0.3 mm |
+| A_ROK_Prone_Aim_Loop | 121 (4.00) | 0.00° / 0.0 mm | 0.166~0.169 | 0.409 (눈 0.261) | 0.0 / 0.0 mm | 0.067 · 0.107 (볼이 개머리판에) | -5.3 mm (배) | 0.0 mm |
+| A_ROK_Run_Start | 16 (0.50) | (전환) | 0.801~0.813 | 1.562 | 0.0 / 0.0 mm | 0.834 · 0.402 | - | 디딘 오른발 미끄러짐(루트 대비) 최대 0.05 m/s, 접지 중 뜸 0.0 mm |
+| A_ROK_Run_To_FireCrouch | 25 (0.80) | (전환) | 0.381~0.802 | 1.542 | 0.0 / 0.0 mm | 0.66 · 0.189 | -5.9 mm | 왼발 미끄러짐 최대 0.03 m/s, 오른발 0.33 m/s(0.37~0.43초 두 프레임, 발볼로 돌며 옆으로 5 cm 옮김) |
+
+| 클립 | 시작 자세 차 | 끝 자세 차 | 속도 이음(다음 · 앞 프레임) |
+|---|---|---|---|
+| A_ROK_Kneel_Mourn_In | `A_ROK_Idle_Stand`(기존): 44.0° (LeftUpperLeg — 4번의 "기존 클립 다리 제 축 비틀림"과 같은 것) | `Kneel_Mourn_Loop` 첫 프레임: 0.0° | - |
+| A_ROK_GoProne_In | `A_ROK_Idle_Stand`(기존): 44.0° (같은 이유) | `Prone_Aim_Loop` 첫 프레임: 0.0° | - |
+| A_ROK_Run_Start | `A_ROK_Idle_Stand`(기존): 79.3° (RightLowerLeg 제 축 비틀림, 첫 판과 같음) | `Run_Rifle` 1프레임: 0.0° | 15프레임 ↔ `Run_Rifle` 20프레임: 2.0° (LeftToes) |
+| A_ROK_Run_To_FireCrouch | `Run_Rifle` **11프레임(오른발 착지)**: 0.0° | `Idle_Trench`(기존): 45.2° (LeftLowerLeg 비틀림) · 끝 자세는 `TrenchReady_To_FireCrouch` 끝과 같은 무릎 사격 자세 | 2프레임 ↔ `Run_Rifle` 12프레임: 2.1° (LeftToes) |
+
+미리보기: `preview/A_ROK_Kneel_Mourn_In.jpg` · `A_ROK_Kneel_Mourn_Loop.jpg` · `A_ROK_GoProne_In.jpg`(옆 · 앞 · 3/4 · 위, 0.1초 간격) · `A_ROK_Prone_Aim_Loop.jpg` · `A_ROK_Run_Start.jpg` · `A_ROK_Run_To_FireCrouch.jpg`(매 프레임, 루트 이동 반영).
+
+### 9-3. 클립마다 만든 방법 · 판단
+
+- **F `Kneel_Mourn_In` (박용팔, 무겁고 느리게 2초)**: 서서 대기 → 0.35초 오른손을 개머리 손목에서 떼고 왼손이 총을 세움 → 0.62초 오른손이 위쪽 총열덮개(총 원점 앞 0.30 m)를 엄지가 위로 오게 쥠(FM 22-5의 앞에총 → 세워총과 같은 손 옮김) → 0.82초 왼손을 놓음 → 1.32초 왼발을 0.32 m 내딛고 몸을 낮춤(오른발은 발볼로 서며 뒤꿈치를 듦) → 1.66초 오른 무릎이 땅(관절 중심 6.2 cm)에 닿고 개머리판이 땅에 닿음 → 2.0초 내려앉으며 고개를 44도 숙임. 끝 자세: 골반 오른쪽으로 18도 돌림, 가슴 25도 숙임, 왼손은 왼 무릎 위(손가락이 무릎을 덮음), 소총은 오른 무릎 오른쪽 앞에 세워 오른 어깨 쪽으로 기댐(가늠자 = 몸 쪽). 개머리판 바닥은 소총 메시 최저점 = 0으로 맞춤.
+  - 처음 렌더에서 0.6~1.0초에 세운 소총이 얼굴 바로 앞을 지나(머리와 5 cm) 오른쪽으로 10 cm 옮겼다(→ 14 cm).
+- **F `Kneel_Mourn_Loop` (4초)**: 무거운 숨 한 번(가슴 2.6도 · 골반 4 mm), 숨에 맞춰 어깨 처짐, 고개 작은 끄덕임 · 좌우 1.2도, 2.3~3.2초에 양손을 한 번 꽉 쥠. 고개를 소총 쪽으로 기울인 채라 3/4에서 보면 이마가 총 가까이(15.9 cm) 간다 — 기대 슬퍼하는 모습으로 의도.
+- **G `GoProne_In` (윤태석, 2초, FM 23-5 113항 순서를 조심스럽게)**: 0.42초 오른 무릎 먼저 → 0.66초 왼 무릎 → 0.80초 왼손을 떼고 → 1.05초 앞으로 숙여 왼손바닥을 땅에 짚음(교범은 개머리판으로 짚지만 서툰 학도병이라 손으로) → 1.42초 무릎을 축으로 허벅지를 눕히며 몸을 내림 → 1.74초 총을 왼손에 얹어 다시 쥐고 개머리판을 어깨로 → 2.0초 오른 팔꿈치를 내리고 볼을 개머리판에. 루트는 원점 고정, 골반만 앞으로 0.47 m 나간다.
+- **G `Prone_Aim_Loop` 자세 (FM 23-5 90항 — 받아 읽음: 척추와 총의 각 30도 이하, 다리를 편하게 벌림, 발끝 바깥, 왼 팔꿈치는 총 아래, 개머리판은 오른 어깨 오목한 곳, 볼은 개머리판에)**: 골반은 총보다 오른쪽으로 22도(다리는 왼쪽 뒤로), 다리 9 · 15도 벌림, 발은 안쪽 날을 땅에 두고 발끝을 바깥 · 뒤로, 총구는 정면(루트 앞)으로 2도 아래. 가슴 숙임은 "왼 팔꿈치 관절 중심 5.8 cm(= 팔꿈치가 땅에 닿음) · 오른 팔꿈치 7 cm 아래 · 왼손이 손잡이에 닿음"을 만족하도록 자동으로 찾았고(89도), 골반 높이는 배 둘레 메시가 땅에 닿게 정함(0.166 m — 탄입대 때문에 조금 높음).
+  - **모델 팔(어깨-손목 0.43 m)이 실물 크기 M1(1.10 m)에 비해 짧아** 처음에는 왼손이 총열덮개에 24 cm 못 미쳤다. 가슴을 골반보다 더 돌리고(가슴 38도 — 교범 30도를 가슴만 조금 넘음) 왼손을 총열덮개 뒤쪽으로 10 cm 옮겨(`grip_slide_L -0.10`) 해결. 반복 동작: 2초에 한 번 숨(가슴 1.3도), 총구 3 mm 흔들림, 2.6~3.4초에 방아쇠 손가락을 고쳐 댐.
+  - 발끝이 4 cm, 오른 팔꿈치가 2 cm 땅에 묻혀 고침(발목 높이 · 발 각도, 팔꿈치 방향 · 탐색 조건). 전환 중 발가락을 세운 자세 → 바깥으로 눕히는 회전에서 발끝이 2.5 cm 묻혀 그 구간에 발 들기를 넣음(→ 최대 1.1 cm, 짚은 손바닥).
+- **`Run_Start` (0.5초, 다시)**: 첫 판의 문제는 ① 발 떼기 전에 골반이 3~4 cm 내려앉아 두 무릎이 함께 굽고 ② 왼발이 루트 기준 0.17 m밖에 안 나가 제자리에서 든 것처럼 보인 것. 고친 것: 루트 속도 곡선(0.05초 정지 뒤 0.5초에 3.0 m/s, 이동 0.675 m)을 정해 디딘 오른발이 정확히 그만큼 뒤로 가게 하고(미끄러짐 ≤0.05 m/s), 디딘 오른발 뒤꿈치를 일찍 들어(0.06초부터 58도) 다리가 닿게 해 **골반이 내려앉지 않음(0.801~0.813 m)**, 몸을 앞으로 14도 더 숙여 밀어 내고, 왼발은 무릎을 앞으로 끌며 내딛고, 마지막 0.1초는 달리기 주기의 같은 순간 자세로 섞어 첫 착지에서 속도까지 이어짐(직전 프레임 차 7.7 → 2.0도). 루트 이동을 반영해 렌더해 보면 기울며 밀어 나가는 출발로 보인다.
+- **`Run_To_FireCrouch` (0.8초)**: `Run_Rifle` 11프레임(오른발 착지)에서 시작 — 왼발 착지(1프레임)에서 시작하면 디딘 왼발이 브레이크로 뒤로 밀려 무릎 사격 자세의 앞발 자리(루트 앞 0.28 m)에 올 수 없다. 오른발로 브레이크(몸을 7도 뒤로 버팀) → 0.28초 왼발을 앞에 디딤 → 남은 속도만큼 미끄러지지 않게 뒤로 → 0.30초부터 오른발이 발볼로 돌며 무릎을 내림(0.58초 무릎 착지) → 소총을 견착. 루트는 3.0 m/s에서 0.42초에 직선 감속(0.63 m). 끝 자세는 4번의 "무릎 사격 끝 발 33도" 판단을 따른 `TrenchReady_To_FireCrouch`와 같은 자세(무릎 · 발볼 모두 땅).
+
+### 9-4. Unity에 넣을 때 (6번에 더해)
+
+1. **루트 이동**: `Run_Start` · `Run_To_FireCrouch`는 제자리 클립이다. 게임이 루트(에이전트)를 `export/<클립>_rifle.json`의 `root_forward_m`(프레임마다 누적 m, 게임 크기 병사)대로 움직여야 디딘 발이 미끄러지지 않는다. 다른 속도로 움직이면 그 비율만큼 재생 속도를 맞춘다(엉덩이 높이 0.84 m 기준). `Run_To_FireCrouch`는 `Run_Rifle`의 **정규화 시간 0.5(오른발 착지)**에서 전환해야 이음매가 0도다(1프레임 차 2.1도). `Run_Start` 끝은 `Run_Rifle` 0에 이어진다.
+2. **F**: 오른손은 2프레임부터 손잡이 표식(개머리 손목)이 아니라 **소총을 따라가는 별도 자리(총열덮개 위)**를 쥔다 → JSON의 `grip_R`이 0이다(“개머리 손목 표식에서 뗌”의 뜻). 소총을 JSON으로 놓으면 오른손을 손잡이로 IK하지 말고 클립 손을 그대로 두어야 한다. 박용팔 아바타는 체격이 달라 `pos`를 (엉덩이 높이 / 0.84)로 늘리고, 리타깃 뒤 손-총 거리를 Unity에서 봐야 한다(미확인). 왼손은 2.0초부터 왼 무릎 위.
+3. **G**: 끝 자세에서 골반은 루트 앞 0.47 m · 왼쪽 0.07 m, 총구는 루트 앞 1.86 m · 오른쪽 0.22 m(Unity 좌표 x +0.22), 발끝은 루트 뒤 0.35 m. "만수 자리"에 엎드리게 하려면 루트를 그 자리에서 약 0.5 m 뒤에 두고 정면을 총구 방향으로 둔다. 엎드린 동안 `AllyRiflePose`의 소총 배치 · `LookAt`을 꺼야 볼이 개머리판에 붙은 자세가 산다.
+4. `AC_ROK` 매개변수 변경 금지(ANIM_SPEC 1-5) — 새 상태 추가 · 코드 재생 방식은 결정 필요(6-3과 같음).
+
+### 9-5. 적(인민군) 달리기
+
+`../rigify_kpa_20261118/README.md`. 요약: 게임 프리팹 `PF_CH_KPA_Rifleman`의 모델 `SK_CH_KPA_Rifleman.fbx`(게임 스케일 0.8431)에 같은 방식으로 Rigify 리그를 만들고, 같은 달리기 사이클로 `A_KPA_Run_Rifle`(3.4 m/s, 0.60초) · `A_KPA_CrouchRun`(2.8 m/s, 0.67초)을 만들었다. 기존 클립 진단(렌더로 확인): 공중 발이 땅 1~2 cm 위를 앞으로 4.9 m/s로 스쳐 끌리는 것처럼 보이고, 디딘 발 속도가 1.6~3.4 m/s로 흔들림. 새 클립: 디딘 발 3.40(3.40~3.40) · 2.80(2.79~2.80) m/s.
+
+### 9-6. 1인칭 `A_FP_M1_Sprint` 진단 (고치지 않음)
+
+진단 파일 · 모음 이미지: `work/diag_fp/` (`A_FP_M1_Sprint_sheet.jpg` 클립 그대로 카메라에서, `_side_sheet.jpg` 옆, `_ingame_sheet.jpg` · `_ingame_side_sheet.jpg` 게임 근사, `A_FP_M1_Idle_*` 비교, 수치 `*_measure.tsv`).
+
+- **클립만 보면 손이 총에서 크게 뜬다**: 22프레임(0.7초, Generic, 반복) 중 0 · 21프레임만 총을 쥐고, 1~20프레임은 팔이 내려가 왼손 25.6~63.8 cm · 오른손 16.3~37.5 cm 떨어진다. 1~20프레임은 `A_FP_M1_Idle`과 같은 값이다(ANIM_SPEC 22번 "그레이박스 = Idle 복사" 상태). Idle도 1~59프레임 손이 12~64 cm 뜬다.
+- **그러나 게임은 이 팔 뼈 곡선을 쓰지 않는 것으로 보인다(정적 분석, Play 미확인)**: 클립의 뼈 경로(`Arms/SK_CH_ROK_Arms_Rig/mixamorig:*`)가 씬의 `VM_M1/FP_Anim` 아래에 없고, `M1ArmRig.cs`(92~117행)가 매 프레임 팔 뼈를 처음 자세로 되돌린 뒤 IK로 손목을 총의 `Grip_Left`/`Grip_Right`에 붙인다(보이는 손은 `M1_Anatomical_Grip_Hands`). 게임 화면에서 손이 뜨지는 않을 것이다.
+- **화면에서 실제로 움직이는 것은 루트(총) 뿐이고 박자와 맞지 않는다**: 카메라 기준 총이 좌우 2.0 cm(0.7초 주기) · 위아래 1.5 cm(0.35초마다)만 흔들리고 **회전 흔들림은 0도**(숙임 −8 · 돌림 −22 · 기울임 +22도로 고정). 발소리 간격은 2.2 m ÷ 5.6 m/s = 0.393초(두 걸음 0.786초)라 클립(0.35초)과 약 3.2초마다 맞았다 어긋난다. 코드 흔들림(`M1Presentation.cs` 190~203행, `walkPhase += dt × 12`)도 시간 기준이라 발걸음과 무관하다. 카메라 자체는 달릴 때 흔들리지 않는다.
+- **고치는 방법(제안)**: ① 새 리그 없이 — 게임이 루트만 쓰므로 Sprint를 루트 곡선만 있는 클립으로 다시 만든다: 두 걸음 한 주기(0.786초)에 위아래 두 번 2~3 cm, 좌우 한 번 2~3 cm, 숙임 ±2~3도 · 옆 기울임 ±3~5도 · 돌림 ±2도. 재생 위치를 이동 거리로 구동(위상 = 이동 거리 / (2 × runStride))하고 `walkPhase`도 같은 위상으로. ② Rigify로 제대로 — 1인칭 팔은 인간형 메타리그가 맞지 않으므로 카메라 뼈(`FP_CameraPivot` 자리) 아래 `limbs.arm` 두 개 + 손가락 `limbs.super_finger`, 카메라 아래 `weapon` 뼈와 그 아래 `grip_L`(총열덮개) · `grip_R`(개머리 손목) 표식으로 작은 메타리그를 짜고, 양손 IK를 표식에 붙이고(이 README 2번과 같은 방식) `weapon`을 카메라 공간에서 발걸음 박자대로 흔든 뒤 `weapon` 움직임을 클립 루트로 굽는다. 팔꿈치 움직임까지 쓰려면 `M1ArmRig`가 뼈를 되돌리는 부분을 바꿔야 한다(코드 변경).
+
+### 9-7. 확인하지 못한 것 (둘째 묶음)
+
+- Unity에서 재생하지 않았다. 특히 F의 소총 기준 오른손이 Humanoid 리타깃 뒤에도 총열덮개에 붙어 있는지, 박용팔 아바타에서의 모습, G에서 소총 · 머리를 코드가 덮어쓰는지.
+- F · G 렌더는 평평한 땅이다. 실제 장면(시신 · 고지 정상 경사)에서 무릎 · 배 · 팔꿈치가 땅에 맞는지는 게임의 발 IK · 지형에 달렸다.
+- `Run_To_FireCrouch` 오른발은 무릎을 내리며 발볼이 옆으로 5 cm 끌린다(0.37~0.43초, 0.23~0.33 m/s). 렌더에서는 무릎을 꿇으며 발을 고쳐 디디는 것으로 보였지만 게임 거리에서 미확인.
+- 출발 · 멈춤은 게임 루트가 `root_forward_m`대로 움직인다는 가정이다. 게임 이동 곡선이 다르면 디딘 발이 미끄러진다.
+- 1인칭 진단은 정적 분석 + Blender 측정이며 Unity Play에서 보지 않았다(9-6).
+
+## 10. 학도병 지친 걸음 `A_ROK_Walk_Tired_v2` (2026-11-18 저녁, 이어받아 완성)
+
+사용자 지시: "뛰어내려서 걸을때 너무 뻣뻣하게 걷는데 무릎이 안굽혀지고 발끝이 위로 올라가는 느낌이라 고쳐보고". 새벽 트럭에서 뛰어내린 학도병 4명이 집결 자리로 걸어가는 걸음. 앞 작업자가 16:52에 계정이 바뀌어 멈춘 것을 이어받았다(그때까지: 학도병 리그 `work/student/`, 진단 `walk_00~03`, 첫 판 스크립트 `walk_10_make.py`, 첫 판 미리보기 — 내보낸 FBX 없음. 첫 판 결과는 `work/walk/prev_1650/`에 보존).
+
+### 10-1. 원인 판단
+
+**클립이 원인이다. 게임 코드는 원인이 아니다.**
+
+- 게임 화면(`work/walk/ingame_*.jpg`, 앞 작업자가 남긴 캡처)에서 학도병은 상체가 꼿꼿하고, 다리를 편 채 앞으로 차내며 발끝이 들린다. 같은 기존 클립(`A_ROK_Walk_Tired`, Mixamo 뼈대)을 Blender에서 학도병에 뼈 방향 그대로 옮기면(`walk_01_measure.py`) 상체를 숙이고 무릎을 굽힌 지친 걸음이다. 여기서 **몸 전체를 뒤로 20도 젖힌 렌더(`work/walk/walk_tired_hp20/`)가 게임 화면과 거의 같다** → Unity Humanoid 재생에서 몸 방향이 약 20도 틀어지고 있다고 본다.
+- 기준 자세 차이로는 설명이 안 된다: 걷기 FBX의 노드 기본값은 Mixamo T자(`walk_02_fbx_default_pose.py`), 학도병 아바타 기준 자세는 척추 수직 · 무릎 4.8도 · 발 21.5도 아래(`walk_03_avatar_skeleton.py`) — 몸통 4도 · 발 6도 차뿐이다. **Unity 안의 정확한 원인은 확인하지 못했다**(Unity 미사용).
+- 게임 코드(읽기만): 하차 자세 `DismountPose`는 걷기 시작 뒤 `EaseOutOfSquat`(`DawnTruckSequence.cs` 350~357행, 초당 2.2)로 0.14~0.16초 만에 꺼지고, 켜진 동안은 오히려 무릎을 더 굽힌다(`DismountPose.cs` 51~56행). `DawnFootPlacement`는 지금 쓰는 뛰어내리기 경로에서 켜지지 않는다(켜는 곳은 다른 경로의 `Release` 272행뿐; `jumpDown`은 프리팹에 저장되지 않아 기본값 true, 28행). 켜져도 평지에서는 손대지 않고(67행) 디딘 발만 경사에 맞춘다(83~87행). `AlliedTerrainFootPlacement`는 등반하는 윤태석에게만 붙는다(`HillAssaultDirector.cs` 308~309행). `AC_ROK` 걷기 상태는 Foot IK 꺼짐 · 마스크 없음(`AC_ROK.controller` 381~395행). 재생 배율 1.32(`PF_DawnTruck.prefab` 1717행) × 기존 클립 디딘 발 0.83 m/s ≈ 걷기 1.1 m/s(`Dabudong.unity` 16951행) — 맞는다.
+
+### 10-2. 만든 방법 (`scripts/walk_10_make.py`, 학도병 리그)
+
+실행: `ROK_MODEL=student blender -b --python scripts/walk_10_make.py -- render hands export blend` (측정만: 인자 없이, 실험: `tag=이름 키=값 …` → `work/walk/v2_이름/`).
+첫 판에서 바꾼 것:
+
+| 무엇 | 첫 판 | 고친 판 · 이유 |
+|---|---|---|
+| 골반 높이 | 평균 높이 + 상하 흔들림을 정해 둠 → 다리가 안 닿으면 내림 | **디딘 다리의 목표 무릎 각에서 거꾸로 구함**(`knee_drive`). 수직 다리에서 골반을 2 cm만 내려도 무릎이 28도 굽어, 첫 판은 디딤 내내 24~34도였다 |
+| 뒤꿈치 드는 각 | 정해 둔 곡선(32도) | **떼는 다리 무릎 목표(다른 발 착지 때 12도 → 떼는 순간 38도)에서 거꾸로 구함**(`heel_solve`). 첫 판은 다른 발이 닿는 순간 이미 39도 굽었다(실제 보행 5~10도) |
+| 착지 직전 발 | 착지점보다 7 cm 앞 → 다리 길이를 넘어 골반이 4 cm 내려감 | 2 cm, 넘으면 발목을 엉덩이 쪽으로 당김(`swing_clamp`) |
+| 디딤 위치 | 골반 앞뒤 대칭 | 5 cm 뒤로(착지 발이 너무 앞이었다) |
+| 발가락 | 디딤 시작부터 땅에 평평 → 착지 순간 한 프레임에 11도 꺾여 반복 이음매가 12.8도 튐 | 발끝이 들린 동안은 발과 나란히 |
+| 주기 · 속도 | 36프레임 1.2 m(다리가 안 닿아 골반 10 cm 내림) / 30프레임 | 34프레임(1.13초) · 디딘 발 1.0 m/s · 한 주기 1.13 m |
+| 군화 바닥 | — | 학도병 군화 바닥 정점은 정강이 뼈 가중치를 평균 30% 받아(43개 중 29개가 5% 넘음) 정강이가 기울고 뒤꿈치를 들면 바닥이 0.5~11 mm 떴다 → 뜬 만큼 발 목표를 내리는 표 `scripts/walk_v2_footcomp.json`(3회 측정 누적, `updatefootcomp`) |
+| 왼손 | 손바닥이 뒤집혔다고 보고 손등 목표 · 손가락 부호를 뒤집음 → 손가락이 앞으로 갈고리처럼 굽고 엄지가 뻗음 | 뼈(DEF-hand)는 좌우 거울 대칭이다. 왼손도 오른손과 같은 축 · 부호(엄지 포함)로 하니 거울처럼 보였다(`work/walk/v2_hA~hE/hands.jpg` 비교). `_probe_fingers`가 소총 쥔 자세에서 축을 고른 것이 원인으로 본다 |
+| 측정 | 무릎 최대 · 최소 | 단계별 무릎 · 발바닥 각 · 흔드는 발 최저(메시) · 군화 바닥 메시 미끄러짐(평평 구간 따로) · 디딤 중 뜸 · 반복 이음매 2차 차분 |
+
+지친 모습: 가슴 15도 숙임 · 고개 20도 숙임 · 골반 7도 · 팔은 늘어뜨려 11도 흔듦 · 손가락 가볍게 굽힘. 소총은 장면에서 프리팹이 등에 메어 붙이므로 클립 손은 비어 있다(`_rifle.json` 없음, `Rifle` 뼈는 있으나 쓰지 않음).
+
+### 10-3. 검사 수치 (4번 · 9-2와 같은 방식, 학도병 게임 크기, 땅 = 0)
+
+| 클립 | 프레임(초) | 반복 첫·끝 차 | 엉덩이 높이 | 무릎: 착지 · 체중 받기 최대 · 디딤 가운데 최소 · 떼기 · 흔들기 최대 | 발바닥 각(+ 발끝 듦): 착지 · 떼기 · 흔들기 중 최대 | 흔드는 발 최저(메시) | 디딘 발 | 메시 최저 |
+|---|---|---|---|---|---|---|---|---|
+| **A_ROK_Walk_Tired_v2** | 35 (1.13) | 0.00° / 0.0 mm | 0.751~0.797 | 7.2 · 20.6 · 11.1 · 33.7 · 57.3도 | +10.0 · −42.6 · +13.2도 | 17.8 mm | 뒤꿈치 · 발볼 접점 속도 1.000 m/s 일정(루트 대비 미끄러짐 0.000), 접지 중 뜸 −0.2~+0.2 mm. 군화 바닥 메시 미끄러짐 평평 구간 0.044(최대 0.076) m/s — 정강이 가중치 탓 | −0.2 mm |
+| 첫 판(16:50, 30프레임) | 31 (1.00) | 0.00° | 0.753~0.795 | 착지 26.5 · 디딤 최소 16.2 · 디딤 최대 38.6 · 흔들기 62.1도 | — | 발끝 0.0 mm(스윙 시작 포함) | 접점 1.0 m/s | +1.3 mm |
+| 실제 보행 자료 | — | — | — | 0~5 · 15~20 · 5~10 · 35~40 · 60~65도 (지친 걸음은 조금 더 굽음) | 15~20 · 약 −40~−50 · — | 1~2 cm | — | — |
+
+- 양발 수치가 같다(34프레임이 짝수라 오른발 착지가 정수 프레임).
+- 반복 이음매(마지막 → 첫 프레임)의 2차 차분 8.8도 · 60 mm는 클립 안 같은 순간(오른발 착지, 17프레임)과 **똑같다** — 이음매가 클립 안쪽과 구별되지 않는다. (이 값은 착지 순간 정강이가 멈추는 정상적인 꺾임이다. 클립 안 최대는 발 16도 · 발가락 72 mm.)
+- 검증(`04_verify_export.py`): 56뼈 · 최상위 `Root` 하나 · `Head<…<Hips<Root` · 테이크 = 파일명 · 30fps · 35프레임 · 첫/끝 0.00도 0.0000 m.
+
+### 10-4. 미리보기에서 본 것
+
+`preview/A_ROK_Walk_Tired_v2.jpg`(옆 · 앞 · 앞쪽 3/4 · 발 확대, 2프레임 간격, 루트가 1.0 m/s로 앞으로 가게 렌더), 손 확대 `work/walk/v2/hands.jpg`.
+- 옆 · 발 확대: 뒤꿈치 착지 → 발바닥 → 뒤꿈치 들림 → 발끝 떼기가 차례로 보이고, 착지 직후 무릎이 굽어 체중을 받는다. 흔드는 다리는 무릎을 접어 발을 낮게 끌어 지나간다. 다리를 편 채 차내거나 발끝이 하늘로 들리는 모습은 없다. 디딘 발은 화면에서 멈춰 있다.
+- 앞 · 3/4: 고개를 숙이고 팔을 늘어뜨린 지친 걸음, 발 간격 자연스러움. 양손이 거울처럼 가볍게 굽음.
+- 렌더는 Workbench(그림자 없음, 240×300)라 세부(손가락 마디, 바지 주름)는 작게만 봤다.
+- 첫 판 렌더는 땅 판의 윗면이 +5.5 cm(`gp.location.z = 0.05`)라 밑창이 묻혀 보였다 — 윗면을 0으로 고쳐 다시 렌더했다(측정은 메시 · 뼈 기준이라 영향 없음).
+
+### 10-5. 중요: Unity 아바타
+
+**내보낸 걷기 FBX의 노드 기본값은 첫 프레임 자세다**(Hips 97도 등, `walk_02_fbx_default_pose.py`로 확인 — 6번의 다른 클립도 같다). 걷기 FBX로 아바타를 만들면(Create From This Model) 기준 자세가 걷는 자세가 되어 리타깃이 틀어진다. 반드시 **`export/A_ROK_Student_Rigify_TPose.fbx`(동작 없음, 노드 기본값 = 학도병 모델 `SK_CH_ROK_Soldier.fbx`와 같음)에서 아바타를 만들고 걷기 FBX는 그 아바타를 복사(Copy From Other Avatar)**한다. 일반 국군 `A_ROK_Rigify_TPose`의 아바타를 쓰면 안 된다(뼈 이름은 같지만 기준 자세가 달라 발이 17도 차이). 게임에 넣는 순서 · 코드는 `../../unity_staging_20261118/README_walk.md`.
+
+### 10-6. 확인하지 못한 것
+
+- Unity에서 재생하지 않았다. 기존 클립의 20도 틀어짐이 Unity 안에서 무엇 때문인지, 새 클립이 학도병 아바타에서 렌더와 같게 나오는지, 왼손이 리타깃 뒤에도 거울처럼 보이는지.
+- 군화 바닥 메시 미끄러짐(평평 구간 약 2 cm)은 모델 가중치 탓이라 클립으로 없애지 못했다. 1인칭 거리에서 보이는지 미확인.
+- 평지 렌더뿐이다. 하차 경로는 `DawnFootPlacement`가 꺼져 있어 경사에서 발이 박히거나 뜰 수 있다(기존 클립도 같음).
+- 등반하는 윤태석(같은 학도병 모델 · 같은 `Walk_Tired`)과 고지 아군의 지친 걸음은 바꾸지 않았다 — 같은 뻣뻣함이 있을 수 있다.

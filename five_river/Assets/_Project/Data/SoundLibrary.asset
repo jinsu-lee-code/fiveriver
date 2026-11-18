@@ -285,6 +285,52 @@ MonoBehaviour:
     maxDistance: 120
     loop: 0
     cooldown: 0
+  - id: SFX_Artillery_Incoming
+    clips:
+    - {fileID: 8300000, guid: b264ae29e21d3a24198740d2bee2bfe1, type: 3}
+    - {fileID: 8300000, guid: c42475814bd726a408619a861aff0f66, type: 3}
+    - {fileID: 8300000, guid: f80f1f456e256b943beb9d156da540c8, type: 3}
+    bus: 0
+    volume: 0.7
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 320
+    loop: 0
+    cooldown: 0
+  - id: SFX_Artillery_Near
+    clips:
+    - {fileID: 8300000, guid: 89d4cb9b2ff7ea34095c14caad1bedd2, type: 3}
+    - {fileID: 8300000, guid: b8cbf2419f9e26f4d88dd8fa7d005d61, type: 3}
+    - {fileID: 8300000, guid: 56a017feb4155a44d9c3f9f8f59153ef, type: 3}
+    bus: 0
+    volume: 1
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 420
+    loop: 0
+    cooldown: 0
+  - id: SFX_Debris_Fall
+    clips:
+    - {fileID: 8300000, guid: 6eb27e321b480834a974ed49fded62ed, type: 3}
+    - {fileID: 8300000, guid: d71e402d2e9c7c04d8802faa3d89852f, type: 3}
+    - {fileID: 8300000, guid: 2570c1d5c38dc81479534cddae8b9c89, type: 3}
+    bus: 0
+    volume: 0.6
+    pitchVariance: 0.05
+    spatial: 1
+    maxDistance: 130
+    loop: 0
+    cooldown: 0
+  - id: SFX_Ear_Ring
+    clips:
+    - {fileID: 8300000, guid: 439dd0a8e6801664a9d53467c1a9c401, type: 3}
+    bus: 0
+    volume: 0.1
+    pitchVariance: 0.05
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
   - id: SFX_Foot_Dirt
     clips:
     - {fileID: 8300000, guid: ff873de79794d4f429a3ed4083417aff, type: 3}
@@ -313,6 +359,31 @@ MonoBehaviour:
     spatial: 0
     maxDistance: 120
     loop: 0
+    cooldown: 0
+  - id: SFX_Gear_Run
+    clips:
+    - {fileID: 8300000, guid: 6349ceecb459e764eb939de559a09c95, type: 3}
+    - {fileID: 8300000, guid: 988d8fc12b98b284c99db91d2ffca4f7, type: 3}
+    - {fileID: 8300000, guid: 3272e19fb348d5e469e3c9575b5c4e84, type: 3}
+    - {fileID: 8300000, guid: 65e26aef9fb9fee429e8fccce04d41fd, type: 3}
+    - {fileID: 8300000, guid: 0fe45f3e441319045a678759515ad418, type: 3}
+    - {fileID: 8300000, guid: 06aae373c96fe024290c74f14d275fe8, type: 3}
+    bus: 0
+    volume: 0.6
+    pitchVariance: 0.06
+    spatial: 0
+    maxDistance: 120
+    loop: 0
+    cooldown: 0
+  - id: SFX_Player_Breath_Run_Loop
+    clips:
+    - {fileID: 8300000, guid: a676b4d1b4c739e4d8cb2015f6ee5e0a, type: 3}
+    bus: 0
+    volume: 0.5
+    pitchVariance: 0
+    spatial: 0
+    maxDistance: 120
+    loop: 1
     cooldown: 0
   - id: SFX_Stance_Change
     clips:
@@ -445,28 +516,3 @@ MonoBehaviour:
     maxDistance: 120
     loop: 0
     cooldown: 0.5
-  - id: SFX_Gear_Run
-    clips:
-    - {fileID: 8300000, guid: 6349ceecb459e764eb939de559a09c95, type: 3}
-    - {fileID: 8300000, guid: 988d8fc12b98b284c99db91d2ffca4f7, type: 3}
-    - {fileID: 8300000, guid: 3272e19fb348d5e469e3c9575b5c4e84, type: 3}
-    - {fileID: 8300000, guid: 65e26aef9fb9fee429e8fccce04d41fd, type: 3}
-    - {fileID: 8300000, guid: 0fe45f3e441319045a678759515ad418, type: 3}
-    - {fileID: 8300000, guid: 06aae373c96fe024290c74f14d275fe8, type: 3}
-    bus: 0
-    volume: 0.6
-    pitchVariance: 0.06
-    spatial: 0
-    maxDistance: 120
-    loop: 0
-    cooldown: 0
-  - id: SFX_Player_Breath_Run_Loop
-    clips:
-    - {fileID: 8300000, guid: a676b4d1b4c739e4d8cb2015f6ee5e0a, type: 3}
-    bus: 0
-    volume: 0.5
-    pitchVariance: 0
-    spatial: 0
-    maxDistance: 120
-    loop: 1
-    cooldown: 0

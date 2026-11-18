@@ -73,6 +73,9 @@ namespace FiveRivers.Narrative
             public float settleUntil;
             public float frontLine = float.NegativeInfinity; // just beyond the trench front wall ahead of his post
             public StrideGrounding stride;      // sets the running body down onto its feet (the clips run 6-12 cm high)
+            // The clip foot speeds this man really has: the Rigify run clips (2026-11-18) are swapped into his two moving
+            // states by AllyClipPlayer when their data is in, and run faster than the old ones (measured by the menu).
+            public float runClip = RunClipSpeed, advanceClip = AdvanceClipSpeed;
         }
 
         readonly List<Follower> followers = new List<Follower>();
@@ -106,6 +109,8 @@ namespace FiveRivers.Narrative
                     hasAdvance = animator.HasState(0, AdvanceState),
                     frontLine = FrontLine(ally.transform),
                     stride = StrideGrounding.Attach(animator, ally.transform),
+                    runClip = AllyClipPlayer.RunClipSpeedFor(animator, RunClipSpeed),
+                    advanceClip = AllyClipPlayer.AdvanceClipSpeedFor(animator, AdvanceClipSpeed),
                 });
             }
             followers.Sort((a, b) => Flat(a.body.position - exit).CompareTo(Flat(b.body.position - exit)));
@@ -361,7 +366,7 @@ namespace FiveRivers.Narrative
             bool stepping = f.speed > StepOffSpeed;
             f.runGait = f.speed > (f.runGait ? RunGaitBelow : RunGaitAbove);
             int state = !stepping ? IdleState : f.runGait ? RunState : f.hasAdvance ? AdvanceState : TiredWalkState;
-            float clip = f.runGait ? RunClipSpeed : f.hasAdvance ? AdvanceClipSpeed : TiredWalkClipSpeed;
+            float clip = f.runGait ? f.runClip : f.hasAdvance ? f.advanceClip : TiredWalkClipSpeed;
             Play(f.animator, state, stepping ? 0.2f : 0.15f);
             f.animator.speed = stepping ? Mathf.Clamp(f.speed / (clip * f.rigScale), MinAnimSpeed, MaxAnimSpeed) : 1f;
             // The controller's own Idle <-> Walk_Tired transitions listen to Speed: only the old walk may use it.

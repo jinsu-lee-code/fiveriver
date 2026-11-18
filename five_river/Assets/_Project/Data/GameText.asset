@@ -145,3 +145,8 @@ MonoBehaviour:
     text: "만수야!"
     duration: 2
     voice: ""
+  shellingIncoming:
+    speaker: "\uBD84\uB300\uC7A5"
+    text: "\uD3EC\uACA9\uC774\uB2E4! \uBA38\uB9AC \uC219\uC5EC!"
+    duration: 2.2
+    voice: 

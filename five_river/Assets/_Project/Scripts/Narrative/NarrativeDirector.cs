@@ -27,6 +27,8 @@ namespace FiveRivers.Narrative
         [SerializeField] float parkCall1At = 4f;
         [SerializeField] float parkCall2At = 9f;
         [SerializeField] float silenceSettleAfterCall = 4f;
+        [Tooltip("일반판(확장 흐름)에서 담요 컷이 끝난 뒤 전차가 오기까지의 조용한 시간. BALANCE 1-3 S4.")]
+        [SerializeField] float silenceSettleAfterCut = 8f;
 
         public GameText Text => text;
 
@@ -138,7 +140,8 @@ namespace FiveRivers.Narrative
                     subtitles.Say(text.retreat);
                     objective.Show(text.objectiveSilence);
                     // The covered body is Choi Man-su: in the expanded run it appears only after he has fallen.
-                    blanketBody.SetActive(!director.Flow.IsExpanded || mansuLostThisRun);
+                    // when his fall was shown, the blanket comes with the cut to the body (CoverMansu)
+                    blanketBody.SetActive(!director.Flow.IsExpanded);
                     silence = StartCoroutine(SilenceSequence());
                     break;
                 case FlowSection.Tank:
@@ -177,13 +180,14 @@ namespace FiveRivers.Narrative
             {
                 // He saw him fall and shouted his name: he does not ask where he is. He is at the body and says the
                 // name once (2026-11-18). The move to the body happens on the cut; without the cut he stays at his post.
+                CoverMansu();
                 bool cut = blanketCut != null && blanketCut.Begin(blanketBody.transform);
                 if (cut) ParkToBody();
                 yield return new WaitForSeconds(cut ? 1.0f : 0f);
                 subtitles.Say(text.parkCall1);
                 if (cut) yield return new WaitWhile(() => blanketCut.Playing);
                 else yield return GlanceAtBlanket();
-                yield return new WaitForSeconds(silenceSettleAfterCall);
+                yield return new WaitForSeconds(silenceSettleAfterCut);
                 yield return new WaitUntil(() => resupplied);
                 silence = null;
                 director.Flow.ReportGoalMet(FlowSection.Silence);

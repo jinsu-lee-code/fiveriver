@@ -60,12 +60,11 @@ namespace FiveRivers.Narrative
                     StartWestBeat();
                     break;
                 case FlowSection.Silence:
-                    if (mansu != null && mansuLostThisRun)
-                    {
-                        CoverWhereHeLies();
-                        mansu.gameObject.SetActive(false);
-                        StopFall();
-                    }
+                    // 2026-11-18: he used to turn into a blanket on the first frame of the silence, in plain view of a
+                    // player who was looking at him. He lies as he fell until the cut to the body (CoverMansu).
+                    break;
+                default:
+                    CoverMansu(); // the silence was left before its cut (forced on, or jumped): he is covered by then
                     break;
             }
         }
@@ -154,8 +153,21 @@ namespace FiveRivers.Narrative
         // facing the field, 7.5 m from the covered body, contradicted what had just been shown. When the fall was
         // witnessed, Park is at the body, facing it, and only says his name.
         public bool MansuSeenToFall => director.Flow.IsExpanded && mansuLostThisRun;
-        public static float ParkBesideBody = 1.8f;
+        bool mansuCovered;
+
+        // The body is covered: the blanket goes where he lies and the man himself is put away. Done on a cut.
+        void CoverMansu()
+        {
+            if (mansuCovered || mansu == null || !mansuLostThisRun) return;
+            mansuCovered = true;
+            CoverWhereHeLies();
+            blanketBody.SetActive(true);
+            mansu.gameObject.SetActive(false);
+            StopFall();
+        }
+        public static float ParkBesideBody = 2.05f;
         AllyCombatant parkAtBody;
+        HeadBow parkBow;
         Vector3 parkPostPosition;
         Quaternion parkPostRotation;
 
@@ -173,11 +185,14 @@ namespace FiveRivers.Narrative
             var spot = blanketCut.StandSpot(ParkBesideBody);
             spot.y = TrenchFloor(spot, park.transform, null);
             park.transform.SetPositionAndRotation(spot, blanketCut.StandFacing);
+            parkBow = HeadBow.On(park.transform); // he looks down at him
         }
 
         void ParkToPost()
         {
             if (parkAtBody == null) return;
+            if (parkBow != null) Destroy(parkBow);
+            parkBow = null;
             parkAtBody.transform.SetPositionAndRotation(parkPostPosition, parkPostRotation);
             parkAtBody = null;
         }
@@ -445,6 +460,7 @@ namespace FiveRivers.Narrative
 
         void RestoreMansu()
         {
+            mansuCovered = false;
             StopFall();
             if (rifleDrop != null) { StopCoroutine(rifleDrop); rifleDrop = null; }
             if (mansuTurn != null) { StopCoroutine(mansuTurn); mansuTurn = null; }

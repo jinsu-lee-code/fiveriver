@@ -28,5 +28,21 @@ MonoBehaviour:
   accuracyLit: 0.35
   crouchedFactor: 0.25
   damage: 18
-  expandedDamage: 35
+  expandedDamage: 50
   sightRange: 140
+  expandedMainAssault: 14
+  expandedMainMaxActive: 9
+  expandedWestAssault: 9
+  expandedWestMaxActive: 6
+  expandedSpawnInterval: 1.5
+  hillExtraDefenders: 1
+  aimAtPlayerMax: 2
+  allyFloorMain: 4
+  allyFloorWest: 3
+  allyFloorHill: 1
+  allyKillChance: 0.2
+  spawnSpread: 5
+  speedSpread: 0.1
+  maxBodies: 24
+  bodyCullDistance: 55
+  bodySettleAfter: 5

@@ -1,0 +1,223 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4661d52e57acd554aad1e05015e76c06, type: 3}
+  m_Name: ShellingConfig
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.ShellingConfig
+  rules:
+  - section: 1
+    distantMin: 7
+    distantMax: 16
+    distantLevel: 0.9
+    nearMin: 34
+    nearMax: 55
+    nearFirstDelay: 14
+    nearMaxCount: 0
+    zone: 1
+    playerMin: 60
+    playerMax: 95
+    tracerMin: 30
+    tracerMax: 55
+    gunfireMin: 14
+    gunfireMax: 30
+  - section: 2
+    distantMin: 6
+    distantMax: 14
+    distantLevel: 1
+    nearMin: 26
+    nearMax: 40
+    nearFirstDelay: 12
+    nearMaxCount: 0
+    zone: 1
+    playerMin: 38
+    playerMax: 80
+    tracerMin: 25
+    tracerMax: 45
+    gunfireMin: 10
+    gunfireMax: 22
+  - section: 3
+    distantMin: 5
+    distantMax: 12
+    distantLevel: 1
+    nearMin: 15
+    nearMax: 26
+    nearFirstDelay: 9
+    nearMaxCount: 0
+    zone: 3
+    playerMin: 18
+    playerMax: 62
+    tracerMin: 18
+    tracerMax: 34
+    gunfireMin: 8
+    gunfireMax: 18
+  - section: 9
+    distantMin: 8
+    distantMax: 18
+    distantLevel: 0.8
+    nearMin: 22
+    nearMax: 32
+    nearFirstDelay: 10
+    nearMaxCount: 1
+    zone: 1
+    playerMin: 34
+    playerMax: 75
+    tracerMin: 28
+    tracerMax: 50
+    gunfireMin: 14
+    gunfireMax: 30
+  - section: 10
+    distantMin: 5
+    distantMax: 12
+    distantLevel: 1
+    nearMin: 15
+    nearMax: 25
+    nearFirstDelay: 8
+    nearMaxCount: 0
+    zone: 3
+    playerMin: 18
+    playerMax: 60
+    tracerMin: 18
+    tracerMax: 34
+    gunfireMin: 8
+    gunfireMax: 18
+  - section: 4
+    distantMin: 14
+    distantMax: 26
+    distantLevel: 0.4
+    nearMin: 0
+    nearMax: 0
+    nearFirstDelay: 0
+    nearMaxCount: 0
+    zone: 0
+    playerMin: 0
+    playerMax: 0
+    tracerMin: 0
+    tracerMax: 0
+    gunfireMin: 0
+    gunfireMax: 0
+  - section: 5
+    distantMin: 7
+    distantMax: 15
+    distantLevel: 0.9
+    nearMin: 36
+    nearMax: 55
+    nearFirstDelay: 22
+    nearMaxCount: 0
+    zone: 1
+    playerMin: 45
+    playerMax: 90
+    tracerMin: 30
+    tracerMax: 55
+    gunfireMin: 14
+    gunfireMax: 28
+  - section: 11
+    distantMin: 5
+    distantMax: 12
+    distantLevel: 1
+    nearMin: 16
+    nearMax: 28
+    nearFirstDelay: 10
+    nearMaxCount: 0
+    zone: 4
+    playerMin: 20
+    playerMax: 60
+    tracerMin: 20
+    tracerMax: 38
+    gunfireMin: 9
+    gunfireMax: 20
+  nearInExhibit: 1
+  soundSpeed: 340
+  distantNear: 900
+  distantFar: 3200
+  salvoChance: 0.4
+  salvoGapMin: 0.35
+  salvoGapMax: 1.6
+  frontShare: 0.7
+  flashBright: 0.3
+  flashDim: 0.11
+  flashColor: {r: 1, g: 0.72, b: 0.45, a: 1}
+  incomingMin: 1
+  incomingMax: 1.5
+  holdAfterBlock: 2.5
+  afterTankShot: 3.5
+  keepAlly: 10
+  keepEnemy: 7
+  keepBody: 3.5
+  keepCover: 5
+  keepCrate: 8
+  keepTrench: 7
+  keepTank: 14
+  keepCrater: 5
+  fieldArea:
+    serializedVersion: 2
+    x: -42
+    y: 10
+    width: 86
+    height: 82
+  rearArea:
+    serializedVersion: 2
+    x: -34
+    y: -34
+    width: 70
+    height: 23
+  rearShare: 0.3
+  inViewShare: 0.6
+  craterRadius: 1.9
+  craterDepth: 0.3
+  craterRim: 0.1
+  shakeRange: 55
+  shakeDegrees: 1.5
+  shakeSeconds: 0.45
+  deafenRange: 22
+  deafenSeconds: 1.1
+  trenchDustRange: 38
+  blastLight: 420
+  blastLightRange: 45
+  blastLightSeconds: 0.22
+  smolderSeconds: 40
+  dawnSmokes: 5
+  dawnSmokeSeconds: 90
+  smallRoundsMin: 2
+  smallRoundsMax: 4
+  smallGapMin: 0.35
+  smallGapMax: 1.1
+  smallSpreadMin: 6
+  smallSpreadMax: 15
+  bigBarrage: 1
+  bigDelay: 1.6
+  bigRoundsMin: 7
+  bigRoundsMax: 9
+  bigSeconds: 5.5
+  bigStartDistance: 58
+  bigCloseRounds: 3
+  bigCloseMin: 5
+  bigCloseMax: 12
+  bigLateral: 15
+  bigKeepPlayer: 6.5
+  bigKeepAlly: 6
+  bigKeepCrate: 6
+  bigKeepTrench: 4.5
+  closeShakeDegrees: 2.6
+  closeShakeSeconds: 0.5
+  closeDeafenSeconds: 3.2
+  dustSeconds: 4
+  dustDensity: 0.07
+  dustColor: {r: 0.17, g: 0.145, b: 0.12, a: 1}
+  breatherSeconds: 4.5
+  breatherBreath: 0.85
+  dirtShowerPrefab: {fileID: 1617476614809591699, guid: 9889c32f82d7c0b4b8d7df6788eb4722, type: 3}
+  blastPrefab: {fileID: 2920761122382029457, guid: 263528dd75d061145bc4ad2ee05dbc59, type: 3}
+  smolderPrefab: {fileID: 6559892204573624024, guid: 37dcb719d1f2c9d4eb3597872fa97671, type: 3}
+  trenchDustPrefab: {fileID: 4854670346929840748, guid: 4a16ce38bdbe496448e5970fa0748e23, type: 3}
+  horizonGlow: {fileID: 2100000, guid: 16f69de0fa9498543910ebabb3127300, type: 2}
+  tracerOurs: {r: 1, g: 0.42, b: 0.22, a: 1}
+  tracerTheirs: {r: 0.45, g: 1, b: 0.5, a: 1}
+  gunfireLevel: 0.3

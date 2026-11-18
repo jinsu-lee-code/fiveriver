@@ -139,7 +139,29 @@ namespace FiveRivers.Combat
                 recoil = (recoil + impulse * dt) * decay;
                 recoilVelocity = (recoilVelocity - omega * impulse * dt) * decay;
             }
-            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil, 0f, 0f);
+            // A shell bursting near by jolts the view (2026-11-18). Only what is drawn moves: Update sets the true
+            // aim again before the weapons cast their rays, so a shot goes where the sights were laid.
+            var jolt = Vector3.zero;
+            if (shakeLeft > 0f)
+            {
+                shakeLeft -= Time.unscaledDeltaTime;
+                float fade = Mathf.Clamp01(shakeLeft / shakeFor);
+                float amount = shakeDegrees * fade * fade, t = Time.unscaledTime * 19f;
+                // Perlin noise stays near its middle: scaled so the swing really reaches about the asked angle
+                jolt = new Vector3((Mathf.PerlinNoise(t, 3.1f) - 0.5f) * 3.6f, (Mathf.PerlinNoise(7.7f, t) - 0.5f) * 2.6f, (Mathf.PerlinNoise(t, t * 0.5f + 11f) - 0.5f) * 0.9f) * amount;
+            }
+            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil + jolt.x, jolt.y, jolt.z);
+        }
+
+        float shakeDegrees, shakeLeft, shakeFor = 1f;
+        // degrees: the most the view is turned; it dies away over the given time. A stronger jolt replaces a weaker one.
+        public void AddShake(float degrees, float seconds)
+        {
+            if (degrees <= 0f || seconds <= 0f) return;
+            float now = shakeLeft > 0f ? shakeDegrees * (shakeLeft / shakeFor) * (shakeLeft / shakeFor) : 0f;
+            if (degrees < now) return;
+            shakeDegrees = Mathf.Min(degrees, 3f);
+            shakeFor = shakeLeft = seconds;
         }
 
         // Turns the view a little toward a point (scripted beats such as greeting someone); the player keeps control.
@@ -161,6 +183,7 @@ namespace FiveRivers.Combat
             pitch = 0f;
             recoil = 0f;
             recoilVelocity = 0f;
+            shakeLeft = 0f;
             verticalSpeed = 0f;
             Crouched = false;
             eye = config.standEyeHeight;
