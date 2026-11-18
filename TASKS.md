@@ -1439,3 +1439,14 @@
   3. Unity: `AllyClipRole` 끝에 `KneelIdle`, `KneelFire` 추가 → `RokRigifyClipsSetup.Clips` 표에 두 클립 추가, 컨트롤러에서 `Idle_Trench` · `Fire_Crouch` 원래 클립 이름을 읽어 `AllyRifleTracks`에 저장 → `AllyClipPlayer.InstallRunClips`가 달리기처럼 그 둘도 바꿔 끼우게(새 역할은 클립 판단 `AllyClipBrain` 목록에서 뺌). 무릎 사격 중 팔 · 소총은 기존 `AllyRiflePose.Apply`(견착 IK)가 그대로 맞춘다.
   4. 메뉴 `Setup/ROK Rigify Clips` 다시 실행 → 1배속 플레이어 시점으로 튜토리얼 무릎 대기 · 서쪽 공세 무릎 사격 · 고지 무릎 경계 · 탄막 `TakeCover` · 박용팔(`ParkCombatFootPlacement` 무릎 IK) 확인.
 - **같이 남은 것**: 가까운 포탄 숙이기의 사람별 반응 차(`AllyClipPlayer.duckReaction`, −0.2~+0.15초) 1배속 재확인(`ClaudeClipProbe.RunDuck`). 학도병 걷기 새 클립(`export/A_ROK_Walk_Tired_v2.fbx`, 넣는 법 `source/unity_staging_20261118/README_walk.md`)은 아직 Unity에 안 넣음.
+
+
+## 무릎 자세 꿇은 발 — 게임에 넣음 · 2026-11-18 밤
+
+위 "무릎 자세 발목 · 꿇은 발 고치기"의 남은 일 1~4를 마무리.
+- 1(전환 순서): `rok_clips.py`의 서기 ↔ 낮춘 대기는 이미 "발끝 세워 디딤 → 무릎 내림 → 발을 들어 뒤집어 눕힘" 순서였다(확인만). **달리다 무릎 사격**(`rok_clips_more.py` `A_ROK_Run_To_FireCrouch`)은 무릎이 내려가는 동안 발끝 세운 발에서 눕힌 발로 바로 섞여 **메시가 땅 밑 3.1 cm까지** 들어갔다 → 무릎이 닿을 때까지는 발끝 세운 발(`rok_poses.TUCK`), 0.58초부터 0.18초 동안 발을 `FLIP_LIFT`만큼 들며 뒤집어 눕힘. 땅 밑 최저 −0.3 cm.
+- 무릎 고쳐 앉기(`A_ROK_Trench_ShiftKnee`)는 눕힌 발 그대로 옆으로 옮겨 문제없음(렌더 확인). 무릎 애도 · 엎드리기는 발끝 세운 발 그대로 — **이야기 장면에 연결 안 된 클립이라 이번에 바꾸지 않음**(연결할 때 같은 방식으로 고칠 것).
+- 2(Blender): `work/`가 없어 `01_build_rig.py` · `02_extract_ref.py`부터 다시 만든 뒤 `03_make_clips.py`로 렌더 · 내보냄, `04_verify_export.py` 통과(56뼈 · 루트 하나 · 프레임 수). 다시 내보낸 것은 꿇은 발이 바뀐 13개(참호 대기 · 전환 · 변화 동작 10개, `A_ROK_Kneel_Watch_Idle`, `A_ROK_FireCrouch_Fire`, `A_ROK_Run_To_FireCrouch`)뿐 — 움직임이 그대로인 달리기 · 애도 · 엎드리기 · 기준 자세 FBX는 바이트만 달라져 되돌림.
+- 3(Unity): 역할 `KneelIdle` · `KneelFire`, 클립 표, `AllyClipPlayer.InstallRunClips` 교체는 이미 들어가 있었다(`UseRigifyKneel = true`). 메뉴 `Setup/ROK Rigify Clips` 다시 실행 → FBX 12개 · `AllyRifleTracks.asset` 갱신.
+- 4(확인): 편집 모드 214/214, 콘솔 오류 0. 서쪽 공세 무릎 사격 다리 근접(`C:/sk_assets/capture/ad/kneel.sh kw WestAssault`): 일반 병사 셋 모두 뒷발 군화가 발등을 땅에 눕히고 앞코가 뒤를 봄, 땅 뚫림 · 뜸 없음. 박용팔은 자기 컨트롤러(무릎 IK)라 따로 봐야 함.
+- 남은 것: 튜토리얼 무릎 대기 · 고지 무릎 경계 · 탄막 숙이기 1배속 확인, 박용팔 꿇은 발 근접.
