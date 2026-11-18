@@ -32,6 +32,16 @@ namespace FiveRivers.Narrative
         [Min(0f)] public float landingReach = 1.2f;             // how far past the tailgate the feet come down
         public Vector3 gatherOrigin = new Vector3(2.6f, 0f, -5.4f); // truck-local spot of the first man, the others to his right; just behind the tailgate so the summit's second shot sees them whole beside the truck (at -7.4 they stood in front of that camera, filling a quarter of the frame)
         public event System.Action Arrived;
+        // 2026-11-18: the landing of the first man raised Arrived on every frame from touchdown until he walked off
+        // (about 40 frames). Each one queued the 7-second arrival narration again, and the lines spoken at the summit
+        // afterwards ("포항에서 왔습니다", "만수 자리다") waited behind minutes of it and were never shown.
+        bool arrivedRaised;
+        void RaiseArrived()
+        {
+            if (arrivedRaised) return;
+            arrivedRaised = true;
+            Arrived?.Invoke();
+        }
         bool arrivalPresented;
         Camera arrivalView;
 
@@ -94,7 +104,7 @@ namespace FiveRivers.Narrative
             transform.SetPositionAndRotation(approachStart, startRotation);
             elapsed = 0f;
             stopped = false;
-            JoinedCount = 0;
+            JoinedCount = 0; arrivedRaised = false;
             arrivalPresented = false;
             arrivalView = Camera.main;
             audioPaused = false;
@@ -235,7 +245,7 @@ namespace FiveRivers.Narrative
                     passenger.released = true;
                     JoinedCount++;
                 }
-                Arrived?.Invoke();
+                RaiseArrived();
             }
             // Reveal only outside the player's view: never show an on-screen teleport.
             var planes = arrivalView != null ? GeometryUtility.CalculateFrustumPlanes(arrivalView) : null;
@@ -412,7 +422,7 @@ namespace FiveRivers.Narrative
                     position.y = t >= dismountLand ? p.jumpTo.y : p.jumpFrom.y + up * air - .5f * 9.81f * air * air;
                     p.body.position = position;
                     if (p.pose != null) { p.pose.Crouch = Mathf.Clamp01(CrouchCurve.Evaluate(t)); p.pose.Tuck = Mathf.Clamp01(TuckCurve.Evaluate(t)); p.pose.Lean = Mathf.Clamp01(LeanCurve.Evaluate(t)); }
-                    if (t >= dismountLand && JoinedCount == 0 && index == 0) Arrived?.Invoke();
+                    if (t >= dismountLand && JoinedCount == 0 && index == 0) RaiseArrived();
                     if (t < dismountLength - .2f) return;
                     p.stage = 2; // the pose stays on: EaseOutOfSquat lets the rest of the squat out as he walks
                     p.route.Clear();

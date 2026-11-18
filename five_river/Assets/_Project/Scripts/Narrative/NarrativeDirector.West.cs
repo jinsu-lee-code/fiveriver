@@ -40,6 +40,7 @@ namespace FiveRivers.Narrative
         void OnWestSectionChanged(FlowTransition transition)
         {
             StopWestBeat();
+            ParkToPost(); // before his own section handler or the hill assault reads where he stands
             if (transition.To == FlowSection.Title || transition.To == FlowSection.Tutorial)
             {
                 RestoreMansu();
@@ -92,6 +93,95 @@ namespace FiveRivers.Narrative
                 along.sqrMagnitude > 0.04f ? Quaternion.LookRotation(along.normalized, Vector3.up) : blanketBody.transform.rotation);
         }
 
+        public static float MansuTalkTurn = 140f; // degrees per second
+
+        // ---- the squad leader's lines have a man saying them (2026-11-18) ----
+        // "분대장" gave every order of the night and was nobody on screen. The rifleman on the player's right in the
+        // trench (Ally_2) is the squad leader: when one of his lines starts and he is not in a fight (the lull, the
+        // tank, the support call), he turns to the player to say it and back to the field afterwards. In a fight he
+        // shouts over his rifle, as before. Presentation only.
+        public const string SquadLeaderName = "Ally_2";
+        AllyCombatant squadLeader;
+        Coroutine leaderTurn;
+        Quaternion leaderPost;
+
+        void OnSquadLeaderLine(FiveRivers.Data.GameText.Line line)
+        {
+            if (line.speaker != text.scoutSpotted.speaker) return;
+            var section = director.Flow.Section;
+            if (section != FlowSection.Silence && section != FlowSection.Tank && section != FlowSection.AllySupport
+                && section != FlowSection.Regroup) return;
+            if (CutsceneRig.Running > 0) return;
+            if (squadLeader == null)
+                foreach (var ally in FindObjectsByType<AllyCombatant>(FindObjectsSortMode.None))
+                    if (ally.gameObject.name == SquadLeaderName) squadLeader = ally;
+            if (squadLeader == null || !squadLeader.isActiveAndEnabled || squadLeader.Engaged || squadLeader.Advancing) return;
+            if (leaderTurn == null) leaderPost = squadLeader.transform.rotation;
+            else StopCoroutine(leaderTurn);
+            leaderTurn = StartCoroutine(LeaderSpeaks(Mathf.Max(1.2f, line.duration)));
+        }
+
+        IEnumerator LeaderSpeaks(float seconds)
+        {
+            var body = squadLeader.transform;
+            for (float t = 0f; t < seconds; t += Time.deltaTime)
+            {
+                if (squadLeader.Engaged || squadLeader.Advancing) { leaderTurn = null; yield break; } // the fight has him again
+                var toPlayer = player.transform.position - body.position; toPlayer.y = 0f;
+                if (toPlayer.sqrMagnitude > 0.04f && !director.Flow.Paused)
+                    body.rotation = Quaternion.RotateTowards(body.rotation, Quaternion.LookRotation(toPlayer), MansuTalkTurn * Time.deltaTime);
+                yield return null;
+            }
+            for (float t = 0f; t < 1.5f && Quaternion.Angle(body.rotation, leaderPost) > 1f; t += Time.deltaTime)
+            {
+                if (squadLeader.Engaged || squadLeader.Advancing) break;
+                body.rotation = Quaternion.RotateTowards(body.rotation, leaderPost, MansuTalkTurn * Time.deltaTime);
+                yield return null;
+            }
+            leaderTurn = null;
+        }
+
+        void StopLeaderTurn()
+        {
+            if (leaderTurn == null) return;
+            StopCoroutine(leaderTurn);
+            leaderTurn = null;
+            if (squadLeader != null) squadLeader.transform.rotation = leaderPost;
+        }
+
+        // ---- the silence after he was seen to fall (2026-11-18) ----
+        // Park shouted his name as he went down, so "has anyone seen Man-su?" from a man standing at his own post,
+        // facing the field, 7.5 m from the covered body, contradicted what had just been shown. When the fall was
+        // witnessed, Park is at the body, facing it, and only says his name.
+        public bool MansuSeenToFall => director.Flow.IsExpanded && mansuLostThisRun;
+        public static float ParkBesideBody = 1.8f;
+        AllyCombatant parkAtBody;
+        Vector3 parkPostPosition;
+        Quaternion parkPostRotation;
+
+        void ParkToBody()
+        {
+            if (parkAtBody != null || !blanketBody.activeInHierarchy) return;
+            AllyCombatant park = null;
+            foreach (var ally in FindObjectsByType<AllyCombatant>(FindObjectsSortMode.None))
+                if (ally.gameObject.name == "ParkYongpal") park = ally;
+            if (park == null) return;
+            parkAtBody = park;
+            parkPostPosition = park.transform.position;
+            parkPostRotation = park.transform.rotation;
+            // the cut decides which side of the body he stands on (never where the player is standing)
+            var spot = blanketCut.StandSpot(ParkBesideBody);
+            spot.y = TrenchFloor(spot, park.transform, null);
+            park.transform.SetPositionAndRotation(spot, blanketCut.StandFacing);
+        }
+
+        void ParkToPost()
+        {
+            if (parkAtBody == null) return;
+            parkAtBody.transform.SetPositionAndRotation(parkPostPosition, parkPostRotation);
+            parkAtBody = null;
+        }
+
         void ResolveWestActors()
         {
             if (westEnemies == null) westEnemies = FindFirstObjectByType<EnemyDirector>();
@@ -116,13 +206,32 @@ namespace FiveRivers.Narrative
             objective.Hide();
             subtitles.Say(text.mansuLetter);
             subtitles.Say(text.mansuMorning);
-            yield return new WaitUntil(() => !subtitles.Speaking && !director.Flow.Paused);
+            // 2026-11-18: he asked the favour with his back to the man he was asking, still facing the field. While he
+            // speaks he turns to the player, and back to his post when he has finished.
+            var post = mansu != null ? mansu.transform.rotation : Quaternion.identity;
+            while (subtitles.Speaking || director.Flow.Paused)
+            {
+                if (mansu != null && !director.Flow.Paused)
+                {
+                    var toPlayer = player.transform.position - mansu.transform.position; toPlayer.y = 0f;
+                    if (toPlayer.sqrMagnitude > 0.04f)
+                        mansu.transform.rotation = Quaternion.RotateTowards(mansu.transform.rotation,
+                            Quaternion.LookRotation(toPlayer), MansuTalkTurn * Time.deltaTime);
+                }
+                yield return null;
+            }
+            for (float t = 0f; mansu != null && t < 1.2f && Quaternion.Angle(mansu.transform.rotation, post) > 1f; t += Time.deltaTime)
+            {
+                mansu.transform.rotation = Quaternion.RotateTowards(mansu.transform.rotation, post, MansuTalkTurn * 1.3f * Time.deltaTime);
+                yield return null;
+            }
             westBeat = null;
             director.Flow.ReportGoalMet(FlowSection.Regroup);
         }
 
         void OnWestRetry(FlowCheckpoint checkpoint)
         {
+            ParkToPost();
             if (checkpoint == FlowCheckpoint.WestAssault) StartWestBeat();
         }
 

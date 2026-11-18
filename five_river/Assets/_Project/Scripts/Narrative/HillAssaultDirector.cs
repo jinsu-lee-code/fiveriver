@@ -49,6 +49,11 @@ namespace FiveRivers.Narrative
         bool arrivalStarted;
         Transform climber;
         Animator climberAnimator;
+        // seconds into Park's last line before the recruit moves, and how much longer the scene is held for it
+        public static float TakePlaceAfter = 1.5f, TakePlaceExtra = 1.6f;
+        static readonly int CrouchId = Animator.StringToHash("Crouch"), KneelState = Animator.StringToHash("Idle_Trench");
+        float takePlaceAt;
+        bool tookPlace;
         bool climberWalking;
         readonly List<Vector3> climbPath = new List<Vector3>();
         int climbCorner;
@@ -243,11 +248,33 @@ namespace FiveRivers.Narrative
                         player.LookToward(climber.position + Vector3.up * FaceHeight, GreetTurnSpeed * Time.deltaTime);
                     if (Time.time < nextLineAt) return;
                     subtitles.Say(copy.parkMansuPlace);
-                    nextLineAt = Time.time + copy.parkMansuPlace.duration + .5f;
+                    nextLineAt = Time.time + copy.parkMansuPlace.duration + .5f + TakePlaceExtra;
+                    takePlaceAt = Time.time + TakePlaceAfter;
+                    tookPlace = false;
                     arrival = Arrival.Closing;
                     break;
                 case Arrival.Closing:
-                    FaceClimberToPlayer();
+                    // 2026-11-18: told "that is Man-su's place, get down there", he went on standing and looking at the
+                    // player until the screen changed. He now turns to the line he has been given and goes down on one knee.
+                    if (Time.time < takePlaceAt || climber == null) FaceClimberToPlayer();
+                    else
+                    {
+                        var outward = climber.position - points.assaultCovers[9].position; outward.y = 0f; // on, the way the assault was going
+                        if (outward.sqrMagnitude > .01f)
+                        {
+                            var want = Quaternion.LookRotation(outward);
+                            climber.rotation = Quaternion.RotateTowards(climber.rotation, want, 150f * Time.deltaTime);
+                            if (!tookPlace && Quaternion.Angle(climber.rotation, want) < 12f)
+                            {
+                                tookPlace = true;
+                                if (climberAnimator != null)
+                                {
+                                    climberAnimator.SetBool(CrouchId, true);
+                                    if (climberAnimator.HasState(0, KneelState)) climberAnimator.CrossFadeInFixedTime(KneelState, .4f);
+                                }
+                            }
+                        }
+                    }
                     if (Time.time >= nextLineAt) flow.ReportGoalMet(FlowSection.Dawn);
                     break;
             }

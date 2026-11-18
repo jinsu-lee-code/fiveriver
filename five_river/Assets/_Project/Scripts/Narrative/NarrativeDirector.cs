@@ -40,6 +40,7 @@ namespace FiveRivers.Narrative
         WeaponHolder weapons;
         TankEntranceDirector tankEntrance;
         MansuFallDirector mansuCut;
+        BlanketCutDirector blanketCut;
         readonly TankObjectiveTracker tankObjective = new TankObjectiveTracker();
 
         void OnEnable()
@@ -78,6 +79,7 @@ namespace FiveRivers.Narrative
                 subtitles.Say(text.tankRicochet);
             };
             resupplier.Resupplied += () => resupplied = true;
+            subtitles.LineStarted += OnSquadLeaderLine;
             blanketBody.SetActive(false);
             // staged entrance of the tank (TankConfig.entranceTake; 0 = none, the section starts as before)
             tankEntrance = gameObject.AddComponent<TankEntranceDirector>();
@@ -86,6 +88,8 @@ namespace FiveRivers.Narrative
             gameObject.AddComponent<FlareRevealDirector>().Configure(director, player, flares, objective, text);
             mansuCut = gameObject.AddComponent<MansuFallDirector>();
             mansuCut.Configure(director, player, objective, text);
+            blanketCut = gameObject.AddComponent<BlanketCutDirector>();
+            blanketCut.Configure(director, player);
         }
 
         void OnRetry(FlowCheckpoint checkpoint)
@@ -101,6 +105,7 @@ namespace FiveRivers.Narrative
 
         void OnSectionChanged(FlowTransition t)
         {
+            StopLeaderTurn(); // before this section's first line is said: that line may start him turning again
             lastCombatHintSection = FlowSection.Title;
             if (silence != null)
             {
@@ -168,13 +173,52 @@ namespace FiveRivers.Narrative
             float start = Time.time;
             yield return new WaitUntil(() => Time.time - start >= parkCall1At);
             if (parkAnimator != null) parkAnimator.SetTrigger("Call");
+            if (MansuSeenToFall)
+            {
+                // He saw him fall and shouted his name: he does not ask where he is. He is at the body and says the
+                // name once (2026-11-18). The move to the body happens on the cut; without the cut he stays at his post.
+                bool cut = blanketCut != null && blanketCut.Begin(blanketBody.transform);
+                if (cut) ParkToBody();
+                yield return new WaitForSeconds(cut ? 1.0f : 0f);
+                subtitles.Say(text.parkCall1);
+                if (cut) yield return new WaitWhile(() => blanketCut.Playing);
+                else yield return GlanceAtBlanket();
+                yield return new WaitForSeconds(silenceSettleAfterCall);
+                yield return new WaitUntil(() => resupplied);
+                silence = null;
+                director.Flow.ReportGoalMet(FlowSection.Silence);
+                yield break;
+            }
             subtitles.Say(text.parkCall1);
             yield return new WaitUntil(() => Time.time - start >= parkCall2At);
             subtitles.Say(text.parkCall2);
+            // the covered body, seen once from close by (BlanketCutDirector); otherwise the view is drawn to it
+            if (blanketCut != null && blanketCut.Begin(blanketBody.transform))
+                yield return new WaitWhile(() => blanketCut.Playing);
+            else yield return GlanceAtBlanket();
             yield return new WaitForSeconds(silenceSettleAfterCall);
             yield return new WaitUntil(() => resupplied);
             silence = null;
             director.Flow.ReportGoalMet(FlowSection.Silence);
+        }
+
+        // 2026-11-18: the covered body is what the silence is about (GDD 8), but the only objective on screen sends the
+        // player to the ammunition crate, so a visitor could go through the section without ever looking at it. As
+        // Park asks "has anyone seen Man-su?", the view is drawn gently to the blanket; the player keeps control and
+        // can look away at once. Nothing happens when he is already looking at it or the blanket is not there.
+        public static float GlanceDelay = 1.1f, GlanceSeconds = 2.4f, GlanceRate = 38f, GlanceEnough = 7f;
+        IEnumerator GlanceAtBlanket()
+        {
+            if (blanketBody == null || !blanketBody.activeInHierarchy) yield break;
+            yield return new WaitForSeconds(GlanceDelay);
+            var target = blanketBody.transform.position + Vector3.up * 0.15f;
+            for (float t = 0f; t < GlanceSeconds; t += Time.deltaTime)
+            {
+                var pivot = player.CameraPivot;
+                if (Vector3.Angle(pivot.forward, target - pivot.position) < GlanceEnough) break;
+                if (!director.Flow.Paused && player.Gate.CanAct) player.LookToward(target, GlanceRate * Time.deltaTime);
+                yield return null;
+            }
         }
 
         void Update()
