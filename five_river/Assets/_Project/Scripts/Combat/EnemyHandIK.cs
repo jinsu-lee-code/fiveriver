@@ -16,7 +16,7 @@ namespace FiveRivers.Combat
         // below, so the wood lies across the palm), how far ahead of the grip the support hand holds, and how far
         // the trigger palm may be turned from the clip's own pose so the wrist is never wrung round.
         public static Vector3 SupportWrist = new Vector3(-0.09f, -0.047f, 0f);
-        public static float SupportAhead = 0.36f, MaxTriggerTurn = 130f;
+        public static float SupportAhead = 0.36f;
         // Aiming (2026-11-13, against a 1944 photo of a Mosin held in the aim): the support hand cradles the fore-end
         // about a hand's span ahead of the trigger hand, just in front of the magazine, with the elbow straight under
         // the rifle. With the running values the arm reached almost straight out along the barrel, elbow to the side.
@@ -163,16 +163,45 @@ namespace FiveRivers.Combat
             var wrist = a + along * Mathf.Lerp(Mathf.Lerp(SupportAhead, AimSupportAhead, aim), LowSupportAhead, low) + rifle.up * ForeEndAbove + rifle.TransformDirection(SupportWrist);
             Reach(leftUpper, leftFore, leftHand, Vector3.Lerp(leftHand.position, wrist, weight),
                 animator.transform.TransformDirection(Vector3.Lerp(Vector3.Lerp(RunElbow, AimElbow, aim), LowElbow, low)));
-            // trigger hand: under the small of the stock, palm up, the fingers across to its left side and up round it (2026-11-16:
-            // laid along the wood, as until then, they could only lie flat on its side and never closed round it)
-            var trigger = Quaternion.LookRotation(rifle.TransformDirection(new Vector3(-1f, 0f, .6f)), rifle.up) * Quaternion.Inverse(rightPalmFrame);
-            rightHand.rotation = Quaternion.Slerp(rightHand.rotation, Quaternion.RotateTowards(rightHand.rotation, trigger, MaxTriggerTurn), weight);
+            GripStockWrist(weight);
             // support hand: palm up under the fore-end, fingers wrapping across to the right
             var across = rifle.TransformDirection(new Vector3(1f, .12f, .05f));
             var support = Quaternion.LookRotation(across, Vector3.Cross(rifle.forward, across)) * Quaternion.Inverse(leftPalmFrame);
             leftHand.rotation = Quaternion.Slerp(leftHand.rotation, support, weight);
             Close(rightFingers, rightThumb, rightIndex, rightLittle, true, weight);
             Close(leftFingers, leftThumb, leftIndex, leftLittle, false, weight);
+        }
+
+        // The trigger hand round the small of the stock (2026-11-18). The rifle is placed from the clip's wrist, which
+        // sat 16 cm too far forward, over the trigger guard and magazine: palm up under it (as until now) the fingers
+        // came up through the guard. Now the hand is turned as on a straight-wristed stock - palm on its right side,
+        // knuckles down and forward, the fingers curling under it to the left, the thumb over the top - and the arm
+        // brings the knuckles to the wrist of the stock just behind the guard. Rifle space (x right, y up, z muzzle).
+        public static Vector3 TriggerKnuckles = new Vector3(0.034f, -0.048f, -0.020f);
+        public static Vector3 TriggerFingers = new Vector3(-0.1f, -0.8f, 0.55f);   // wrist -> knuckles
+        public static float ForearmShare = 0.45f;
+        public float TriggerWristBend { get; private set; }   // degrees between forearm and hand (check value)
+        void GripStockWrist(float weight)
+        {
+            if (rightUpper == null || rightFore == null) return;
+            var clip = rightHand.rotation;
+            var fingers = rifle.TransformDirection(TriggerFingers).normalized;
+            var knucklesWanted = rifle.TransformPoint(TriggerKnuckles);
+            var elbow = animator.transform.TransformDirection(CarryElbow);
+            var turn = clip;
+            for (int pass = 0; pass < 3; pass++)   // later passes take up what the elbow's swing moved
+            {
+                // the hand follows the forearm part of the way: turned fully onto the wood the wrist bent ~90 degrees
+                // and the sleeve came away from the hand
+                var forearm = (rightHand.position - rightFore.position).normalized;
+                var along = Vector3.Slerp(fingers, forearm, ForearmShare);
+                turn = Quaternion.Slerp(clip, Quaternion.LookRotation(along, -rifle.right) * Quaternion.Inverse(rightPalmFrame), weight);
+                rightHand.rotation = turn;
+                var knuckles = (rightIndex.position + rightLittle.position) * 0.5f;
+                Reach(rightUpper, rightFore, rightHand, rightHand.position + (knucklesWanted - knuckles) * weight, elbow);
+            }
+            rightHand.rotation = turn;
+            TriggerWristBend = Vector3.Angle(rightHand.position - rightFore.position, (rightIndex.position + rightLittle.position) * 0.5f - rightHand.position);
         }
 
         // Crouched run (2026-11-15): the clip keeps the trigger hand close in against the chest, so a rifle carried at
@@ -244,11 +273,8 @@ namespace FiveRivers.Combat
                 }
                 var inward = WoodMiddle(knuckle, stockA, stockDirection) - knuckle;
                 float sign = Vector3.Dot(Vector3.Cross(axis, chain[1].position - knuckle), inward) >= 0f ? 1f : -1f;
-                if (triggerHand)
-                    // round the narrow wrist of the stock (its section is measured with the trigger guard in it, so the
-                    // trigger hand's fingers take a set curl); the forefinger lies in the guard, less bent
-                    Bend(chain, axis, sign, finger == 0 ? new Vector3(30f, 45f, 25f) : new Vector3(55f, 75f, 45f));
-                else
+                // every finger, the forefinger too, bends until its tip reaches the wood or the guard (a set, lighter
+                // curl for the forefinger left it pointing out into the air below the rifle when he aimed)
                 {
                     var rest0 = chain[0].localRotation;
                     float best = 0f, bestGap = float.MaxValue;
