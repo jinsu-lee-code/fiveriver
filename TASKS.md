@@ -1450,3 +1450,13 @@
 - 3(Unity): 역할 `KneelIdle` · `KneelFire`, 클립 표, `AllyClipPlayer.InstallRunClips` 교체는 이미 들어가 있었다(`UseRigifyKneel = true`). 메뉴 `Setup/ROK Rigify Clips` 다시 실행 → FBX 12개 · `AllyRifleTracks.asset` 갱신.
 - 4(확인): 편집 모드 214/214, 콘솔 오류 0. 서쪽 공세 무릎 사격 다리 근접(`C:/sk_assets/capture/ad/kneel.sh kw WestAssault`): 일반 병사 셋 모두 뒷발 군화가 발등을 땅에 눕히고 앞코가 뒤를 봄, 땅 뚫림 · 뜸 없음. 박용팔은 자기 컨트롤러(무릎 IK)라 따로 봐야 함.
 - 남은 것: 튜토리얼 무릎 대기 · 고지 무릎 경계 · 탄막 숙이기 1배속 확인, 박용팔 꿇은 발 근접.
+
+
+## 무릎 자세 남은 확인 · 박용팔 꿇은 발 · 2026-11-18 밤 (이어서)
+
+- 튜토리얼 · 서쪽 공세 · 고지 돌격 다리 근접(`kneel.sh kt Tutorial` · `kw WestAssault` · `kh HillAssault`): 일반 병사 셋은 세 구간 모두 꿇은 뒷발 군화가 발등을 땅에 눕힘, 뚫림 · 뜸 없음.
+- **박용팔 무릎이 9 cm 떠 있었다**(무릎 관절 17.7 cm, 일반 병사 8~10 cm). 원인: `RokRigifyClipsSetup`이 바꿔 끼운 무릎 클립의 바닥 맞춤(`kneelFloorOffset`)을 "몸에서 가장 낮은 점"으로 쟀는데, 체격이 다른 박용팔은 앞발 밑창이 꿇은 무릎보다 낮아 6.2 cm만 내렸다. → **꿇은 오른 무릎 관절을 바닥 위 8.2 cm(`KneelKneeHeight`, Blender `KNEEL_KNEE_Z`)에 맞추도록** 바꿈. 박용팔 −6.2 → −16.9, 일반 병사 −17.1 → −16.6(0.5 cm 차, 무릎 8.9~9.7 cm).
+- 그러자 박용팔은 정강이가 길어 **눕힌 오른 군화가 바닥에 묻혔다**(발목 0 cm). `ParkCombatFootPlacement.SupportKneelingRightFoot`: 무릎 꿇은 상태에서 오른 발목이 바닥 위 6 cm(일반 병사 높이)보다 낮으면 그 높이로 IK로 받친다(회전은 클립 그대로). 결과 무릎 9.2 cm · 발목 6.0 cm · 발가락 5.2 cm, 근접에서 군화가 바닥 위에 보임. 앞발은 기존 무릎 IK가 바닥에 맞춤. 튜토리얼에서는 이 컴포넌트가 원래 꺼져 있다(그 구간 박용팔은 서 있음).
+- 포탄 숙이기: 정적 구간에서 `AllyClipCues.ShellIncoming`(6 m 앞, 0.8초 뒤)을 보내자 네 명 모두 `Duck` → 머리 5~12 cm 내려갔다가 1초 안에 `Ready`로 돌아옴.
+- 확인: 편집 모드 214/214, 콘솔 오류 0.
+- 남은 것: 무릎 애도 · 엎드리기 클립(이야기 장면에 연결할 때 꿇은 발 고치기), 사람이 처음부터 끝까지 한 판.
