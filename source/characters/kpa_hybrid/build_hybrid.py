@@ -267,11 +267,24 @@ def inside_collar(c):
     # shards whatever their colour (2026-11-16). The front ends of the collar near the level go as well.
     d = c - neck_axis; d[up] = 0; r = np.linalg.norm(d)
     return zneck - 0.05 < c[up] and r < neck_r - 0.012   # well inside the head's neck only: the collar itself stays
-kept = cut = neckcut = 0
+def wrist_skin(poly, c):
+    # (2026-11-18) the body's own wrist skin between the end of its sleeve and the cut showed as a pale peach band
+    # beside the (darker) game hand: skin-coloured faces within 8 cm of either wrist go
+    if skin_tex is None: return False
+    for s_ in ('Left', 'Right'):
+        axis = wrist[s_] - elbow[s_]; axis = axis / np.linalg.norm(axis); d = (c - wrist[s_]) @ axis
+        if -0.08 < d and np.linalg.norm((c - wrist[s_]) - axis * d) < 0.09: break
+    else: return False
+    uvs = np.array([nuv[li].uv[:] for li in poly.loop_indices]).mean(0)
+    h, w = skin_tex.shape[:2]
+    r, g, b = skin_tex[min(h - 1, int(uvs[1] % 1 * h)), min(w - 1, int(uvs[0] % 1 * w))]
+    return r > g * 1.12 and r - b > 0.12
+kept = cut = neckcut = wristcut = 0
 keep_polys = []
 for poly in nm.data.polygons:
     c = nv[list(poly.vertices)].mean(0)
     if past_wrist(c, 0.012): cut += 1; continue
+    if wrist_skin(poly, c): wristcut += 1; continue
     # the collar stands up past the cut level at the back: it is kept to 4 cm above it (cut there along the level it
     # came out in saw teeth); everything else above the level is the body's own head and goes
     if heads and c[up] > zneck + 0.04: cut += 1; continue
@@ -299,11 +312,53 @@ for poly in keep_polys:
     ids = [corner('n', nm.data.loops[li].vertex_index, nv[nm.data.loops[li].vertex_index], nn[nm.data.loops[li].vertex_index], tuple(nuv[li].uv), nw[nm.data.loops[li].vertex_index]) for li in poly.loop_indices]
     for k in range(1, len(ids) - 1): subs[0].append((ids[0], ids[k], ids[k + 1]))
     kept += 1
-print('SHARDS dropped %d faces' % shards)
+print('SHARDS dropped %d faces, wrist skin cut %d' % (shards, wristcut))
 ouv = om.data.uv_layers.active.data
 mats = [m.name for m in om.data.materials]
 print('OLD MATERIALS', mats)
 hands = 0
+# (2026-11-18) Close up the old hands read as mittens: fingers as thick as sausages and a palm as deep as a fist.
+# Each hand vertex is drawn in toward the bone it hangs on - a finger toward its segment's axis, the palm toward
+# the plane through the wrist and the knuckles - weighted over its bones. The joints do not move, so the hands
+# still bend where they did.
+FINGER_THIN, PALM_THIN, PALM_NARROW, WRIST_THIN = 0.78, 0.82, 0.9, 1.08
+def finger_axis(b):
+    head = oj[b]
+    nxt = b[:-1] + str(int(b[-1]) + 1)
+    if nxt in oj: return head, oj[nxt] - head
+    prev = b[:-1] + str(int(b[-1]) - 1)
+    return head, head - oj[prev]
+def palm_plane(side):
+    h = oj[P + side + 'Hand']; ki, kp = oj[P + side + 'HandIndex1'], oj[P + side + 'HandPinky1']
+    n = np.cross(ki - h, kp - h); return (h + ki + kp) / 3, n / np.linalg.norm(n)
+planes = {sd: palm_plane(sd) for sd in ('Left', 'Right')}
+hand_vs = set()
+for poly in om.data.polygons:
+    if 'Hand' in mats[poly.material_index]: hand_vs.update(poly.vertices)
+ov = ov.copy()
+for vi in hand_vs:
+    v = ov[vi]; bi, bw = ow[vi]; acc = np.zeros(3); tot = 0.0
+    for i_, w_ in zip(bi, bw):
+        if w_ <= 0: continue
+        b = names[i_]; t = v
+        if any(f in b for f in ('Thumb', 'Index', 'Middle', 'Ring', 'Pinky')) and b[-1].isdigit():
+            head, d = finger_axis(b); d = d / np.linalg.norm(d)
+            q = head + d * ((v - head) @ d); t = q + (v - q) * FINGER_THIN
+        elif b.endswith('Hand'):
+            sd = 'Left' if 'Left' in b else 'Right'
+            c, n = planes[sd]; t = v - n * ((v - c) @ n) * (1 - PALM_THIN)
+            # a little narrower across the knuckles: the old palm was as wide as a paddle
+            a_ = oj[P + sd + 'HandIndex1'] - oj[P + sd + 'HandPinky1']; a_ = a_ / np.linalg.norm(a_)
+            t = t - a_ * ((t - c) @ a_) * (1 - PALM_NARROW)
+        elif b.endswith('ForeArm'):
+            # the bit of wrist that runs back into the sleeve: a little fuller, so it fills the sleeve's open end
+            # (with the body's own wrist skin cut away, the inside of the cuff showed round it)
+            sd = 'Left' if 'Left' in b else 'Right'
+            head = oj[P + sd + 'ForeArm']; d = oj[P + sd + 'Hand'] - head; d = d / np.linalg.norm(d)
+            q = head + d * ((v - head) @ d); t = q + (v - q) * WRIST_THIN
+        acc += w_ * t; tot += w_
+    if tot > 0: ov[vi] = acc / tot
+print('HANDS thinned %d vertices (fingers x%.2f, palm depth x%.2f, width x%.2f, wrist x%.2f)' % (len(hand_vs), FINGER_THIN, PALM_THIN, PALM_NARROW, WRIST_THIN))
 for poly in om.data.polygons:
     mn = mats[poly.material_index]
     if 'Hand' not in mn: continue
@@ -311,6 +366,43 @@ for poly in om.data.polygons:
     ids = [corner('o', om.data.loops[li].vertex_index, ov[om.data.loops[li].vertex_index], on[om.data.loops[li].vertex_index], tuple(ouv[li].uv), ow[om.data.loops[li].vertex_index]) for li in poly.loop_indices]
     for k in range(1, len(ids) - 1): subs[sub].append((ids[0], ids[k], ids[k + 1]))
     hands += 1
+# (2026-11-18) The hand's wrist is an open tube: looking up under the arm its dark inside showed as a ring round the
+# sleeve's end. Each hand's open end (the boundary of its faces nearest the elbow) is closed with a fan, faced both
+# ways, coloured from the skin round its rim.
+from collections import defaultdict
+capped = 0
+for side, sub in (('Left', 1), ('Right', 2)):
+    edges = defaultdict(int); uvof = {}
+    for poly in om.data.polygons:
+        mn = mats[poly.material_index]
+        if 'Hand' not in mn or side not in mn: continue
+        vs = list(poly.vertices)
+        for li in poly.loop_indices: uvof[om.data.loops[li].vertex_index] = tuple(ouv[li].uv)
+        for i_ in range(len(vs)): edges[tuple(sorted((vs[i_], vs[(i_ + 1) % len(vs)])))] += 1
+    nb = defaultdict(list)
+    for (a_, b_), n_ in edges.items():
+        if n_ == 1: nb[a_].append(b_); nb[b_].append(a_)
+    seen = set(); loops = []
+    for st in nb:
+        if st in seen: continue
+        loop = [st]; seen.add(st); prev, cur = None, st
+        while True:
+            nxt = [x for x in nb[cur] if x != prev and x not in seen]
+            if not nxt: break
+            prev, cur = cur, nxt[0]; loop.append(cur); seen.add(cur)
+        loops.append(loop)
+    if not loops: continue
+    axis = wrist[side] - elbow[side]; axis = axis / np.linalg.norm(axis)
+    loop = min((l for l in loops if len(l) >= 6), key=lambda l: np.mean([(ov[v] - wrist[side]) @ axis for v in l]), default=None)
+    if loop is None: continue
+    ctr = ov[loop].mean(0); cuv = tuple(np.mean([uvof[v] for v in loop], 0)); cw = ow[loop[0]]
+    ci = len(verts); verts.append((to_unity(ctr), (-axis) @ Rn.T, cuv, cw))
+    ids = [corner('o', v, ov[v], -axis, uvof[v], ow[v]) for v in loop]
+    for i_ in range(len(ids)):
+        a_, b_ = ids[i_], ids[(i_ + 1) % len(ids)]
+        subs[sub].append((ci, a_, b_)); subs[sub].append((ci, b_, a_))
+    capped += len(loop)
+print('CAPS wrist openings closed, %d rim vertices' % capped)
 print('FACES new kept %d, hands cut %d, neck skin cut %d, old hand faces %d, vertices %d' % (kept, cut, neckcut, hands, len(verts)))
 
 with open(out, 'wb') as f:
