@@ -61,16 +61,6 @@ namespace FiveRivers.Combat
             return reference;
         }
 
-        internal void ApplyToAnimatedArm(bool right, Transform upper, Transform fore, Transform hand)
-        {
-            if (upper == null || fore == null || hand == null) return;
-            var reference = new Pose(hand.position, hand.rotation);
-            var adjusted = Adjust(right, reference);
-            if (HasPositionOffset(right))
-                SolveArm(upper, fore, hand, new Pose(adjusted.position, reference.rotation), fore.position - upper.position);
-            if (HasRotationOffset(right)) hand.rotation = adjusted.rotation;
-        }
-
         internal static void SolveArm(Transform upper, Transform fore, Transform hand, Pose target,
             Vector3 bendDirection, float maxForearmRoll = 180f, float maxWristSwing = 180f)
         {

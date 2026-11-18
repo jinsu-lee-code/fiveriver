@@ -58,17 +58,17 @@ namespace FiveRivers.Combat
             leftLittle = animator.GetBoneTransform(HumanBodyBones.LeftLittleProximal);
             rightIndex = animator.GetBoneTransform(HumanBodyBones.RightIndexProximal);
             rightLittle = animator.GetBoneTransform(HumanBodyBones.RightLittleProximal);
-            leftFingers = Fingers(true);
-            rightFingers = Fingers(false);
-            leftThumb = Thumb(true);
-            rightThumb = Thumb(false);
+            leftFingers = AllyRiflePose.Fingers(animator, true);
+            rightFingers = AllyRiflePose.Fingers(animator, false);
+            leftThumb = AllyRiflePose.Thumb(animator, true);
+            rightThumb = AllyRiflePose.Thumb(animator, false);
             leftPalmFrame = PalmFrame(leftHand, leftIndex, leftLittle, true);
             rightPalmFrame = PalmFrame(rightHand, rightIndex, rightLittle, false);
             var skeleton = animator.avatar.humanDescription.skeleton;
-            foreach (var chain in leftFingers) CacheRest(chain, skeleton);
-            foreach (var chain in rightFingers) CacheRest(chain, skeleton);
-            CacheRest(leftThumb, skeleton);
-            CacheRest(rightThumb, skeleton);
+            foreach (var chain in leftFingers) AllyRiflePose.CacheRest(chain, skeleton, fingerRest);
+            foreach (var chain in rightFingers) AllyRiflePose.CacheRest(chain, skeleton, fingerRest);
+            AllyRiflePose.CacheRest(leftThumb, skeleton, fingerRest);
+            AllyRiflePose.CacheRest(rightThumb, skeleton, fingerRest);
         }
 
         // Feet on a slope (2026-11-13, "다리 질질끌면서 내려오는 부분"): the clips lift the feet over flat ground, so
@@ -358,37 +358,6 @@ namespace FiveRivers.Combat
             thumb[0].localRotation = Quaternion.Slerp(clip0, thumb[0].localRotation, weight);
             thumb[1].localRotation = Quaternion.Slerp(clip1, thumb[1].localRotation, weight);
             thumb[2].localRotation = Quaternion.Slerp(clip2, thumb[2].localRotation, weight);
-        }
-
-        Transform[] Thumb(bool left)
-        {
-            int first = (int)(left ? HumanBodyBones.LeftThumbProximal : HumanBodyBones.RightThumbProximal);
-            return new[] { animator.GetBoneTransform((HumanBodyBones)first), animator.GetBoneTransform((HumanBodyBones)(first + 1)), animator.GetBoneTransform((HumanBodyBones)(first + 2)) };
-        }
-
-        Transform[][] Fingers(bool left)
-        {
-            var result = new Transform[4][];
-            // HumanBodyBones keeps each finger's proximal/intermediate/distal triplet contiguous.
-            int first = (int)(left ? HumanBodyBones.LeftIndexProximal : HumanBodyBones.RightIndexProximal);
-            for (int finger = 0; finger < 4; finger++)
-            {
-                result[finger] = new Transform[3];
-                for (int joint = 0; joint < 3; joint++)
-                    result[finger][joint] = animator.GetBoneTransform((HumanBodyBones)(first + finger * 3 + joint));
-            }
-            return result;
-        }
-
-        void CacheRest(Transform[] chain, SkeletonBone[] skeleton)
-        {
-            foreach (var bone in chain)
-            {
-                if (bone == null) continue;
-                var rotation = bone.localRotation;
-                foreach (var rest in skeleton) if (rest.name == bone.name) { rotation = rest.rotation; break; }
-                fingerRest[bone] = rotation;
-            }
         }
 
         // Same construction as AllyRiflePose.PalmFrame: forward runs from the wrist to the knuckles, up is the way

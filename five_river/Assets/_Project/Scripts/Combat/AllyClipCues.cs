@@ -25,9 +25,6 @@ namespace FiveRivers.Combat
             shells.Add(new Shell { id = ++serial, point = point, at = impactTime });
         }
 
-        // 날아오는 소리 없이 이미 떨어진 것 (늦게 알려도 0.4초 안이면 숙인다)
-        public static void ShellLanded(Vector3 point) => ShellIncoming(point, Time.time);
-
         // 이 사람이 아직 반응하지 않은 가까운 포탄이 지금 숙일 때인가 (handled: 이 사람이 이미 본 포탄 번호)
         internal static bool TakeNear(Vector3 at, float radius, float lead, HashSet<int> handled)
         {

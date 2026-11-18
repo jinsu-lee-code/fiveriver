@@ -63,8 +63,6 @@ namespace FiveRivers.Tutorial
             Advance();
         }
 
-        public bool IsDone(TutorialStep step) => done[(int)step];
-
         void Advance()
         {
             bool moved = false;

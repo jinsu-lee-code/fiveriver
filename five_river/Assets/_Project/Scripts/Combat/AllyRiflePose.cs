@@ -44,8 +44,8 @@ namespace FiveRivers.Combat
             rightLittle = animator.GetBoneTransform(HumanBodyBones.RightLittleProximal);
             leftPalmFrame = PalmFrame(leftHand, leftIndex, leftLittle, true);
             rightPalmFrame = PalmFrame(rightHand, rightIndex, rightLittle, false);
-            leftThumb = new[] { animator.GetBoneTransform(HumanBodyBones.LeftThumbProximal), animator.GetBoneTransform(HumanBodyBones.LeftThumbIntermediate), animator.GetBoneTransform(HumanBodyBones.LeftThumbDistal) };
-            rightThumb = new[] { animator.GetBoneTransform(HumanBodyBones.RightThumbProximal), animator.GetBoneTransform(HumanBodyBones.RightThumbIntermediate), animator.GetBoneTransform(HumanBodyBones.RightThumbDistal) };
+            leftThumb = Thumb(animator, true);
+            rightThumb = Thumb(animator, false);
             var skeleton = animator.avatar.humanDescription.skeleton;
             // Park (carry profile) needs the same native-hinge elbow rebuild when he shoulders the rifle to fire.
             if (fit != null && (fit.correctStandingReady || fit.correctCarryPose) && rightUpper != null && rightFore != null && rightHand != null
@@ -62,9 +62,9 @@ namespace FiveRivers.Combat
                     rightReadyElbowFrameValid = true;
                 }
             }
-            foreach (var chain in leftFingers) CacheFingerRest(chain, skeleton);
-            foreach (var chain in rightFingers) CacheFingerRest(chain, skeleton);
-            CacheFingerRest(leftThumb, skeleton); CacheFingerRest(rightThumb, skeleton);
+            foreach (var chain in leftFingers) CacheRest(chain, skeleton, fingerRest);
+            foreach (var chain in rightFingers) CacheRest(chain, skeleton, fingerRest);
+            CacheRest(leftThumb, skeleton, fingerRest); CacheRest(rightThumb, skeleton, fingerRest);
         }
 
         // Set by AllyIdleLife while an idle clip plays over the standing carry: how far the chest has moved and turned
@@ -349,14 +349,15 @@ namespace FiveRivers.Combat
             return Quaternion.LookRotation(along, Vector3.Cross(weapon.forward, along)) * Quaternion.Inverse(leftPalmFrame);
         }
 
-        void CacheFingerRest(Transform[] chain, SkeletonBone[] skeleton)
+        // the rest rotation of each bone of a finger chain, from the avatar's skeleton (also used by EnemyHandIK)
+        internal static void CacheRest(Transform[] chain, SkeletonBone[] skeleton, System.Collections.Generic.Dictionary<Transform, Quaternion> into)
         {
             foreach (var bone in chain)
             {
                 if (bone == null) continue;
                 var rotation = bone.localRotation;
                 foreach (var rest in skeleton) if (rest.name == bone.name) { rotation = rest.rotation; break; }
-                fingerRest[bone] = rotation;
+                into[bone] = rotation;
             }
         }
 
@@ -425,7 +426,13 @@ namespace FiveRivers.Combat
             }
         }
 
-        static Transform[][] Fingers(Animator animator, bool left)
+        internal static Transform[] Thumb(Animator animator, bool left)
+        {
+            int first = (int)(left ? HumanBodyBones.LeftThumbProximal : HumanBodyBones.RightThumbProximal);
+            return new[] { animator.GetBoneTransform((HumanBodyBones)first), animator.GetBoneTransform((HumanBodyBones)(first + 1)), animator.GetBoneTransform((HumanBodyBones)(first + 2)) };
+        }
+
+        internal static Transform[][] Fingers(Animator animator, bool left)
         {
             var result = new Transform[4][];
             // HumanBodyBones keeps each finger's proximal/intermediate/distal triplet contiguous.

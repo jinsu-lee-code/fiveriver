@@ -215,59 +215,5 @@ namespace FiveRivers.EditorTools
             var existing=AssetDatabase.LoadAssetAtPath<AnimationClip>(path);if(existing==null){AssetDatabase.CreateAsset(clip,path);return clip;}
             EditorUtility.CopySerialized(clip,existing);EditorUtility.SetDirty(existing);Object.DestroyImmediate(clip);return existing;
         }
-
-        struct SkinVertex
-        {
-            public Vector3 position,normal;
-            public Vector2 uv;
-            public BoneWeight weight;
-        }
-
-        static void ClipAtWrist(Mesh mesh,int wristIndex)
-        {
-            if(wristIndex<0)throw new InvalidOperationException("Missing original arm wrist binding.");
-            var p=mesh.vertices;var n=mesh.normals;var uv=mesh.uv;var w=mesh.boneWeights;
-            var triangles=mesh.triangles;var binds=mesh.bindposes;var plane=binds[wristIndex];
-            var output=new List<SkinVertex>();var indices=new List<int>();
-            SkinVertex Read(int i)=>new SkinVertex{position=p[i],normal=n[i],uv=uv[i],weight=w[i]};
-            SkinVertex Lerp(SkinVertex a,SkinVertex b,float t)
-            {
-                var weights=new Dictionary<int,float>();
-                void Add(BoneWeight bw,float scale)
-                {
-                    int[] ids={bw.boneIndex0,bw.boneIndex1,bw.boneIndex2,bw.boneIndex3};
-                    float[] values={bw.weight0,bw.weight1,bw.weight2,bw.weight3};
-                    for(int i=0;i<4;i++)if(values[i]>0f)weights[ids[i]]=(weights.TryGetValue(ids[i],out var old)?old:0f)+values[i]*scale;
-                }
-                Add(a.weight,1f-t);Add(b.weight,t);
-                var sorted=weights.OrderByDescending(x=>x.Value).Take(4).ToArray();
-                float sum=sorted.Sum(x=>x.Value);var bw=new BoneWeight();
-                for(int i=0;i<sorted.Length;i++)
-                {
-                    int id=sorted[i].Key;float v=sorted[i].Value/sum;
-                    switch(i){case 0:bw.boneIndex0=id;bw.weight0=v;break;case 1:bw.boneIndex1=id;bw.weight1=v;break;case 2:bw.boneIndex2=id;bw.weight2=v;break;case 3:bw.boneIndex3=id;bw.weight3=v;break;}
-                }
-                return new SkinVertex{position=Vector3.Lerp(a.position,b.position,t),normal=Vector3.Lerp(a.normal,b.normal,t).normalized,uv=Vector2.Lerp(a.uv,b.uv,t),weight=bw};
-            }
-            const float cut=-0.005f;
-            for(int i=0;i<triangles.Length;i+=3)
-            {
-                var poly=new[]{Read(triangles[i]),Read(triangles[i+1]),Read(triangles[i+2])};
-                var clipped=new List<SkinVertex>();
-                for(int edge=0;edge<3;edge++)
-                {
-                    var a=poly[edge];var b=poly[(edge+1)%3];
-                    float da=plane.MultiplyPoint3x4(a.position).y,db=plane.MultiplyPoint3x4(b.position).y;
-                    if(da<=cut)clipped.Add(a);
-                    if((da<=cut)!=(db<=cut))clipped.Add(Lerp(a,b,(cut-da)/(db-da)));
-                }
-                if(clipped.Count<3)continue;
-                int start=output.Count;output.AddRange(clipped);
-                for(int j=1;j<clipped.Count-1;j++)indices.AddRange(new[]{start,start+j,start+j+1});
-            }
-            if(output.Count<100)throw new InvalidOperationException("Wrist plane removed the original arm.");
-            mesh.Clear();mesh.SetVertices(output.Select(x=>x.position).ToList());mesh.SetNormals(output.Select(x=>x.normal).ToList());mesh.SetUVs(0,output.Select(x=>x.uv).ToList());
-            mesh.boneWeights=output.Select(x=>x.weight).ToArray();mesh.bindposes=binds;mesh.SetTriangles(indices,0);mesh.RecalculateBounds();mesh.RecalculateTangents();
-        }
     }
 }

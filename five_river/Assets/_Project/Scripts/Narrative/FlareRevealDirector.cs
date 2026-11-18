@@ -48,7 +48,7 @@ namespace FiveRivers.Narrative
         FiveRivers.Data.GameText copy;
         EnemyAgent subject, victim;
         Vector3 closeOffset, victimFocus;
-        FiveRivers.Audio.AudioDirector audio;
+        FiveRivers.Audio.AudioDirector audioDirector;
 
         public bool Playing { get; private set; }
         public float Elapsed => time;
@@ -190,8 +190,8 @@ namespace FiveRivers.Narrative
                     if (victim != null && victim.Alive)
                     {
                         // the shot from the trench that finds him (heard from the trench, as the allies' own fire is)
-                        if (audio == null) audio = FindFirstObjectByType<FiveRivers.Audio.AudioDirector>();
-                        if (audio != null) audio.PlaySpatial("SFX_M1_Fire", eye + (victimFocus - eye).normalized * 6f);
+                        if (audioDirector == null) audioDirector = FindFirstObjectByType<FiveRivers.Audio.AudioDirector>();
+                        if (audioDirector != null) audioDirector.PlaySpatial("SFX_M1_Fire", eye + (victimFocus - eye).normalized * 6f);
                         victim.Kill(EnemyAgent.QuickDeath);
                     }
                 }
