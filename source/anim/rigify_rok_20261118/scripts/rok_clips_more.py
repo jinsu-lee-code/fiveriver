@@ -9,7 +9,7 @@ import rok_poses
 import rok_run
 from rok_rig import rot, gun_rot, copy_pose, blend_pose, ease, frame, blend
 from rok_timeline import Key, Timeline, breathe, qx, qy, qz, GROUPS
-from rok_clips import Clip, with_, moved, tl_sampler, hand_world, elbow_world
+from rok_clips import Clip, with_, moved, tl_sampler, hand_world, elbow_world, FLIP_LIFT
 
 UP = Vector((0, 0, 1))
 
@@ -713,16 +713,23 @@ def run_to_fire_clip(R, L, clips, rbase, spec):
             bf = rok_run.flat_ball(R, "R", aRf, 0.0) if False else None
             a1, q1, t1 = planted(R, "R", (b0.x, b0.y), 20.0)
             # 무릎 꿇은 발의 발볼 자리 (kneel_leg와 같은 식)
-            ballf = aRf - qRf @ (R.ankle0["R"] - R.ball0["R"])
+            # 11-18 밤: 끝 자세의 꿇은 발은 발등을 눕힌 발이라, 먼저 발끝 세운 발(TUCK)로 무릎을 내린 뒤 0.58초부터 들어 뒤집어 눕힌다
+            aT, qT = rok_poses.TUCK["foot_R"]
+            tT = rok_poses.TUCK["toe_R"]
+            ballf = aT - qT @ (R.ankle0["R"] - R.ball0["R"])
             # 디딘 발볼은 루트가 멈출 때까지 루트 이동만큼 뒤로 가고, 남은 차(옆 5 cm · 뒤 2 cm)만 천천히 옮김
             bplant = Vector((ballR0.x, ballR0.y + travel(t)))
             bend = Vector((ballR0.x, ballR0.y + travel(t_stop)))
             bxy = bplant + (Vector((ballf.x, ballf.y)) - bend) * u
             a, q, toe = planted(R, "R", (bxy.x, bxy.y), 20.0 + 56.0 * u, yawf * u)
-            if u > 0.7:   # 마지막에 무릎 사격 자세의 발과 정확히 같게
+            if u > 0.7:   # 무릎이 닿을 때 발끝 세운 꿇은 발과 정확히 같게
                 w = ease((u - 0.7) / 0.3)
-                a, q, toe = a.lerp(aRf, w), q.slerp(qRf, w), toe.slerp(tRf, w)
+                a, q, toe = a.lerp(aT, w), q.slerp(qT, w), toe.slerp(tT, w)
             a = a + Vector((0, 0, 0.012 * math.sin(math.pi * u)))
+            if t > 0.58:  # 무릎이 땅에 닿은 뒤 발을 들어 뒤집어 발등을 눕힘(서기 → 낮춘 대기와 같은 순서)
+                w = ease(min(1.0, (t - 0.58) / 0.18), "inout")
+                a = aT.lerp(aRf, w) + Vector((0, 0, FLIP_LIFT * math.sin(math.pi * w)))
+                q, toe = qT.slerp(qRf, w), tT.slerp(tRf, w)
             P["foot_R"], P["toe_R"] = (a, q), toe
         # 왼발: 뒤에서 앞으로 와 0.28초에 디딤 → 남은 속도만큼 뒤로 가서 무릎 사격 자리에 멈춤
         if t <= t_land:
