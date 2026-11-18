@@ -134,13 +134,18 @@ def blend_groups(A, B, w):
 
 
 # ------------------------------------------------------------------ F. 시신 곁 무릎 (박용팔)
+MOURN_TUCK = {}   # mourn_pose가 채움: 무릎을 내리는 동안의 발끝 세운 오른발
 def mourn_pose(R, stand):
     """오른 무릎을 꿇고 왼 무릎을 세움. 오른손은 세운 소총의 총열덮개 위, 개머리판은 땅. 왼손은 왼 무릎 위. 고개를 숙임."""
     P = copy_pose(stand)
     P["pelvis_rot"] = rot(pitch=7, yaw=-18, roll=-2)
-    knee_R = Vector((-0.19, -0.06, 0.062))
-    ankle_R, qf, qt, ball_R = R.kneel_leg("R", knee_R, (0.22, 1.0))
-    P["foot_R"], P["toe_R"] = (ankle_R, qf), qt
+    # 11-18 밤: 오래 머무는 자세라 참호 무릎과 같이 발등을 눕힌 발(군화 앞코가 접히지 않음). 무릎을 내리는 동안은
+    # 발끝 세운 발(MOURN_TUCK)로 디디고, 무릎이 닿은 뒤 발을 들어 눕힌다(mourn_clips).
+    knee_R = Vector((-0.19, -0.06, rok_poses.KNEEL_KNEE_Z))
+    ankle_R, qf = rok_poses.instep_leg(R, knee_R, Vector((0.22, 1.0, 0.0)), rok_poses.KNEEL_FOOT_TILT, rok_poses.KNEEL_ANKLE_Z)
+    P["foot_R"], P["toe_R"] = (ankle_R, qf), qf
+    ta, tq, tt, _ = R.kneel_leg("R", knee_R, (0.22, 1.0))
+    MOURN_TUCK["foot_R"], MOURN_TUCK["toe_R"] = (ta, tq), tt
     u = Vector((0.10, 0.36, 0.0))
     u.z = math.sqrt(1 - u.x ** 2 - u.y ** 2)
     P["pelvis_loc"] = R.pelvis_from_hip("R", knee_R + R.thigh * u, P["pelvis_rot"])
@@ -263,7 +268,7 @@ def mourn_clips(R, L, clips):
     Cp["hand_space_L"] = "world"
     # D: 무릎이 땅에 닿고 개머리판이 땅에 닿음. 몸은 아직 조금 높고 덜 숙임
     D = moved(M, pelvis=(0, 0.0, 0.022), chest_rot=qx(-8), head_rot=qx(-14))
-    D["foot_R"], D["toe_R"] = M["foot_R"], M["toe_R"]
+    D["foot_R"], D["toe_R"] = MOURN_TUCK["foot_R"], MOURN_TUCK["toe_R"]
     keys = [
         Key(0.0, S0),
         Key(0.35, A, "inout"),
@@ -271,7 +276,7 @@ def mourn_clips(R, L, clips):
         Key(0.82, B2, "inout"),
         Key(1.32, Cp, "inout", lift_L=0.05),
         Key(1.66, D, "out", lift_R=0.03),
-        Key(2.0, M, "soft"),
+        Key(2.0, M, "soft", lift_R=FLIP_LIFT),
     ]
     clip = Clip("A_ROK_Kneel_Mourn_In", 2.0, tl_sampler(keys, 2.0, lags={"chest": 0.06, "head": 0.12, "arms": 0.04}),
                 start_ref="A_ROK_Idle_Stand", end_ref="A_ROK_Kneel_Mourn_Loop",
