@@ -33,6 +33,7 @@ namespace FiveRivers.EditorTools
         const string ControllerPath = "Assets/_Project/Art/Animations/AC_ROK.controller";
         // 참호 낮춘 대기 첫 프레임의 엉덩이 높이 (Blender 리그, 바닥 기준 게임 크기 m — README 4번 표 0.351~0.353)
         const float SourceReadyHips = 0.352f;
+        const float KneelKneeHeight = 0.082f;   // 꿇은 무릎 관절 중심 높이(m) — source rok_poses.KNEEL_KNEE_Z
         // HillAllies 의 기존 클립 발 속도 (사람 크기 1 기준). 새 클립은 같은 몸에서 잰 비율로 환산한다.
         const float OldRunClipSpeed = 3.1f, OldAdvanceClipSpeed = 2.5f;
         // 잴 수 없을 때 쓰는 값 (README 5번의 추정: 3.0 / 0.84, 2.2 / 0.84)
@@ -321,7 +322,10 @@ namespace FiveRivers.EditorTools
                     {
                         Sample(kneel.clip, clone, 0f);
                         float kneelLow = LowestPoint(clone);
-                        fit.kneelFloorOffset = standLow - kneelLow;
+                        // 꿇은 오른 무릎을 바닥에 맞춘다(관절 중심이 KneelKneeHeight). 가장 낮은 점으로 맞추면 체격이 다른 박용팔은
+                        // 앞발 밑창이 무릎보다 낮아 6 cm만 내려가고 무릎이 9 cm 떴다(2026-11-18 밤). 앞발은 발 IK가 바닥에 맞춘다.
+                        var kneelKnee = rig.GetBoneTransform(HumanBodyBones.RightLowerLeg);
+                        fit.kneelFloorOffset = kneelKnee != null ? standLow + KneelKneeHeight * scale - kneelKnee.position.y : standLow - kneelLow;
                         var oldKneel = animator.runtimeAnimatorController != null
                             ? animator.runtimeAnimatorController.animationClips.FirstOrDefault(c => c != null && c.name == set.kneelSourceClip) : null;
                         float oldLow = kneelLow;

@@ -31,6 +31,9 @@ namespace FiveRivers.Combat
         }
 
         AllyClipPlayer clipPlayer;
+        bool kneelOwnsRightFoot;
+        // 꿇은 오른발(발등을 눕힌 군화)의 발목 높이(m): 일반 병사가 같은 클립에서 6 cm 안팎
+        const float KneelAnkleHeight = .06f;
 
         void Awake()
         {
@@ -51,8 +54,9 @@ namespace FiveRivers.Combat
             if (layerIndex != 0 || animator == null) return;
             animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0f);
             animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0f);
-            if (standingOwnsRightFoot)
+            if (standingOwnsRightFoot || kneelOwnsRightFoot)
             {
+                kneelOwnsRightFoot = false;
                 animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0f);
                 animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0f);
                 standingOwnsRightFoot = false;
@@ -104,6 +108,8 @@ namespace FiveRivers.Combat
         void ApplyKneeling(float weight)
         {
             if (weight <= 0f) return;
+            if (clipPlayer == null) clipPlayer = animator.GetComponent<AllyClipPlayer>();
+            SupportKneelingRightFoot(weight);
 
             // Read the animation's IK goal inside its pass, not last frame's already solved bone.
             var position = animator.GetIKPosition(AvatarIKGoal.LeftFoot);
@@ -122,7 +128,6 @@ namespace FiveRivers.Combat
             var targetRotation = Quaternion.RotateTowards(rotation, aligned, 18f);
             // the swapped kneeling clip is lowered onto the floor after this pass (AllyClipPlayer.KneelDropNow, 2026-11-18):
             // aim that much higher so the foot ends on the ground
-            if (clipPlayer == null) clipPlayer = animator.GetComponent<AllyClipPlayer>();
             float drop = clipPlayer != null ? clipPlayer.KneelDropNow : 0f;
             TargetSole = new Vector3(sole.x, height + soleClearance - drop, sole.z);
             animator.SetIKPosition(AvatarIKGoal.LeftFoot, TargetSole - targetRotation * soleOffset);
@@ -130,6 +135,24 @@ namespace FiveRivers.Combat
             animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, weight);
             animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, weight);
             AppliedWeight = weight;
+        }
+
+        // (2026-11-18 밤) 박용팔은 정강이가 길어, 꿇은 무릎을 바닥에 맞추면 눕힌 오른 군화의 발목이 바닥까지 내려가
+        // 군화가 바닥에 묻혔다. 발목이 일반 병사 높이보다 낮으면 그 높이로 받친다(회전은 클립 그대로, 무릎이 조금 든다).
+        void SupportKneelingRightFoot(float weight)
+        {
+            var position = animator.GetIKPosition(AvatarIKGoal.RightFoot);
+            var local = ground.transform.InverseTransformPoint(position);
+            var size = ground.terrainData.size;
+            if (local.x < 0f || local.z < 0f || local.x > size.x || local.z > size.z) return;
+            float drop = clipPlayer != null ? clipPlayer.KneelDropNow : 0f;
+            float lowest = ground.SampleHeight(position) + ground.transform.position.y + KneelAnkleHeight - drop;
+            if (position.y >= lowest) return;
+            animator.SetIKPosition(AvatarIKGoal.RightFoot, new Vector3(position.x, lowest, position.z));
+            animator.SetIKRotation(AvatarIKGoal.RightFoot, animator.GetIKRotation(AvatarIKGoal.RightFoot));
+            animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, weight);
+            animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, weight);
+            kneelOwnsRightFoot = true;
         }
 
         FootSample ReadStandingFoot(AvatarIKGoal goal, float bottomHeight, bool checkToe)

@@ -5477,7 +5477,7 @@ MonoBehaviour:
   - actor: Ally_1
     avatar: SK_CH_ROK_Soldier_Person1Avatar
     floorOffset: -0.16574726
-    kneelFloorOffset: -0.16576174
+    kneelFloorOffset: -0.16113175
     scale: 1.3573997
     offset: {x: 0.0013212962, y: -0.04374534, z: -0.013739094}
     anchor: 54
@@ -8205,7 +8205,7 @@ MonoBehaviour:
   - actor: Ally_2
     avatar: SK_CH_ROK_Soldier_Person1Avatar
     floorOffset: -0.1706462
-    kneelFloorOffset: -0.17066069
+    kneelFloorOffset: -0.1660307
     scale: 1.3573997
     offset: {x: 0.0013212962, y: -0.04374534, z: -0.013739094}
     anchor: 54
@@ -10933,7 +10933,7 @@ MonoBehaviour:
   - actor: Ally_3
     avatar: SK_CH_ROK_Soldier_Person1Avatar
     floorOffset: -0.17064612
-    kneelFloorOffset: -0.1706606
+    kneelFloorOffset: -0.16603062
     scale: 1.3573997
     offset: {x: 0.0013212962, y: -0.04374534, z: -0.013739094}
     anchor: 54
@@ -13661,7 +13661,7 @@ MonoBehaviour:
   - actor: ParkYongpal
     avatar: SK_CH_ROK_ParkYongpalAvatar
     floorOffset: -0.10763789
-    kneelFloorOffset: -0.06237992
+    kneelFloorOffset: -0.16887635
     scale: 1.1701994
     offset: {x: 0.025514575, y: 0.03494054, z: 0.06435478}
     anchor: 54
