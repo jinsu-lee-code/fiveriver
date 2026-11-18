@@ -240,7 +240,7 @@ namespace FiveRivers.Combat
         // over the top of it like claws, spread wide as in the rest pose, with the thumb left sticking out where the
         // clip had it. Now each finger is first brought in beside the middle one, then bent - all three joints in
         // proportion - just until its tip reaches the wood's surface; the thumb is laid round the other side.
-        public static float WoodRadius = 0.024f, FingersTogether = 0.6f;   // WoodRadius: only if the rifle mesh cannot be read
+        public static float WoodRadius = 0.024f, FingersTogether = 0.25f, FingerPad = 0.008f;   // WoodRadius: only if the rifle mesh cannot be read
         static readonly Vector3 CurlShare = new Vector3(1f, 0.95f, 0.6f);
         void Close(Transform[][] fingers, Transform[] thumb, Transform index, Transform little, bool triggerHand, float weight)
         {
@@ -284,8 +284,10 @@ namespace FiveRivers.Combat
                         Bend(chain, axis, sign, CurlShare * angle);
                         var tip = chain[2].position + (chain[2].position - chain[1].position) * 0.85f;
                         float outside = OutsideWood(tip, stockA, stockDirection);
-                        if (Mathf.Abs(outside) < bestGap) { bestGap = Mathf.Abs(outside); best = angle; }
-                        if (outside < 0f) break;   // the tip has come round onto the wood: further only digs in
+                        // the tip's bone point stops a finger's half-thickness off the wood, so the pad lies on it
+                        // (stopped at the surface the fingers sank in and only the knuckles showed, as a lump)
+                        if (Mathf.Abs(outside - FingerPad) < bestGap) { bestGap = Mathf.Abs(outside - FingerPad); best = angle; }
+                        if (outside < FingerPad) break;
                     }
                     chain[0].localRotation = rest0; chain[1].localRotation = fingerRest[chain[1]]; chain[2].localRotation = fingerRest[chain[2]];
                     Bend(chain, axis, sign, CurlShare * best);
