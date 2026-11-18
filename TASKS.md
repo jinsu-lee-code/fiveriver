@@ -1460,3 +1460,16 @@
 - 포탄 숙이기: 정적 구간에서 `AllyClipCues.ShellIncoming`(6 m 앞, 0.8초 뒤)을 보내자 네 명 모두 `Duck` → 머리 5~12 cm 내려갔다가 1초 안에 `Ready`로 돌아옴.
 - 확인: 편집 모드 214/214, 콘솔 오류 0.
 - 남은 것: 무릎 애도 · 엎드리기 클립(이야기 장면에 연결할 때 꿇은 발 고치기), 사람이 처음부터 끝까지 한 판.
+
+
+## 무릎 애도 꿇은 발 · main 코드 정리 · 2026-11-18 밤
+
+- **무릎 애도**(`rok_clips_more.py` `mourn_pose` · `mourn_clips`): 오래 머무는 자세라 참호 무릎과 같이 발등을 눕힌 발로(`rok_poses.instep_leg`, 무릎 관절 8.2 cm). 들어가는 클립은 무릎이 닿을 때까지 발끝 세운 발(`MOURN_TUCK`) → 마지막 0.34초에 발을 들어(`FLIP_LIFT`) 눕힘. `A_ROK_Kneel_Mourn_In` · `_Loop` 다시 내보냄, 메뉴 `Setup/ROK Rigify Clips` 실행. 아직 이야기 장면에 연결 안 된 클립.
+- **엎드리기**(`A_ROK_GoProne_In`)는 바꾸지 않음: 무릎을 꿇는 순간 발끝으로 땅을 밀고 곧바로 엎드리는 짧은 동작이라 발끝 세운 발이 맞다.
+- **코드 정리** (실행에 쓰이지 않는 것만):
+  - 지움: `Editor/ClaudeProbe.cs` · `Editor/ClaudePlayCapture.cs`(10-30 "작업이 끝나면 지운다"고 적힌 임시 점검 도구, 어디서도 안 씀. `ClaudePlayCapture`는 에디터를 열 때마다 `InitializeOnLoad`로 돌았다).
+  - 지움(호출 0): `NpcRifleGrip.ApplyToAnimatedArm`, `TutorialTracker.IsDone`, `AllyClipCues.ShellLanded`, `M1FpsRigSetup.ClipAtWrist` + `SkinVertex`(54줄).
+  - 같은 함수 두 벌 → 하나: `EnemyHandIK`의 `Fingers` · `Thumb` · `CacheRest`를 지우고 `AllyRiflePose`의 같은 함수(`internal static`)를 씀.
+  - 경고 CS0108: `FlareRevealDirector.audio` → `audioDirector`(Unity `Component.audio`를 가렸음).
+  - 남긴 것: 에디터 메뉴(한 번 돌린 설정 메뉴 포함 — 다시 만들 때 쓰는 기록), `M1VisualReview`(문서에서 쓰는 검수 도구), 이름이 `Debug*`인 점검용 함수(플레이 확인 스크립트가 부름).
+- 확인: 컴파일 오류 · 경고 0, 편집 모드 214/214, 적 손 근접(`look.sh refac`) 정리 전과 같음.
