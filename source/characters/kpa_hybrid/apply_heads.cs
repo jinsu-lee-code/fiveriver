@@ -2,8 +2,9 @@
 // (run in the editor after apply_hybrid.cs: unity command script eval --code "<this file>").
 // The head is a renderer of its own on the body's bones; EnemyHeadVariant gives each man one of the three.
 var dir = "Assets/_Project/Art/Models/Characters/KPA_Hybrid/";
-var src = "C:/sk_assets/varco/kpa/hybrid/hybrid.bin";
-var oldMesh = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>("Assets/_Project/Art/Models/Characters/KPA_Rifleman/SK_CH_KPA_Rifleman.fbx").GetComponentInChildren<UnityEngine.SkinnedMeshRenderer>().sharedMesh;
+var src = "C:/sk_assets/varco/kpa/own/hybrid.bin";   // the build folder (own: the whole-model rig, 2026-11-18)
+// the heads share the body mesh's bind poses (apply_hybrid.cs moves the bones onto the model's own joints)
+var bodyMesh = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Mesh>(dir + "SK_CH_KPA_Hybrid.asset");
 var meshes = new UnityEngine.Mesh[3]; var mats = new UnityEngine.Material[3];
 for (int h = 0; h < 3; h++)
 {
@@ -33,7 +34,7 @@ for (int h = 0; h < 3; h++)
         for (int i = 0; i < ni; i++) idx[i] = r.ReadInt32();
         mesh.vertices = v; mesh.normals = n; mesh.uv = uv; mesh.boneWeights = bw; mesh.triangles = idx;
     }
-    mesh.bindposes = oldMesh.bindposes; mesh.RecalculateTangents(); mesh.RecalculateBounds();
+    mesh.bindposes = bodyMesh.bindposes; mesh.RecalculateTangents(); mesh.RecalculateBounds();
     UnityEditor.EditorUtility.SetDirty(mesh); meshes[h] = mesh;
     var ni2 = (UnityEditor.TextureImporter)UnityEditor.AssetImporter.GetAtPath(dir + "T_CH_KPA_Head" + h + "_Normal.png");
     if (ni2.textureType != UnityEditor.TextureImporterType.NormalMap) { ni2.textureType = UnityEditor.TextureImporterType.NormalMap; ni2.SaveAndReimport(); }

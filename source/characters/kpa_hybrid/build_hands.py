@@ -7,22 +7,28 @@
 #      smoothing, then thinned to a game count); its colour and surface detail are baked back from the original;
 #   2. given a skeleton found from its outline (forearm, hand, three bones per finger) and bound with Blender's
 #      automatic weights, so each joint bends over a soft band and no vertex follows the wrong finger;
-#   3. carried bone by bone into the bind pose of the game's rig (the knuckles onto the rig's knuckles, each finger
-#      segment joint to joint), mirrored for the right hand. The stub of wrist rides the forearm bone, so it turns
-#      with the sleeve.
+#   3. placed on the game's rig by its palm (knuckles onto the rig's knuckles, scaled by the fingers), unstretched;
+#      the rig's finger bones are then moved onto the hand's own joints (<out>_bones.json, read by apply_hybrid.cs),
+#      as the Rigify video does it: bones fitted to the model, not the model to the bones. Mirrored for the right.
 #
-#   blender -b --factory-startup -P build_hands.py -- <old SK_CH_KPA_Rifleman.fbx> <hand.glb> <unity_bones.txt> <out.bin>
-# Writes <out.bin> (both hands, one submesh) and <out.bin>_BaseColor.png / _Normal.png.
-import bpy, bmesh, sys, os, struct
+#   blender -b --factory-startup -P build_hands.py -- <old SK_CH_KPA_Rifleman.fbx> <hand.glb> <unity_bones.txt> <out.bin> [<joints.json>]
+# Writes <out.bin> (both hands, one submesh) and <out.bin>_BaseColor.png; the normal map is made from the colour
+# (detail_normal.py). build_hybrid.py takes <out.bin> as an extra argument and puts the hands into the body mesh.
+import bpy, bmesh, sys, os, struct, json
 import numpy as np
 
 old_fbx, hand_glb, bones_txt, out = [sys.argv[sys.argv.index('--') + i] for i in (1, 2, 3, 4)]
 P = 'mixamorig:'
-VOXEL, FACES, TEX, STUB, WRIST_REACH = 0.0045, 9000, 2048, 0.05, 0.8
+VOXEL, FACES, TEX, STUB, WRIST_REACH, FINGER_THIN, PALM_THIN = 0.0045, 9000, 2048, 0.05, 0.8, 0.9, 0.9
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.fbx(filepath=old_fbx)
 arm = next(o for o in bpy.data.objects if o.type == 'ARMATURE')
 OJ = {b.name: np.array(arm.matrix_world @ b.head_local) for b in arm.data.bones}
+# where the hands go: the old rig's joints, or (6th argument, 2026-11-18 whole-model rig) a json of the joints the
+# body itself has (build_hybrid.py own-joints writes it). OJ stays the old rig: it fixes the mesh's own space below.
+TJ = dict(OJ)
+if len(sys.argv) > sys.argv.index('--') + 5:
+    TJ.update({k: np.array(v) for k, v in json.load(open(sys.argv[sys.argv.index('--') + 5])).items()})
 for o in list(bpy.data.objects): bpy.data.objects.remove(o)
 
 # ---- 1. make the hand over
@@ -63,17 +69,16 @@ sc = bpy.context.scene; sc.render.engine = 'CYCLES'; sc.cycles.device = 'CPU'; s
 bk = sc.render.bake; bk.use_selected_to_active = True; bk.cage_extrusion = 0.01; bk.max_ray_distance = 0.03; bk.margin = 16
 mat = bpy.data.materials.new('M_Hand'); mat.use_nodes = True; nt = mat.node_tree
 hand.data.materials.clear(); hand.data.materials.append(mat)
-imgs = {}
-for name, typ in (('BaseColor', 'DIFFUSE'),):   # the normal is made from the colour (detail_normal.py): baked, the sides came out as noise
-    img = bpy.data.images.new(name, TEX, TEX, alpha=False)
-    if name == 'Normal': img.colorspace_settings.name = 'Non-Color'
-    node = nt.nodes.new('ShaderNodeTexImage'); node.image = img; nt.nodes.active = node
-    if typ == 'DIFFUSE': bk.use_pass_direct = False; bk.use_pass_indirect = False; bk.use_pass_color = True
-    bpy.ops.object.select_all(action='DESELECT'); src.select_set(True); hand.select_set(True); bpy.context.view_layer.objects.active = hand
-    bpy.ops.object.bake(type=typ)
-    img.filepath_raw = '%s_%s.png' % (out, name); img.file_format = 'PNG'; img.save(); imgs[name] = img
-    nt.nodes.remove(node)
-print('BAKED', ', '.join(imgs))
+# colour only: a baked normal map came out as noise on the sides of the hand, so it is made from the colour instead
+# (detail_normal.py)
+img = bpy.data.images.new('BaseColor', TEX, TEX, alpha=False)
+node = nt.nodes.new('ShaderNodeTexImage'); node.image = img; nt.nodes.active = node
+bk.use_pass_direct = False; bk.use_pass_indirect = False; bk.use_pass_color = True
+bpy.ops.object.select_all(action='DESELECT'); src.select_set(True); hand.select_set(True); bpy.context.view_layer.objects.active = hand
+bpy.ops.object.bake(type='DIFFUSE')
+img.filepath_raw = out + '_BaseColor.png'; img.file_format = 'PNG'; img.save()
+nt.nodes.remove(node)
+print('BAKED BaseColor')
 
 V = np.array([v.co[:] for v in hand.data.vertices])
 # the cut end's cap: the bake found nothing there and left it black. Its corners take the texture spot of the
@@ -131,6 +136,7 @@ for n, t in zip(names, order):
 sl = V[np.abs(V[:, 2] - WRIST_Z) < 0.005]                 # the wrist: found before the cut, at its narrowest
 wrist = np.array([(sl[:, 0].max() + sl[:, 0].min()) / 2, (sl[:, 1].max() + sl[:, 1].min()) / 2, WRIST_Z])
 print('WRIST', wrist.round(3), 'FINGERS', [(n, np.round(J[n][3], 3).tolist()) for n in names])
+json.dump({'wrist': wrist.tolist(), **{n: [j.tolist() for j in J[n]] for n in names}}, open(out + '_joints.json', 'w'))   # for checking the joints on the mesh
 
 # armature on the hand, bound with automatic weights
 ad = bpy.data.armatures.new('hand_rig'); rig = bpy.data.objects.new('hand_rig', ad); bpy.context.collection.objects.link(rig)
@@ -157,7 +163,25 @@ miss = W.sum(1) <= 1e-6
 W[miss, 1] = 1.0
 W /= W.sum(1, keepdims=True)
 print('WEIGHTS automatic: %d vertices, %d had none (put on the hand)' % (len(V), int(miss.sum())))
-keep_from = -1e9                                     # the stub is already cut clean above
+# Fingers and palm a little slimmer than generated (the hand read heavy beside the face): each finger drawn in toward
+# its own bones to FINGER_THIN, weighted over them; the joints stay where they are.
+# the palm a little flatter too (its back read as a round dome, like a fist, round the stock): drawn toward the plane
+# through the wrist and the knuckles, by the vertex's weight on the hand bone
+kn_ = np.array([J[n][0] for n in names[1:]]); pc = (kn_.mean(0) + wrist) / 2
+pn = np.cross(kn_[0] - wrist, kn_[3] - wrist); pn /= np.linalg.norm(pn)
+Vthin = V.copy()
+for vi in range(len(V)):
+    acc = np.zeros(3); tot = 0.0
+    for bi_, b in enumerate(bones):
+        w = W[vi, bi_]
+        if w <= 0 or b in ('ForeArm', 'Hand'): continue
+        n, k = b[:-1], int(b[-1]) - 1
+        a_, d_ = J[n][k], J[n][k + 1] - J[n][k]; t = np.clip((V[vi] - a_) @ d_ / (d_ @ d_), 0, 1); q = a_ + d_ * t
+        acc += w * (q + (V[vi] - q) * FINGER_THIN); tot += w
+    if tot > 0: Vthin[vi] = acc + V[vi] * (1 - tot)   # acc carries the finger weights already; the rest stays put
+    wh = W[vi, bones.index('Hand')]
+    if wh > 0: Vthin[vi] -= pn * ((V[vi] - pc) @ pn) * (1 - PALM_THIN) * wh
+V = Vthin
 
 # ---- 3. into the rig's bind pose, per side
 names_u = []; U = []
@@ -175,41 +199,47 @@ def rot_between(a, b):
     K = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]]); return np.eye(3) + K + K @ K / (1 + c)
 N = np.array([v.normal[:] for v in hand.data.vertices])
 uv = hand.data.uv_layers.active.data
-verts = []; tris = []
+verts = []; tris = []; fit_bones = {}
 for side in ('Left', 'Right'):
     flip = np.array([-1.0, 1, 1]) if side == 'Right' else np.ones(3)
     Vs = V * flip; Ns = N * flip; Js = {n: [j * flip for j in J[n]] for n in names}
-    def old(n, i): return OJ[P + side + 'Hand' + n + str(i)]
-    lo = sum(np.linalg.norm(old(n, i + 1) - old(n, i)) for n in names[1:] for i in (1, 2, 3)); ln = sum(np.linalg.norm(Js[n][i + 1] - Js[n][i]) for n in names[1:] for i in range(3))
+    def at(n, i): return TJ[P + side + 'Hand' + n + str(i)]
+    lo = sum(np.linalg.norm(at(n, i + 1) - at(n, i)) for n in names[1:] for i in (1, 2, 3)); ln = sum(np.linalg.norm(Js[n][i + 1] - Js[n][i]) for n in names[1:] for i in range(3))
     sc_ = lo / ln
-    A = np.array([Js[n][0] for n in names[1:]]); B = np.array([old(n, 1) for n in names[1:]])
-    nb = np.cross(B[0] - B[3], B[1] - OJ[P + side + 'Hand']); nb /= np.linalg.norm(nb); nb *= np.sign(nb[2])
+    A = np.array([Js[n][0] for n in names[1:]]); B = np.array([at(n, 1) for n in names[1:]])
+    nb = np.cross(B[0] - B[3], B[1] - TJ[P + side + 'Hand']); nb /= np.linalg.norm(nb); nb *= np.sign(nb[2])
     na = np.array([0.0, -1, 0])
-    A2 = np.vstack([A, A + na * 0.03 / sc_, A.mean(0) - np.array([0, 0, 0.05 / sc_])]); wdir = OJ[P + side + 'Hand'] - B.mean(0); wdir -= nb * (wdir @ nb); wdir /= np.linalg.norm(wdir)
+    A2 = np.vstack([A, A + na * 0.03 / sc_, A.mean(0) - np.array([0, 0, 0.05 / sc_])]); wdir = TJ[P + side + 'Hand'] - B.mean(0); wdir -= nb * (wdir @ nb); wdir /= np.linalg.norm(wdir)
     B2 = np.vstack([B, B + nb * 0.03, B.mean(0) + wdir * 0.05])
     ca, cb = A2.mean(0), B2.mean(0); Hm = (A2 - ca).T @ (B2 - cb); Uu, _, Vt = np.linalg.svd(Hm); D = np.diag([1, 1, np.sign(np.linalg.det(Vt.T @ Uu.T))]); Rp = Vt.T @ D @ Uu.T
     palm = (Rp * sc_, cb - Rp @ ca * sc_)
     # the generated palm is shorter than the rig's (whose Hand joint sits up the forearm), so placed by its
-    # knuckles its wrist stopped short of the sleeve and the stub's cut end showed. The forearm part is moved on to
-    # the rig's wrist joint; the automatic weights stretch the wrist between.
-    reach = OJ[P + side + 'Hand'] - ((np.array(wrist) * flip) @ palm[0].T + palm[1])
-    fore = (palm[0], palm[1] + reach * WRIST_REACH)
-    print(side, 'wrist moved %.3f toward the rig wrist joint' % (np.linalg.norm(reach) * WRIST_REACH))
-    Tm = [fore, palm]; Rl = [Rp, Rp]; bone = [index[P + side + 'ForeArm'], index[P + side + 'Hand']]
+    # knuckles its wrist stopped short of the sleeve and the stub's cut end showed. The forearm part is turned onto
+    # the rig's own forearm line and set on toward the rig's wrist joint. (Only shifted, the automatic weights
+    # stretched the back of the hand into a fist-like dome.)
+    ws = np.array(wrist) * flip
+    w_at = ws @ palm[0].T + palm[1]
+    reach = TJ[P + side + 'Hand'] - w_at
+    Rf = rot_between(Rp @ np.array([0.0, 0, -1]), TJ[P + side + 'ForeArm'] - TJ[P + side + 'Hand']) @ Rp
+    fore = (Rf * sc_, w_at + reach * WRIST_REACH - Rf @ ws * sc_)
+    print(side, 'wrist moved %.3f toward the rig wrist joint, forearm turned %.0f deg' % (np.linalg.norm(reach) * WRIST_REACH, np.degrees(np.arccos(np.clip((np.trace(Rf @ Rp.T) - 1) / 2, -1, 1)))))
+    Tm = [fore, palm]; Rl = [Rf, Rp]; bone = [index[P + side + 'ForeArm'], index[P + side + 'Hand']]
+    # (2026-11-18, the video's way round: the bones go to the model's joints, not the model to the bones) The
+    # fingers ride with the palm, unstretched; the rig's finger bones are moved onto the hand's own joints in Unity
+    # (apply_hybrid.cs reads <out>_bones.json). Stretched and bent segment by segment onto the old rig's finger
+    # joints - spaced and proportioned unlike any real hand - the fingers ran together into one block in the grip.
     for n in names:
         for i in range(3):
-            a, b = Js[n][i], Js[n][i + 1]; a2, b2 = old(n, i + 1), old(n, i + 2)
-            d_ = (b - a) / np.linalg.norm(b - a); R = rot_between(Rp @ d_, b2 - a2) @ Rp
-            Sm = sc_ * np.eye(3) + (np.linalg.norm(b2 - a2) / np.linalg.norm(b - a) - sc_) * np.outer(d_, d_)
-            Tm.append((R @ Sm, a2 - R @ Sm @ a)); Rl.append(R); bone.append(index[P + side + 'Hand' + n + str(i + 1)])
+            Tm.append(palm); Rl.append(Rp); bone.append(index[P + side + 'Hand' + n + str(i + 1)])
+            fit_bones[P + side + 'Hand' + n + str(i + 1)] = to_unity(Js[n][i] @ palm[0].T + palm[1]).tolist()
+        fit_bones[P + side + 'Hand' + n + '4'] = to_unity(Js[n][3] @ palm[0].T + palm[1]).tolist()
     Pn = np.zeros_like(Vs); Nn = np.zeros_like(Ns)
     for b_, ((A_, t_), R_) in enumerate(zip(Tm, Rl)):
         Pn += W[:, b_:b_ + 1] * (Vs @ A_.T + t_); Nn += W[:, b_:b_ + 1] * (Ns @ R_.T)
-    err = max(np.linalg.norm((Js[n][0] @ palm[0].T + palm[1]) - old(n, 1)) for n in names[1:])
+    err = max(np.linalg.norm((Js[n][0] @ palm[0].T + palm[1]) - at(n, 1)) for n in names[1:])
     print(side, 'scale %.3f knuckle fit error %.4f' % (sc_, err))
     key = {}
     for poly in hand.data.polygons:
-        if V[list(poly.vertices)][:, 2].mean() < keep_from: continue
         ids = []
         for li in poly.loop_indices:
             vi = hand.data.loops[li].vertex_index; u2 = tuple(uv[li].uv); kk = (side, vi, round(u2[0], 5), round(u2[1], 5))
@@ -225,4 +255,5 @@ with open(out, 'wb') as f:
         n_ = nrm / max(np.linalg.norm(nrm), 1e-9); f.write(struct.pack('<8f4i4f', *pos, *n_, u2[0], u2[1], *bi, *bw))
     f.write(struct.pack('<i', len(tris) * 3))
     for t in tris: f.write(struct.pack('<3i', *t))
+json.dump(fit_bones, open(out + '_bones.json', 'w'))   # finger joints in the mesh's own space, for apply_hybrid.cs
 print('WROTE', out, len(verts), 'vertices', len(tris), 'triangles')
