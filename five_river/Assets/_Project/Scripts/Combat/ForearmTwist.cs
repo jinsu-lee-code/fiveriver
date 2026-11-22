@@ -12,7 +12,12 @@ namespace FiveRivers.Combat
     [DefaultExecutionOrder(500)]   // after EnemyAgent / EnemyHandIK have turned the hands
     public sealed class ForearmTwist : MonoBehaviour
     {
-        public static float Limit = 120f;   // the video's twist limit (degrees)
+        // (2026-11-19) Shouldered in cover, the support hand palm up under the magazine turned 146-161 degrees from
+        // rest: with the video's 120-degree limit and the last band at 6/7 of it, some 50 degrees were left to the
+        // wrist alone and the cuff pinched into a star. A forearm turns palm-down to palm-up through about 170
+        // degrees, so the limit stays short of the half turn (where the twist's sign would flip) and the bands now
+        // run evenly from the elbow to the wrist, the last turning with the hand.
+        public static float Limit = 175f;
 
         sealed class Arm
         {
@@ -21,11 +26,13 @@ namespace FiveRivers.Combat
             public float[] share;
             public Quaternion handRest;   // the hand's rest turn in the forearm's frame
             public Vector3 axis;          // along the forearm, in its own frame
+            public float last;            // last frame's roll (for the half-turn hysteresis)
         }
 
         readonly List<Arm> arms = new List<Arm>();
 
-        public float LastTwist { get; private set; }   // check value: the right hand's measured roll (degrees)
+        // check values: each hand's measured roll about its forearm before the limit (degrees; left, right)
+        public readonly float[] LastTwist = new float[2];
 
         void Awake()
         {
@@ -50,21 +57,30 @@ namespace FiveRivers.Combat
                 handRest = Quaternion.Inverse(fore.rotation) * hand.rotation,
                 axis = fore.InverseTransformDirection(hand.position - fore.position).normalized,
             };
-            // band k of n+1 (the forearm bone itself is band 0) turns k/(n+1) of the roll
-            for (int k = 0; k < twist.Count; k++) arm.share[k] = (k + 1f) / (twist.Count + 1f);
+            // band k of n (the forearm bone itself is band 0, at the elbow) turns k/n of the roll: the last with the hand
+            for (int k = 0; k < twist.Count; k++) arm.share[k] = (k + 1f) / twist.Count;
             arms.Add(arm);
         }
 
         void LateUpdate()
         {
-            foreach (var arm in arms)
+            for (int a = 0; a < arms.Count; a++)
             {
+                var arm = arms[a];
                 // the hand's change from rest, in the forearm's frame, and its twist part about the forearm
                 var change = Quaternion.Inverse(arm.fore.rotation) * arm.hand.rotation * Quaternion.Inverse(arm.handRest);
-                float angle = Mathf.Clamp(TwistAngle(change, arm.axis), -Limit, Limit);
+                // (2026-11-20) Read alone, a roll hovering about the half turn reads +179 one frame and -179 the next,
+                // and the bands between elbow and wrist swing from one side to the other. It stays on last frame's side
+                // for up to 30 degrees past the half turn; further than that the shorter way round is taken again (a
+                // turn carried on from last frame without that bound wound up to 246 degrees, past the limit).
+                float raw = TwistAngle(change, arm.axis);
+                if (arm.last > 150f && raw < -150f) raw += 360f; else if (arm.last < -150f && raw > 150f) raw -= 360f;
+                if (raw > 210f) raw -= 360f; else if (raw < -210f) raw += 360f;
+                arm.last = raw;
+                float angle = Mathf.Clamp(raw, -Limit, Limit);
                 for (int k = 0; k < arm.twist.Length; k++)
                     arm.twist[k].localRotation = Quaternion.AngleAxis(angle * arm.share[k], arm.axis);
-                LastTwist = angle;
+                if (a < LastTwist.Length) LastTwist[a] = raw;
             }
         }
 

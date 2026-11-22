@@ -102,6 +102,47 @@ namespace FiveRivers.Combat
         Vector3 rifleCentreLocal;
         bool rifleDropped;
 
+        // (2026-11-19) Aiming from cover the rifle was held level at the chest, the butt under the arm: the clips'
+        // hands are low and the rifle was placed from them. The Soviet manual for the Mosin (НСД-38, arts. 128, 131,
+        // 142) has the butt-plate firm in the hollow of the right shoulder, the cheek on the stock, the body turned
+        // half right so the left shoulder is forward (this rig's arms, 0.41 m shoulder to wrist, cannot otherwise
+        // reach the support hand under the magazine - 0.58 m from a square-on left shoulder). While he is in cover
+        // the body is turned, the rifle is set from the shoulder toward what he aims at, and the hands follow it.
+        public static bool ShoulderAim = true;
+        public static float BladeYaw = 35f, ShoulderRate = 3f, HeadDown = 6f, HeadToStock = 8f, CheekAbove = 0.07f;
+        public static Vector3 ShoulderPocket = new Vector3(-0.035f, -0.03f, 0.05f);   // from the right shoulder joint, agent axes
+        Vector3 buttLocal;
+        float shoulderTurn;
+        Transform rightShoulder, bladeSpine, bladeChest, bladeNeck, bladeHead;
+
+        // the middle of the butt-plate in rifle space: the mean of the rifle's points within 1.5 cm of its back end
+        Vector3 ButtPlate(MeshFilter mesh)
+        {
+            if (!mesh.sharedMesh.isReadable) return rifleCentreLocal + Vector3.back * 0.6f;
+            var toRifle = rifle.worldToLocalMatrix * mesh.transform.localToWorldMatrix;
+            var vs = mesh.sharedMesh.vertices; float back = float.MaxValue;
+            foreach (var v in vs) back = Mathf.Min(back, toRifle.MultiplyPoint3x4(v).z);
+            var sum = Vector3.zero; int n = 0;
+            foreach (var v in vs) { var p = toRifle.MultiplyPoint3x4(v); if (p.z < back + 0.015f) { sum += p; n++; } }
+            return n > 0 ? sum / n : rifleCentreLocal + Vector3.back * 0.6f;
+        }
+
+        // the body turned half right for the aim (spine and chest share it), the head turned back to the front and
+        // laid down onto the stock
+        void Blade(float w)
+        {
+            if (w <= 0f || bladeSpine == null || bladeChest == null) return;
+            var up = transform.up;
+            bladeSpine.rotation = Quaternion.AngleAxis(BladeYaw * 0.4f * w, up) * bladeSpine.rotation;
+            bladeChest.rotation = Quaternion.AngleAxis(BladeYaw * 0.6f * w, up) * bladeChest.rotation;
+            if (bladeNeck != null) bladeNeck.rotation = Quaternion.AngleAxis(-BladeYaw * 0.5f * w, up) * bladeNeck.rotation;
+            if (bladeHead != null)
+            {
+                bladeHead.rotation = Quaternion.AngleAxis(-BladeYaw * 0.5f * w, up) * bladeHead.rotation;
+                bladeHead.rotation = Quaternion.AngleAxis(HeadDown * w, transform.right) * Quaternion.AngleAxis(-HeadToStock * w, transform.forward) * bladeHead.rotation;
+            }
+        }
+
         public Transform Cover { get; private set; }
         public bool Alive => state != State.Dead;
         public bool Retreating => state == State.Retreat;
@@ -138,7 +179,18 @@ namespace FiveRivers.Combat
             if (model != null) modelRest = model.localPosition;
             var mesh = rifle != null ? rifle.GetComponentInChildren<MeshFilter>() : null;
             if (mesh != null && mesh.sharedMesh != null)
+            {
                 rifleCentreLocal = rifle.InverseTransformPoint(mesh.transform.TransformPoint(mesh.sharedMesh.bounds.center));
+                buttLocal = ButtPlate(mesh);
+            }
+            if (animator != null && animator.isHuman)
+            {
+                rightShoulder = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
+                bladeSpine = animator.GetBoneTransform(HumanBodyBones.Spine);
+                bladeChest = animator.GetBoneTransform(HumanBodyBones.Chest);
+                bladeNeck = animator.GetBoneTransform(HumanBodyBones.Neck);
+                bladeHead = animator.GetBoneTransform(HumanBodyBones.Head);
+            }
             if (rifle != null && rightHand != null)
             {
                 handIK = animator.GetComponent<EnemyHandIK>();
@@ -175,6 +227,10 @@ namespace FiveRivers.Combat
                 // the rifle's weight lags the body: the hand sinks a little after each footfall
                 handIK.ReachTrigger(CrouchTriggerHand + Vector3.up * (CrouchHandBob * Mathf.Sin(stride * 2f - 0.6f)), crouchCarry * CrouchTriggerWeight);
             }
+            // in cover: turned half right, the rifle in the shoulder (eased in and out; never while a carry is on)
+            shoulderTurn = Mathf.MoveTowards(shoulderTurn, ShoulderAim && state == State.Cover ? 1f : 0f, Time.deltaTime * ShoulderRate);
+            float shoulderW = Mathf.SmoothStep(0f, 1f, shoulderTurn) * (1f - Mathf.Max(RunCarryWeight(), crouchCarry));
+            Blade(shoulderW);
             var support = handIK != null && handIK.HasAnimatedHand ? handIK.AnimatedLeftHand : leftHand.position;
             var along = support + transform.forward * AimAhead - rightHand.position;
             if (along.sqrMagnitude < 0.0025f) return;
@@ -197,12 +253,27 @@ namespace FiveRivers.Combat
             // the rifle's grip point (behind its centre on the local z axis) goes to the grip
             var gripLocal = rifleCentreLocal + Vector3.back * GripBehindCentre;
             rifle.SetPositionAndRotation(grip - rotation * Vector3.Scale(gripLocal, rifle.lossyScale), rotation);
+            // shouldered: the butt-plate in the hollow of the right shoulder, the barrel toward what he aims at
+            if (shoulderW > 0f && rightShoulder != null)
+            {
+                var pocket = rightShoulder.position + transform.TransformDirection(ShoulderPocket);
+                var to = (owner != null ? owner.AimPointFor(this) : pocket + transform.forward * 10f) - pocket;
+                var aimRotation = to.sqrMagnitude > 0.01f ? Quaternion.LookRotation(to, transform.up) : transform.rotation;
+                var shouldered = pocket - aimRotation * Vector3.Scale(buttLocal, rifle.lossyScale);
+                rotation = Quaternion.Slerp(rifle.rotation, aimRotation, shoulderW);
+                rifle.SetPositionAndRotation(Vector3.Lerp(rifle.position, shouldered, shoulderW), rotation);
+                // the cheek on the stock, not in it: kneeling, the clip's bowed head came down 2-5 cm over the axis
+                // and the face went 2 cm into the wood (standing, at 7 cm, it lies on it). The neck lifts until it is.
+                if (bladeNeck != null && bladeHead != null)
+                    for (int k = 0; k < 12 && rifle.InverseTransformPoint(bladeHead.position).y < CheekAbove * shoulderW; k++)
+                        bladeNeck.rotation = Quaternion.AngleAxis(-3f, transform.right) * bladeNeck.rotation;
+            }
             // muzzle flash and shot origin follow the barrel end
             if (muzzle != null) muzzle.SetPositionAndRotation(rifle.TransformPoint(rifleCentreLocal + Vector3.forward * MuzzleAhead), rotation);
             // support hand under the fore-end, palms onto the wood, fingers closed round it. First only while running;
             // seen close in the flare sequence the aiming clips also left the support hand open and floating under
             // the rifle (2026-11-13), so the hands now always hold it while he is alive.
-            if (handIK != null) handIK.Shape(1f, 1f - Mathf.Max(carry, crouchCarry), crouchCarry);
+            if (handIK != null) { handIK.Shoulder = shoulderW; handIK.Shape(1f, 1f - Mathf.Max(carry, crouchCarry), crouchCarry); }
         }
 
         // Period footage and accounts (2026-11-15): a 1950 rifleman going forward under fire stoops low and carries

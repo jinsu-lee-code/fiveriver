@@ -163,7 +163,7 @@ if (mesh.subMeshCount == 2)
     if (hm == null) { hm = new UnityEngine.Material(UnityEngine.Shader.Find("Universal Render Pipeline/Lit")); UnityEditor.AssetDatabase.CreateAsset(hm, dir + "M_CH_KPA_Hands.mat"); }
     hm.SetTexture("_BaseMap", UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>(dir + "T_CH_KPA_Hands_BaseColor.png"));
     hm.SetTexture("_BumpMap", UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>(dir + "T_CH_KPA_Hands_Normal.png")); hm.EnableKeyword("_NORMALMAP");
-    hm.SetFloat("_Smoothness", 0.3f); hm.SetFloat("_Metallic", 0f); hm.SetColor("_BaseColor", new UnityEngine.Color(0.68f, 0.60f, 0.55f));
+    hm.SetFloat("_BumpScale", 0.45f); hm.SetFloat("_Smoothness", 0.3f); hm.SetFloat("_Metallic", 0f); hm.SetColor("_BaseColor", new UnityEngine.Color(0.86f, 0.84f, 0.80f));   // the heads' own tint: the hands' map is painted in the heads' skin colour (the darker, redder tint was for the generated hand's map and left these hands a different man's)
     UnityEditor.EditorUtility.SetDirty(hm);
     hands = new[] { hm };
 }

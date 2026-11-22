@@ -321,6 +321,48 @@ for poly in nm.data.polygons:
     if heads and inside_collar(c): neckcut += 1; continue
     if heads and c[up] > zneck and not collar_cloth(poly, c): cut += 1; continue
     keep_polys.append(poly)
+# (2026-11-20) Seen at 40 cm the collar's cut edge was still in saw teeth, with thin spikes standing off it at the
+# front, whether he was turned for the aim or not: the faces dropped above (skin-coloured, inside the head's neck)
+# leave the edge however the texels fell. Near the neck, a face hanging by two open edges that meet in a point
+# (under 50 degrees) is taken off, three times over, and then each open edge vertex there is drawn halfway to the
+# middle of its two neighbours along the edge, six times: the edge runs smooth round the neck.
+if heads:
+    def near_neck(c):
+        d = c - neck_axis; d[up] = 0
+        return c[up] > zneck - 0.15 and np.linalg.norm(d) < 0.16
+    spikes = 0
+    for _ in range(3):
+        use = {}
+        for poly in keep_polys:
+            vs = list(poly.vertices)
+            for i_ in range(len(vs)):
+                e_ = tuple(sorted((vs[i_], vs[(i_ + 1) % len(vs)]))); use[e_] = use.get(e_, 0) + 1
+        drop = set()
+        for pi_, poly in enumerate(keep_polys):
+            vs = list(poly.vertices)
+            if not near_neck(nv[vs].mean(0)): continue
+            n_ = len(vs)
+            for i_ in range(n_):
+                a_, b_, c_ = vs[i_ - 1], vs[i_], vs[(i_ + 1) % n_]
+                if use[tuple(sorted((a_, b_)))] == 1 and use[tuple(sorted((b_, c_)))] == 1:
+                    u_, w_ = nv[a_] - nv[b_], nv[c_] - nv[b_]
+                    cosang = u_ @ w_ / max(1e-9, np.linalg.norm(u_) * np.linalg.norm(w_))
+                    if cosang > np.cos(np.radians(50)): drop.add(pi_); break
+        if not drop: break
+        spikes += len(drop); keep_polys = [p_ for i_, p_ in enumerate(keep_polys) if i_ not in drop]
+    use = {}
+    for poly in keep_polys:
+        vs = list(poly.vertices)
+        for i_ in range(len(vs)):
+            e_ = tuple(sorted((vs[i_], vs[(i_ + 1) % len(vs)]))); use[e_] = use.get(e_, 0) + 1
+    edge_nb = {}
+    for (a_, b_), n_ in use.items():
+        if n_ == 1: edge_nb.setdefault(a_, []).append(b_); edge_nb.setdefault(b_, []).append(a_)
+    loose = [v for v, nb in edge_nb.items() if len(nb) == 2 and near_neck(nv[v])]
+    for _ in range(6):
+        mid = {v: (nv[edge_nb[v][0]] + nv[edge_nb[v][1]]) / 2 for v in loose}
+        for v in loose: nv[v] = nv[v] + (mid[v] - nv[v]) * 0.5
+    print('COLLAR edge: %d spikes taken off, %d edge vertices smoothed' % (spikes, len(loose)))
 # Shards (2026-11-16): what the cuts round the neck leave behind as small loose pieces of collar - a few faces no
 # longer joined to the jacket - stood out beside the chin. Pieces of fewer than 60 faces near the neck are dropped.
 parent = {}
@@ -430,6 +472,46 @@ if own:
         tot = sum(w_ for _, w_ in top); top += [(0, 0.0)] * (4 - len(top))
         p_, n_, u_, _ = verts[i_]; verts[i_] = (p_, n_, u_, ([i__ for i__, _ in top], [w_ / tot for _, w_ in top]))
     print('AUTOMATIC WEIGHTS body: %d vertices (%d welded), %d left with the generated weights' % (len(used), len(wv), empty))
+    # (2026-11-20) Some 370 vertices of each sleeve's end took part of their weight from the hand bone (112 of them
+    # more than half), so a bent wrist dragged the cuff after the hand and it folded into points round the wrist
+    # (seen at 40 cm in the kneeling aim). A sleeve does not bend with the hand: whatever the body's skin had on a
+    # hand or finger bone goes to the forearm's last twist band, which turns with the hand's roll but not its bend.
+    moved = 0
+    for i_ in used:
+        p_, n_, u_, wt = verts[i_]; ids_, ws_ = list(wt[0]), list(wt[1])
+        for k_ in range(4):
+            nm_ = names[ids_[k_]] if ids_[k_] < len(names) else ''
+            for s_ in ('Left', 'Right'):
+                if ws_[k_] > 0 and nm_.startswith(P + s_ + 'Hand'):
+                    ids_[k_] = index[P + s_ + 'ForeArmTwist%d' % (TWIST_SEGS - 1)]; moved += 1
+        acc = {}
+        for j_, w_ in zip(ids_, ws_): acc[j_] = acc.get(j_, 0.0) + w_
+        top = sorted(acc.items(), key=lambda kv: -kv[1])[:4]; top += [(0, 0.0)] * (4 - len(top))
+        verts[i_] = (p_, n_, u_, ([j_ for j_, _ in top], [w_ for _, w_ in top]))
+    print('SLEEVES off the hands: %d weights moved to the last twist band' % moved)
+    # (2026-11-20) Moved to the last band, a vertex that also kept weight on the forearm bone itself turned half by
+    # 0 and half by the whole roll and the cuff closed into a star with the hand turned 140 degrees. As in the
+    # video's twist rig, the forearm's share of each vertex now goes only to the two bands either side of where it
+    # lies along the forearm (the bands' middles at (k + 1/2)/7 of the way), whatever the heat gave it.
+    banded = 0
+    for s_ in ('Left', 'Right'):
+        bands = [index[P + s_ + 'ForeArm']] + [index[P + s_ + 'ForeArmTwist%d' % k_] for k_ in range(1, TWIST_SEGS)]
+        bandset = set(bands)
+        e0, e1 = oj[P + s_ + 'ForeArm'], oj[P + s_ + 'Hand']; L_ = np.linalg.norm(e1 - e0); dir_ = (e1 - e0) / L_
+        for i_ in used:
+            p_, n_, u_, wt = verts[i_]
+            wf = sum(w_ for j_, w_ in zip(wt[0], wt[1]) if j_ in bandset)
+            if wf < 1e-4: continue
+            t_ = float((to_blender(p_) - e0) @ dir_ / L_)
+            b_ = min(max(t_ * TWIST_SEGS - 0.5, 0.0), TWIST_SEGS - 1.0); k0 = int(b_); k1 = min(k0 + 1, TWIST_SEGS - 1); f_ = b_ - k0
+            acc = {}
+            for j_, w_ in zip(wt[0], wt[1]):
+                if j_ not in bandset and w_ > 0: acc[j_] = acc.get(j_, 0.0) + w_
+            acc[bands[k0]] = acc.get(bands[k0], 0.0) + wf * (1 - f_)
+            if f_ > 0: acc[bands[k1]] = acc.get(bands[k1], 0.0) + wf * f_
+            top = sorted(acc.items(), key=lambda kv: -kv[1])[:4]; tot = sum(w_ for _, w_ in top); top += [(0, 0.0)] * (4 - len(top))
+            verts[i_] = (p_, n_, u_, ([j_ for j_, _ in top], [w_ / tot for _, w_ in top])); banded += 1
+    print('FOREARM bands: %d vertices put on their two nearest bands' % banded)
     if 'bend-check' in extra:
         # part 2's check: head back, arms down and bent, a knee bent; renders front and side
         bpy.ops.object.mode_set(mode='OBJECT'); bpy.context.view_layer.objects.active = ar_; bpy.ops.object.mode_set(mode='POSE')
@@ -485,9 +567,17 @@ if hands_bin:
     subs = [subs[0], []]
     with open(hands_bin, 'rb') as f:
         nh, _ = struct.unpack('<ii', f.read(8)); base = len(verts); rec = struct.calcsize('<8f4i4f')
+        # (2026-11-20) The hands' wrists are shared between the hand and the forearm bone, which never turns with
+        # the hand's roll: turned 140 degrees, a wrist half on each closed in like a sweet wrapper inside the cuff.
+        # Their forearm share goes to the forearm's last twist band, which turns with the hand.
+        to_band = {}
+        if own:
+            for s_ in ('Left', 'Right'):
+                last_ = P + s_ + 'ForeArmTwist%d' % (TWIST_SEGS - 1)
+                if last_ in index: to_band[index[P + s_ + 'ForeArm']] = index[last_]
         for _ in range(nh):
             r_ = struct.unpack('<8f4i4f', f.read(rec))
-            verts.append((np.array(r_[0:3]), np.array(r_[3:6]), (r_[6], r_[7]), (list(r_[8:12]), list(r_[12:16]))))
+            verts.append((np.array(r_[0:3]), np.array(r_[3:6]), (r_[6], r_[7]), ([to_band.get(j_, j_) for j_ in r_[8:12]], list(r_[12:16]))))
         nt_, = struct.unpack('<i', f.read(4)); idx = struct.unpack('<%di' % nt_, f.read(4 * nt_))
         for i_ in range(0, nt_, 3):
             a, b_, c = (base + x for x in idx[i_:i_ + 3])
