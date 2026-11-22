@@ -157,6 +157,7 @@
 | M1 시작 예비탄 · 최대 예비탄 | 40 · 64 (F 보충 = 최대까지) | `m1StartReserve` · `m1MaxReserve` |
 | M1 발사 간격 · 피해 · 사거리 | 0.22초 · 100(적 한 발) · 250 m | `m1FireInterval` · `m1Damage` · `m1Range` |
 | M1 퍼짐 (허리 / 조준) · 반동 | 1.6° / 0.15° · 1.8° | `m1HipSpread` · `m1AimSpread` · `m1RecoilPitch` |
+| M1 넉넉한 판정 (조준 / 허리) | 2026-11-22: 1.2° / 0.8°, 몸에서 최소 0.3 m · 최대 1 m. 탄이 아무도 못 맞혔을 때 **보이는** 몸 부위에만 적용(엄폐에 완전히 가리면 안 맞음). 뒤 둥근 가늠자는 숨기고 앞 가늠쇠로만 조준 | `m1AimForgive` · `m1HipForgive` · `m1ForgiveLeast` · `m1ForgiveMost` |
 | M1 장전 (빈 클립 / 잔탄) | 2.5초 / 3.2초 (ANIM_SPEC) | `m1ReloadEmptyTime` · `m1ReloadPartialTime` |
 | M1 꺼내기 · 집어넣기 | 0.5초 · 0.4초 | `m1EquipTime` · `m1UnequipTime` |
 | 시야각 (허리 / M1 조준 / 바주카 조준) · 조준 전환 | 70 / 50 / 55 · 0.18초 | `hipFov` · `m1AimFov` · `bazookaAimFov` · `aimBlendTime` |

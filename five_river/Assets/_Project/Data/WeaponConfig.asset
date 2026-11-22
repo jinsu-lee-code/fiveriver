@@ -25,6 +25,10 @@ MonoBehaviour:
   m1ReloadPartialTime: 3.2
   m1EquipTime: 0.5
   m1UnequipTime: 0.4
+  m1AimForgive: 1.2
+  m1HipForgive: 0.8
+  m1ForgiveLeast: 0.3
+  m1ForgiveMost: 1
   hipFov: 70
   m1AimFov: 50
   aimBlendTime: 0.18

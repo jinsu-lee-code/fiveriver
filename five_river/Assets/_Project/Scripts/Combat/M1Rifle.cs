@@ -87,7 +87,20 @@ namespace FiveRivers.Combat
             float spread = aimed ? config.m1AimSpread : config.m1HipSpread;
             var dir = Quaternion.Euler(UnityEngine.Random.Range(-spread, spread) * 0.5f, UnityEngine.Random.Range(-spread, spread) * 0.5f, 0f) * Vector3.forward;
             var ray = new Ray(view.transform.position, view.transform.rotation * dir);
-            if (TryGetShotHit(ray, config.m1Range, hitMask & FiveRivers.Core.WorldQuery.All, player.transform, out var hit))
+            int mask = hitMask & FiveRivers.Core.WorldQuery.All;
+            bool struck = TryGetShotHit(ray, config.m1Range, mask, player.transform, out var hit);
+            // a shot that struck no one counts for the man the sights were nearly on (ShotForgiveness)
+            if (!struck || hit.collider.GetComponentInParent<IDamageable>() == null)
+            {
+                var laid = new Ray(view.transform.position, view.transform.forward);
+                float forgive = aimed ? config.m1AimForgive : config.m1HipForgive;
+                if (ShotForgiveness.TryFind(laid, config.m1Range, forgive, config.m1ForgiveLeast, config.m1ForgiveMost, mask, player.transform, out var nearly))
+                {
+                    hit = nearly;
+                    struck = true;
+                }
+            }
+            if (struck)
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(config.m1Damage, view.transform.position);

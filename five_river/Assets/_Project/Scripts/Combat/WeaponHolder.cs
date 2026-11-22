@@ -44,6 +44,9 @@ namespace FiveRivers.Combat
         // Off by request (2026-11-07): aim through the real rear-sight model at its original eye position, no
         // painted ghost ring or focus blur. Set true to bring the ghost-ring presentation back.
         public static bool PeepRing = false;
+        // Off by request (2026-11-22): no round rear-sight plate; he aims by the front post alone. Its tip stands at
+        // the middle of the screen, where the shot goes. Set true to put the plate back.
+        public static bool RearPlate = false;
         PeepSightOverlay peep;
         Transform rearSight;
         Renderer[] rearApertures = Array.Empty<Renderer>();
@@ -70,7 +73,7 @@ namespace FiveRivers.Combat
                 if (sp.z > 0f) centre = sp;
             }
             peep.Show(ring, centre);
-            foreach (var r in rearApertures) r.forceRenderingOff = ring > 0.5f || CutsceneHidden;
+            foreach (var r in rearApertures) r.forceRenderingOff = !RearPlate || ring > 0.5f || CutsceneHidden;
         }
 
         // A staged sequence has hidden the first-person body (CutsceneRig.HidePlayer). Without this the line above

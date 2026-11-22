@@ -21,6 +21,12 @@ namespace FiveRivers.Data
         public float m1EquipTime;
         public float m1UnequipTime;
 
+        [Header("M1 넉넉한 판정 (보이는 적만. 0이면 끔)")]
+        [Tooltip("조준 사격: 가늠쇠에서 이 각도(도) 안이면 명중")] public float m1AimForgive = 1.2f;
+        [Tooltip("지향 사격: 십자선에서 이 각도(도) 안이면 명중")] public float m1HipForgive = 0.8f;
+        [Tooltip("각도와 상관없이 몸에서 이만큼(m)은 봐준다 (근거리)")] public float m1ForgiveLeast = 0.3f;
+        [Tooltip("아무리 멀어도 몸에서 이보다(m) 더는 안 봐준다")] public float m1ForgiveMost = 1f;
+
         [Header("조준 (시야각)")]
         public float hipFov;
         public float m1AimFov;
