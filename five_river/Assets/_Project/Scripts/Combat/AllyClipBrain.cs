@@ -60,6 +60,7 @@ namespace FiveRivers.Combat
         public bool FacingAway;      // 들판에서 크게 돌아서 있음
         public bool AwayFromPost;
         public float StillFor;       // 멈춰 선 지 몇 초
+        public bool StandFire;       // 교전 중 서서 쏜다: 무릎 사격으로 가지 않고 일어선다
         public bool Low;             // 지금 자세가 낮다(무릎 사격에서 막 멈춤)
         public bool Cutscene;        // 연출 컷 중: 변화 동작을 새로 시작하지 않음
         public bool Duck;            // 가까운 포탄이 곧 떨어진다
@@ -165,6 +166,13 @@ namespace FiveRivers.Combat
             if (s.Advancing) return Leave(timing.advanceOut);
             if (s.Walking || s.AwayFromPost || s.Busy) return Leave(timing.brokenOut);
             if (s.TakingCover) return Leave(timing.coverOut);
+            if (s.Engaged && s.StandFire)
+            {
+                if (Phase == AllyClipPhase.ToStand) return StandTick();
+                if (standClip != null && (Phase == AllyClipPhase.Ready || Phase == AllyClipPhase.Variation || Phase == AllyClipPhase.Duck))
+                    return Play(AllyClipPhase.ToStand, standClip, timing.standFade, 0f, false);
+                return Leave(timing.fireFade);
+            }
             if (s.Engaged)
             {
                 if (Phase == AllyClipPhase.ToFire) return FireTick();

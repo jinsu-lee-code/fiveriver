@@ -36,6 +36,25 @@ namespace FiveRivers.Combat
 
         static readonly int FireId = Animator.StringToHash("Fire");
         static readonly int CrouchId = Animator.StringToHash("Crouch");
+        static readonly int AimStandId = Animator.StringToHash("Aim_Stand"), FireStandId = Animator.StringToHash("Fire_Stand");
+        // (2026-11-23, asked for) The allies fire standing at the parapet, not from one knee: with a man to shoot at,
+        // or firing at the slope, they stand in the aim (Aim_Stand / Fire_Stand). They still go down on one knee to
+        // watch the ridge on the hill and under a barrage. False: the kneeling fire as before.
+        public static bool StandToFire = true;
+        public static float StandYawOffset = -25f;   // the body bladed to the rifle, standing
+        public bool StandsToFire { get; private set; }
+        void Posture(bool stand)
+        {
+            StandsToFire = stand;
+            animator.SetBool(CrouchId, !stand);
+            // The controller's parameters are fixed by ANIM_SPEC 1-5, so the two standing states have no transitions
+            // into them: he is cross-faded there from here, and out again by StopFiring or by kneeling.
+            if (stand) { if (!InState(AimStandId) && !InState(FireStandId)) animator.CrossFadeInFixedTime(AimStandId, 0.3f); }
+            else if (InState(AimStandId) || InState(FireStandId)) animator.CrossFadeInFixedTime(IdleTrenchId, 0.3f);
+        }
+        static readonly int IdleTrenchId = Animator.StringToHash("Idle_Trench"), IdleStandId = Animator.StringToHash("Idle_Stand");
+        bool InState(int id) => animator.GetCurrentAnimatorStateInfo(0).shortNameHash == id
+            || (animator.IsInTransition(0) && animator.GetNextAnimatorStateInfo(0).shortNameHash == id);
         static readonly int RunRifleId = Animator.StringToHash("Run_Rifle");
         static readonly int CrouchRunRifleId = Animator.StringToHash("CrouchRun_Rifle");
         Transform rightHand, leftHand;
@@ -53,7 +72,7 @@ namespace FiveRivers.Combat
         float recoilAt = -100f;
 
         // 박용팔의 사격 원본은 가슴이 이미 옆으로 돌아가 있어 몸을 덜 비틀어 견착한다.
-        float AimYawOffset => AlliedRifleFit.IsParkAvatar(animator) ? -26f : rifleYawOffset;
+        float AimYawOffset => StandsToFire ? StandYawOffset : AlliedRifleFit.IsParkAvatar(animator) ? -26f : rifleYawOffset;
 
         // Set by HillAllies while he walks up the ridge: no turning or firing, rifle in the carry pose.
         public bool Advancing
@@ -224,7 +243,7 @@ namespace FiveRivers.Combat
                 // under the barrage the muzzle comes down below the parapet: hunched low behind the sandbags, head bowed
                 if (!watching) { watching = true; suppressAim = takingCover ? CoverPoint() : WatchPoint(); }
                 engaged = true;
-                animator.SetBool(CrouchId, true);
+                Posture(false);
                 var look = suppressAim - transform.position; look.y = 0f;
                 if (look.sqrMagnitude > 0.01f)
                     transform.rotation = Quaternion.RotateTowards(transform.rotation,
@@ -242,7 +261,7 @@ namespace FiveRivers.Combat
                 CancelCue();
                 suppressing = false;
                 suppressAim = lastAim; // LateUpdate aims through AimPoint(): the rifle stays on that spot
-                animator.SetBool(CrouchId, true);
+                Posture(StandToFire);
                 var hold = lastAim - transform.position; hold.y = 0f;
                 if (hold.sqrMagnitude > 0.01f)
                     transform.rotation = Quaternion.RotateTowards(transform.rotation,
@@ -258,7 +277,7 @@ namespace FiveRivers.Combat
             if (target == null && (!suppressing || (!pending && Time.time >= nextPick))) PickSuppressAim();
             suppressing = target == null;
             engaged = true;
-            animator.SetBool(CrouchId, true);
+            Posture(StandToFire);
             var direction = AimPoint() - transform.position;
             direction.y = 0f;
             if (direction.sqrMagnitude < 0.01f) return;
@@ -268,7 +287,8 @@ namespace FiveRivers.Combat
             // still coming up from the low wait to one knee (AllyClipPlayer): the rifle is not at his shoulder yet
             if (Clips != null && Clips.HoldsFire) return;
             if (!suppressing && !CanSee(target)) { target = FindTarget(); nextShot = Time.time + 0.25f; return; }
-            animator.SetTrigger(FireId);
+            if (StandsToFire) animator.CrossFadeInFixedTime(FireStandId, 0.05f, 0, 0f);
+            else animator.SetTrigger(FireId);
             pending = true;
             cueAt = Time.time + fireCueDelay;
             nextShot = Time.time + Random.Range(config.fireIntervalMin, config.fireIntervalMax) * (suppressing ? suppressIntervalScale : 1f);
@@ -352,9 +372,36 @@ namespace FiveRivers.Combat
             return now ? (next ? 1f : 1f - t) : next ? t : 0f;
         }
 
+        // The standing aim and shot are the KPA clips, which stand these bodies 11-14 cm above the floor (toes at
+        // 17-20 cm, 6 in their own standing idle): while those states show, the hips come down until the lower toe
+        // is at its idle height over the ground.
+        public static float ToeRest = 0.06f, StandDropMost = 0.25f;
+        Transform standHips, leftToe, rightToe;
+        float standDrop;
+        void StandOnFloor()
+        {
+            float w = Mathf.Clamp01(StateWeight(AimStandId) + StateWeight(FireStandId));
+            if (w <= 0f) { standDrop = 0f; return; }
+            if (standHips == null)
+            {
+                standHips = animator.GetBoneTransform(HumanBodyBones.Hips);
+                leftToe = animator.GetBoneTransform(HumanBodyBones.LeftToes) ?? animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+                rightToe = animator.GetBoneTransform(HumanBodyBones.RightToes) ?? animator.GetBoneTransform(HumanBodyBones.RightFoot);
+            }
+            if (standHips == null || leftToe == null || rightToe == null) return;
+            float low = float.MaxValue;
+            foreach (var toe in new[] { leftToe, rightToe })
+                if (Physics.Raycast(toe.position + Vector3.up * 0.6f, Vector3.down, out var hit, 3f, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore))
+                    low = Mathf.Min(low, toe.position.y - hit.point.y);
+            if (low == float.MaxValue) return;
+            standDrop = Mathf.MoveTowards(standDrop, Mathf.Clamp(low - ToeRest, 0f, StandDropMost), Time.deltaTime * 0.6f);
+            standHips.position += Vector3.down * (standDrop * w);
+        }
+
         void LateUpdate()
         {
             if (director.Flow.Paused) return;
+            StandOnFloor();
             // Rigify clips (2026-11-18, AllyClipPlayer): while a trench clip has the whole pose, the rifle follows the
             // clip's own track and the hands hold it as the clip has them. The aim, the carry and the tutorial look rest.
             bool clipRifle = Clips != null && Clips.OwnsRifle;
@@ -434,7 +481,10 @@ namespace FiveRivers.Combat
             suppressing = false;
             if (!engaged) return;
             engaged = false;
+            bool stood = StandsToFire;
+            StandsToFire = false;
             animator.SetBool(CrouchId, false);
+            if (stood && (InState(AimStandId) || InState(FireStandId))) animator.CrossFadeInFixedTime(IdleStandId, 0.3f);
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Fire_Crouch")
                 || (animator.IsInTransition(0) && animator.GetNextAnimatorStateInfo(0).IsName("Fire_Crouch")))
                 animator.CrossFade("Idle_Stand", 0.1f);

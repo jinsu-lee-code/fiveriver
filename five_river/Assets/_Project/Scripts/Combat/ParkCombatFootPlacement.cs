@@ -47,7 +47,7 @@ namespace FiveRivers.Combat
         }
 
         static bool Kneeling(AnimatorStateInfo state) => state.IsName("Idle_Trench") || state.IsName("Fire_Crouch");
-        static bool Standing(AnimatorStateInfo state) => state.IsName("Idle_Stand") || state.IsName("Walk_Tired");
+        static bool Standing(AnimatorStateInfo state) => state.IsName("Idle_Stand") || state.IsName("Walk_Tired") || state.IsName("Aim_Stand") || state.IsName("Fire_Stand");
 
         void OnAnimatorIK(int layerIndex)
         {

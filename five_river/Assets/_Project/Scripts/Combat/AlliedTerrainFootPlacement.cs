@@ -137,9 +137,11 @@ namespace FiveRivers.Combat
             return leg.Upper != null && leg.Lower != null && leg.Foot != null ? leg : null;
         }
 
+        // standing on the spot: the idle, and (2026-11-23) the standing aim and shot
+        static bool StandStill(AnimatorStateInfo state) => state.IsName("Idle_" + "Stand") || state.IsName("Aim_Stand") || state.IsName("Fire_Stand");
         static bool Kneeling(AnimatorStateInfo state) => state.IsName("Idle_Trench") || state.IsName("Fire_Crouch");
         static bool Moving(AnimatorStateInfo state) => state.IsName("Run_Rifle") || state.IsName("Walk_Tired");
-        static bool Locomotion(AnimatorStateInfo state) => Moving(state) || state.IsName("Idle_Stand");
+        static bool Locomotion(AnimatorStateInfo state) => Moving(state) || StandStill(state);
 
         void LateUpdate()
         {
@@ -163,7 +165,7 @@ namespace FiveRivers.Combat
             if (!GroundHeight(actorRoot.position, out float rootHeight)) return;
             float rootGap = actorRoot.position.y - rootHeight;
             if (rootGap < -.16f || rootGap > (PreparingHillLanding ? HillLandingHeight : .16f)) return;
-            bool settle = !transition && current.IsName("Idle_Stand");
+            bool settle = !transition && StandStill(current);
             bool hillWalker = UsesHillWalkContact && director.Flow.Section == FlowSection.HillAssault;
             bool fromWalk = current.IsName("Walk_Tired");
             float walkContact = !transition && fromWalk ? 1f : 0f;
@@ -224,7 +226,7 @@ namespace FiveRivers.Combat
                 standingDrop = Mathf.MoveTowards(standingDrop, wantedDrop, dropSpeed * Time.deltaTime);
                 if (hillWalker && fromWalk && transition && next.IsName("Run_Rifle"))
                     standingDrop = Mathf.Min(standingDrop, HillWalkPelvisDrop * walkContact);
-                if (!current.IsName("Idle_Stand") && !next.IsName("Idle_Stand")
+                if (!StandStill(current) && !StandStill(next)
                     && !current.IsName("Walk_Tired") && !next.IsName("Walk_Tired")) standingDrop = 0f;
                 PelvisDrop = standingDrop;
                 // 앞서 맞춘 상체와 소총 파지를 보존하고 골반과 다리만 낮춥니다.

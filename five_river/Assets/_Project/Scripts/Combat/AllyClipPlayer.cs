@@ -319,6 +319,7 @@ namespace FiveRivers.Combat
                 Reset = pendingReset,
                 Teleported = teleported,
                 Engaged = ally.Engaged,
+                StandFire = ally.StandsToFire,
                 Advancing = ally.Advancing,
                 TakingCover = ally.TakingCover,
                 StillFor = stillFor,
