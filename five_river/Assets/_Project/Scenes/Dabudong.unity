@@ -30604,7 +30604,7 @@ MonoBehaviour:
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
-  m_SoftShadowQuality: 1
+  m_SoftShadowQuality: 3
   m_RenderingLayersMask:
     serializedVersion: 0
     m_Bits: 3
@@ -50681,6 +50681,14 @@ PrefabInstance:
       propertyPath: m_TerrainData
       value: 
       objectReference: {fileID: 15600000, guid: 7f32ca9d14bebdc4aa078afff9e2dd6f, type: 2}
+    - target: {fileID: 8318581904142142282, guid: bfdd1b3e1244b964498cd33dc1aa5914, type: 3}
+      propertyPath: m_HeightmapPixelError
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8318581904142142282, guid: bfdd1b3e1244b964498cd33dc1aa5914, type: 3}
+      propertyPath: m_DetailObjectDistance
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 8322040559331134171, guid: bfdd1b3e1244b964498cd33dc1aa5914, type: 3}
       propertyPath: m_Size
       value: 0.013304935
@@ -94576,6 +94584,7 @@ MonoBehaviour:
   suppressDistance: {x: 45, y: 85}
   suppressSpread: 25
   suppressIntervalScale: 1.4
+  holdAimAfterTarget: 4
 --- !u!1001 &1657121524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -109686,6 +109695,7 @@ MonoBehaviour:
   suppressDistance: {x: 45, y: 85}
   suppressSpread: 25
   suppressIntervalScale: 1.4
+  holdAimAfterTarget: 4
 --- !u!1001 &1982421366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116223,6 +116233,7 @@ MonoBehaviour:
   suppressDistance: {x: 45, y: 85}
   suppressSpread: 25
   suppressIntervalScale: 1.4
+  holdAimAfterTarget: 4
 --- !u!1001 &2120806646
 PrefabInstance:
   m_ObjectHideFlags: 0
