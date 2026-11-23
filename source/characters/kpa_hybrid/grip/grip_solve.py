@@ -21,13 +21,13 @@ pose = {k: np.mean(v, 0) for k, v in groups.items()}
 # targets (rifle space). knuckle: the middle finger's; tips: the bones' ends; at: (finger, joint position, where, tolerance)
 SPECS = {
     'RightCarry': dict(side='Right', pose='carry', hint=(0.25, -0.5, -0.8), F=(0.05, -0.8, 0.55), N=(-1, 0, 0),
-                       knuckle=(0.036, -0.032, -0.010), straight=(1,),
+                       knuckle=(0.036, -0.032, -0.010), straight=(1,), wrist=(20, 12), knuckle_tol=0.035,   # (2026-11-23: 55/26 left the wrist bent 67 degrees on the run)
                        at=[(1, 3.0, (0.031, -0.008, 0.078), 0.006), (0, 3.0, (-0.018, 0.016, -0.018), 0.012),
                            (2, 3.0, (-0.022, -0.030, -0.004), 0.015), (3, 3.0, (-0.022, -0.036, -0.026), 0.015),
                            (4, 3.0, (-0.015, -0.046, -0.046), 0.015)]),
     'RightAim': dict(side='Right', pose='kneel', hint=(0.95, 0.0, -0.2), swing=22, F=(-0.4, -0.6, 0.7), N=(-1, 0, 0),
                      knuckle=(0.036, -0.030, -0.012), straight=(), trigger=True,
-                     at=[(1, 2.55, (0.004, -0.040, 0.0495), 0.002), (1, 3.0, (-0.007, -0.041, 0.046), 0.005), (0, 3.0, (-0.022, 0.008, -0.044), 0.012),
+                     clear_heads=('kneel', 'stand'), at=[(1, 2.55, (0.000, -0.040, 0.0495), 0.002), (1, 3.0, (-0.010, -0.041, 0.047), 0.005), (0, 3.0, (-0.022, 0.008, -0.044), 0.012),
                          (2, 3.0, (-0.022, -0.030, -0.004), 0.015), (3, 3.0, (-0.022, -0.036, -0.026), 0.015),
                          (4, 3.0, (-0.015, -0.046, -0.046), 0.015)]),
     'LeftLow': dict(side='Left', pose='carry', hint=(-0.5, -0.6, -0.3), F=(1, 0.1, 0.1), N=(0, 1, 0),
@@ -46,7 +46,7 @@ SPECS = {
                           (2, 3.0, (0.028, 0.036, 0.316), 0.014), (3, 3.0, (0.028, 0.032, 0.290), 0.016),
                           (4, 3.0, (0.030, 0.018, 0.268), 0.018)]),
     'LeftStand': dict(side='Left', pose='stand', hint=(-0.6, -0.8, 0.0), F=(0.75, 0.15, 0.6), N=(0, 1, 0),
-                      knuckle=(0.008, -0.068, 0.135), straight=(), thumb=(8, 10), pen=700,
+                      knuckle=(0.008, -0.068, 0.135), straight=(), thumb=(8, 10), pen=700, wrist=(25, 12),
                       at=[(0, 3.0, (-0.034, -0.012, 0.170), 0.008), (1, 3.0, (0.024, 0.000, 0.200), 0.022),
                           (2, 3.0, (0.030, -0.004, 0.172), 0.022), (3, 3.0, (0.028, -0.014, 0.146), 0.022),
                           (4, 3.0, (0.024, -0.030, 0.124), 0.024)]),
@@ -71,6 +71,8 @@ class Problem:
         self.L2 = np.linalg.norm(g[:, o + 1] - g[:, o + 2], axis=1).mean()
         self.hint = self.body @ np.array(spec['hint'])
         self.R0 = frame(spec['F'], spec['N']) @ frame(h.along, h.palm).T
+        # heads the forearm must keep clear of (the forearm across the chin seen from the front, standing)
+        self.heads = [np.mean(groups[k], 0)[6] for k in spec.get('clear_heads', ())]
 
         main = h.idx[np.arange(len(h.vids)), h.wgt.argmax(1)]
         sel, self.groups, self.radius = [], [], np.zeros((5, 3))
@@ -85,7 +87,7 @@ class Problem:
                 self.radius[fi, j] = np.median(np.linalg.norm(q - np.outer(q @ d, d), axis=1))
                 pad = ids[h.rest_n[ids] @ (h.rest_R[b] @ h.axes[fi, j, 1]) > 0.55]
                 trigger = fi == 1 and spec.get('trigger', False)
-                weight = (0.0 if trigger else 90.0 if j == 2 else 22.0 if j == 1 else 14.0)
+                weight = (60.0 if j == 2 else 0.0) if trigger else (90.0 if j == 2 else 22.0 if j == 1 else 14.0)   # (the trigger finger's end pad on the blade: 2026-11-23, it stood 2.5 mm off it)
                 if b == 1:
                     weight = 45.0                       # the ball of the thumb
             else:
@@ -157,7 +159,7 @@ class Problem:
         for fi, at, where, tol in self.s['at']:
             j = min(int(at), 2); t = at - j
             out.append((JW[fi, j] * (1 - t) + JW[fi, j + 1] * t - np.array(where)) / tol)
-        out.append((JW[2, 0] - np.array(self.s['knuckle'])) / 0.020)
+        out.append((JW[2, 0] - np.array(self.s['knuckle'])) / self.s.get('knuckle_tol', 0.020))
         a = x[6:27]
         out.append((a - self.pr) / self.sd * 0.45)
         out.append(np.maximum(self.lo - a, 0) / rad(2.5)); out.append(np.maximum(a - self.hi, 0) / rad(2.5))
@@ -170,8 +172,12 @@ class Problem:
                 extra.append((a[k] - a[k + 4]) / rad(28))                     # neighbours bend alike
                 extra.append((a[k + 2] - a[k + 6]) / rad(32))
         e, b, over, flex, dev = self.wrist(R0, T0, x[27])
-        extra += [flex / rad(38), dev / rad(18), max(0, abs(flex) - rad(55)) / rad(4), max(0, abs(dev) - rad(26)) / rad(4),
+        fl, dl = self.s.get('wrist', (55, 26))
+        extra += [flex / rad(38), dev / rad(18), max(0, abs(flex) - rad(fl)) / rad(4), max(0, abs(dev) - rad(dl)) / rad(4),
                   x[27] / rad(self.s.get('swing', 80)), over / 0.003]
+        for head in self.heads:
+            ab = T0 - e; t_ = np.clip((head - e) @ ab / (ab @ ab), 0, 1)
+            extra.append(max(0.0, 0.17 - np.linalg.norm(e + ab * t_ - head)) / 0.004)
         out.append(extra)
         # fingers not inside one another
         s_ = np.array((0.1, 0.5, 0.9))[None, None, :, None]

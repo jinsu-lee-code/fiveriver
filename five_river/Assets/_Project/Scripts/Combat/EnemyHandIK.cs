@@ -128,7 +128,8 @@ namespace FiveRivers.Combat
         public static float SlideMost = 0.1f;
         // Between under the magazine and any hold on the fore-end the hand drops this far off the rifle on the way
         // (straight across, its fingers went 14 mm through the magazine).
-        public static float MagazineClear = 0.035f;
+        public static Vector3 TriggerClear = new Vector3(0.012f, 0f, -0.012f);
+        public static float MagazineClear = 0.05f;   // (0.035 still let it graze the magazine by 6 mm, 2026-11-23)
         public float SupportWristBend { get; private set; }   // degrees between forearm and hand (check values)
         public float TriggerWristBend { get; private set; }
         public float SupportShort { get; private set; }       // how far each wrist stayed from its hold, metres (check values)
@@ -155,7 +156,10 @@ namespace FiveRivers.Combat
 
             // trigger hand: carried, or in the shoulder
             EnemyGrips.Hold carried = EnemyGrips.RightCarry, aimed = EnemyGrips.RightAim;
-            var rightAt = rifle.TransformPoint(Vector3.Lerp(carried.Wrist, aimed.Wrist, shouldered));
+            // (2026-11-23) straight from one hold to the other the ball of the thumb went up to 9 mm through the small
+            // of the stock on the way: half way it stands this far out and back (rifle space), 2 mm
+            var rightWay = TriggerClear * Mathf.Sqrt(Mathf.Clamp01(4f * shouldered * (1f - shouldered)));
+            var rightAt = rifle.TransformPoint(Vector3.Lerp(carried.Wrist, aimed.Wrist, shouldered) + rightWay);
             var rightTurn = rifle.rotation * Quaternion.Slerp(carried.Turn, aimed.Turn, shouldered);
             var rightElbow = body.TransformDirection(Vector3.Slerp(carried.Elbow, aimed.Elbow, shouldered));
             TriggerShort = Place(rightUpper, rightFore, rightHand, rightAt, rightTurn, rightElbow, weight);

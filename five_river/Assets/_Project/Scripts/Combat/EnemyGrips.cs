@@ -18,48 +18,48 @@ namespace FiveRivers.Combat
             { Wrist = wrist; Turn = turn; Elbow = elbow; Fingers = fingers; }
         }
 
-        // wrist bent -55, sideways -28 degrees
+        // wrist bent -20, sideways -16 degrees
         public static readonly Hold RightCarry = new Hold(
-            new Vector3(0.04466f, 0.02509f, -0.08164f), new Quaternion(0.663489f, -0.493874f, -0.411248f, 0.383074f),
-            new Vector3(-0.1429f, 0.024f, -0.9894f), new[]
+            new Vector3(0.03125f, 0.0647f, -0.06474f), new Quaternion(0.738688f, -0.358565f, -0.460271f, 0.337524f),
+            new Vector3(0.1886f, 0.2242f, -0.9561f), new[]
             {
-                new Quaternion(0.094552f, -0.085423f, 0.396915f, 0.908967f),
-                new Quaternion(0.305795f, -0.277621f, -0.426742f, 0.804554f),
-                new Quaternion(0.172425f, 0.062259f, -0.324865f, 0.927823f),
-                new Quaternion(-0.139361f, -0.037907f, -0.080964f, 0.986198f),
-                new Quaternion(0.153918f, 0.008916f, 0.019232f, 0.987856f),
-                new Quaternion(0.082729f, 0.014388f, 0.02244f, 0.996216f),
-                new Quaternion(0.279302f, -0.133267f, -0.260229f, 0.91461f),
-                new Quaternion(0.437103f, 0.083815f, 0.103434f, 0.889504f),
-                new Quaternion(0.456173f, -0.042617f, 0.021092f, 0.88862f),
-                new Quaternion(0.260166f, -0.122877f, -0.127919f, 0.949132f),
-                new Quaternion(0.46658f, 0.077773f, 0.085886f, 0.876857f),
-                new Quaternion(0.528964f, -0.056217f, 0.051833f, 0.845193f),
-                new Quaternion(0.220503f, -0.176176f, -0.051811f, 0.957944f),
-                new Quaternion(0.514243f, -0.08101f, 0.100065f, 0.847926f),
-                new Quaternion(0.40285f, 0.007974f, 0.061234f, 0.91318f),
+                new Quaternion(0.218979f, 0.048689f, 0.348094f, 0.910224f),
+                new Quaternion(0.306029f, -0.277731f, -0.427183f, 0.804193f),
+                new Quaternion(0.172674f, 0.062102f, -0.32523f, 0.92766f),
+                new Quaternion(-0.12621f, -0.035259f, -0.073665f, 0.988636f),
+                new Quaternion(0.195514f, 0.014665f, 0.025281f, 0.980265f),
+                new Quaternion(0.085227f, 0.014819f, 0.022728f, 0.995992f),
+                new Quaternion(0.12589f, -0.110504f, -0.306015f, 0.937174f),
+                new Quaternion(0.496965f, 0.087482f, 0.114258f, 0.855756f),
+                new Quaternion(0.492354f, -0.035239f, 0.025722f, 0.869301f),
+                new Quaternion(0.164146f, -0.125161f, -0.210895f, 0.955465f),
+                new Quaternion(0.450648f, 0.077921f, 0.082117f, 0.885495f),
+                new Quaternion(0.527671f, -0.05651f, 0.051659f, 0.845991f),
+                new Quaternion(0.091946f, -0.14327f, -0.149347f, 0.97402f),
+                new Quaternion(0.443883f, -0.061727f, 0.082666f, 0.890126f),
+                new Quaternion(0.368195f, 0.010969f, 0.050877f, 0.928291f),
             });
 
-        // wrist bent +26, sideways +14 degrees
+        // wrist bent +18, sideways +10 degrees
         public static readonly Hold RightAim = new Hold(
-            new Vector3(0.06607f, -0.00974f, -0.08069f), new Quaternion(-0.572869f, 0.645384f, 0.431907f, -0.262214f),
-            new Vector3(0.9568f, 0.262f, -0.1264f), new[]
+            new Vector3(0.07044f, -0.04953f, -0.07964f), new Quaternion(-0.427758f, 0.785246f, 0.406437f, -0.187672f),
+            new Vector3(0.973f, -0.1595f, -0.1668f), new[]
             {
-                new Quaternion(0.303758f, 0.004066f, 0.37909f, 0.874074f),
-                new Quaternion(0.286557f, -0.268441f, -0.390624f, 0.832609f),
-                new Quaternion(0.108593f, 0.101405f, -0.230675f, 0.96162f),
-                new Quaternion(-0.131209f, -0.045826f, -0.205209f, 0.9688f),
-                new Quaternion(0.376115f, 0.039907f, 0.051619f, 0.924273f),
-                new Quaternion(0.2821f, 0.048788f, 0.045184f, 0.957078f),
-                new Quaternion(0.140062f, -0.104537f, -0.275784f, 0.945197f),
-                new Quaternion(0.581958f, 0.092173f, 0.129405f, 0.797549f),
-                new Quaternion(0.536028f, -0.026002f, 0.031401f, 0.843215f),
-                new Quaternion(0.163177f, -0.094241f, -0.112884f, 0.975576f),
-                new Quaternion(0.57448f, 0.075962f, 0.111653f, 0.807301f),
-                new Quaternion(0.57632f, -0.045155f, 0.058239f, 0.813894f),
-                new Quaternion(0.165899f, -0.141772f, -0.005438f, 0.975884f),
-                new Quaternion(0.621762f, -0.111445f, 0.127092f, 0.764748f),
-                new Quaternion(0.468113f, 0.002145f, 0.081f, 0.879946f),
+                new Quaternion(0.385228f, 0.104853f, 0.273896f, 0.874978f),
+                new Quaternion(0.147277f, -0.194007f, -0.138063f, 0.960005f),
+                new Quaternion(0.121907f, 0.093455f, -0.250412f, 0.955876f),
+                new Quaternion(-0.212102f, -0.047413f, -0.234711f, 0.947457f),
+                new Quaternion(0.407543f, 0.04435f, 0.056215f, 0.910375f),
+                new Quaternion(0.28071f, 0.048548f, 0.045028f, 0.957506f),
+                new Quaternion(0.087006f, -0.104574f, -0.317334f, 0.938506f),
+                new Quaternion(0.593705f, 0.092768f, 0.131475f, 0.78843f),
+                new Quaternion(0.544492f, -0.024167f, 0.032514f, 0.837787f),
+                new Quaternion(0.106867f, -0.091805f, -0.142407f, 0.97973f),
+                new Quaternion(0.602112f, 0.075245f, 0.118328f, 0.786001f),
+                new Quaternion(0.598557f, -0.039742f, 0.061271f, 0.797744f),
+                new Quaternion(0.158048f, -0.131325f, 0.022271f, 0.978406f),
+                new Quaternion(0.655192f, -0.1212f, 0.135627f, 0.733238f),
+                new Quaternion(0.486878f, 0.00042f, 0.08675f, 0.869151f),
             });
 
         // wrist bent -5, sideways -2 degrees
@@ -128,26 +128,26 @@ namespace FiveRivers.Combat
                 new Quaternion(0.517198f, 0.012493f, -0.085116f, 0.851531f),
             });
 
-        // wrist bent +39, sideways -4 degrees
+        // wrist bent +25, sideways -9 degrees
         public static readonly Hold LeftStand = new Hold(
-            new Vector3(-0.02699f, -0.08122f, 0.06925f), new Quaternion(0.05207f, 0.789553f, 0.611467f, -0.001543f),
-            new Vector3(-0.3451f, -0.6521f, -0.6751f), new[]
+            new Vector3(-0.02848f, -0.08823f, 0.07325f), new Quaternion(0.022442f, 0.806132f, 0.583177f, -0.097739f),
+            new Vector3(-0.4845f, -0.6078f, -0.6292f), new[]
             {
-                new Quaternion(0.19851f, -0.174247f, -0.120723f, 0.9569f),
-                new Quaternion(0.041905f, 0.000801f, -0.013227f, 0.999034f),
-                new Quaternion(0.129773f, 0.011381f, 0.045865f, 0.990417f),
-                new Quaternion(0.121848f, 0.012473f, 0.118292f, 0.985396f),
-                new Quaternion(0.672643f, -0.084792f, -0.094446f, 0.729001f),
-                new Quaternion(0.473908f, -0.084247f, -0.037555f, 0.87573f),
-                new Quaternion(0.231371f, 0.01368f, 0.029625f, 0.972318f),
-                new Quaternion(0.629253f, -0.094492f, -0.114495f, 0.762891f),
-                new Quaternion(0.511429f, 0.048099f, -0.015957f, 0.85783f),
-                new Quaternion(0.220415f, 0.083141f, 0.129262f, 0.963222f),
-                new Quaternion(0.568276f, -0.090032f, -0.107827f, 0.810759f),
-                new Quaternion(0.538003f, 0.053795f, -0.018808f, 0.841014f),
-                new Quaternion(0.291063f, 0.10938f, -0.081403f, 0.946938f),
-                new Quaternion(0.59873f, 0.098928f, -0.11036f, 0.787119f),
-                new Quaternion(0.52748f, 0.013059f, -0.087456f, 0.844953f),
+                new Quaternion(0.215096f, -0.118841f, -0.098176f, 0.964351f),
+                new Quaternion(0.040402f, 0.00051f, -0.01502f, 0.99907f),
+                new Quaternion(0.128033f, 0.010899f, 0.043893f, 0.990738f),
+                new Quaternion(0.11238f, -0.000406f, 0.069588f, 0.991226f),
+                new Quaternion(0.662017f, -0.083219f, -0.092775f, 0.739054f),
+                new Quaternion(0.486141f, -0.086951f, -0.038996f, 0.868669f),
+                new Quaternion(0.181026f, -0.001895f, -0.008172f, 0.983443f),
+                new Quaternion(0.653126f, -0.095368f, -0.120075f, 0.741562f),
+                new Quaternion(0.520831f, 0.045454f, -0.016977f, 0.85228f),
+                new Quaternion(0.146749f, 0.075354f, 0.143361f, 0.975825f),
+                new Quaternion(0.597319f, -0.090563f, -0.114079f, 0.788666f),
+                new Quaternion(0.559185f, 0.047825f, -0.02075f, 0.827402f),
+                new Quaternion(0.223736f, 0.100935f, -0.061451f, 0.96746f),
+                new Quaternion(0.622076f, 0.104002f, -0.116019f, 0.767297f),
+                new Quaternion(0.542504f, 0.01389f, -0.090884f, 0.835007f),
             });
     }
 }
