@@ -108,7 +108,10 @@ def make_poses(R):
         P["knee_" + s] = k + (k - mid).normalized() * 1.5
     # 소총: 배 높이에 가로로 (게임의 서서 대기처럼 총구는 루트의 앞-왼쪽)
     # 게임의 서서 들기(AlliedRifleFit.carryPosition (.04, 1.08, .20), carryEuler (-3.2, -31.9, 0))와 같은 자리
-    P["rifle"] = (Vector((-0.04, -0.20, 1.08)), gun_rot((0.528, -0.848, 0.056)))
+    # 11-24 관절 검사(코디네이터 결정: 들기 자리를 옮김): (-0.04, -0.20, 1.08)에서는 총을 쥔 오른손 · 아래팔이 앞 탄입대 · 허리에
+    # 5.9 cm 묻혔다. 오른쪽 3 cm · 앞 5 cm · 위 2 cm 옮긴 자리에서 손 0 cm · 아래팔 2.0 cm (가장 작은 이동). 게임
+    # AlliedRifleFit.carryPosition 도 같은 값 (0.07, 1.10, 0.25)으로 바꿔야 함 — source/unity_staging_20261124_allyclips/
+    P["rifle"] = (Vector((-0.07, -0.25, 1.10)), gun_rot((0.528, -0.848, 0.056)))
     P["elbow_R"] = Vector((-0.50, 0.30, 0.95))
     P["elbow_L"] = Vector((0.45, -0.05, 0.85))
     P["shoulder_L"] = rot(roll=0)
@@ -170,7 +173,9 @@ def make_poses(R):
     P["pelvis_loc"] = R.pelvis_from_hip("R", knee + R.thigh * u, P["pelvis_rot"])
     P["chest_rot"] = rot(pitch=24, yaw=pel_yaw * 0.25, roll=-2)
     P["head_rot"] = rot(pitch=7, yaw=0, roll=0)
-    P["rifle"] = rifle_from_right(R, (-0.150, -0.130, 0.455), (0.60, -0.36, 0.72), roll=-20)
+    # 11-24 관절 검사: 오른팔이 다 펴진 채 손잡이(개머리판 손목)를 쥐어 손목이 127도 꺾였다(팔꿈치 방향으로는 못 풂).
+    # 오른 손목 자리를 7.5 cm 올리고 2 cm 앞으로, 총 굴림 −20 → +10도 — 팔꿈치가 굽어 손목 약 90도. 총구 방향은 그대로.
+    P["rifle"] = rifle_from_right(R, (-0.150, -0.150, 0.530), (0.60, -0.36, 0.72), roll=10)
     P["elbow_R"] = Vector((-0.60, 0.45, 0.45))
     P["elbow_L"] = Vector((0.55, -0.05, 0.25))
     poses["ready"] = chestify(R, P)

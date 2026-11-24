@@ -211,5 +211,5 @@ MonoBehaviour:
   supportWristGrip: {x: -0.04, y: -0.032, z: 0.22}
   triggerWristGrip: {x: 0.025, y: -0.05, z: -0.185}
   supportPalmDirection: {x: 1, y: 0.35, z: 0.1}
-  carryPosition: {x: 0.04, y: 1.08, z: 0.2}
+  carryPosition: {x: 0.07, y: 1.1, z: 0.25}
   carryEuler: {x: -3.2, y: -31.9, z: 0}

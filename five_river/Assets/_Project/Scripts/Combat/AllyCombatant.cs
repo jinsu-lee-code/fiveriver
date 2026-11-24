@@ -69,6 +69,11 @@ namespace FiveRivers.Combat
         Vector3 suppressAim;
         AllyRiflePose riflePose;
         AlliedRifleFit rifleFit;
+        // 2026-11-24: switching between port arms, the aim and the carry used to move the rifle up to 48 cm and 137 degrees
+        // in one frame (the hill cover). The arms and the rifle go from the pose last shown over this many seconds (0 = off).
+        public static float HoldFadeSeconds = 0.22f;
+        AllyPoseFade poseFade;
+        float lastAdvance, lastRun; int portCut;
         float recoilAt = -100f;
 
         // 박용팔의 사격 원본은 가슴이 이미 옆으로 돌아가 있어 몸을 덜 비틀어 견착한다.
@@ -107,6 +112,7 @@ namespace FiveRivers.Combat
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
             rifleFit = animator.GetComponent<AlliedRifleFit>();
             riflePose = new AllyRiflePose(animator, transform, weapon);
+            poseFade = new AllyPoseFade(animator, transform, weapon, HoldFadeSeconds);
             director.Flow.SectionChanged += OnSectionChanged;
             director.Flow.RetryRequested += OnRetry;
             ResetCombat(true);
@@ -143,6 +149,7 @@ namespace FiveRivers.Combat
         {
             if (!isActiveAndEnabled) return;
             StopFiring();
+            poseFade?.Clear(); // a new section or retry starts from where he is put, not from the last pose
             watching = false;
             lastTargetAt = -100f;
             if (resetCounts && takingCover) { takingCover = false; LookUp(); }
@@ -296,6 +303,22 @@ namespace FiveRivers.Combat
             nextPick = Mathf.Min(cueAt + 0.5f, nextShot - 1f);
         }
 
+        // 2026-11-24: a new target or the spot he watches used to swing the rifle up to 55 degrees in one frame; the
+        // shouldered rifle now turns to it at most this fast (degrees a second). The first aimed frame starts on the point.
+        public static float AimTurnSpeed = 320f;
+        Vector3 steadyAimDir; bool steadyAimSet;
+        Vector3 SteadyAim()
+        {
+            var want = AimPoint();
+            var from = transform.position + transform.up * 1.4f;
+            var dir = want - from; float far = dir.magnitude;
+            if (far < 0.01f) return want;
+            dir /= far;
+            steadyAimDir = steadyAimSet && AimTurnSpeed > 0f ? Vector3.RotateTowards(steadyAimDir, dir, AimTurnSpeed * Mathf.Deg2Rad * Time.deltaTime, 0f) : dir;
+            steadyAimSet = true;
+            return from + steadyAimDir * far;
+        }
+
         Vector3 AimPoint() => target != null
             ? target.transform.position + Vector3.up * (target.Standing ? 1.25f : 0.75f)
             : suppressAim;
@@ -405,13 +428,16 @@ namespace FiveRivers.Combat
             // Rigify clips (2026-11-18, AllyClipPlayer): while a trench clip has the whole pose, the rifle follows the
             // clip's own track and the hands hold it as the clip has them. The aim, the carry and the tutorial look rest.
             bool clipRifle = Clips != null && Clips.OwnsRifle;
+            int holdMode = PoseFadeClock.Clip;
+            if (!engaged || clipRifle) steadyAimSet = false;
             if (clipRifle) NoteCarry("clip");
             // Both palms come from the actual crouch/fire clip, including its recoil. While he kneels to fire the rifle
             // stays shouldered even on the frame a target is lost (it used to drop into the standing carry).
             else if (engaged)
             {
-                riflePose.Apply(AimPoint(), 0.022f * Mathf.Exp(-(Time.time - recoilAt) * 24f));
+                riflePose.Apply(SteadyAim(), 0.022f * Mathf.Exp(-(Time.time - recoilAt) * 24f));
                 NoteCarry(watching ? "watch" : "aim");
+                holdMode = watching ? PoseFadeClock.Watch : PoseFadeClock.Aim;
             }
             else if (rightHand != null && leftHand != null && weapon != null)
             {
@@ -423,6 +449,11 @@ namespace FiveRivers.Combat
                     && riflePose.ApplyPortArms(clipAdvance ? 0f : advance, clipRun ? 0f : run, section == FlowSection.Dawn ? 1f : 0f);
                 if (portArms && (clipRun || clipAdvance)) Clips.HoldMovingRifle(weapon, clipRun ? run : 0f, clipAdvance ? advance : 0f);
                 NoteCarry(portArms ? $"port a{StateWeight(CrouchRunRifleId):0.00} r{StateWeight(RunRifleId):0.00}" : "carry");
+                // stopping at cover (Advancing off) or the controller cutting run ↔ crouched advance in one frame moved the
+                // rifle from the clip's track to the standing port arms at once: count those as a change of hold too
+                if (Mathf.Abs(advance - lastAdvance) + Mathf.Abs(run - lastRun) > 0.35f) portCut++;
+                lastAdvance = advance; lastRun = run;
+                holdMode = portArms ? (Advancing ? PoseFadeClock.PortMove : PoseFadeClock.PortStand) + 2 * (portCut & 0xFFFF) : PoseFadeClock.Carry;
                 if (!portArms && !riflePose.TryApplyCarry())
                 {
                     var forward = leftHand.position - rightHand.position;
@@ -438,6 +469,8 @@ namespace FiveRivers.Combat
             if (!engaged && (Clips == null || Clips.RifleWeight <= 0f)
                 && (director.Flow.Section == FlowSection.Title || director.Flow.Section == FlowSection.Tutorial))
                 riflePose.LookAt(transform.position + defensiveForward * 60f + Vector3.up * 1.4f);
+            // the way he holds the rifle changed this frame (port arms ↔ aim ↔ carry): from the pose last on screen, not in one frame
+            if (poseFade != null && HoldFadeSeconds > 0f) { poseFade.Clock.Duration = HoldFadeSeconds; poseFade.Apply(holdMode, Time.deltaTime); }
             if (!pending || Time.time < cueAt) return;
             pending = false;
             if (suppressing ? !SuppressActive

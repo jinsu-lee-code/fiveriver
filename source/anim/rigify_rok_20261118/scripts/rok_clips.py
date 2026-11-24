@@ -213,14 +213,18 @@ def make_clips(R):
     up = with_(ready, pelvis_loc=Vector((pel_ready.x + 0.02, pel_ready.y - 0.13, 0.585)), pelvis_rot=rot(pitch=18),
                chest_rot=rot(pitch=17), head_rot=rot(pitch=-6))
     up = rifle_turn(R, up, qx(16), pivot="R", shift=(0.0, 0.03, -0.02))
+    # 11-24 관절 검사: 무릎을 떼고 올라설 때 눕힌 오른발(발등)을 그대로 두면 발목이 95도로 펴졌다 → 올라서기 전에 발끝을 세움
+    up["foot_R"], up["toe_R"] = tuck["foot_R"], tuck["toe_R"]
+    pk_pre = with_(moved(ready, pelvis=(0.03, -0.07, 0.03), chest_rot=qx(9)), foot_R=tuck["foot_R"], toe_R=tuck["toe_R"])   # 앞으로 숙여 무게를 왼발에
     pk = [
         Key(0.0, ready),
-        Key(0.45, moved(ready, pelvis=(0.02, -0.02, 0.015), chest_rot=qx(4)), "inout"),
+        Key(0.30, pk_pre, "inout", lift_R=0.085, groups={"base": "inout"}),   # 무릎을 땅에 둔 채 뒤집음(발목을 많이 들면 무릎도 떠 왼발 하나로 무게)
         Key(1.25, up, "inout"),
         Key(1.75, moved(up, head_rot=qz(20) @ qx(2), chest_rot=qz(5)), "inout"),
         Key(2.35, moved(up, head_rot=qz(-16) @ qx(1), chest_rot=qz(-4)), "inout"),
         Key(2.6, moved(up, head_rot=qz(-10)), "inout"),
-        Key(3.15, moved(ready, pelvis=(0, 0.0, -0.012), chest_rot=qx(2)), "inout"),
+        Key(3.12, with_(moved(ready, pelvis=(0.03, -0.07, 0.03), chest_rot=qx(8)), foot_R=tuck["foot_R"], toe_R=tuck["toe_R"]), "inout"),
+        Key(3.36, moved(ready, pelvis=(0, 0.0, -0.012), chest_rot=qx(2)), "inout", lift_R=0.085, groups={"base": "inout"}),
         Key(3.5, ready, "soft"),
     ]
     clips["A_ROK_Trench_PeekOver"] = Clip("A_ROK_Trench_PeekOver", 3.5, tl_sampler(pk, 3.5, live=live_ready(3.5, 0.6)),
@@ -238,7 +242,8 @@ def make_clips(R):
     base_R = hand_at_grip(R, ready, "R", "world")
     R.apply(tilt)
     pouch = mesh_point(R, tilt, "Pauch", side=-1)       # 오른쪽 앞 탄입대 (변형된 메시에서 찾음)
-    pouch_hand = hand_world(R, tilt, "R", pouch + Vector((-0.015, -0.035, 0.075)), (0.1, 0.25, -1.0), (-0.5, -0.85, 0.0), "world")
+    CK_OUT = float(__import__("os").environ.get("ALLY_CK_OUT", "0.025"))
+    pouch_hand = hand_world(R, tilt, "R", pouch + Vector((-0.015, -0.035 - CK_OUT, 0.075)), (0.1, 0.25, -1.0), (-0.5, -0.85, 0.0), "world")   # 11-24: 손이 탄입대 속 8 cm → 바깥으로
     pouch_hand = with_(pouch_hand, grip_R=0.0, fingers_R=0.45, thumb_R=0.3, index_R=0.45)
     tap = copy_pose(pouch_hand)
     tap["hand_R"] = (tap["hand_R"][0] + Vector((0.0, 0.012, -0.018)), tap["hand_R"][1])
@@ -260,7 +265,7 @@ def make_clips(R):
                                             note="소총을 기울여 기관부를 내려다본 뒤 오른손으로 탄입대(클립 주머니)를 두 번 만져 확인")
 
     # ---------------------------------------------------------------- D. 이마 훔치기 (2.8초)
-    held = rifle_turn(R, ready, qx(-10) @ qz(4), pivot="R", shift=(0, 0.01, -0.02))   # 왼손을 떼면 총구가 조금 내려앉음
+    held = rifle_turn(R, ready, qx(-5) @ qz(4), pivot="R", shift=(0, 0.01, -0.02))   # 왼손을 떼면 총구가 조금 내려앉음 (11-24: −10 → −5도, 오른손목 100도)
     w0 = hand_at_grip(R, ready, "L", "head")
     R.apply(held)
     hp = R.delta4("DEF-spine.006")
@@ -270,9 +275,11 @@ def make_clips(R):
     if face_left.x < 0:
         face_left = -face_left
     brow = hp @ (R.exp_rest["Head"].translation + Vector((0, -0.095, 0.085)))
-    a1 = hand_world(R, moved(held, head_rot=qx(8) @ qz(-6)), "L", brow - face_left * 0.12 + face_fwd * 0.05 + face_up * 0.01,
+    WF = float(__import__("os").environ.get("ALLY_WIPE_FWD", "0.06"))
+    WU = float(__import__("os").environ.get("ALLY_WIPE_UP", "-0.08"))   # 11-24: 아래팔이 이마 · 얼굴 속 10 cm → 앞으로
+    a1 = hand_world(R, moved(held, head_rot=qx(8) @ qz(-6)), "L", brow - face_left * 0.12 + face_fwd * (0.05 + WF) + face_up * (0.01 + WU),
                     -face_left * 0.6 + face_up * 0.8, face_fwd, "head")
-    a2 = hand_world(R, moved(held, head_rot=qx(12) @ qz(8)), "L", brow + face_left * 0.04 + face_fwd * 0.07 + face_up * 0.02,
+    a2 = hand_world(R, moved(held, head_rot=qx(12) @ qz(8)), "L", brow + face_left * 0.04 + face_fwd * (0.07 + WF) + face_up * (0.02 + WU),
                     -face_left * 0.4 + face_up * 0.9, face_fwd * 0.8 - face_left * 0.2, "head")
     mid = hand_world(R, moved(held, head_rot=qx(4)), "L", brow - face_left * 0.02 + face_fwd * 0.20 - face_up * 0.15,
                      -face_left * 0.3 + face_up * 1.0, face_fwd, "head")
@@ -280,8 +287,10 @@ def make_clips(R):
         P["grip_L"] = 0.0
         P["fingers_L"] = 0.35
         P["thumb_L"] = 0.2
-    a1 = elbow_world(R, a1, "L", (0.45, -0.25, 1.25))
-    a2 = elbow_world(R, a2, "L", (0.55, -0.20, 1.10))
+    EF = float(__import__("os").environ.get("ALLY_WIPE_ELBF", "0.0"))   # 11-24: 팔꿈치를 앞으로 (아래팔이 이마 속 3~4 cm)
+    _ez = float(__import__("os").environ.get("ALLY_WIPE_ELBZ", "-0.30"))
+    a1 = elbow_world(R, a1, "L", (0.45, -0.25 - EF, 1.25 + _ez))
+    a2 = elbow_world(R, a2, "L", (0.55, -0.20 - EF, 1.10 + _ez))
     mid = elbow_world(R, mid, "L", (0.40, -0.25, 0.90))
     w1 = with_(w0, rifle=held["rifle"], grip_L=1.0)
     wk = [
@@ -314,7 +323,7 @@ def make_clips(R):
                                           note="오른쪽 옆 사람에게 고개와 어깨를 돌렸다가(고개 끄덕) 돌아옴")
 
     # ---------------------------------------------------------------- D. 고쳐 앉기 (3초)
-    rise = moved(ready, pelvis=(0.035, -0.05, 0.10), pelvis_rot=qy(4), chest_rot=qx(-6) @ qy(-2), head_rot=qx(-3))
+    rise = moved(ready, pelvis=(0.035, -0.05, 0.045), pelvis_rot=qy(4), chest_rot=qx(-6) @ qy(-2), head_rot=qx(-3))   # 11-24: 골반 +0.10 → +0.05 (눕힌 오른발 발목이 83도로 펴짐)
     rise_foot = copy_pose(rise)
     a, q = ready["foot_R"]
     rise_foot["foot_R"] = (a + Vector((-0.05, 0.035, 0.0)), qz(-12) @ q)
@@ -342,7 +351,9 @@ def make_clips(R):
                                            note="무게를 왼발로 옮겨 오른 무릎을 들고 발을 고쳐 디딘 뒤 한숨 쉬며 다시 앉음")
 
     # ---------------------------------------------------------------- E. 포탄에 급히 숙이기 (1.6초)
-    duck = moved(ready, pelvis=(0.0, 0.04, -0.05), pelvis_rot=qx(8), chest_rot=qx(30), head_rot=qx(42))
+    import os
+    DUCK_UP = float(os.environ.get("ALLY_DUCK_UP", "0.03"))
+    duck = moved(ready, pelvis=(0.0, 0.04, -0.03), pelvis_rot=qx(8), chest_rot=qx(32), head_rot=qx(42))   # 11-24: 골반 −5 → −3 cm (두 허벅지가 5 cm 겹침)
     duck = rifle_turn(R, duck, qz(-12) @ qx(-27), pivot="R", shift=(-0.035, 0.05, 0.0))
     d0 = hand_at_grip(R, ready, "L", "head")
     R.apply(duck)
@@ -350,7 +361,7 @@ def make_clips(R):
     top = hp @ (R.exp_rest["Head"].translation + Vector((0.0, 0.02, 0.17)))
     hup = (hp.to_3x3() @ Vector((0, 0, 1))).normalized()
     hfwd = (hp.to_3x3() @ Vector((0, -1, 0))).normalized()
-    cover = hand_world(R, duck, "L", top + hfwd * 0.03 + Vector((0.04, 0, 0)) + hup * 0.02, -hfwd * 0.5 + Vector((-0.6, 0, 0)), hup, "head")
+    cover = hand_world(R, duck, "L", top + hfwd * 0.03 + Vector((0.04, 0, 0)) + hup * DUCK_UP, -hfwd * 0.5 + Vector((-0.6, 0, 0)), hup, "head")   # 11-24: 손이 모자 · 머리 속 10 cm → 위로
     cover = elbow_world(R, cover, "L", (0.38, -0.35, 0.85))
     cover.update(grip_L=0.0, fingers_L=0.3, thumb_L=0.2)
     dk = [
@@ -425,7 +436,9 @@ def run_base(R, L, crouch=False):
     fwd = (R.delta("DEF-spine.003") @ Vector((0, -1, 0))).normalized()
     up = (R.delta("DEF-spine.003") @ Vector((0, 0, 1))).normalized()
     left = Vector((1, 0, 0))
-    wrist = mid - left * 0.11 + fwd * 0.20 - up * 0.30
+    # 11-24 관절 검사(코디네이터 결정): (0.11, 0.20, 0.30)에서는 오른 아래팔이 허리 · 탄입대에 11.4 cm, 왼손목 103도.
+    # 오른쪽 12 cm · 앞 7 cm · 위 6 cm 옮겨 아래팔 1.6 cm · 왼손목 84도 (이 클립들의 소총은 _rifle.json 궤적을 따르므로 코드 변경 없음)
+    wrist = mid - left * 0.23 + fwd * 0.27 - up * 0.24
     muzzle = (left * 0.72 + up * 0.62 + fwd * 0.30)
     P["rifle"] = rok_poses.rifle_from_right(R, wrist, muzzle, up=fwd + up * 0.3, roll=0)
     P["elbow_R"] = Vector((-0.55, 0.45, 0.70))

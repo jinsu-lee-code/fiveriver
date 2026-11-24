@@ -195,7 +195,7 @@ def mourn_pose(R, stand):
     side = t.cross(UP).normalized()
     if side.x < 0:
         side = -side
-    wristL = kL - t * 0.115 + UP * 0.070 + side * 0.012
+    wristL = kL - t * 0.115 + UP * float(__import__("os").environ.get("ALLY_MOURN_UP", "0.135")) + side * 0.012      # 11-24: 0.070 → (손이 무릎 · 정강이 속에 묻히던 것)
     fl = (t * 0.75 - UP * 0.55 - side * 0.15).normalized()
     bl = (UP - fl * UP.dot(fl)).normalized()
     P = hand_world(R, P, "L", wristL, fl, bl, "world")
@@ -221,7 +221,7 @@ def mourn_clips(R, L, clips):
     up_hint = Vector((0.25, 1.0, 0)).normalized()
     # 오른손 자리(총의 0.30 m 지점)가 어깨 앞 아래 0.30 m에 오게
     q_v = gun_rot(vdir, up_hint)
-    target_pt = shR + Vector((-0.13, -0.24, -0.17))
+    target_pt = shR + Vector(tuple(float(x) for x in __import__("os").environ.get("ALLY_MOURN_RIF", "-0.16,-0.30,-0.14").split(",")))
     B["rifle"] = (target_pt - q_v @ Vector((0, 0.30, 0)), q_v)
     B["rifle_space"] = 0.0
     B["grip_L"], B["grip_R"] = 1.0, 0.0

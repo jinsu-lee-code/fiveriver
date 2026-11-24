@@ -42,7 +42,9 @@ with io.open(C.REF_JSON, encoding="utf-8") as fh:
 BODY = ["Hips", "Spine", "Chest", "UpperChest", "Neck", "Head", "LeftUpperLeg", "LeftLowerLeg", "LeftFoot", "LeftToes",
         "RightUpperLeg", "RightLowerLeg", "RightFoot", "RightToes"]
 ARMS = ["LeftShoulder", "LeftUpperArm", "LeftLowerArm", "LeftHand", "RightShoulder", "RightUpperArm", "RightLowerArm", "RightHand"]
-os.makedirs(C.EXPORT, exist_ok=True)
+# 11-24 관절 검사 반복용: ALLY_EXPORT 로 내보낼 폴더를 바꿀 수 있다(기본 export/). 바꾸면 metrics.json 도 그 폴더에 쓴다.
+EXPORT_DIR = os.environ.get("ALLY_EXPORT", C.EXPORT)
+os.makedirs(EXPORT_DIR, exist_ok=True)
 os.makedirs(C.PREVIEW, exist_ok=True)
 
 
@@ -437,7 +439,7 @@ def export(clip):
     bpy.context.view_layer.objects.active = R.exp
     scene.frame_start, scene.frame_end = 1, clip.frames
     scene.name = clip.name          # FBX 테이크 이름 = 장면 이름 → 클립 이름 = 파일명
-    path = os.path.join(C.EXPORT, clip.name + ".fbx")
+    path = os.path.join(EXPORT_DIR, clip.name + ".fbx")
     bpy.ops.export_scene.fbx(
         filepath=path, use_selection=True, object_types={"ARMATURE"},
         add_leaf_bones=False, bake_anim=True, bake_anim_use_all_bones=True,
@@ -495,11 +497,11 @@ for name in names:
         print("SHEETARGS", os.path.join(C.WORK, "frames", clip.name, "sheet_args.txt"))
     if do_export:
         path = export(clip)
-        with io.open(os.path.join(C.EXPORT, clip.name + "_rifle.json"), "w", encoding="utf-8") as fh:
+        with io.open(os.path.join(EXPORT_DIR, clip.name + "_rifle.json"), "w", encoding="utf-8") as fh:
             json.dump(rifle_track(clip, rec), fh, ensure_ascii=False)
         print("EXPORTED", path, os.path.getsize(path))
 
-mpath = os.path.join(C.WORK, "metrics.json")
+mpath = os.path.join(C.WORK if EXPORT_DIR == C.EXPORT else EXPORT_DIR, "metrics.json")
 old = {}
 if os.path.exists(mpath):
     with io.open(mpath, encoding="utf-8") as fh:

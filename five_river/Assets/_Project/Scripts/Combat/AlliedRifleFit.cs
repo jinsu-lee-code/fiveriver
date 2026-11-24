@@ -36,7 +36,7 @@ namespace FiveRivers.Combat
             ? triggerWristGrip + new Vector3(.006f, -.002f, -.038f)
             : triggerWristGrip;
         public Vector3 supportPalmDirection = new Vector3(1f, .35f, .1f);
-        public Vector3 carryPosition = new Vector3(.04f, 1.08f, .20f);
+        public Vector3 carryPosition = new Vector3(.07f, 1.10f, .25f);   // 11-24: (.04, 1.08, .20)에서는 총을 쥔 오른손 · 아래팔이 앞 탄입대에 묻힘 (source rok_poses stand 와 같은 값)
         public Vector3 carryEuler = new Vector3(-3.2f, -31.9f, 0f);
     }
 }
