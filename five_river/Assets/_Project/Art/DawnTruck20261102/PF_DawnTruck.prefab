@@ -1714,7 +1714,7 @@ MonoBehaviour:
   departureInterval: 0.9
   wheelRadius: 0.48
   turnSpeed: 240
-  walkPlaybackRate: 1.32
+  walkPlaybackRate: 1.1
   moveAngleTolerance: 15
 --- !u!82 &2017779704931826064
 AudioSource:

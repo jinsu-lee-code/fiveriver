@@ -43,7 +43,9 @@ namespace FiveRivers.Narrative
         [SerializeField] Vector3 dawnLightEuler = new Vector3(8f, 120f, 0f); // 오른쪽 뒤에서 낮게 (실루엣)
         [SerializeField] Color dawnSky = new Color(0.55f, 0.55f, 0.62f);
         [SerializeField] Color dawnEquator = new Color(0.45f, 0.40f, 0.38f);
-        [SerializeField] Color dawnFog = new Color(0.52f, 0.50f, 0.55f);        // the night haze thins as the day breaks, so the valley and the truck below read from the crest        [SerializeField] float dawnFogDensity = .0075f;
+        [SerializeField] Color dawnFog = new Color(0.52f, 0.50f, 0.55f);
+        // the night haze thins as the day breaks, so the valley and the truck below read from the crest
+        [SerializeField] float dawnFogDensity = .0075f;
 
         Color nightLight, nightSky, nightEquator, nightFog, nightBackground;
         float nightIntensity, nightFogDensity;
@@ -54,7 +56,10 @@ namespace FiveRivers.Narrative
         static readonly int SpeedId = Animator.StringToHash("Speed");
         Terrain ground;
         float blend;
-        Material originalSky, runtimeSky;        HillAssaultDirector hill;        // the ridge is retaken "before the day breaks": the sky only greys while climbing and breaks at the summit        [SerializeField, Range(0f, 1f)] float preDawnAtSummit = .35f;
+        Material originalSky, runtimeSky;
+        HillAssaultDirector hill;
+        // the ridge is retaken "before the day breaks": the sky only greys while climbing and breaks at the summit
+        [SerializeField, Range(0f, 1f)] float preDawnAtSummit = .35f;
         float lastEnvironmentBlend=-1f;
 
         void Awake()
@@ -70,7 +75,8 @@ namespace FiveRivers.Narrative
             nightRotation = moon.transform.rotation;
             nightSky = RenderSettings.ambientSkyColor;
             nightEquator = RenderSettings.ambientEquatorColor;
-            nightFog = RenderSettings.fogColor;            nightFogDensity = RenderSettings.fogDensity;
+            nightFog = RenderSettings.fogColor;
+            nightFogDensity = RenderSettings.fogDensity;
             nightBackground = view.backgroundColor;
             originalSky=RenderSettings.skybox;
             if(originalSky!=null && originalSky.HasProperty("_DawnBlend"))
@@ -154,7 +160,8 @@ namespace FiveRivers.Narrative
             moon.transform.rotation = Quaternion.Slerp(nightRotation, Quaternion.Euler(dawnLightEuler), e);
             RenderSettings.ambientSkyColor = Color.Lerp(nightSky, dawnSky, e);
             RenderSettings.ambientEquatorColor = Color.Lerp(nightEquator, dawnEquator, e);
-            RenderSettings.fogColor = Color.Lerp(nightFog, dawnFog, e);            RenderSettings.fogDensity = Mathf.Lerp(nightFogDensity, dawnFogDensity, e);
+            RenderSettings.fogColor = Color.Lerp(nightFog, dawnFog, e);
+            RenderSettings.fogDensity = Mathf.Lerp(nightFogDensity, dawnFogDensity, e);
             view.backgroundColor = Color.Lerp(nightBackground, dawnFog, e);
             if (dawnGrade != null) dawnGrade.weight = e;
             if(runtimeSky!=null)
@@ -201,6 +208,7 @@ namespace FiveRivers.Narrative
                 {
                     animator.applyRootMotion=false;
                     animator.SetFloat(SpeedId,walkSpeed);
+                    animator.speed=walkSpeed/1.0f; // the students' walk covers 1.0 m/s at rate 1 (A_ROK_Walk_Tired_v2, 2026-11-24)
                     animator.Play("Walk_Tired",0,i*.23f);
                 }
                 walkerAnimators.Add(animator);

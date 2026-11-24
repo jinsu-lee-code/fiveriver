@@ -18,7 +18,9 @@ namespace FiveRivers.Narrative
         [Min(.1f)] public float departureInterval = .9f;
         [Min(.01f)] public float wheelRadius = .48f;
         [Min(.1f)] public float turnSpeed = 240f;
-        [Min(.1f)] public float walkPlaybackRate = 1.32f;
+        // 2026-11-24: the students walk A_ROK_Walk_Tired_v2 (AOC_ROK_Student; knees bent, head down - the old clip read as a
+        // straight-legged parade step). It covers 1.0 m/s at rate 1, so the rate is the walking speed (1.1 m/s).
+        [Min(.1f)] public float walkPlaybackRate = 1.1f;
         [Range(1f, 45f)] public float moveAngleTolerance = 15f;
 
         [Header("Narrated arrival: skip exposed dismount/walking")]

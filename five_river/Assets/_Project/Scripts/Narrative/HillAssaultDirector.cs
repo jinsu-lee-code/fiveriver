@@ -18,7 +18,9 @@ namespace FiveRivers.Narrative
         enum Arrival { Waiting, Climbing, Talking, Closing }
 
         // Tae-seok appears out of view on the slope below the crest and walks the last stretch up.
-        const float ClimbStartDistance = 18f, ClimbSpeed = 1.8f, WalkClipSpeed = 1.3f, MeetDistance = 3.2f, StandOff = 2.6f;
+        // WalkClipSpeed: ground speed of the students' walk at rate 1 (A_ROK_Walk_Tired_v2, AOC_ROK_Student: 1.0 m/s; was 1.3
+        // for the old clip, 2026-11-24). ClimbSpeed 1.8 -> 1.4: at 1.8x the tired walk turned into short quick shuffling steps
+        const float ClimbStartDistance = 18f, ClimbSpeed = 1.4f, WalkClipSpeed = 1.0f, MeetDistance = 3.2f, StandOff = 2.6f;
         // The crest is captured by reaching the highest boulder on the hill top (the player cannot stand on it).
         const float GreetTurn = 2f, GreetTurnSpeed = 160f, FaceHeight = 1.5f;
         float greetUntil;

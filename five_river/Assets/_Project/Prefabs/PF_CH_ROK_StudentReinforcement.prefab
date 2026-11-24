@@ -150,11 +150,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7381627145666660342, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.02433799
+      value: 0.024337992
       objectReference: {fileID: 0}
     - target: {fileID: -7381627145666660342, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.119690716
+      value: -0.11969072
       objectReference: {fileID: 0}
     - target: {fileID: -1125170043226530859, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -171,7 +171,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 234c1f179545026448aa6cafb7cefff4, type: 2}
+      objectReference: {fileID: 22100000, guid: 80b2dc5bd1206c44b922f13d879d229d, type: 2}
     - target: {fileID: 5866666021909216657, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
       propertyPath: m_CullingMode
       value: 0
