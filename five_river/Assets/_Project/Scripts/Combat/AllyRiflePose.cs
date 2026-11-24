@@ -71,6 +71,10 @@ namespace FiveRivers.Combat
         // from where the carry was fitted. The rifle is turned about RidePivot and shifted by the same, so it stays on
         // the body instead of hanging in the air in front of the root while the man shifts his weight.
         public Vector3 RidePivot, RideShift;
+        // Set by AllyCombatant each frame: the shoulder offset to use instead of the fit's (null = the fit's own).
+        public Vector3? ShoulderOverride;
+        // and the head settle onto the stock (x pitch, y lean, degrees) instead of the fit's
+        public Vector2? HeadOverride;
         public Quaternion RideTurn = Quaternion.identity;
 
         public void Apply(Vector3 aim, float recoil)
@@ -78,7 +82,7 @@ namespace FiveRivers.Combat
             // Park (carry profile) shoulders the rifle with the same contacts as the others: his delivered fire-arm
             // pose held the rifle at chest height once the crouch clip was straightened (2026-11-09).
             var currentFit = fit != null && fit.isActiveAndEnabled && (fit.correctShoulderedHands || fit.correctCarryPose) ? fit : null;
-            var shoulder = rightUpper.position + (currentFit != null ? root.TransformDirection(currentFit.shoulderOffset) : root.up * 0.025f);
+            var shoulder = rightUpper.position + (currentFit != null ? root.TransformDirection(ShoulderOverride ?? currentFit.shoulderOffset) : root.up * 0.025f);
             var forward = (aim - shoulder).normalized;
             var rotation = Quaternion.LookRotation(forward, root.up);
             var animatedAxis = leftHand.position - rightHand.position;
@@ -107,15 +111,39 @@ namespace FiveRivers.Combat
             if (currentFit != null && head != null)
             {
                 // Settle the head onto the stock instead of moving the butt through the harness.
-                if (currentFit.shoulderedHeadLean != 0f)
+                float headPitch = HeadOverride.HasValue ? HeadOverride.Value.x : currentFit.shoulderedHeadPitch;
+                float headLean = HeadOverride.HasValue ? HeadOverride.Value.y : currentFit.shoulderedHeadLean;
+                if (headLean != 0f)
                 {
-                    var lean = Quaternion.AngleAxis(currentFit.shoulderedHeadLean, head.forward);
+                    var lean = Quaternion.AngleAxis(headLean, head.forward);
                     if (neck != null) neck.rotation = lean * neck.rotation;
                     else head.rotation = lean * head.rotation;
                 }
-                if (currentFit.shoulderedHeadPitch != 0f)
-                    head.rotation *= Quaternion.Euler(currentFit.shoulderedHeadPitch, 0f, 0f);
+                if (headPitch != 0f)
+                    head.rotation *= Quaternion.Euler(headPitch, 0f, 0f);
             }
+        }
+
+        // 2026-11-24 (사용자 지시 "새벽고지에서 어깨에 총 매고"): standing at dawn with the rifle slung on his back, both
+        // arms hang at his sides, elbows a little bent (a straight arm read stiff). Offsets from each shoulder joint in the
+        // chest's own frame (the standing idle turns the chest about 40 degrees from the feet), metres, right side; the
+        // left is mirrored. The elbow hint points back and a little out.
+        public static Vector3 HangHand = new Vector3(0.05f, -0.44f, 0.05f);
+        static readonly Vector3 HangElbow = new Vector3(.25f, -.3f, -.9f);
+        public void ApplySlungArms()
+        {
+            if (rightUpper == null || leftUpper == null) return;
+            var right = rightUpper.position - leftUpper.position; right.y = 0f;
+            if (right.sqrMagnitude < 1e-4f) right = root.right;
+            right.Normalize();
+            var up = Vector3.up; var forward = Vector3.Cross(right, up);
+            var mirror = new Vector3(-1f, 1f, 1f);
+            System.Func<Vector3, Vector3> torso = v => right * v.x + up * v.y + forward * v.z;
+            // fingers down and a little forward, palm to the thigh
+            var rightRotation = Quaternion.LookRotation((-up + forward * 0.2f).normalized, -right) * Quaternion.Inverse(rightPalmFrame);
+            Solve(rightUpper, rightFore, rightHand, rightUpper.position + torso(HangHand), rightRotation, torso(HangElbow), fit, true);
+            var leftRotation = Quaternion.LookRotation((-up + forward * 0.2f).normalized, right) * Quaternion.Inverse(leftPalmFrame);
+            Solve(leftUpper, leftFore, leftHand, leftUpper.position + torso(Vector3.Scale(HangHand, mirror)), leftRotation, torso(Vector3.Scale(HangElbow, mirror)), fit, true);
         }
 
         // Standing carry: the ready pose for the opt-in actor, Park's carry profile otherwise.

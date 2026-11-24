@@ -42,6 +42,12 @@ namespace FiveRivers.Combat
         // watch the ridge on the hill and under a barrage. False: the kneeling fire as before.
         public static bool StandToFire = true;
         public static float StandYawOffset = -25f;   // the body bladed to the rifle, standing
+        // 2026-11-24 (아군 동작 검수): Park's shoulder offset was fitted to his kneeling fire; standing, it put the butt 5 cm
+        // higher and 4 cm further back than the others' (from his clavicle) - beside his jaw, the cheek off the stock.
+        // Standing he uses this one (the butt where the others have it) and lays his head on the stock as they do
+        // (his fit has no head settle: kneeling, his own clip already has the head down).
+        public static Vector3 ParkStandShoulder = new Vector3(0.025f, 0.015f, 0.067f);
+        public static Vector2 ParkStandHead = new Vector2(12f, -6f);
         public bool StandsToFire { get; private set; }
         void Posture(bool stand)
         {
@@ -71,8 +77,23 @@ namespace FiveRivers.Combat
         AlliedRifleFit rifleFit;
         // 2026-11-24: switching between port arms, the aim and the carry used to move the rifle up to 48 cm and 137 degrees
         // in one frame (the hill cover). The arms and the rifle go from the pose last shown over this many seconds (0 = off).
-        public static float HoldFadeSeconds = 0.22f;
+        // 2026-11-24 (검수): 0.22 s raised the rifle from port arms to the shoulder faster than a man does; 0.4 s.
+        public static float HoldFadeSeconds = 0.4f;
         AllyPoseFade poseFade;
+        Vector3 standWatch; float standWatchAt = -1f;
+        // shouldering while standing in the trench (not firing): AllyClipPlayer may start its trench clips from it
+        public bool Shouldering { get; private set; }
+        public static float ShoulderAfter = 0f;   // 0.3 s left the old standing arms on screen first (2026-11-24)
+        float standingSince = -1f;
+
+        Vector3 StandWatchPoint()
+        {
+            var forward = Quaternion.AngleAxis(StandYawOffset, Vector3.up) * transform.forward; forward.y = 0f;
+            var point = transform.position + forward.normalized * 30f;
+            return Physics.Raycast(point + Vector3.up * 80f, Vector3.down, out var hit, 160f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
+                ? hit.point + Vector3.up * 1.0f
+                : point + Vector3.up * 2f;
+        }
         float lastAdvance, lastRun; int portCut;
         float recoilAt = -100f;
 
@@ -150,6 +171,7 @@ namespace FiveRivers.Combat
             if (!isActiveAndEnabled) return;
             StopFiring();
             poseFade?.Clear(); // a new section or retry starts from where he is put, not from the last pose
+            Shouldering = false; standingSince = -1f;
             watching = false;
             lastTargetAt = -100f;
             if (resetCounts && takingCover) { takingCover = false; LookUp(); }
@@ -429,12 +451,19 @@ namespace FiveRivers.Combat
             // clip's own track and the hands hold it as the clip has them. The aim, the carry and the tutorial look rest.
             bool clipRifle = Clips != null && Clips.OwnsRifle;
             int holdMode = PoseFadeClock.Clip;
+            bool wasShouldering = Shouldering;
+            Shouldering = false;
             if (!engaged || clipRifle) steadyAimSet = false;
-            if (clipRifle) NoteCarry("clip");
+            // a trench clip started from the shouldered stand: he still counts as standing there (else the clip player would
+            // see the controller busy, stop the clip and the two would take turns every frame)
+            if (clipRifle) { NoteCarry("clip"); Shouldering = wasShouldering; }
             // Both palms come from the actual crouch/fire clip, including its recoil. While he kneels to fire the rifle
             // stays shouldered even on the frame a target is lost (it used to drop into the standing carry).
             else if (engaged)
             {
+                bool parkStanding = StandsToFire && AlliedRifleFit.IsParkAvatar(animator);
+                riflePose.ShoulderOverride = parkStanding ? ParkStandShoulder : (Vector3?)null;
+                riflePose.HeadOverride = parkStanding ? ParkStandHead : (Vector2?)null;
                 riflePose.Apply(SteadyAim(), 0.022f * Mathf.Exp(-(Time.time - recoilAt) * 24f));
                 NoteCarry(watching ? "watch" : "aim");
                 holdMode = watching ? PoseFadeClock.Watch : PoseFadeClock.Aim;
@@ -445,16 +474,41 @@ namespace FiveRivers.Combat
                 float advance = Advancing ? StateWeight(CrouchRunRifleId) : 0f, run = Advancing ? StateWeight(RunRifleId) : 0f;
                 // the new run clips carry the rifle in both hands themselves: port arms only for what is left of standing
                 bool clipRun = Clips != null && Clips.RunClipsInstalled, clipAdvance = Clips != null && Clips.AdvanceClipsInstalled;
-                bool portArms = director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
+                // 2026-11-24 (사용자 지시 "새벽고지에서 어깨에 총 매고"): standing at dawn on the hill the rifle is slung
+                Vector3 slungPosition = Vector3.zero; Quaternion slungRotation = Quaternion.identity;
+                bool slung = director.Flow.IsExpanded && section == FlowSection.Dawn && advance <= 0f && run <= 0f
+                    && Clips != null && Clips.SlungPose(out slungPosition, out slungRotation);
+                if (slung) { weapon.SetPositionAndRotation(slungPosition, slungRotation); riflePose.ApplySlungArms(); }
+                bool portArms = !slung && director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
                     && riflePose.ApplyPortArms(clipAdvance ? 0f : advance, clipRun ? 0f : run, section == FlowSection.Dawn ? 1f : 0f);
                 if (portArms && (clipRun || clipAdvance)) Clips.HoldMovingRifle(weapon, clipRun ? run : 0f, clipAdvance ? advance : 0f);
-                NoteCarry(portArms ? $"port a{StateWeight(CrouchRunRifleId):0.00} r{StateWeight(RunRifleId):0.00}" : "carry");
+                NoteCarry(slung ? "slung" : portArms ? $"port a{StateWeight(CrouchRunRifleId):0.00} r{StateWeight(RunRifleId):0.00}" : "carry");
                 // stopping at cover (Advancing off) or the controller cutting run ↔ crouched advance in one frame moved the
                 // rifle from the clip's track to the standing port arms at once: count those as a change of hold too
                 if (Mathf.Abs(advance - lastAdvance) + Mathf.Abs(run - lastRun) > 0.35f) portCut++;
                 lastAdvance = advance; lastRun = run;
-                holdMode = portArms ? (Advancing ? PoseFadeClock.PortMove : PoseFadeClock.PortStand) + 2 * (portCut & 0xFFFF) : PoseFadeClock.Carry;
-                if (!portArms && !riflePose.TryApplyCarry())
+                holdMode = slung ? PoseFadeClock.Slung
+                    : portArms ? (Advancing ? PoseFadeClock.PortMove : PoseFadeClock.PortStand) + 2 * (portCut & 0xFFFF) : PoseFadeClock.Carry;
+                // 2026-11-24 (사용자 지시 "국군 서 있을 때 참호에서는 견착"): the riflemen without Park's carry profile held the
+                // rifle in the Mixamo standing arms (through the ammo pouches) or the low ready: standing in the trench they
+                // shoulder it in the standing-fire body (Aim_Stand) and watch the ground up the slope, a little to the left of
+                // straight ahead as the bladed stance points the rifle (StandYawOffset), no rounds.
+                bool standing = !portArms && !slung && rifleFit != null && rifleFit.isActiveAndEnabled && !rifleFit.correctCarryPose;
+                // only once he has stood a moment: at a section start the trench clips take him down within half a second,
+                // and raising the rifle just to lower it again read as a twitch
+                if (!standing) standingSince = -1f; else if (standingSince < 0f) standingSince = Time.time;
+                bool shoulder = standing && (wasShouldering || Time.time - standingSince >= ShoulderAfter);
+                bool carried = portArms || slung || shoulder || riflePose.TryApplyCarry();
+                if (shoulder)
+                {
+                    if (!Shouldering) { Shouldering = true; standWatchAt = -1f; }
+                    if (!InState(AimStandId) && !InState(FireStandId)) animator.CrossFadeInFixedTime(AimStandId, 0.3f);
+                    if (Time.time >= standWatchAt) { standWatch = StandWatchPoint(); standWatchAt = Time.time + 2f; }
+                    riflePose.Apply(standWatch, 0f);
+                    NoteCarry("shoulder");
+                    holdMode = PoseFadeClock.Watch;
+                }
+                else if (!carried)
                 {
                     var forward = leftHand.position - rightHand.position;
                     if (forward.sqrMagnitude > 0.001f)
@@ -464,6 +518,8 @@ namespace FiveRivers.Combat
                     }
                 }
             }
+            if (wasShouldering && !Shouldering && !StandsToFire && (InState(AimStandId) || InState(FireStandId)))
+                animator.CrossFadeInFixedTime(IdleStandId, 0.3f);
             // going into or out of a clip: what was done above is kept in proportion (nothing when no clip plays)
             if (Clips != null) Clips.HoldRifle(weapon);
             if (!engaged && (Clips == null || Clips.RifleWeight <= 0f)

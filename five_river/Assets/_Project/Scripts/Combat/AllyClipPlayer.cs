@@ -363,11 +363,15 @@ namespace FiveRivers.Combat
             return s;
         }
 
+        static readonly int AimStandId = Animator.StringToHash("Aim_Stand");
+
         bool ControllerFree()
         {
             if (!animator.isActiveAndEnabled) return false;
-            if (!animator.IsInTransition(0)) return animator.GetCurrentAnimatorStateInfo(0).shortNameHash == IdleStandId;
-            return animator.GetNextAnimatorStateInfo(0).shortNameHash == IdleStandId;
+            // standing in the trench he shoulders the rifle in Aim_Stand (2026-11-24): that is the free stand too
+            int free2 = ally != null && ally.Shouldering ? AimStandId : IdleStandId;
+            int state = animator.IsInTransition(0) ? animator.GetNextAnimatorStateInfo(0).shortNameHash : animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+            return state == IdleStandId || state == free2;
         }
 
         bool StateIs(int state)
@@ -587,6 +591,25 @@ namespace FiveRivers.Combat
 
         // Hill assault: the new run clips carry the rifle in both hands. run / advance: how much of each moving state
         // is on screen (AllyCombatant.StateWeight); the standing port arms placed before this keeps the rest.
+        // 2026-11-24 (사용자 지시 "새벽고지에서 어깨에 총 매고"): the rifle slung on his back, muzzle up over the right
+        // shoulder, where the loader carries it while he handles the rockets (A_ROK_Loader_Kneel_Idle, baked on this
+        // man's upper chest, so it rides his own back standing as kneeling).
+        public const string SlungSourceClip = "A_ROK_Loader_Kneel_Idle";
+        internal bool SlungPose(out Vector3 position, out Quaternion rotation)
+        {
+            position = Vector3.zero; rotation = Quaternion.identity;
+            if (!bound || anchor == null || Data == null) return false;
+            var baked = AllyRifleTracks.BakedFor(fit, SlungSourceClip);
+            if (baked == null || baked.position.Length == 0) return false;
+            AllyRifleTracks.Sample(baked, 30f, 0f, false, out var local, out var localRotation);
+            position = anchor.TransformPoint(local);
+            rotation = anchor.rotation * localRotation;
+            return true;
+        }
+
+        public static float MoveHoldSeconds = 0.4f;
+        float moveHold; int moveHoldFrame = -10;
+
         internal void HoldMovingRifle(Transform weapon, float run, float advance)
         {
             if (weapon == null || !armsSnapped) return;
@@ -607,8 +630,14 @@ namespace FiveRivers.Combat
             }
             else if (hasRun) { position = runPosition; rotation = runRotation; w = Mathf.Clamp01(run); }
             else if (hasAdvance) { position = advancePosition; rotation = advanceRotation; w = Mathf.Clamp01(advance); }
-            else return;
-            Hold(weapon, w, position, rotation, 1f, 1f);
+            else { moveHold = 0f; return; }
+            // 2026-11-24 (검수): the animator's 0.2 s cross-fade turned the rifle from the standing carry to the run's port
+            // arms (about 120 degrees) in 0.2 s. Going in, the rifle takes MoveHoldSeconds; going out is left to the pose
+            // fade of AllyCombatant (the run state is gone and its track with it).
+            if (Time.frameCount - moveHoldFrame > 2) moveHold = 0f;
+            moveHoldFrame = Time.frameCount;
+            moveHold = w > moveHold ? Mathf.MoveTowards(moveHold, w, Time.deltaTime / MoveHoldSeconds) : w;
+            Hold(weapon, moveHold, position, rotation, 1f, 1f);
         }
 
         void Hold(Transform weapon, float w, Vector3 position, Quaternion rotation, float gripLeft, float gripRight)
@@ -628,7 +657,14 @@ namespace FiveRivers.Combat
             weapon.SetPositionAndRotation(position, rotation);
             Contact(right, gripRight, Data.rightWrist, weapon);
             Contact(left, gripLeft, Data.leftWrist, weapon);
-            if (mix) { Mix(left, w); Mix(right, w); }
+            if (mix)
+            {
+                Mix(left, w); Mix(right, w);
+                // 2026-11-24 (검수): mixing the arms apart from the rifle took the hands 15-25 cm off it while it turned;
+                // a hand that holds it in the clip stays on the mixed rifle.
+                Contact(right, gripRight, Data.rightWrist, weapon);
+                Contact(left, gripLeft, Data.leftWrist, weapon);
+            }
         }
 
         static void Save(Arm arm)
