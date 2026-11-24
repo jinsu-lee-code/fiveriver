@@ -36,7 +36,7 @@ Material:
     - _DawnBlend: 0
     - _DawnExposure: 0.42
     - _NightCeiling: 0.008
-    - _NightExposure: 0.13
+    - _NightExposure: 0.085
     - _Rotation: 0
     - _StarBrightness: 0.4
     - _StarDensity: 0.016

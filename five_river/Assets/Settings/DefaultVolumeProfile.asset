@@ -299,6 +299,70 @@ MonoBehaviour:
   cropToFit:
     m_OverrideState: 1
     m_Value: 1
+--- !u!114 &-3777368525336640465
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd6f817d1017f94daf20118b918cd3d, type: 3}
+  m_Name: FrontlineVolumetricFog
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Environment.FrontlineVolumetricFog
+  active: 1
+  density:
+    m_OverrideState: 1
+    m_Value: 0
+  airDensity:
+    m_OverrideState: 1
+    m_Value: 0
+  baseHeight:
+    m_OverrideState: 1
+    m_Value: 0
+  heightFalloff:
+    m_OverrideState: 1
+    m_Value: 6
+  distance:
+    m_OverrideState: 1
+    m_Value: 120
+  tint:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+  ambient:
+    m_OverrideState: 1
+    m_Value: 1
+  mainLightScattering:
+    m_OverrideState: 1
+    m_Value: 0.5
+  mainLightAnisotropy:
+    m_OverrideState: 1
+    m_Value: 0.6
+  lightScattering:
+    m_OverrideState: 1
+    m_Value: 1
+  lightAnisotropy:
+    m_OverrideState: 1
+    m_Value: 0.3
+  lightNearRadius:
+    m_OverrideState: 1
+    m_Value: 1.5
+  lightCeiling:
+    m_OverrideState: 1
+    m_Value: 0
+  noise:
+    m_OverrideState: 1
+    m_Value: 0.3
+  noiseScale:
+    m_OverrideState: 1
+    m_Value: 0.05
+  wind:
+    m_OverrideState: 1
+    m_Value: {x: 0.4, y: 0, z: 0.15}
+  steps:
+    m_OverrideState: 1
+    m_Value: 24
 --- !u!114 &-1410297666881709256
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -468,6 +532,7 @@ MonoBehaviour:
   - {fileID: -6288072647309666549}
   - {fileID: 7518938298396184218}
   - {fileID: -1410297666881709256}
+  - {fileID: -3777368525336640465}
 --- !u!114 &853819529557874667
 MonoBehaviour:
   m_ObjectHideFlags: 3

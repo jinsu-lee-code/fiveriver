@@ -17,6 +17,16 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: URPLab_Baked_Cap
+    second: {fileID: 2100000, guid: 471e6d28a4265094794cf5c9a59b7635, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: URPLab_Baked_Head
+    second: {fileID: 2100000, guid: 58cbce19f62e5ae47ae8a8c10945d7f9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: URPLab_Baked_Vest
     second: {fileID: 2100000, guid: d633249c02590b04abfa6a77ae340395, type: 2}
   materials:

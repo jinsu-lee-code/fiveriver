@@ -27,6 +27,7 @@ namespace FiveRivers.Combat
             flare.born = Time.time;
             flare.glow = go.AddComponent<Light>();
             flare.glow.type = LightType.Point; flare.glow.color = Green; flare.glow.range = Range; flare.glow.shadows = LightShadows.None; flare.glow.intensity = 0f;
+            FiveRivers.Environment.FrontlineVolumetricFog.MarkLight(flare.glow); // a faint green glow in the night haze (2026-11-24)
             var ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             Destroy(ball.GetComponent<Collider>());
             ball.transform.SetParent(go.transform, false);

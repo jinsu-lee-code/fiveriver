@@ -115,7 +115,7 @@ MonoBehaviour:
     m_Value: 3
   intensity:
     m_OverrideState: 1
-    m_Value: 0.14
+    m_Value: 0.12
   response:
     m_OverrideState: 1
     m_Value: 0.8
@@ -144,6 +144,7 @@ MonoBehaviour:
   - {fileID: -1089690741057296248}
   - {fileID: -4349901694371704091}
   - {fileID: 1072658003098987496}
+  - {fileID: 3331242509193619257}
 --- !u!114 &1072658003098987496
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -232,7 +233,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.24
+    m_Value: 0.18
   smoothness:
     m_OverrideState: 1
     m_Value: 0.42
@@ -289,6 +290,67 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 1
     m_Value: 0
+--- !u!114 &3331242509193619257
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd6f817d1017f94daf20118b918cd3d, type: 3}
+  m_Name: FrontlineVolumetricFog
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Environment.FrontlineVolumetricFog
+  active: 1
+  density:
+    m_OverrideState: 1
+    m_Value: 0.006
+  airDensity:
+    m_OverrideState: 1
+    m_Value: 0
+  baseHeight:
+    m_OverrideState: 1
+    m_Value: -1
+  heightFalloff:
+    m_OverrideState: 1
+    m_Value: 2.5
+  distance:
+    m_OverrideState: 1
+    m_Value: 200
+  tint:
+    m_OverrideState: 1
+    m_Value: {r: 1, g: 0.97, b: 0.94, a: 1}
+  ambient:
+    m_OverrideState: 1
+    m_Value: 1
+  mainLightScattering:
+    m_OverrideState: 1
+    m_Value: 0.8
+  mainLightAnisotropy:
+    m_OverrideState: 1
+    m_Value: 0.7
+  lightScattering:
+    m_OverrideState: 1
+    m_Value: 1
+  lightAnisotropy:
+    m_OverrideState: 1
+    m_Value: 0.35
+  lightNearRadius:
+    m_OverrideState: 1
+    m_Value: 2
+  noise:
+    m_OverrideState: 1
+    m_Value: 0.45
+  noiseScale:
+    m_OverrideState: 1
+    m_Value: 0.03
+  wind:
+    m_OverrideState: 1
+    m_Value: {x: 0.6, y: 0, z: 0.2}
+  steps:
+    m_OverrideState: 1
+    m_Value: 18
 --- !u!114 &6760523553387437286
 MonoBehaviour:
   m_ObjectHideFlags: 3
