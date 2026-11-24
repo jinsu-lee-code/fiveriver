@@ -59,7 +59,8 @@ namespace FiveRivers.Data
         [Range(0f, 0.3f)] public float speedSpread = 0.1f;
 
         [Header("쓰러진 적 : 그 회차 동안 남는다")]
-        [Tooltip("이 수를 넘으면 화면 밖 · 먼 것부터 치운다")] [Min(1)] public int maxBodies = 24;
+        // 2026-11-24 24 → 40: 밤의 결과가 새벽 고지 · 들판까지 보이게 (사용자 지시 "쌓이는 흔적"). 쓰러진 뒤 5초면 자세를 굳혀 애니메이터가 꺼지므로 가볍다. 실측: 29구에서 새벽 61.6fps(0구 67.4fps, 구당 약 0.05ms). 40을 넘기면 60fps 목표가 위험해 40으로 정했다(EnemyDensityTests 상한 40).
+        [Tooltip("이 수를 넘으면 화면 밖 · 먼 것부터 치운다")] [Min(1)] public int maxBodies = 40;
         [Tooltip("화면 안의 몸은 이 거리보다 멀 때만 치운다 (m)")] public float bodyCullDistance = 55f;
         [Tooltip("쓰러진 뒤 이 시간이 지나면 자세를 굳혀 계산을 멈춘다 (초)")] public float bodySettleAfter = 5f;
     }

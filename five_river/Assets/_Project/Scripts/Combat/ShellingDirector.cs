@@ -105,7 +105,7 @@ namespace FiveRivers.Combat
             var flow = director.Flow;
             flow.SectionChanged += OnSectionChanged;
             flow.RetryRequested += OnRetry;
-            if (tank != null) tank.CannonFired += OnTankShot;
+            if (tank != null) { tank.CannonFired += OnTankShot; tank.ShellLanded += OnTankShellLanded; }
             plan.Enter(flow.Section, flow.IsExpanded);
         }
 
@@ -116,11 +116,47 @@ namespace FiveRivers.Combat
                 director.Flow.SectionChanged -= OnSectionChanged;
                 director.Flow.RetryRequested -= OnRetry;
             }
-            if (tank != null) tank.CannonFired -= OnTankShot;
+            if (tank != null) { tank.CannonFired -= OnTankShot; tank.ShellLanded -= OnTankShellLanded; }
             if (quad != null) Destroy(quad);
         }
 
         void OnTankShot() => lastTankShot = Time.time;
+
+        // 전차포 한 발이 떨어졌을 때 몸으로 느끼는 것만 (2026-11-24, 전차포 직격 규칙): 화면 흔들림 · 귀 먹먹함 · 흙 쏟아짐 · 먼지.
+        // 폭발 섬광 · 구덩이는 전차가 따로 만든다. 가까울수록 세게(close). 체력 피해와는 무관하다.
+        void OnTankShellLanded(Vector3 point, bool close)
+        {
+            if (CutsceneRig.Running > 0 || player == null) return;
+            var eye = view != null ? view.transform.position : player.CameraPivot.position;
+            float distance = Vector3.Distance(eye, point);
+            float travel = distance / Mathf.Max(1f, config.soundSpeed);
+            if (distance < 90f)
+                sounds.Add(new PendingSound { at = Time.time + travel + Rand(0.55f, 0.9f), kind = Debris, point = point, gain = Mathf.Lerp(1f, 0.4f, distance / 90f) });
+            if (close)
+            {
+                player.AddShake(config.closeShakeDegrees, config.closeShakeSeconds);
+                if (sound != null) sound.Deafen(config.closeDeafenSeconds, 1f, true);
+                RaiseDust(1f);
+                if (effects != null && config.dirtShowerPrefab != null)
+                {
+                    var toward = eye + Vector3.up * 2.2f - point;
+                    var shower = Instantiate(config.dirtShowerPrefab, point + Vector3.up * 0.3f, Quaternion.LookRotation(toward.normalized, Vector3.up), effects.Container);
+                    Destroy(shower, 4f);
+                }
+            }
+            else
+            {
+                if (distance < config.shakeRange)
+                {
+                    float k = 1f - distance / config.shakeRange;
+                    player.AddShake(config.shakeDegrees * k * k * 1.6f, config.shakeSeconds * Mathf.Lerp(0.6f, 1f, k));
+                }
+                if (sound != null && distance < config.deafenRange)
+                    sound.Deafen(config.deafenSeconds * Mathf.Lerp(0.5f, 1f, 1f - distance / config.deafenRange), Mathf.Lerp(0.45f, 0.9f, 1f - distance / config.deafenRange), false);
+            }
+            if (distance < config.trenchDustRange)
+                sounds.Add(new PendingSound { at = Time.time + 0.55f + distance / 45f, kind = Rain, point = point });
+        }
 
         void FindTrench()
         {
@@ -249,6 +285,44 @@ namespace FiveRivers.Combat
                     case FarGun: sound.PlayDistantGunfire(s.id, Pan(s.bearing), s.level * Behind(s.bearing), s.cutoff, s.voice, s.pitch); break;
                 }
             }
+        }
+
+        // 연출용 한 발 (조명탄 연출, 2026-11-23): near 둘레 고리(ringMin~ringMax) 안의 열린 땅에 lead초 뒤 떨어진다.
+        // 일정 포격과 같은 규칙으로 사람 · 엄폐물 · 탄약 상자 · 참호를 피한다. 자리를 못 찾으면 false.
+        // toward: 주면 near에서 그 방향(좌우 40도 안)으로만 고른다 (카메라 쪽으로 떨어지지 않게).
+        public bool TryStagedShell(Vector3 near, float ringMin, float ringMax, float lead, out Vector3 point, Vector3 toward = default)
+        {
+            point = default;
+            if (!enabled || terrain == null || player == null) return false;
+            CollectKeepouts(config.keepAlly);
+            var origin = terrain.transform.position;
+            var size = terrain.terrainData.size;
+            for (int attempt = 0; attempt < 4; attempt++)
+            {
+                if (!ShellSafety.TryPick(new Vector2(near.x, near.z), ringMin, ringMax, null, keepouts, trench, config.keepTrench, Rand, 16, out var picked,
+                        new Vector2(toward.x, toward.z), 1f)) break;
+                var from = new Vector3(picked.x, origin.y + size.y + 5f, picked.y);
+                if (!Physics.Raycast(from, Vector3.down, out var hit, size.y + 20f, WorldQuery.Solid, QueryTriggerInteraction.Ignore) || !(hit.collider is TerrainCollider)) continue;
+                point = hit.point;
+                shells.Add(new PendingShell { point = point, at = Time.time + lead });
+                AllyClipCues.ShellIncoming(point, Time.time + lead);
+                sounds.Add(new PendingSound { at = Time.time, kind = Incoming, point = point, gain = 1f });
+                return true;
+            }
+            return false;
+        }
+
+        // 연출용: 움직이는 표적 곁에 맞추려고 날아오는 소리와 폭발을 따로 부른다. 자리 검사는 부르는 쪽이 한다.
+        public void StagedIncoming(Vector3 point)
+        {
+            if (sound != null) sound.PlayAt("SFX_Artillery_Incoming", point + Vector3.up * 12f, 1f);
+        }
+
+        public void StagedBlast(Vector3 point)
+        {
+            if (!enabled || terrain == null) return;
+            point.y = terrain.SampleHeight(point) + terrain.transform.position.y;
+            Blast(point);
         }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

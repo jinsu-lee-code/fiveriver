@@ -62,6 +62,23 @@ namespace FiveRivers.Combat
         float nextAllyBlast;
         int allyBlastsLeft;
         float approachElapsed;
+        // 조준해 들어옴 (2026-11-24): 노출된 채 쏘면 멀리 → 가까이 → 직격
+        TankGunnery gunnery;
+        Vector3 lastShotPlayerAt;
+        bool hasLastShot;
+        static readonly RaycastHit[] sightHits = new RaycastHit[24];
+        // 쏘기 전 예고 (2026-11-24): 포탑 회전 소리 + 마지막 조정. 판정은 쏘는 순간 그대로
+        TankFireWarning warning;
+        RunCoordinator coordinator;
+        float appliedNudgeYaw;
+        public bool WarningActive => warning != null && warning.Active;
+
+        public int ShotsFired { get; private set; }
+        public GunneryShot LastShot { get; private set; }
+        public bool LastShotExposed { get; private set; }
+        public float LastShotMissDistance { get; private set; }   // 플레이어에서 착탄점까지 수평 m
+        public Vector3 LastImpact { get; private set; }
+        public int AimStage => gunnery != null ? gunnery.Stage : 0;
 
         public int SideHits { get; private set; }
         public bool IsStopped => state == State.Stopped;
@@ -72,6 +89,8 @@ namespace FiveRivers.Combat
         public event Action<int> SideHit;
         public event Action Stopped;
         public event Action CannonFired;
+        // 포탄이 떨어진 자리 · 가까이(센 흔들림) 여부. 몸으로 느끼는 효과는 ShellingDirector가 맡는다.
+        public event Action<Vector3, bool> ShellLanded;
         public event Action AllySupportStarted;
 
         void Awake()
@@ -86,6 +105,12 @@ namespace FiveRivers.Combat
             // wheels turn and the track belts run with the distance the hull travels (TankRunningGear)
             body.gameObject.AddComponent<TankRunningGear>().Build(body);
             // where its rounds land the ground is blown out (ShellCraters, undone on a new run or a retry)
+            gunnery = new TankGunnery(new GunneryRules
+            {
+                ShotsToDirect = config.shotsToDirect, FarMin = config.farMin, FarMax = config.farMax, MidMin = config.midMin, MidMax = config.midMax,
+                DirectScatter = config.directScatter, Lateral = config.aimLateral, MoveReset = config.aimMoveReset,
+            });
+            warning = new TankFireWarning(config.warnLead, config.warnNudgeDelay, config.warnNudgeSeconds, config.warnNudgeYaw, config.warnNudgePitch);
             craters = gameObject.AddComponent<ShellCraters>();
             craters.Bind(director, config, driveTerrain);
             Hide();
@@ -93,6 +118,7 @@ namespace FiveRivers.Combat
 
         void Start()
         {
+            coordinator = FindFirstObjectByType<RunCoordinator>();
             director.Flow.SectionChanged += OnSectionChanged;
             director.Flow.RetryRequested += OnRetry;
         }
@@ -136,6 +162,8 @@ namespace FiveRivers.Combat
             body.SetPositionAndRotation(at.position, at.rotation);
             if (driveTerrain != null) AlignWithGround();
             turret.localRotation = turretRest;
+            appliedNudgeYaw = 0f;
+            warning.Cancel();
             gunPitch = 0f;
             if (gun != null) gun.localRotation = gunRest;
             destroyedSwapAt = -1f;
@@ -154,11 +182,15 @@ namespace FiveRivers.Combat
             // every other time, always came before he could fire (played through by hand, 2026-11-17 night)
             nextFire = Time.time + config.fireInterval;
             allyBlastsLeft = 0;
+            gunnery.Reset();
+            hasLastShot = false;
         }
 
         void Hide()
         {
             Scripted = false;
+            warning.Cancel();
+            appliedNudgeYaw = 0f;
             state = State.Hidden;
             allyBlastsLeft = 0;
             body.gameObject.SetActive(false);
@@ -204,32 +236,42 @@ namespace FiveRivers.Combat
             var toPlayer = player.transform.position - turret.position;
             var turretUp = driveTerrain != null ? body.up : Vector3.up;
             toPlayer = Vector3.ProjectOnPlane(toPlayer, turretUp);
+            // 지난 프레임의 예고 조정을 벗기고 추적한 뒤 이번 조정을 얹는다 (조정이 추적 상태에 쌓이지 않게)
+            UndoNudge(turretUp);
             if (toPlayer.sqrMagnitude > 0.01f)
             {
                 var want = Quaternion.LookRotation(toPlayer, turretUp) * turretBasis;
                 turret.rotation = Quaternion.RotateTowards(turret.rotation, want, config.turretTurnSpeed * Time.deltaTime);
             }
+            // 쏘기 warnLead 초 전 예고 (2026-11-24): 소리는 AudioDirector 가 WarningActive 로 튼다. 같은 조건에서만 알린다.
+            // 등장 연출(Scripted)은 위에서 이미 빠졌고, 재시도 · 사망으로 화면이 어두운 동안에는 알리지 않는다.
+            bool mayFire = !director.Flow.CombatLocked && director.Flow.Section == FlowSection.Tank;
+            bool dark = coordinator != null && coordinator.Fade > 0.05f;
+            warning.Tick(Time.time, nextFire, mayFire && !dark);
+            float nudge = warning.NudgeYaw(Time.time);
+            if (nudge != 0f)
+            {
+                turret.rotation = Quaternion.AngleAxis(nudge, turretUp) * turret.rotation;
+                appliedNudgeYaw = nudge;
+            }
             AimGun(turretUp);
 
-            if (!director.Flow.CombatLocked && director.Flow.Section == FlowSection.Tank && Time.time >= nextFire)
+            if (mayFire && Time.time >= nextFire)
             {
-                // Establish sight of the gun once on each appearance. Later shots still threaten cover.
-                // The player's own rig never blocks the sight line, and the tank stops waiting after 2 s.
-                if (!openedFire && Physics.Linecast(player.CameraPivot.position, gunMuzzle.position,
-                        out var obstruction, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore)
-                    && !obstruction.transform.IsChildOf(body) && !obstruction.transform.IsChildOf(player.transform))
-                {
-                    if (sightWaitUntil < 0f) sightWaitUntil = Time.time + 2f;
-                    if (Time.time < sightWaitUntil)
-                    {
-                        nextFire = Time.time + 0.25f;
-                        return;
-                    }
-                }
+                // 2026-11-24: 시선이 막혀 있어도 기다리지 않는다. 쏘는 순간 노출 여부로 조준이 정해진다 (FireCannon).
                 openedFire = true;
                 nextFire = Time.time + config.fireInterval;
                 FireCannon();
+                warning.Fired();
             }
+        }
+
+        // 예고 때 얹은 포탑 조정을 벗긴다 (추적 상태에 쌓이지 않게)
+        void UndoNudge(Vector3 turretUp)
+        {
+            if (appliedNudgeYaw == 0f) return;
+            turret.rotation = Quaternion.AngleAxis(-appliedNudgeYaw, turretUp) * turret.rotation;
+            appliedNudgeYaw = 0f;
         }
 
         // 포탑이 좌우를 맡고, 주포는 포탑 오른쪽 축으로만 위아래를 겨눈다 (포탑과 같은 속도).
@@ -240,7 +282,7 @@ namespace FiveRivers.Combat
             var flat = Vector3.ProjectOnPlane(aim, turretUp);
             float want = Mathf.Clamp(Mathf.Atan2(Vector3.Dot(aim, turretUp), flat.magnitude) * Mathf.Rad2Deg, gunDepression, gunElevation);
             gunPitch = Mathf.MoveTowards(gunPitch, want, config.turretTurnSpeed * Time.deltaTime);
-            gun.rotation = Quaternion.AngleAxis(-gunPitch, turret.right) * (turret.rotation * gunRest);
+            gun.rotation = Quaternion.AngleAxis(-(gunPitch + warning.NudgePitch(Time.time)), turret.right) * (turret.rotation * gunRest);
         }
 
         // 기존 전체 접근 시간은 유지한다. 앞 75%에 직진하고, 마지막 25%는
@@ -275,20 +317,57 @@ namespace FiveRivers.Combat
             return p;
         }
 
-        // 위협 사격: 플레이어 근처(빗나감 거리)에 떨어진다. 폭발 반경 안이면 피해 (실패 보조 배율 적용)
+        // 포구에서 플레이어 머리(카메라)까지 시선이 지형 · 흉벽 · 엄폐물에 막히지 않으면 노출.
+        // 전차 자신과 플레이어 몸체는 막지 않고, 플레이어만 막는 벽(레이어 8)은 WorldQuery.All이 이미 뺀다.
+        public bool PlayerExposed()
+        {
+            var from = gunMuzzle.position;
+            var head = player.CameraPivot.position;
+            var dir = head - from;
+            float distance = dir.magnitude;
+            if (distance < 0.05f) return true;
+            int n = Physics.RaycastNonAlloc(from, dir / distance, sightHits, distance, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < n; i++)
+            {
+                var t = sightHits[i].transform;
+                if (t.IsChildOf(body) || t.IsChildOf(player.transform)) continue;
+                return false;
+            }
+            return true;
+        }
+
+        // 위협 사격 (2026-11-24 규칙): 노출된 채면 조준이 좁혀 들어와 셋째 발이 직격, 직격이면 즉사.
+        // 빗나간 포탄은 아무리 가까워도 체력 피해 0 (흔들림 · 먹먹함 · 흙만). 수치는 TankConfig, 순서는 TankGunnery.
         void FireCannon()
         {
             var target = player.transform.position;
-            var offset = Random.insideUnitCircle.normalized * config.nearMissOffset * Random.Range(0.5f, 1.2f);
-            var impact = target + new Vector3(offset.x, 0f, offset.y);
+            bool exposed = PlayerExposed();
+            float moved = hasLastShot ? Vector2.Distance(new Vector2(target.x, target.z), new Vector2(lastShotPlayerAt.x, lastShotPlayerAt.z)) : 0f;
+            var shot = gunnery.Next(exposed, moved, () => Random.value);
+            lastShotPlayerAt = target;
+            hasLastShot = true;
+
+            var axis = target - body.position; axis.y = 0f;
+            axis = axis.sqrMagnitude > 0.01f ? axis.normalized : Vector3.forward;
+            var side = Vector3.Cross(Vector3.up, axis);
+            float along = shot.Beyond ? shot.Distance : -shot.Distance;
+            var impact = target + axis * along + side * shot.Lateral;
             if (Physics.Raycast(impact + Vector3.up * 20f, Vector3.down, out var hit, 40f, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore))
                 impact = hit.point;
+            if (shot.Direct) impact = new Vector3(impact.x, Mathf.Max(impact.y, target.y - 0.05f), impact.z);
+
+            ShotsFired++;
+            LastShot = shot;
+            LastShotExposed = exposed;
+            LastImpact = impact;
+            LastShotMissDistance = Vector2.Distance(new Vector2(impact.x, impact.z), new Vector2(target.x, target.z));
+
             effects.Spawn(EffectKind.TankMuzzle, gunMuzzle.position, gunMuzzle.rotation);
             effects.Spawn(EffectKind.CannonBlast, impact, Quaternion.identity);
             craters.Make(impact);
-            if (Vector3.Distance(impact, target) <= config.cannonRadius)
-                playerHealth.TakeDamage(config.cannonDamage * director.EnemyDamageScale, impact);
             CannonFired?.Invoke();
+            ShellLanded?.Invoke(impact, shot.Direct || LastShotMissDistance <= config.feelCloseRange);
+            if (shot.Direct) playerHealth.Kill(impact);
         }
 
         // ---- Entrance sequence (TankEntranceDirector) ----
@@ -304,6 +383,8 @@ namespace FiveRivers.Combat
         public void BeginScripted()
         {
             if (state == State.Hidden || state == State.Stopped) return;
+            UndoNudge(driveTerrain != null ? body.up : Vector3.up);
+            warning.Cancel();
             Scripted = true;
         }
 
@@ -357,6 +438,9 @@ namespace FiveRivers.Combat
             // about 6 s to reach the trench end, change to the bazooka and aim, so the first shell, which kills about
             // every other time, always came before he could fire (played through by hand, 2026-11-17 night)
             nextFire = Time.time + config.fireInterval;
+            gunnery.Reset();
+            warning.Cancel();
+            hasLastShot = false;
         }
 
         public void OnRocketHit(Vector3 point, Vector3 shooterPosition)
@@ -379,6 +463,8 @@ namespace FiveRivers.Combat
         void Stop()
         {
             if (state == State.Stopped) return;
+            UndoNudge(driveTerrain != null ? body.up : Vector3.up);
+            warning.Cancel();
             state = State.Stopped;
             allyBlastsLeft = 0;
             smoke.SetActive(false);

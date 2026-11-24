@@ -27,4 +27,14 @@ MonoBehaviour:
   craterDepth: 0.55
   craterRim: 0.15
   craterBreach: 1.2
+  directRadius: 1
+  shotsToDirect: 3
+  farMin: 9
+  farMax: 13
+  midMin: 3
+  midMax: 5
+  directScatter: 0.4
+  aimLateral: 1.5
+  aimMoveReset: 4
+  feelCloseRange: 6.5
   entranceTake: 3

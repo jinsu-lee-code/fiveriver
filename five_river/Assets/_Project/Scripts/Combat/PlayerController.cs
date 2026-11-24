@@ -38,6 +38,8 @@ namespace FiveRivers.Combat
         public bool Sprinting { get; private set; }
         public static bool DebugForceSprint; // capture/review tools only
         public bool Aiming { get; set; }
+        // 크게 맞은 뒤의 손 떨림 (2026-11-24, WoundAftermathDirector): 시선에 더하는 좌우(x) · 위아래(y) 도. 실제 탄도에도 실린다.
+        public Vector2 AimTremor { get; set; }
         public Vector2 MoveInput { get; private set; }
 
         // 튜토리얼 행동 판정용 누적 값 (회차 시작 · 복구 때 0)
@@ -73,7 +75,7 @@ namespace FiveRivers.Combat
                 LookedDegrees += d.magnitude;
             }
             // Raycasts in WeaponHolder.Update must see this frame's mouse pitch.
-            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil, 0f, 0f);
+            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil + AimTremor.y, AimTremor.x, 0f);
 
 
             MoveInput = gate.CanAct ? Controls.Move.ReadValue<Vector2>() : Vector2.zero;
@@ -150,7 +152,7 @@ namespace FiveRivers.Combat
                 // Perlin noise stays near its middle: scaled so the swing really reaches about the asked angle
                 jolt = new Vector3((Mathf.PerlinNoise(t, 3.1f) - 0.5f) * 3.6f, (Mathf.PerlinNoise(7.7f, t) - 0.5f) * 2.6f, (Mathf.PerlinNoise(t, t * 0.5f + 11f) - 0.5f) * 0.9f) * amount;
             }
-            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil + jolt.x, jolt.y, jolt.z);
+            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil + jolt.x + AimTremor.y, jolt.y + AimTremor.x, jolt.z);
         }
 
         float shakeDegrees, shakeLeft, shakeFor = 1f;

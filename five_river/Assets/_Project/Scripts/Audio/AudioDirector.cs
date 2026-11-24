@@ -34,7 +34,7 @@ namespace FiveRivers.Audio
         AudioSource ambience, music, voice, breath;
         float sprintTime, breathLevel;
         bool clipRemovePending;
-        AudioSource tankEngine, tankDamage;
+        AudioSource tankEngine, tankDamage, tankTurret;
         // Distant shelling: a few muffled voices so salvos can overlap. Each shell gets its own distance
         // (level + low-pass), side (pan) and pitch so the front sounds wide and far, never in your face.
         readonly AudioSource[] artillery = new AudioSource[3];
@@ -131,6 +131,7 @@ namespace FiveRivers.Audio
             var body = tank.transform.GetChild(0);
             tankEngine = NewSource("TankEngine", body);
             tankDamage = NewSource("TankDamage", body);
+            tankTurret = NewSource("TankTurretWarning", body);
             OnSectionChanged(new FlowTransition(FlowSection.Title, flow.Section, TransitionReason.RunStart, 0));
         }
 
@@ -204,10 +205,15 @@ namespace FiveRivers.Audio
             {
                 tankEngine.Stop();
                 tankDamage.Stop();
+                tankTurret.Stop();
                 return;
             }
             SetLoop(tankEngine, tank.IsStopped ? null : tank.IsMoving ? "SFX_Tank_Move_Loop" : "SFX_Tank_EngineIdle_Loop");
             SetLoop(tankDamage, tank.IsStopped ? "SFX_Tank_Fire_Loop" : tank.SideHits > 0 ? "SFX_Tank_Smoke_Loop" : null);
+            // 쏘기 전 예고 (2026-11-24): 포탑이 마지막으로 돌아가는 소리. 쏘는 순간(예고 끝)에 멎는다. 3D, 대사 중에는 덕킹을 따른다.
+            bool warn = tank.WarningActive && !tank.IsStopped;
+            if (warn) tankTurret.transform.position = tank.TurretPosition;
+            SetLoop(tankTurret, warn ? "SFX_Tank_Turret_Loop" : null);
         }
 
         void OnEffect(EffectKind kind, Vector3 position)
@@ -248,6 +254,7 @@ namespace FiveRivers.Audio
             music.volume = Volume("bgm") * VolumeOf(music.clip);
             tankEngine.volume = Volume("sfx") * VolumeOf(tankEngine.clip) * duck;
             tankDamage.volume = Volume("sfx") * VolumeOf(tankDamage.clip) * duck;
+            tankTurret.volume = Volume("sfx") * VolumeOf(tankTurret.clip) * duck;
             for (int i = 0; i < artillery.Length; i++)
                 artillery[i].volume = Volume("sfx") * VolumeOf(artillery[i].clip) * artilleryLevel[i] * duck;
             for (int i = 0; i < farGuns.Length; i++)
@@ -554,6 +561,7 @@ namespace FiveRivers.Audio
             poolEntries.Clear();
             StopVoice();
             breath.Stop();
+            if (tankTurret != null) tankTurret.Stop();
             sprintTime = breathLevel = 0f;
             StopDistant();
             ClearDeafness();

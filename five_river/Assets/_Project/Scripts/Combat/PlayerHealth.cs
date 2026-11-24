@@ -22,9 +22,13 @@ namespace FiveRivers.Combat
         public event Action<float, Vector3> Damaged;
         public event Action Died;
 
+        public PlayerConfig Config => config;
+
         void Awake()
         {
             Restore();
+            // 크게 맞은 뒤 몸에 남는 것 (2026-11-24): 어댑터는 실행 중에 붙인다 (씬 · 프리팹 수정 없음)
+            if (GetComponent<WoundAftermathDirector>() == null) gameObject.AddComponent<WoundAftermathDirector>().Bind(this, config);
         }
 
         void Update()
@@ -46,6 +50,19 @@ namespace FiveRivers.Combat
                 dead = true;
                 Died?.Invoke();
             }
+        }
+
+        // 즉사 (전차포 직격, 2026-11-24): 체력 · 회복 · 실패 보조 피해 배율과 무관. 구간 보호(연출 · 결말 · 무적 표시)는 그대로 따른다.
+        public void Kill(Vector3 from)
+        {
+            var flow = director.Flow;
+            if (dead || Invulnerable || !flow.IsRunning || flow.CombatLocked) return;
+            float lost = Mathf.Max(Current, Max);
+            Current = 0f;
+            lastDamageTime = Time.time;
+            Damaged?.Invoke(lost, from);
+            dead = true;
+            Died?.Invoke();
         }
 
         public void Restore()

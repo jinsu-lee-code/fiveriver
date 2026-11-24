@@ -49,6 +49,6 @@ MonoBehaviour:
   allyKillChance: 0.2
   spawnSpread: 5
   speedSpread: 0.1
-  maxBodies: 24
+  maxBodies: 40
   bodyCullDistance: 55
   bodySettleAfter: 5
