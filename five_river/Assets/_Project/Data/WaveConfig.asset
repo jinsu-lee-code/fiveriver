@@ -35,6 +35,12 @@ MonoBehaviour:
   expandedWestAssault: 9
   expandedWestMaxActive: 6
   expandedSpawnInterval: 1.5
+  expandedMainWaveCounts: 060000000600000006000000
+  expandedMainWaveStarts:
+  - 0
+  - 30
+  - 60
+  expandedMainWaveSides: 0000000001000000ffffffff
   hillExtraDefenders: 1
   aimAtPlayerMax: 2
   allyFloorMain: 4

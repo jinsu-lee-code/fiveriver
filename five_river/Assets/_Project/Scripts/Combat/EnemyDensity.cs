@@ -21,6 +21,10 @@ namespace FiveRivers.Combat
             public float interval;  // 출현 간격 초
             public int aimAtPlayer; // 동시에 플레이어를 겨누는 적 (int.MaxValue = 제한 없음)
             public int allyFloor;   // 살아 있는 적이 이 수보다 많을 때만 아군이 쓰러뜨린다 (int.MaxValue = 아군은 쓰러뜨리지 않는다)
+            public int[] waveCounts; // 물결 (null = 한 번에): 인원 · 시작 초 · 방향 (2026-11-24, 일반판 주 공세)
+            public float[] waveStarts;
+            public int[] waveSides;
+            public bool HasWaves => waveCounts != null && waveCounts.Length > 0;
         }
 
         public const int Unlimited = int.MaxValue;
@@ -39,6 +43,11 @@ namespace FiveRivers.Combat
                 case FlowSection.Assault:
                     rule.total = expanded ? c.expandedMainAssault : c.mainAssault;
                     if (expanded) { rule.maxActive = c.expandedMainMaxActive; rule.interval = c.expandedSpawnInterval; rule.aimAtPlayer = c.aimAtPlayerMax; rule.allyFloor = c.allyFloorMain; }
+                    if (expanded && Waves(c, out var counts, out var starts, out var sides))
+                    {
+                        rule.waveCounts = counts; rule.waveStarts = starts; rule.waveSides = sides;
+                        rule.total = 0; foreach (var n in counts) rule.total += n;
+                    }
                     break;
                 case FlowSection.WestAssault:
                     rule.total = expanded ? c.expandedWestAssault : c.westAssault;
@@ -49,6 +58,16 @@ namespace FiveRivers.Combat
                     break;
             }
             return rule;
+        }
+
+        // 물결 설정이 쓸 수 있는가: 세 배열 길이가 같고, 시작 시각이 0부터 늘어나며, 인원이 1 이상
+        public static bool Waves(WaveConfig c, out int[] counts, out float[] starts, out int[] sides)
+        {
+            counts = c.expandedMainWaveCounts; starts = c.expandedMainWaveStarts; sides = c.expandedMainWaveSides;
+            if (counts == null || starts == null || sides == null || counts.Length == 0 || counts.Length != starts.Length || counts.Length != sides.Length) return false;
+            for (int i = 0; i < counts.Length; i++)
+                if (counts[i] < 1 || (i > 0 && starts[i] < starts[i - 1]) || sides[i] < -1 || sides[i] > 1) return false;
+            return true;
         }
 
         // 아군의 한 발이 이 적을 쓰러뜨려도 되는가: 플레이어의 몫(allyFloor)은 남기고, 플레이어를 겨누고 있는 적은 건드리지 않는다.

@@ -39,6 +39,13 @@ namespace FiveRivers.Data
         [Min(1)] public int expandedWestAssault = 9;
         [Min(1)] public int expandedWestMaxActive = 6;
         [Min(0.2f)] public float expandedSpawnInterval = 1.5f;
+        // 2026-11-24 (사용자 지시 "방어공세는 조금 짧아도 되지만 그래도 이건 너무짧다"): 일반판 주 공세는 조명탄
+        // 리듬(첫 조명탄 5초 뒤 · 24초마다)에 맞춘 물결로 나온다. 물결마다 인원 · 시작 시각(공세 시작부터 초) ·
+        // 방향(-1 왼쪽 비탈, 0 정면, 1 오른쪽 비탈). 세 배열의 길이는 같아야 한다. BALANCE.md 2-1c.
+        [Header("일반판 주 공세 물결 : BALANCE 2-1c")]
+        public int[] expandedMainWaveCounts = { 6, 6, 6 };
+        public float[] expandedMainWaveStarts = { 0f, 30f, 60f };
+        public int[] expandedMainWaveSides = { 0, 1, -1 };
         [Tooltip("고지 탈환: 엄폐 지점마다 곁에 더 서는 수비병 수")] [Min(0)] public int hillExtraDefenders = 1;
         [Tooltip("동시에 플레이어를 겨누는 적의 최대 수. 나머지는 참호의 아군과 교전한다(플레이어 피해 없음)")]
         [Min(1)] public int aimAtPlayerMax = 2;

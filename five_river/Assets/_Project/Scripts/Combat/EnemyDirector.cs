@@ -140,7 +140,9 @@ namespace FiveRivers.Combat
         void BeginAssault(int joined)
         {
             scoutsActive = false;
-            plan = new WavePlan(rule.total, rule.maxActive, rule.interval, joined, Time.time);
+            plan = rule.HasWaves
+                ? new WavePlan(rule.waveCounts, rule.waveStarts, rule.maxActive, rule.interval, joined, Time.time)
+                : new WavePlan(rule.total, rule.maxActive, rule.interval, joined, Time.time);
             // 합류한 정찰병은 주 공세 엄폐 지점으로 옮긴다
             foreach (var e in alive.Where(e => e.Alive && e.IsScout))
             {
@@ -204,7 +206,11 @@ namespace FiveRivers.Combat
                         && plan.TrySpawn(Time.time))
                         SpawnAt(PickCover(float.PositiveInfinity, far: true), hit.position, westSpawn.rotation);
                 }
-                else if (plan.TrySpawn(Time.time)) Spawn(PickCover(float.PositiveInfinity, far: true));
+                else if (plan.TrySpawn(Time.time))
+                {
+                    if (plan.HasWaves && rule.HasWaves) SpawnFromSide(rule.waveSides[plan.SpawnWave]);
+                    else Spawn(PickCover(float.PositiveInfinity, far: true));
+                }
                 if (plan.Done)
                 {
                     plan = null;
@@ -237,6 +243,33 @@ namespace FiveRivers.Combat
             if (at != spawn.position && NavMesh.SamplePosition(at, out var hit, 4f, NavMesh.AllAreas)) at = hit.position;
             else at = spawn.position;
             return SpawnAt(cover, at, spawn.rotation);
+        }
+
+        // 2026-11-24 general run: the main assault comes in waves from the front, the right slope, the left slope.
+        // side -1 / 0 / 1: start points and covers left of x -12, between, right of x 12 (the field runs along z).
+        static int SideOf(Vector3 p) => p.x < -12f ? -1 : p.x > 12f ? 1 : 0;
+
+        EnemyAgent SpawnFromSide(int side)
+        {
+            var starts = points.enemySpawns.Where(s => SideOf(s.position) == side).ToArray();
+            if (starts.Length == 0) starts = points.enemySpawns;
+            var spawn = starts[spawnIndex++ % starts.Length];
+            var at = Scatter(spawn.position);
+            if (at != spawn.position && NavMesh.SamplePosition(at, out var hit, 4f, NavMesh.AllAreas)) at = hit.position;
+            else at = spawn.position;
+            return SpawnAt(PickCoverOnSide(side), at, spawn.rotation);
+        }
+
+        // a free cover on that side, the farther ones first; when they are taken he goes to ground near one of them
+        Transform PickCoverOnSide(int side)
+        {
+            var mine = points.assaultCovers.Where(c => SideOf(c.position) == side).ToArray();
+            if (mine.Length == 0) return PickCover(float.PositiveInfinity, far: true);
+            var free = mine.Where(c => !usedCovers.Contains(c)).ToList();
+            if (free.Count > 0) return free.OrderByDescending(c => c.position.z).Take(2).OrderBy(_ => Random.value).First();
+            var near = mine[Random.Range(0, mine.Length)];
+            var open = OpenSpotNear(near.position, 3.5f, 7f);
+            return open != null ? open : PickCover(float.PositiveInfinity, far: true);
         }
 
         EnemyAgent SpawnAt(Transform cover, Vector3 position, Quaternion rotation)
@@ -422,8 +455,17 @@ namespace FiveRivers.Combat
             // man who is up and in the open (coming forward, or risen to fire): from the trench the two cannot be
             // told apart, and the squad's fire still thins the assault at the rate the numbers ask for.
             var victim = target.Alive && !target.Retreating && EnemyDensity.AllyMayKill(rule, living, aim.Holds(target)) ? target : Exposed();
-            if (victim != null) victim.Kill(-1);
+            if (victim != null)
+            {
+                victim.Kill(-1);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                DebugAllyKills++;
+#endif
+            }
         }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        public static int DebugAllyKills; // review tools: how many of the fallen the squad's fire took (2026-11-24)
+#endif
 
         EnemyAgent Exposed()
         {

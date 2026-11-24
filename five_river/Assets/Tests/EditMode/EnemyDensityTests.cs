@@ -21,7 +21,8 @@ namespace FiveRivers.Tests
 
         static int PeakActive(EnemyDensity.Rule rule, int joined = 0)
         {
-            var plan = new WavePlan(rule.total, rule.maxActive, rule.interval, joined);
+            var plan = rule.HasWaves ? new WavePlan(rule.waveCounts, rule.waveStarts, rule.maxActive, rule.interval, joined)
+                                     : new WavePlan(rule.total, rule.maxActive, rule.interval, joined);
             int peak = 0, spawned = 0;
             for (float t = 0f; t < 600f; t += 0.25f)
             {
@@ -72,6 +73,25 @@ namespace FiveRivers.Tests
             // 프레임 · 화면이 감당하는 선
             Assert.LessOrEqual(main.maxActive, 12);
             Assert.LessOrEqual(main.total, 24);
+        }
+
+        // 2026-11-24: the general run's main assault comes in waves timed with the flares, from different sides
+        [Test]
+        public void GeneralMainAssault_ComesInWaves_FromDifferentSides_ExhibitAndWestDoNot()
+        {
+            var c = Config();
+            var main = EnemyDensity.For(FlowSection.Assault, true, c);
+            Assert.IsTrue(main.HasWaves, "일반판 주 공세는 물결");
+            Assert.GreaterOrEqual(main.waveCounts.Length, 2);
+            Assert.AreEqual(0f, main.waveStarts[0], "첫 물결은 공세와 함께");
+            int sum = 0; foreach (var n in main.waveCounts) sum += n;
+            Assert.AreEqual(sum, main.total);
+            for (int i = 1; i < main.waveSides.Length; i++) Assert.AreNotEqual(main.waveSides[i - 1], main.waveSides[i], "물결마다 방향이 다르다");
+            // the last wave comes late enough that even a quick player is in the assault for a minute
+            Assert.GreaterOrEqual(main.waveStarts[main.waveStarts.Length - 1], 45f);
+            Assert.LessOrEqual(main.waveStarts[main.waveStarts.Length - 1], c != null ? 90f : 90f, "상한 150초 안에 마지막 물결이 와서 싸울 시간이 있다");
+            Assert.IsFalse(EnemyDensity.For(FlowSection.Assault, false, c).HasWaves, "전시용 짧은 흐름은 그대로");
+            Assert.IsFalse(EnemyDensity.For(FlowSection.WestAssault, true, c).HasWaves, "서쪽 공세는 그대로");
         }
 
         [Test]
