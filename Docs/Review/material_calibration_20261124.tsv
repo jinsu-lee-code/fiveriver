@@ -1,0 +1,18 @@
+time	material	path	property	old	new	why
+2026-11-24 11:40	Photo_Metal	Assets/_Project/Art/Weapons/M1Refined/Source/Art/M1ExteriorRefine20261023/Photo_Metal.mat	_Smoothness	1	0.62	파커라이징 강철: 맵 A .68 x 1 -> x .62 = .42 (무광 인산염 피막)
+2026-11-24 11:40	Photo_Hardware	Assets/_Project/Art/Weapons/M1Refined/Source/Art/M1ExteriorRefine20261023/Photo_Hardware.mat	_Smoothness	1	0.7	철물: .55 -> .39
+2026-11-24 11:40	Photo_Canvas	Assets/_Project/Art/Weapons/M1Refined/Source/Art/M1ExteriorRefine20261023/Photo_Canvas.mat	_Smoothness	1	0.4	면 멜빵: .60 -> .24 (천이 번들거림)
+2026-11-24 11:40	Photo_Wood	Assets/_Project/Art/Weapons/M1Refined/Source/Art/M1ExteriorRefine20261023/Photo_Wood.mat	_Smoothness	1	0.75	기름 먹인 호두나무: .54 -> .40
+2026-11-24 11:40	SK_CH_ROK_ParkYongpal_URPLab_Baked_Helmat	Assets/_Project/Art/SurfaceDetail20261030/SK_CH_ROK_ParkYongpal_URPLab_Baked_Helmat.mat	_Smoothness	0.5	0.32	닳은 도장 철모: .50 -> .32
+2026-11-24 11:40	M_CH_ROK_Body	Assets/_Project/Art/Models/Characters/ROK_Arms/M_CH_ROK_Body.mat	_Smoothness	1	0.55	군복 천: 맵 A .45 x 1 -> x .55 = .25
+2026-11-24 11:40	URPLab_Baked_Pauch	Assets/_Project/Art/Models/Characters/ROK_Protagonist/Materials/URPLab_Baked_Pauch.mat	_BaseColor	147 #FFFFFF	132 #E6E6E6	탄입대(카키 면포) 알베도 147 -> 132
+2026-11-24 11:40	URPLab_Baked_Pauch.001	Assets/_Project/Art/Models/Characters/ROK_Protagonist/Materials/URPLab_Baked_Pauch.001.mat	_BaseColor	147 #FFFFFF	132 #E6E6E6	탄입대(카키 면포) 알베도 147 -> 132
+2026-11-24 11:40	M_AC_Iron	Assets/_Project/Art/Models/Props/AmmoCrateM1917/M_AC_Iron.mat	_Metallic	0.8	0.2	도장된 철 장식: 금속성 .80 -> .20 (도장면, 모서리만 닳음)
+2026-11-24 11:40	Granite_Boulder	Assets/_Project/Art/Maps/DabudongRefined/Source/Art/VarcoV12/Environment/Granite_Boulder/Granite_Boulder.mat	_Smoothness	1	0.8	마른 화강암: 맵 A .37 x 1 -> x .8 = .30
+2026-11-24 13:21	URPLab_Baked_Cap	Assets/_Project/Art/Models/Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx	remap	embedded	Assets/_Project/Art/Models/Characters/ROK_Soldier/Materials20261124/M_Student_Cap_20261124.mat	모델에 묻힌 재질을 꺼내 리맵
+2026-11-24 13:21	M_Student_Cap_20261124	Assets/_Project/Art/Models/Characters/ROK_Soldier/Materials20261124/M_Student_Cap_20261124.mat	_Smoothness	0.5	0.18	학도병 모자(천): .50 -> .18
+2026-11-24 13:21	URPLab_Baked_Head	Assets/_Project/Art/Models/Characters/ROK_Soldier/SK_CH_ROK_Soldier.fbx	remap	embedded	Assets/_Project/Art/Models/Characters/ROK_Soldier/Materials20261124/M_Student_Head_20261124.mat	모델에 묻힌 재질을 꺼내 리맵
+2026-11-24 13:21	M_Student_Head_20261124	Assets/_Project/Art/Models/Characters/ROK_Soldier/Materials20261124/M_Student_Head_20261124.mat	_Smoothness	0.5	0.38	학도병 얼굴 피부: .50 -> .38
+2026-11-24 13:21	T_PR_BlanketBody_MetallicSmoothness	Assets/_Project/Art/Models/Props/BlanketBody/Textures/T_PR_BlanketBody_MetallicSmoothness_NoMetal20261124.png	new texture	-	R = 0, alpha kept	천 · 가죽에 금속성 .15 → 0 (원본 텍스처는 그대로)
+2026-11-24 13:21	M_PR_Blanket	Assets/_Project/Art/Materials/M_PR_Blanket.mat	_MetallicGlossMap	T_PR_BlanketBody_MetallicSmoothness	T_PR_BlanketBody_MetallicSmoothness_NoMetal20261124	천 · 가죽: 금속성 .15 → 0
+2026-11-24 13:21	M_PR_Boot	Assets/_Project/Art/Materials/M_PR_Boot.mat	_MetallicGlossMap	T_PR_BlanketBody_MetallicSmoothness	T_PR_BlanketBody_MetallicSmoothness_NoMetal20261124	천 · 가죽: 금속성 .15 → 0

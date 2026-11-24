@@ -1,0 +1,21 @@
+fog True ExponentialSquared density 0.0120 start 0 end 300 colour RGBA(0.120, 0.160, 0.230, 1.000)
+ambient Trilight sky RGBA(0.220, 0.260, 0.340, 1.000) equator RGBA(0.210, 0.235, 0.280, 1.000) ground RGBA(0.060, 0.055, 0.047, 1.000) intensity 1 reflection Skybox 0.55 skybox Frontline_NightDawnSky sun Moon
+volume [DawnGrade] global True priority 1 weight 0 profile Assets/_Project/Art/FrontlinePolish20261102/Frontline_Dawn_Grade.asset layer 0 active True
+volume Global Volume global True priority 0 weight 1 profile Assets/_Project/Art/FrontlinePolish20261102/Frontline_Night_Profile.asset layer 0 active True
+camera [Player]/CameraPivot/PlayerCamera enabled True post True aa SubpixelMorphologicalAntiAliasing High volumeMask 1 type Base near 0.03 far 600 fov 70 cull -1 depth True dither True
+light [Map]/Frontline_Art_20261102/Supply_bay_lantern Point active True i 0.9 range 4.2 colour RGBA(1.000, 0.570, 0.250, 1.000) shadows None cull -1 layers UnityEngine.RenderingLayerMask mode Realtime
+light [Player]/CameraPivot/PlayerCamera/VM_Bazooka/FP_ReloadFrame/FP_Anim/ShotPresentation/Bazooka_MoonFill Point active False i 0.24 range 1.5 colour RGBA(0.920, 0.940, 1.000, 1.000) shadows None cull -2147483648 layers UnityEngine.RenderingLayerMask mode Realtime
+light [Tank]/PF_VH_T34_85/Socket_Fire/VFX_Tank_Fire Point active False i 8 range 16 colour RGBA(1.000, 0.500, 0.150, 1.000) shadows None cull -1 layers UnityEngine.RenderingLayerMask mode Realtime
+light [Map]/Frontline_Art_20261102/Supply_bay_lantern/Candle_SelfLight Point active True i 0.004 range 0.3 colour RGBA(1.000, 0.620, 0.300, 1.000) shadows None cull -1 layers UnityEngine.RenderingLayerMask mode Realtime
+light Moon_Bounce Directional active True i 0.16 range 10 colour RGBA(0.560, 0.660, 0.860, 1.000) shadows None cull -1 layers UnityEngine.RenderingLayerMask mode Realtime
+light [Player]/CameraPivot/PlayerCamera/VM_M1/FP_Anim/ArtM1_Presentation/M1_ShotMotion/M1_MoonFill Point active True i 0.4 range 1.5 colour RGBA(0.820, 0.880, 1.000, 1.000) shadows None cull -2147483648 layers UnityEngine.RenderingLayerMask mode Realtime
+light Moon Directional active True i 0.78 range 10 colour RGBA(0.760, 0.840, 1.000, 1.000) shadows Soft cull -1 layers UnityEngine.RenderingLayerMask mode Realtime
+terrain Terrain material Universal Render Pipeline/Terrain/Lit pos (-60.00, -1.65, -60.00) size (135.00, 64.00, 180.00)
+  layer TL_Claude_Grass tex T2_Grass_A avg 93 colour #675D36 remapMax (0.93, 0.97, 0.72, 1.00) metallic 0 smooth 0.04 normal 0.8 mask -
+  layer TL_Claude_Soil tex T2_Soil_A avg 97 colour #795B3E remapMax (1.00, 1.00, 1.00, 1.00) metallic 0 smooth 0.06 normal 0.8 mask -
+  layer TL_Claude_Rock tex T2_Rock_A avg 55 colour #3E362C remapMax (1.00, 1.00, 1.00, 1.00) metallic 0 smooth 0.12 normal 0.8 mask -
+  layer TL_Claude_Mud tex T2_Mud_A avg 79 colour #5C4D38 remapMax (1.00, 1.00, 1.00, 1.00) metallic 0 smooth 0.1 normal 0.8 mask -
+  layer TL_Claude_Burned tex T2_Burned_A avg 60 colour #413B35 remapMax (1.00, 1.00, 1.00, 1.00) metallic 0 smooth 0.05 normal 0.8 mask -
+  layer TL_Photo_RockyTrail tex rocky_trail_diff_2k avg 133 colour #95826D remapMax (1.00, 1.00, 1.00, 1.00) metallic 0 smooth 0.08 normal 0.6 mask rocky_trail_MAHS_2k
+  layer TL_DirtFloor_TrenchOnly tex dirt_floor_diff_2k avg 149 colour #B78D65 remapMax (0.70, 0.67, 0.63, 1.00) metallic 0 smooth 0.045 normal 0.65 mask -
+feature Assets/Settings/PC_Renderer.asset ScreenSpaceAmbientOcclusion True

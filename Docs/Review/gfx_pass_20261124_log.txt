@@ -1,0 +1,82 @@
+==== Volumetric Fog 20261124 2026-11-24 11:16
+PC_Renderer: added renderer feature FrontlineVolumetricFog
+feature shader Hidden/FiveRivers/FrontlineVolumetricFog
+created Assets/_Project/Art/FrontlinePolish20261102/Frontline_Atmosphere_20261124.asset
+night fog density 0.006, baseHeight -1, heightFalloff 4, distance 120, ambient 1, mainLightScattering 0.3, mainLightAnisotropy 0.55, lightScattering 1, lightAnisotropy 0.35, lightNearRadius 2, noise 0.35, noiseScale 0.04, steps 24
+dawn fog density 0.008, baseHeight -1, heightFalloff 2.5, distance 200, ambient 1, mainLightScattering 0.8, mainLightAnisotropy 0.7, lightScattering 1, lightAnisotropy 0.35, lightNearRadius 2, noise 0.45, noiseScale 0.03, steps 24
+fog light layer: VFX_Flare.prefab (1 changed)
+fog light layer: VFX_Shell_Blast.prefab (1 changed)
+fog light layer: VFX_MuzzleFlash_Enemy.prefab (1 changed)
+fog light layer: VFX_Tank_Fire.prefab (1 changed)
+fog light layer: VFX_Tank_HitExplosion.prefab (1 changed)
+fog light layer: VFX_Tank_DestroyExplosion.prefab (1 changed)
+fog light layer: VFX_Tank_Ricochet.prefab (1 changed)
+fog light layer: scene VFX_Tank_Fire
+
+==== Post Finish 20261124 2026-11-24 12:00
+night (over the night grade): vignette .30 -> .22, grain .20 -> .15
+dawn vignette 0.24 -> .18
+dawn grain 0.14 -> .12
+cutscene depth of field: Gaussian, far side only, start >= 8 m, weight follows CutsceneRig.Running
+
+==== Reflection Probes 20261124 2026-11-24 12:01
+Probe_Trench: centre (1.16, 0.08, -1.25) size (42.91, 4.00, 6.90) blend 1.5 realtime, rendered when the light changes, 128 px HDR, box projection
+Probe_Stream: centre (35.51, 2.64, 77.95) size (15.22, 10.00, 81.90) blend 3 realtime, rendered when the light changes, 128 px HDR, box projection
+M_StreamWater _Smoothness 0.55 -> 0.86 (still water)
+
+==== Trench Decals 20261124 2026-11-24 12:08
+PC_Renderer: added renderer feature Decal
+decal feature: screen space, normal blend low, draw distance 80 m
+decals: 10 damp on the trench walls (floor to 1.1 m), 3 damp on the floor, 7 earth sprays 1.2-2.6 m in front of the parapet (seed 20261124)
+
+==== Volumetric Fog 20261124 2026-11-24 12:15
+feature shader Hidden/FiveRivers/FrontlineVolumetricFog
+night fog density 0.008, airDensity 0.0004, baseHeight -1, heightFalloff 4, distance 120, ambient 0.5, mainLightScattering 0.6, mainLightAnisotropy 0.55, lightScattering 1.5, lightAnisotropy 0.25, lightNearRadius 4, noise 0.35, noiseScale 0.04, steps 24
+dawn fog density 0.006, airDensity 0, baseHeight -1, heightFalloff 2.5, distance 200, ambient 1, mainLightScattering 0.8, mainLightAnisotropy 0.7, lightScattering 1, lightAnisotropy 0.35, lightNearRadius 2, noise 0.45, noiseScale 0.03, steps 24
+fog light layer: VFX_Flare.prefab (0 changed)
+fog light layer: VFX_Shell_Blast.prefab (0 changed)
+fog light layer: VFX_MuzzleFlash_Enemy.prefab (0 changed)
+fog light layer: VFX_Tank_Fire.prefab (0 changed)
+fog light layer: VFX_Tank_HitExplosion.prefab (0 changed)
+fog light layer: VFX_Tank_DestroyExplosion.prefab (0 changed)
+fog light layer: VFX_Tank_Ricochet.prefab (0 changed)
+
+==== Trench Decals 20261124 — removed 2026-11-24 12:13
+Screen-space decals (damp on the trench walls / floor, earth sprays in front of the parapet) were placed, looked at
+from the player's height at night, and hardly showed in the trench's shade. Removed again: Decal renderer feature
+taken off PC_Renderer, [Decals20261124] deleted from the scene, the textures, materials and the menu deleted.
+==== SSAO — unchanged
+Radius .45 -> .8 tried as a same-frame on/off: no visible change inside the trench. Left at .45.
+==== Tuning (TuneFog, same-frame on/off by eye), final values are the menu defaults
+night: density .006 -> .008, ambient 1 -> .5, airDensity 0 -> .0004, lightScattering 1 -> 1.5, lightAnisotropy .35 -> .25,
+lightNearRadius 2 -> 4, mainLightScattering .3 -> .6, steps 24 -> 18. dawn: density .008 -> .006, steps 24 -> 18.
+==== Trench Sky Occlusion 20261124 2026-11-24 12:52
+PC_RPAsset light probe system 0 -> 1 (Adaptive Probe Volumes, L1)
+Contribute GI (receive GI from probes) on 137 objects around the trench + the terrain; box centre (1.16, 1.38, -1.25) size (52.91, 8.00, 16.90)
+created baking set Assets/_Project/Scenes/Dabudong_TrenchSkyOcclusion20261124.asset
+add scene to baking set: True
+bake started False
+
+==== Trench Sky Occlusion 20261124 2026-11-24 12:52
+Contribute GI (receive GI from probes) on 0 objects around the trench + the terrain; box centre (1.16, 1.38, -1.25) size (52.91, 8.00, 16.90)
+bake started True
+
+==== Trench Shade 20261124 2026-11-24 13:17
+trench rim map 196x52 (0.25 m cells, rim radius 1.5 m) over x -23.3..25.6 z -7.7..5.2, deepest 1.72 m below the rim; shade .35 from .45 m to 1.7 m below the rim, nothing nearer than 1.5 m to the camera
+
+==== Night Exposure 20261124 2026-11-24 14:24
+Moon intensity 0.78 -> 0.5, colour RGBA(0.760, 0.840, 1.000, 1.000) -> RGBA(0.700, 0.800, 1.000, 1.000)
+Moon_Bounce intensity 0.16 -> 0.1
+ambient sky RGBA(0.220, 0.260, 0.340, 1.000) -> RGBA(0.110, 0.130, 0.170, 1.000) (x0.5 of the 11-16 night values)
+fog colour RGBA(0.120, 0.160, 0.230, 1.000) -> RGBA(0.072, 0.096, 0.138, 1.000)
+sky _NightExposure 0.13 -> 0.085
+night saturation (atmosphere volume over the night grade's -18) -> -32
+
+==== Night Exposure 20261124 2026-11-24 14:26
+Moon intensity 0.5 -> 0.5, colour RGBA(0.700, 0.800, 1.000, 1.000) -> RGBA(0.700, 0.800, 1.000, 1.000)
+Moon_Bounce intensity 0.1 -> 0.1
+ambient sky RGBA(0.110, 0.130, 0.170, 1.000) -> RGBA(0.110, 0.130, 0.170, 1.000) (x0.5 of the 11-16 night values)
+fog colour RGBA(0.072, 0.096, 0.138, 1.000) -> RGBA(0.072, 0.096, 0.138, 1.000)
+sky _NightExposure 0.085 -> 0.085
+night saturation (atmosphere volume over the night grade's -18) -> -32
+
