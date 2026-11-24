@@ -39,7 +39,12 @@ namespace FiveRivers.Combat
         // The enemies play A_KPA_CrouchRun_Charge (shorter contact, longer flight; source/animation/kpa_crouch_run),
         // so the 3.4 m/s advance plays at about 1.27x. The allies keep A_KPA_CrouchRun for their slower advance.
         public static float CrouchRunClipSpeed = 3.61f; // measured in play 2026-11-15: at 3.06 the planted foot slid back 0.8 m/s
-        const float CrouchRunFrom = 1.2f, MinCrouchAnimSpeed = 0.7f, MaxCrouchAnimSpeed = 2.0f;
+        const float MinCrouchAnimSpeed = 0.7f, MaxCrouchAnimSpeed = 2.0f;
+        // MoveBlend is in seconds: as a share of the state he leaves (CrossFade), 0.2 of the 3.1 s aiming idle took 0.6 s,
+        // and he slid off at 3.5 m/s still half in the aim
+        const float MoveFrom = 0.15f, StopBelow = 1.0f, MoveBlend = 0.2f;
+        static readonly int WalkStateId = Animator.StringToHash("Walk"), IdleAimStateId = Animator.StringToHash("Idle_Aim");
+        float stridePhase; // where in the stride this man's run begins (0-1), his own
         static readonly int CrouchRunStateId = Animator.StringToHash("CrouchRun");
         static readonly int CrouchAimStateId = Animator.StringToHash("Crouch_Aim");
         static readonly int FireCrouchStateId = Animator.StringToHash("Fire_Crouch");
@@ -161,6 +166,7 @@ namespace FiveRivers.Combat
             {
                 rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
                 leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                stridePhase = Random.value;
                 runFootSpeed = RunClipSpeed * animator.humanScale * animator.transform.lossyScale.y;
                 crouchFootSpeed = CrouchRunClipSpeed * animator.humanScale * animator.transform.lossyScale.y;
                 leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
@@ -535,11 +541,22 @@ namespace FiveRivers.Combat
                 float speed = agent.velocity.magnitude;
                 animator.SetFloat(SpeedId, speed);
                 int current = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-                // 전진은 숙인 달리기, 철수는 선 달리기 (2026-11-13). 멈추면 컨트롤러가 CrouchRun → Crouch_Aim으로 나간다
-                if (CrouchAdvance && !animator.IsInTransition(0))
+                // 전진은 숙인 달리기, 철수는 선 달리기 (2026-11-13).
+                // 2026-11-23 (사용자 지시 "달리기 모션이 어색한 부분도 고치고"), 1초에 30장 기록으로 본 세 가지:
+                //  - 서 있다 떠날 때 컨트롤러가 Idle_Aim → Walk를 먼저 거쳐, 걷는 동작으로 3.7 m/s를 미끄러져 갔다
+                //    (전환 중에는 숙인 달리기로 넘기지 않았다). 이제 움직이기 시작하면 전환 중이어도 바로 넘긴다.
+                //  - 엄폐에 닿아 속도가 0.1 m/s로 떨어질 때까지 제자리에서 달렸다. 서기 시작하면 바로 조준 자세로 넘긴다.
+                //  - 여럿이 같은 박자 · 같은 자세로 달렸다(복제한 것처럼 보인다). 사람마다 걸음의 시작 위치를 달리한다.
+                if (CrouchAdvance)
                 {
-                    if (state == State.Advance && speed > CrouchRunFrom && current != CrouchRunStateId) animator.CrossFade(CrouchRunStateId, 0.2f);
-                    else if (state == State.Retreat && current == CrouchRunStateId) animator.CrossFade(RunStateId, 0.2f);
+                    bool turning = animator.IsInTransition(0);
+                    int next = turning ? animator.GetNextAnimatorStateInfo(0).shortNameHash : 0;
+                    if (state == State.Advance && speed > MoveFrom && current != CrouchRunStateId && next != CrouchRunStateId)
+                        animator.CrossFadeInFixedTime(CrouchRunStateId, MoveBlend, 0, stridePhase * 0.75f);
+                    else if (state == State.Retreat && speed > MoveFrom && current != RunStateId && next != RunStateId)
+                        animator.CrossFadeInFixedTime(RunStateId, MoveBlend, 0, stridePhase * 0.7f);
+                    else if (state == State.Cover && speed < StopBelow && !turning && (current == CrouchRunStateId || current == RunStateId || current == WalkStateId))
+                        animator.CrossFadeInFixedTime(Standing ? IdleAimStateId : CrouchAimStateId, MoveBlend);
                 }
                 // 달리기 상태에서만 지면 속도에 재생 속도를 맞춘다 (사격 · 피격 등 다른 동작은 원래 속도)
                 animator.speed = current == RunStateId ? Mathf.Clamp(speed / runFootSpeed, MinRunAnimSpeed, MaxRunAnimSpeed)

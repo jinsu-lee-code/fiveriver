@@ -104,6 +104,14 @@ namespace FiveRivers.Combat
             {
                 if (shown != pending && (Time.time >= hideAt || Time.time >= switchEnd))
                 {
+                    if (resetOnSwap)
+                    {
+                        // (ReturnToRifle) the bazooka is down and out of sight: now the ammunition and the poses go back
+                        resetOnSwap = false;
+                        m1.ResetAmmo();
+                        bazooka.ResetAmmo();
+                        LoadoutReset?.Invoke();
+                    }
                     ShowOnly(pending);
                     Raising?.Invoke(pending, Mathf.Max(0f, switchEnd - hideAt));
                 }
@@ -171,8 +179,20 @@ namespace FiveRivers.Combat
         }
 
         // 체크포인트 복구 · 새 회차: 탄약을 체크포인트 값으로 되돌린다.
+        // 전차를 잡고 고지 공격으로 넘어갈 때 (2026-11-23). ResetLoadout(true, M1)을 그대로 불렀더니 로켓이 터지는 것을
+        // 보는 바로 그 프레임에 손의 바주카가 소총으로 바뀌어 있었다(조준 중이면 소총 조준 화면이 그대로 떴다).
+        // 바주카를 들고 있으면 내려놓는 동작을 거쳐 소총을 들고, 탄약 · 자세는 바주카가 화면에서 내려간 순간에 되돌린다.
+        bool resetOnSwap;
+        public void ReturnToRifle()
+        {
+            if (Switching || Current != WeaponSlot.Bazooka) { ResetLoadout(BazookaUnlocked, WeaponSlot.M1); return; }
+            resetOnSwap = true;
+            BeginSwitch(WeaponSlot.M1);
+        }
+
         public void ResetLoadout(bool bazookaUnlocked, WeaponSlot slot)
         {
+            resetOnSwap = false;
             BazookaUnlocked = bazookaUnlocked;
             m1.ResetAmmo();
             bazooka.ResetAmmo();

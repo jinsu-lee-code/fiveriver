@@ -57,7 +57,7 @@ namespace FiveRivers.Combat
             }
             else if (t.To == FlowSection.HillAssault)
             {
-                weapons.ResetLoadout(true, WeaponSlot.M1);
+                weapons.ReturnToRifle();
             }
             else if (t.To == FlowSection.Title)
             {

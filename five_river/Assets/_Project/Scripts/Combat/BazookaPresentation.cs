@@ -18,6 +18,7 @@ namespace FiveRivers.Combat
         [SerializeField] Transform rocketInHand;
         [SerializeField] Transform leftUpper, leftForearm, leftWrist, leftGrip;
         [SerializeField] Transform rightUpper, rightForearm, rightWrist, rightGrip;
+        [SerializeField] Vector3 leftGripShift, rightGripShift;   // added to the grips' own local positions once, on Awake
         [SerializeField] Vector3 hipViewPosition = new Vector3(.20f, -.09f, .36f);
         // Hip carry attitude (pitch, yaw, cant). A level tube pointing straight down the view line sits on the
         // crosshair and fills the stretched right edge of the 70 degree view; a slight dip, inward yaw and cant reads
@@ -36,8 +37,9 @@ namespace FiveRivers.Combat
         [SerializeField, Range(0f, 1f)] float aimedKickScale = .6f;
         // 2026-11-16 "손이 너무 가늘어": the delivered arms read thin at the launcher's distance from the eye. The
         // animator writes the arms' root every frame, so the size is put back on here, before the arms are fitted.
-        [SerializeField, Range(1f, 1.6f)] float armScale = 1.38f;
+        [SerializeField, Range(1f, 2.2f)] float armScale = 1.38f;   // (2026-11-24 pass 2: 1.9 in the scene, the launcher's scale)
         Transform armsRoot;
+        const float ArmReference = 1.25f;   // the arm scale FitArm's shoulder and elbow offsets were set at
         [Header("Sprint carry: the tube swings across the body instead of staying at low ready")]
         [SerializeField] Vector3 sprintOffset = new Vector3(-.06f, -.04f, -.05f);
         [SerializeField] Vector3 sprintEuler = new Vector3(14f, -28f, 18f);
@@ -80,6 +82,9 @@ namespace FiveRivers.Combat
             ViewmodelFill.Confine(visualFrame, "Bazooka_MoonFill"); // it lit the sandbags in front white
             if (animator != null) animationEvents = animator.GetComponent<AnimationEventSink>();
             if (weapons != null) player = weapons.GetComponent<PlayerController>();
+            // the wrist targets moved so that the closed fingers come round the grips (BazookaArmSetup, 2026-11-23)
+            if (rightGrip != null) rightGrip.localPosition += rightGripShift;
+            if (leftGrip != null) leftGrip.localPosition += leftGripShift;
             if (leftGrip != null)
             {
                 leftGripPosition = leftGrip.localPosition;
@@ -215,12 +220,18 @@ namespace FiveRivers.Combat
         {
             var cameraFrame = transform.parent;
             var target = cameraFrame.InverseTransformPoint(grip.position);
-            float depth = Mathf.Max(.03f, target.z - .34f);
-            float height = Mathf.Min(-.25f, -.82f * depth - .085f);
+            // (2026-11-24, pass 3) The shoulder and elbow offsets below were set for arms at the scene's 1.25. At 1.9 (pass 2) the
+            // same shoulder spot left the half again longer arm folded hard, its elbow out toward the view: shouldered, the left
+            // sleeve filled the lower left of the screen, and the shot's shove (the hands 2 cm back) pushed it to the near plane
+            // for the 0.42 s the kick settles (seen in the rocket-team check, Docs/Review/rocketteamH*_20261124.png). The offsets
+            // grow with the arms, so the arm keeps the shape it had at 1.25.
+            float s = armScale / ArmReference;
+            float depth = Mathf.Max(.03f, target.z - .34f * s);
+            float height = Mathf.Min(-.25f * s, -.82f * depth - .085f * s);
             // 팔 시작점은 시야 아래에 두고, 손목은 납품 자세에서 손잡이와 장전 소품에 맞춘다.
-            var shoulder = new Vector3(Mathf.Lerp(target.x, side, .25f), height, depth);
+            var shoulder = new Vector3(Mathf.Lerp(target.x, side, .25f), height, depth);   // (not wider: pushed out by s, the elbows turned in)
             upper.position = cameraFrame.TransformPoint(shoulder);
-            var elbow = shoulder + new Vector3(side * .36f, -.07f, .18f);
+            var elbow = shoulder + new Vector3(side * .36f, -.07f, .18f) * s;
             M1ArmRig.Solve(upper, forearm, wrist, grip, elbowPosition: cameraFrame.TransformPoint(elbow));
         }
 

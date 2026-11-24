@@ -22,6 +22,14 @@ namespace FiveRivers.Combat
         [SerializeField] LayerMask hitMask = ~0;
 
         public static float AimEyePull = 0f; // 0.035 with WeaponHolder.PeepRing; 0 = original eye position
+        // 2026-11-23 (사용자 지시 "조준할 때 총몸이 표적을 가리는 문제를 고쳐"): 뒤 가늠자 판을 뺀 뒤(11-22)로는 눈이
+        // 조준선 높이에 있어, 눈앞 3~9 cm를 지나는 총몸 뒤끝이 화면 가운데 바로 아래부터 바닥까지를 덮었다(70 m 밖의 적이
+        // 그 윗선에 걸려 거의 보이지 않았다). 가늠쇠 끝은 화면 가운데(탄이 가는 곳)에 둔 채, 그 점을 축으로 총 뒤쪽을
+        // 이 각도(도)만큼 내린다: 눈이 조준선 조금 위에서 가늠쇠를 넘겨다보는 구도. 0 = 예전 그대로.
+        // 총을 앞으로 미는 것(방아쇠 손이 화면을 덮는다)과 눈앞을 잘라 내는 것(총 속이 보인다)은 해 보고 버렸다.
+        public static float AimButtDrop = 1.3f;
+        // 조준 자세에서 카메라부터 가늠쇠 끝까지 (M1SightHandlingSetup: 뒤 가늠자 자리 0.095 + 가늠자 사이 0.708)
+        const float FrontTipAhead = 0.803f;
 
         float nextFire;
         float reloadEnd;
@@ -56,8 +64,18 @@ namespace FiveRivers.Combat
             float blendSpeed = config.aimBlendTime > 0f ? Time.deltaTime / config.aimBlendTime : 1f;
             aimBlend = Mathf.MoveTowards(aimBlend, aim && !Reloading ? 1f : 0f, blendSpeed);
             // Bring the rear aperture to ~3.5 cm from the eye (it sat 9.5 cm away and read as a small plate).
-            model.localPosition = Vector3.Lerp(hipPosition, aimPosition + Vector3.back * AimEyePull, aimBlend);
-            model.localRotation = Quaternion.Slerp(Quaternion.Euler(hipEuler), Quaternion.Euler(aimEuler), aimBlend);
+            var aimAt = aimPosition + Vector3.back * AimEyePull;
+            var aimTurn = Quaternion.Euler(aimEuler);
+            if (AimButtDrop != 0f)
+            {
+                // the front post's tip stays where it is (the middle of the screen); the rifle hinges down about it
+                var tip = new Vector3(0f, 0f, FrontTipAhead - AimEyePull);
+                var hinge = Quaternion.AngleAxis(-AimButtDrop, Vector3.right);
+                aimAt = tip + hinge * (aimAt - tip);
+                aimTurn = hinge * aimTurn;
+            }
+            model.localPosition = Vector3.Lerp(hipPosition, aimAt, aimBlend);
+            model.localRotation = Quaternion.Slerp(Quaternion.Euler(hipEuler), aimTurn, aimBlend);
 
             if (Reloading)
             {

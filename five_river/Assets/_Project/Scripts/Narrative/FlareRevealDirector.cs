@@ -14,16 +14,17 @@ namespace FiveRivers.Narrative
     // view leaves the player for a few seconds to show what it lights up — the enemy coming down toward the trench.
     //   shot 1  from behind the trench wall: the flare hanging in the sky, then down to the lit slope
     //   shot 2  long lens from the trench on the enemy nearest the trench, following them down
-    //   shot 3  close on a rifleman running down: rifle in his hands, face lit by the flare (2026-11-13)
-    //   shot 4  low on the slope: one of them is hit by the trench's fire and goes down, then back into the
-    //           player's eyes under the bars (2026-11-13)
+    //   shot 3  low on the slope: a shell is heard coming and bursts in front of the lens, two more close by,
+    //           then back into the player's eyes under the bars
+    //           (2026-11-23, 사용자 지시 "적을 클로즈업하는걸 빼고 그냥 포탄 떨어지는 걸로 클로즈업해서 보여줘도 될거 같아":
+    //            달리는 적 근접 컷과 적이 맞아 쓰러지는 컷을 뺐다. 포탄은 ShellingDirector.TryStagedShell, 피해 없음)
     // While it plays the player has no control and cannot be hurt, and the run clock stands still; the enemy keep
     // moving and keep arriving, so the fight is already on when the view comes back. Once per run, expanded run
     // only (the exhibit run's 9:00 limit has no room for it). Space or Enter skips. Added by NarrativeDirector.
     public sealed class FlareRevealDirector : MonoBehaviour, IDebugPanel
     {
         public static bool Enabled = true;
-        const float Shot1 = 2.6f, Shot2 = 4.8f, Shot3 = 7.2f, HitAt = 7.6f, Duration = 10.8f, HandBack = 1.3f;
+        const float Shot1 = 2.6f, Shot2 = 4.8f, Duration = 10.8f, HandBack = 1.3f;
         const float LongLensFog = 0.4f;   // fog density during the long-lens shot, as a share of the night's
         float fogBefore;
         const float BarFade = 0.4f, BarHeight = 0.105f, SkipAfter = 0.6f;
@@ -42,13 +43,10 @@ namespace FiveRivers.Narrative
         Terrain terrain;
         float time, clockBefore;
         bool playedThisRun, pending, cutDone;
-        Vector3 flarePoint, eye, slopeFocus, focus, lowCamera;
+        Vector3 flarePoint, eye, slopeFocus, focus;
         Quaternion eyeView;
-        bool lowCameraSet, closeSet, victimHit;
         FiveRivers.Data.GameText copy;
-        EnemyAgent subject, victim;
-        Vector3 closeOffset, victimFocus;
-        FiveRivers.Audio.AudioDirector audioDirector;
+        EnemyAgent subject;
 
         public bool Playing { get; private set; }
         public float Elapsed => time;
@@ -144,61 +142,84 @@ namespace FiveRivers.Narrative
                 float distance = Mathf.Max(8f, Vector3.Distance(position, focus));
                 fov = Mathf.Clamp(2f * Mathf.Atan(Mathf.Lerp(3.4f, 2.6f, u) / distance) * Mathf.Rad2Deg, 4f, 20f);
             }
-            else if (time < Shot3)
-            {
-                // close on him as he runs: a little ahead and to the side, at chest height, carried along with him
-                if (!closeSet)
-                {
-                    closeSet = true;
-                    subject = Nearest();
-                    if (subject != null) focus = subject.transform.position;
-                    var toTrench = eye - focus; toTrench.y = 0f; toTrench.Normalize();
-                    // ahead and beside along the way he actually runs: placed by the direction of the trench, a man
-                    // coming down on a diagonal ran straight into the lens when the camera had to take the far side
-                    var heading = subject != null ? subject.transform.forward : toTrench;
-                    heading.y = 0f;
-                    heading = heading.sqrMagnitude > 0.01f && Vector3.Dot(heading.normalized, toTrench) > 0f ? heading.normalized : toTrench;
-                    closeOffset = ClearestCloseOffset(heading, Vector3.Cross(Vector3.up, heading));
-                    closeLift = 0f;
-                }
-                float u = Mathf.InverseLerp(Shot2, Shot3, time);
-                var chest = Chest(subject, focus);
-                position = OnGround(focus + closeOffset, 0f);
-                position.y = Mathf.Max(position.y + 0.3f, chest.y - 0.15f); // never under the slope
-                // if cover still comes between them (he turned, or every side was shut), the camera cranes up over it
-                closeLift = Mathf.MoveTowards(closeLift, Covered(position + Vector3.up * closeLift, chest) ? CloseLiftMax : 0f, Time.deltaTime * 2.5f);
-                position.y += closeLift;
-                rotation = Quaternion.LookRotation(chest + Vector3.down * 0.1f - position);
-                fov = Mathf.Lerp(36f, 32f, u);
-            }
             else
             {
-                // low on the slope beside another of them: the trench's fire finds him and he goes down
-                if (!lowCameraSet)
+                // low on the lit slope: a shell is heard coming and bursts in front of the lens, then a second close by
+                if (!shellSet)
                 {
-                    lowCameraSet = true;
-                    victim = Victim();
-                    victimFocus = victim != null ? victim.transform.position : focus;
-                    var toTrench = eye - victimFocus; toTrench.y = 0f; toTrench.Normalize();
-                    var side = Vector3.Cross(Vector3.up, toTrench);
-                    lowCamera = ClearestLowCamera(toTrench, side); // ahead and beside him
-                }
-                if (victim != null) victimFocus = Vector3.Lerp(victimFocus, Hips(victim), 1f - Mathf.Exp(-Time.deltaTime * 6f));
-                if (!victimHit && time >= HitAt)
-                {
-                    victimHit = true;
-                    if (victim != null && victim.Alive)
+                    shellSet = true;
+                    if (shelling == null) shelling = FindFirstObjectByType<ShellingDirector>();
+                    if (shelling == null || !shelling.TryStagedShell(slopeFocus, 3f, 16f, ShellLead, out shellPoint))
                     {
-                        // the shot from the trench that finds him (heard from the trench, as the allies' own fire is)
-                        if (audioDirector == null) audioDirector = FindFirstObjectByType<FiveRivers.Audio.AudioDirector>();
-                        if (audioDirector != null) audioDirector.PlaySpatial("SFX_M1_Fire", eye + (victimFocus - eye).normalized * 6f);
-                        victim.Kill(EnemyAgent.QuickDeath);
+                        // nowhere open to put it: no empty shot of the slope, straight back to the player
+                        shellPoint = OnGround(slopeFocus, 0f);
+                        time = Mathf.Max(time, Duration - HandBack);
+                    }
+                    lastBurst = Shot2 + ShellLead;
+                    shellLook = lookTarget = shellPoint;
+                    var toTrench = eye - shellPoint; toTrench.y = 0f; toTrench.Normalize();
+                    shellCamera = ClearestShellCamera(toTrench, Vector3.Cross(Vector3.up, toTrench));
+                }
+                // two more round the first, one after another: the smoke of one burst is gone in about a second,
+                // and the shot stood empty until the cut back with a single round
+                // (beyond the first crater's keep-out, on the far side of it from the lens, left then right; a round
+                // that finds no open ground is tried again the next frame while there is still time to see it land)
+                if (followed < FollowAfter.Length && time >= Shot2 + ShellLead + FollowAfter[followed] && time < Duration - HandBack - FollowLead - 0.3f && shelling != null)
+                {
+                    var away = shellPoint - shellCamera; away.y = 0f;
+                    var toward = Quaternion.Euler(0f, followed % 2 == 0 ? -20f : 20f, 0f) * away.normalized;
+                    // the second round finds one of them (2026-11-23, 사용자 지시 "포탄 떨어져서 적 죽는 것까지 하나")
+                    if (followed == 0 && (struck = PickStruck()) != null)
+                    {
+                        hasStruck = true;
+                        struckAt = struck.transform.position;
+                        shelling.StagedIncoming(struckAt);
+                        strikeAt = time + FollowLead;
+                        followed++;
+                        lastBurst = strikeAt;
+                    }
+                    else
+                    {
+                        // after a man has gone down the last round falls behind where he lies, as the lens sees it
+                        var behind = struckAt - shellCamera; behind.y = 0f;
+                        if (shelling.TryStagedShell(hasStruck ? struckAt : shellPoint, 5.3f, 7.5f, FollowLead, out var next, hasStruck ? behind.normalized : toward))
+                        {
+                            // the lens turns to where it will land while it is heard coming (it fell at the frame's
+                            // edge); not away from the man who has just gone down
+                            if (!hasStruck) lookTarget = next;
+                            followed++;
+                            lastBurst = time + FollowLead;
+                        }
                     }
                 }
-                float u = Mathf.InverseLerp(Shot3, Duration - HandBack, time);
-                position = lowCamera + Vector3.up * (0.1f * u);
-                rotation = Quaternion.LookRotation(victimFocus + Vector3.up * Mathf.Lerp(0.5f, 0.15f, u) - position);
-                fov = Mathf.Lerp(40f, 34f, u);
+                if (hasStruck)
+                {
+                    // (his agent is gone from the scene soon after he falls: the place is kept)
+                    if (struck != null) struckAt = struck.transform.position;
+                    lookTarget = struckAt;
+                    if (strikeAt >= 0f && time >= strikeAt)
+                    {
+                        strikeAt = -1f;
+                        // beside and a little beyond him as the lens sees it: he goes down next to the burst, not
+                        // inside its smoke
+                        var beyond = struckAt - shellCamera; beyond.y = 0f; beyond.Normalize();
+                        shelling.StagedBlast(struckAt + beyond * 1.0f + Vector3.Cross(Vector3.up, beyond) * 1.9f);
+                        if (struck != null && struck.Alive) struck.Kill(EnemyAgent.QuickDeath);
+                    }
+                }
+                // nothing more to come and the smoke has thinned: back to the player rather than hold an empty slope
+                if (time > lastBurst + AfterLast && (followed >= FollowAfter.Length || time > Shot2 + ShellLead + FollowAfter[followed] + 0.8f))
+                    time = Mathf.Max(time, Duration - HandBack);
+                float u = Mathf.InverseLerp(Shot2, Duration - HandBack, time);
+                // the lens waits on the bare ground, then lifts with the column of earth
+                float risen = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(Shot2 + ShellLead, Shot2 + ShellLead + 0.7f, time));
+                position = shellCamera + Vector3.up * (0.1f * u);
+                shellLook = Vector3.Lerp(shellLook, lookTarget, 1f - Mathf.Exp(-Time.deltaTime * 3.5f));
+                rotation = Quaternion.LookRotation(shellLook + Vector3.up * (hasStruck ? 0.9f : Mathf.Lerp(0.4f, 1.7f, risen)) - position);
+                // on the man the round is coming for, the lens closes in: he stands a good quarter of the frame high
+                float want = hasStruck ? Mathf.Clamp(2f * Mathf.Atan(3.0f / Mathf.Max(6f, Vector3.Distance(position, struckAt))) * Mathf.Rad2Deg, 5f, 38f) : Mathf.Lerp(40f, 36f, u);
+                shellFov = shellFov <= 0f ? want : Mathf.Lerp(shellFov, want, 1f - Mathf.Exp(-Time.deltaTime * 3f));
+                fov = shellFov;
             }
 
             // the last shot is ~70 m out on the slope: cut back into the player's eyes under the bars instead of
@@ -226,72 +247,77 @@ namespace FiveRivers.Narrative
             if (time >= Duration) Finish();
         }
 
-        // The close shot rides beside the runner, and the slope is dotted with sandbag cover: with the camera always
-        // on the same side he ran past a pile and the bags filled the frame (2026-11-15). The camera takes the side
-        // (and, failing that, the nearer or higher place) from which the stretch he is about to run stays in view.
-        const float CloseLiftMax = 0.9f, CloseRunSpeed = 3.4f;
-        float closeLift;
+        // The shell camera stands still on the slope while the enemy keep running: of a few places on the trench's
+        // side of the burst, it takes the one with a clear view of where the shell falls that no runner passes
+        // close to (a man ran straight through the lens of the earlier low shot, 2026-11-15).
+        const float ShellLead = 1.3f, FollowLead = 0.9f, AfterLast = 1.3f, RunSpeed = 3.4f, ShellCameraHeight = 0.9f;
+        float lastBurst, strikeAt = -1f, shellFov;
+        bool hasStruck;
+        Vector3 struckAt;
+        Vector3 shellLook, lookTarget;
+        EnemyAgent struck;
 
-        Vector3 ClearestCloseOffset(Vector3 heading, Vector3 side)
+        // The man the second round finds: alive and coming on, 7-70 m from the lens (the long lens closes in), toward what it
+        // sees and not behind cover.
+        EnemyAgent PickStruck()
         {
-            // 'side' is his right. He carries the rifle across his body with the muzzle up to his left, so from his
-            // left it stands in front of his face: the camera keeps to his right as long as any place there is
-            // clear, from three-quarters on to full profile, and only then crosses over.
-            var candidates = new[]
+            if (enemies == null) return null;
+            var view = shellLook - shellCamera; view.y = 0f;
+            EnemyAgent best = null; float bestAngle = 50f;
+            foreach (var e in enemies.ActiveEnemies)
             {
-                heading * 1.6f + side * 2.2f, heading * 2.4f + side * 1.3f, heading * 0.5f + side * 2.6f,
-                heading * 1.6f - side * 2.2f,
-            };
-            int best = 0, bestScore = int.MaxValue;
-            for (int i = 0; i < candidates.Length; i++)
-            {
-                int score = 0;
-                for (float t = 0f; t <= Shot3 - Shot2; t += 0.2f)
-                {
-                    var at = focus + heading * (CloseRunSpeed * t);
-                    var chest = OnGround(at, 1.1f);
-                    var camera = OnGround(at + candidates[i], 0f);
-                    camera.y = Mathf.Max(camera.y + 0.3f, chest.y - 0.15f);
-                    if (Covered(camera, chest) || Covered(camera, OnGround(at, 0.45f))) score++; // his legs count too
-                }
-                if (score >= bestScore) continue;
-                bestScore = score; best = i;
+                if (e == null || !e.Alive || e.Retreating) continue;
+                var to = e.transform.position - shellCamera;
+                float distance = to.magnitude;
+                to.y = 0f;
+                if (distance < 7f || distance > 70f) continue;
+                float angle = Vector3.Angle(view, to);
+                if (angle >= bestAngle || Covered(shellCamera, e.transform.position + Vector3.up * 1.0f)) continue;
+                bestAngle = angle; best = e;
             }
-            return candidates[best];
+            return best;
         }
+        static readonly float[] FollowAfter = { 0.4f, 1.5f };   // seconds after the first burst that the next are sent for
+        ShellingDirector shelling;
+        Vector3 shellPoint, shellCamera;
+        bool shellSet;
+        int followed;
 
-        // The low camera stands still on the slope while the others keep running: one of them ran straight through
-        // the lens, and a sandbag pile could stand beside it (2026-11-15). Of a few places ahead and beside the man
-        // who falls, it takes the one with a clear view of where he goes down that no other runner passes close to.
-        Vector3 ClearestLowCamera(Vector3 toTrench, Vector3 side)
+        Vector3 ClearestShellCamera(Vector3 toTrench, Vector3 side)
         {
+            // about 8 m off. The uphill places come into it too: from below, a fold of the slope hid the ground
+            // where the shell fell and only the top of the smoke stood over it (2026-11-23)
             var places = new[]
             {
-                toTrench * 3.5f + side * 5.5f, toTrench * 3.5f - side * 5.5f,
-                toTrench * 1.5f + side * 6f, toTrench * 1.5f - side * 6f,
-                toTrench * 5.5f + side * 3.5f, toTrench * 5.5f - side * 3.5f,
+                toTrench * 5.5f + side * 6f, toTrench * 5.5f - side * 6f,
+                toTrench * 2f + side * 8f, toTrench * 2f - side * 8f,
+                toTrench * -4f + side * 7f, toTrench * -4f - side * 7f,
+                toTrench * 8f + side * 2f,
             };
-            var falls = OnGround(victimFocus + toTrench * 1.2f, 0.4f);
             int best = 0; float bestScore = float.MaxValue;
             for (int i = 0; i < places.Length; i++)
             {
-                var camera = OnGround(victimFocus + places[i], 0.55f);
+                var camera = OnGround(shellPoint + places[i], ShellCameraHeight);
                 float score = i * 0.01f; // the first is the composed one: it wins a tie
-                if (Covered(camera, falls) || Covered(camera, OnGround(victimFocus, 1.0f))) score += 10f;
+                if (Covered(camera, OnGround(shellPoint, 0.4f)) || Covered(camera, OnGround(shellPoint, 2.5f))) score += 10f;
+                // the ground itself between the lens and the foot of the burst
+                var foot = OnGround(shellPoint, 0.25f);
+                if (Physics.Linecast(camera, foot, out var ground, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore)
+                    && ground.collider is TerrainCollider && Vector3.Distance(ground.point, foot) > 0.6f) score += 8f;
                 if (enemies != null)
                     foreach (var e in enemies.ActiveEnemies)
                     {
-                        if (e == null || !e.Alive || e == victim) continue;
+                        if (e == null || !e.Alive) continue;
                         var from = e.transform.position; var way = e.transform.forward; way.y = 0f;
                         // how near his run over the rest of the shot takes him to the lens
-                        float along = Mathf.Clamp(Vector3.Dot(camera - from, way), 0f, CloseRunSpeed * (Duration - Shot3));
+                        float along = Mathf.Clamp(Vector3.Dot(camera - from, way), 0f, RunSpeed * (Duration - Shot2));
                         var gap = camera - (from + way * along); gap.y = 0f;
                         if (gap.magnitude < 2.5f) score += 2.5f - gap.magnitude;
                     }
                 if (score >= bestScore) continue;
                 bestScore = score; best = i;
             }
-            return OnGround(victimFocus + places[best], 0.55f);
+            return OnGround(shellPoint + places[best], ShellCameraHeight);
         }
 
         // Something solid (not one of the enemy) stands between the camera and his chest, or right in front of the lens.
@@ -325,35 +351,6 @@ namespace FiveRivers.Narrative
             return best;
         }
 
-        // the one who goes down: someone other than the man in the close shot if there is anyone, nearest the trench
-        EnemyAgent Victim()
-        {
-            EnemyAgent best = null; float bestDistance = float.MaxValue;
-            if (enemies == null) return subject;
-            foreach (var e in enemies.ActiveEnemies)
-            {
-                if (e == null || !e.Alive || e == subject || e.Retreating) continue;
-                float d = (e.transform.position - eye).sqrMagnitude;
-                if (d >= bestDistance) continue;
-                bestDistance = d; best = e;
-            }
-            return best != null ? best : subject;
-        }
-
-        static Vector3 Chest(EnemyAgent e, Vector3 fallback)
-        {
-            var a = e != null ? e.GetComponentInChildren<Animator>() : null;
-            var b = a != null && a.isHuman ? a.GetBoneTransform(HumanBodyBones.Chest) : null;
-            return b != null ? b.position : fallback + Vector3.up * 1.2f;
-        }
-
-        static Vector3 Hips(EnemyAgent e)
-        {
-            var a = e.GetComponentInChildren<Animator>();
-            var b = a != null && a.isHuman ? a.GetBoneTransform(HumanBodyBones.Hips) : null;
-            return b != null ? b.position : e.transform.position + Vector3.up * 0.9f;
-        }
-
         Vector3 OnGround(Vector3 p, float above)
         {
             if (terrain != null) p.y = terrain.SampleHeight(p) + terrain.transform.position.y + above;
@@ -375,7 +372,7 @@ namespace FiveRivers.Narrative
             if (ahead.sqrMagnitude > 1f) player.transform.rotation = Quaternion.LookRotation(ahead);
             subject = Nearest();
             focus = subject != null ? subject.transform.position : slopeFocus;
-            lowCameraSet = false; closeSet = false; victimHit = false; victim = null;
+            shellSet = false; followed = 0; struck = null; strikeAt = -1f; hasStruck = false; shellFov = 0f;
 
             EnsureCamera();
             EnsureBars();
@@ -443,7 +440,8 @@ namespace FiveRivers.Narrative
             if (sequenceCamera != null) sequenceCamera.enabled = false;
             if (playerCamera != null) playerCamera.enabled = true;
             if (bars != null) bars.gameObject.SetActive(false);
-            if (inAssault && copy != null) objective.Show(copy.objectiveAssault);
+            // (objective may already be gone when this runs from OnDestroy as the scene unloads)
+            if (inAssault && copy != null && objective != null) objective.Show(copy.objectiveAssault);
         }
 
         System.Collections.IEnumerator ReleaseAfterGrace()

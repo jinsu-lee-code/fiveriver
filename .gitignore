@@ -392,3 +392,5 @@ source/anim/varco_rok_idle_20261118/raw/
 # Rigify 동작 작업 중간 파일 (약 75MB). 게임에 넣는 것은 export/ 의 FBX 와 JSON 이다.
 source/anim/rigify_rok_20261118/work/
 source/anim/rigify_rok_20261118/scripts/__pycache__/
+source/characters/fp_arms_tripo_20261123/raw/
+source/characters/fp_arms_tripo_20261123/work/
