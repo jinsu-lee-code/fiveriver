@@ -1,0 +1,8 @@
+RESULT playhill
+leg 0: at (23.9,0.0,2.7) goal (26.0,-0.9,6.0), alive 2, bodies 0, near shells 0
+leg 1: at (23.0,1.5,24.9) goal (21.0,2.5,30.0), alive 4, bodies 2, near shells 0
+leg 2: at (21.6,5.5,46.8) goal (20.0,6.2,52.0), alive 2, bodies 6, near shells 0
+leg 3: at (21.9,8.5,64.8) goal (24.0,9.1,66.0), alive 1, bodies 9, near shells 2
+leg 4: at (-5.7,24.0,115.4) goal (-7.4,25.6,118.4), alive 0, bodies 10, near shells 6
+hill done: section Dawn after 54s, bodies 10
+dawn: section Dawn, effects alive 11, player at (-5.7,24.0,115.4)

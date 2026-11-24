@@ -1,0 +1,471 @@
+== joint audit 2026-11-24 16:19:54: 2854 frames
+violations: 310 runs
+     0.13-   4.08s  M1Left wristSwing(total)           worst    83.7  frames  485  during M1 hip
+     0.13-   9.34s  M1Right Index MCP flex             worst   -31.2  frames  805  during M1 hip / M1 aim / M1 reload hip
+     7.69-   7.69s  M1Right wristSwing(total)          worst    71.0  frames    1  during M1 aim
+     9.37-  11.23s  M1Right Index DIP sideways(vs rest) worst   -78.6  frames  111  during M1 reload hip
+     9.39-  11.24s  M1Right Pinky DIP sideways(vs rest) worst   -75.7  frames  111  during M1 reload hip
+     9.39-  11.71s  M1Right Index PIP sideways(vs rest) worst   -70.5  frames  136  during M1 reload hip
+     9.42-   9.45s  M1Right Index MCP sideways(vs rest) worst    28.8  frames    3  during M1 reload hip
+     9.44-   9.47s  M1Right Pinky PIP sideways(vs rest) worst   -15.0  frames    3  during M1 reload hip
+     9.45-   9.45s  M1Right Pinky MCP sideways(vs rest) worst    26.2  frames    1  during M1 reload hip
+     9.47-  11.16s  M1Right Ring DIP sideways(vs rest) worst   -47.6  frames  101  during M1 reload hip
+     9.48-   9.75s  M1Right Middle PIP sideways(vs rest) worst    34.4  frames   15  during M1 reload hip
+     9.48-   9.75s  M1Right Ring PIP sideways(vs rest) worst    30.4  frames   15  during M1 reload hip
+     9.48-   9.85s  M1Right Middle DIP sideways(vs rest) worst   -57.8  frames   20  during M1 reload hip
+     9.48-   9.91s  M1Right Middle MCP sideways(vs rest) worst   -94.6  frames   24  during M1 reload hip
+     9.51-   9.85s  M1Right Ring MCP sideways(vs rest) worst   -60.1  frames   18  during M1 reload hip
+     9.51-  10.54s  M1Right Index DIP twist(vs rest)   worst   -72.9  frames   60  during M1 reload hip
+     9.55-  10.86s  M1Right Thumb MCP sideways(vs rest) worst    50.1  frames   77  during M1 reload hip
+     9.55-  10.86s  M1Right Thumb IP flex              worst   -85.4  frames   77  during M1 reload hip
+     9.55-  10.91s  M1Right Thumb IP sideways(vs rest) worst   -85.2  frames   80  during M1 reload hip
+     9.55-  11.19s  M1Right Pinky DIP flex             worst   -69.1  frames   98  during M1 reload hip
+     9.56-   9.63s  M1Right Thumb CMC sideways(vs rest) worst   -34.1  frames    5  during M1 reload hip
+     9.56-   9.83s  M1Right Index MCP sideways(vs rest) worst   -54.9  frames   14  during M1 reload hip
+     9.58-   9.75s  M1Right Ring DIP flex              worst   -25.2  frames    9  during M1 reload hip
+     9.61-   9.83s  M1Right Pinky MCP flex             worst   117.1  frames   11  during M1 reload hip
+     9.61-  10.58s  M1Right Index DIP flex             worst   -49.7  frames   57  during M1 reload hip
+     9.63-   9.69s  M1Right Index MCP twist(vs rest)   worst   -21.2  frames    5  during M1 reload hip
+     9.64-   9.69s  M1Right Ring DIP twist(vs rest)    worst    17.9  frames    4  during M1 reload hip
+     9.64-   9.79s  M1Right Ring MCP flex              worst   105.2  frames    7  during M1 reload hip
+     9.66-   9.69s  M1Right Ring MCP twist(vs rest)    worst   -16.8  frames    3  during M1 reload hip
+     9.75-   9.85s  M1Right Index PIP flex             worst   -25.8  frames    6  during M1 reload hip
+     9.75-   9.85s  M1Right Middle PIP flex            worst   -25.8  frames    6  during M1 reload hip
+     9.75-   9.85s  M1Right Ring PIP flex              worst   -25.8  frames    6  during M1 reload hip
+     9.75-   9.85s  M1Right Pinky PIP flex             worst   -25.8  frames    6  during M1 reload hip
+     9.75-  11.29s  M1Right Pinky PIP sideways(vs rest) worst   -46.3  frames   94  during M1 reload hip
+     9.79-  10.49s  M1Right Ring DIP flex              worst   -11.7  frames   43  during M1 reload hip
+     9.79-  10.64s  M1Right Thumb CMC sideways(vs rest) worst   -88.4  frames   53  during M1 reload hip
+     9.86-   9.88s  M1Right Middle PIP sideways(vs rest) worst   -15.5  frames    2  during M1 reload hip
+     9.86-   9.88s  M1Right Ring PIP sideways(vs rest) worst   -19.5  frames    2  during M1 reload hip
+     9.88-  10.60s  M1Right Pinky PIP twist(vs rest)   worst   -23.5  frames   45  during M1 reload hip
+     9.90-  11.24s  M1Right Pinky MCP sideways(vs rest) worst    49.0  frames   83  during M1 reload hip
+     9.93-  10.51s  M1Right Middle PIP sideways(vs rest) worst    13.3  frames   36  during M1 reload hip
+     9.93-  10.93s  M1Right Index MCP twist(vs rest)   worst    29.3  frames   61  during M1 reload hip
+    10.51-  11.23s  M1Right Index MCP sideways(vs rest) worst    45.7  frames   45  during M1 reload hip
+    10.55-  11.24s  M1Right Index PIP twist(vs rest)   worst   -32.5  frames   43  during M1 reload hip
+    10.58-  10.61s  M1Right Index DIP twist(vs rest)   worst    17.2  frames    3  during M1 reload hip
+    10.86-  11.14s  M1Right Index DIP twist(vs rest)   worst    16.8  frames   19  during M1 reload hip
+    10.94-  11.16s  M1Right Index DIP flex             worst   -27.1  frames   15  during M1 reload hip
+    10.96-  10.96s  M1Right Thumb MCP flex             worst    60.2  frames    1  during M1 reload hip
+    10.97-  11.14s  M1Right Middle PIP sideways(vs rest) worst    12.0  frames   12  during M1 reload hip
+    10.99-  11.14s  M1Right Ring DIP flex              worst   -11.7  frames   11  during M1 reload hip
+    11.19-  11.29s  M1Right Thumb CMC twist(vs rest)   worst    21.1  frames    7  during M1 reload hip
+    11.21-  11.60s  M1Right Middle DIP sideways(vs rest) worst    38.2  frames   24  during M1 reload hip
+    11.23-  11.48s  M1Right Ring DIP sideways(vs rest) worst    31.0  frames   16  during M1 reload hip
+    11.26-  11.44s  M1Right Middle MCP sideways(vs rest) worst   -34.9  frames   12  during M1 reload hip
+    11.28-  11.38s  M1Right Index DIP sideways(vs rest) worst    17.7  frames    7  during M1 reload hip
+    11.28-  11.53s  M1Right Middle PIP sideways(vs rest) worst    25.2  frames   16  during M1 reload hip
+    11.29-  11.46s  M1Right Middle DIP flex            worst   -19.0  frames   11  during M1 reload hip
+    11.29-  11.48s  M1Right Ring PIP sideways(vs rest) worst    21.3  frames   12  during M1 reload hip
+    11.41-  11.66s  M1Right Pinky PIP sideways(vs rest) worst   -22.7  frames   13  during M1 reload hip
+    11.44-  11.71s  M1Right Pinky DIP sideways(vs rest) worst   -30.9  frames   14  during M1 reload hip
+    11.48-  11.68s  M1Right Index MCP sideways(vs rest) worst    34.9  frames   10  during M1 reload hip
+    11.49-  11.66s  M1Right Pinky MCP sideways(vs rest) worst    34.3  frames    8  during M1 reload hip
+    11.53-  11.73s  M1Right Index DIP sideways(vs rest) worst   -21.8  frames   10  during M1 reload hip
+    11.79-  16.02s  M1Right Index MCP flex             worst   -31.2  frames  266  during M1 reload hip / M1 hip
+    16.08-  17.91s  M1Right Index DIP sideways(vs rest) worst   -54.5  frames  107  during M1 reload hip
+    16.08-  18.29s  M1Right Index PIP sideways(vs rest) worst   -56.1  frames  127  during M1 reload hip
+    16.09-  17.93s  M1Right Pinky DIP sideways(vs rest) worst   -40.2  frames  107  during M1 reload hip
+    16.12-  17.08s  M1Right Thumb CMC sideways(vs rest) worst   -88.4  frames   57  during M1 reload hip
+    16.12-  17.67s  M1Right Thumb IP sideways(vs rest) worst   -85.3  frames   89  during M1 reload hip
+    16.14-  17.87s  M1Right Ring DIP sideways(vs rest) worst   -15.8  frames  101  during M1 reload hip
+    16.14-  17.89s  M1Right Pinky DIP flex             worst   -42.4  frames  102  during M1 reload hip
+    16.14-  17.98s  M1Right Pinky PIP sideways(vs rest) worst   -31.9  frames  107  during M1 reload hip
+    16.16-  17.57s  M1Right Thumb MCP sideways(vs rest) worst    50.1  frames   81  during M1 reload hip
+    16.16-  17.93s  M1Right Pinky MCP sideways(vs rest) worst    49.0  frames  103  during M1 reload hip
+    16.17-  16.72s  M1Right Ring DIP flex              worst   -12.0  frames   34  during M1 reload hip
+    16.17-  16.84s  M1Right Index DIP twist(vs rest)   worst   -38.9  frames   39  during M1 reload hip
+    16.17-  17.68s  M1Right Index MCP twist(vs rest)   worst    29.3  frames   87  during M1 reload hip
+    16.19-  16.91s  M1Right Index DIP flex             worst   -34.4  frames   42  during M1 reload hip
+    16.21-  16.74s  M1Right Middle PIP sideways(vs rest) worst    13.3  frames   33  during M1 reload hip
+    16.22-  16.97s  M1Right Pinky PIP twist(vs rest)   worst   -23.5  frames   44  during M1 reload hip
+    16.22-  17.59s  M1Right Thumb IP flex              worst   -85.4  frames   78  during M1 reload hip
+    16.72-  17.91s  M1Right Index MCP sideways(vs rest) worst    45.7  frames   68  during M1 reload hip
+    16.86-  17.93s  M1Right Index PIP twist(vs rest)   worst   -33.0  frames   63  during M1 reload hip
+    16.92-  17.00s  M1Right Index DIP twist(vs rest)   worst    17.5  frames    6  during M1 reload hip
+    17.57-  17.84s  M1Right Index DIP twist(vs rest)   worst    16.8  frames   18  during M1 reload hip
+    17.69-  17.86s  M1Right Index DIP flex             worst   -27.1  frames   11  during M1 reload hip
+    17.73-  17.84s  M1Right Ring DIP flex              worst   -11.7  frames    8  during M1 reload hip
+    17.73-  17.86s  M1Right Middle PIP sideways(vs rest) worst    12.0  frames    9  during M1 reload hip
+    17.89-  17.96s  M1Right Thumb CMC twist(vs rest)   worst    21.1  frames    5  during M1 reload hip
+    17.91-  18.20s  M1Right Middle DIP sideways(vs rest) worst    38.2  frames   15  during M1 reload hip
+    17.93-  18.11s  M1Right Ring DIP sideways(vs rest) worst    30.8  frames    9  during M1 reload hip
+    17.94-  18.08s  M1Right Middle MCP sideways(vs rest) worst   -34.9  frames    6  during M1 reload hip
+    17.96-  18.06s  M1Right Index DIP sideways(vs rest) worst    17.5  frames    4  during M1 reload hip
+    17.96-  18.10s  M1Right Ring PIP sideways(vs rest) worst    21.1  frames    6  during M1 reload hip
+    17.96-  18.15s  M1Right Middle PIP sideways(vs rest) worst    25.0  frames    9  during M1 reload hip
+    17.98-  18.10s  M1Right Middle DIP flex            worst   -19.0  frames    5  during M1 reload hip
+    18.08-  18.25s  M1Right Pinky PIP sideways(vs rest) worst   -22.8  frames   11  during M1 reload hip
+    18.10-  18.29s  M1Right Pinky DIP sideways(vs rest) worst   -30.9  frames   13  during M1 reload hip
+    18.11-  18.25s  M1Right Pinky MCP sideways(vs rest) worst    34.3  frames    9  during M1 reload hip
+    18.11-  18.26s  M1Right Index MCP sideways(vs rest) worst    34.8  frames   10  during M1 reload hip
+    18.16-  18.31s  M1Right Index DIP sideways(vs rest) worst   -22.9  frames   10  during M1 reload hip
+    18.36-  45.77s  M1Right Index MCP flex             worst   -31.2  frames  875  during M1 reload hip / M1 hip / M1 switch hip / M1 sprint hip / M1 aim
+    27.19-  27.19s  BazookaLeft Index MCP twist(vs rest) worst    21.9  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaLeft Ring PIP sideways(vs rest) worst   -16.8  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaLeft Pinky MCP twist(vs rest) worst    23.6  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaLeft Pinky DIP flex         worst   -13.1  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaLeft Pinky DIP twist(vs rest) worst   -15.3  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaRight Index MCP twist(vs rest) worst    21.8  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaRight Middle PIP sideways(vs rest) worst    14.6  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaRight Ring MCP twist(vs rest) worst   -19.9  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaRight Ring PIP sideways(vs rest) worst   -10.2  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaRight Thumb CMC twist(vs rest) worst    38.0  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaRight Thumb IP sideways(vs rest) worst   -51.5  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaLeft Middle skinToLauncher(mm) worst    -8.4  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaLeft Ring skinToLauncher(mm) worst    -7.3  frames    1  during Bazooka hip
+    27.19-  27.19s  BazookaRight Middle skinToLauncher(mm) worst    -4.4  frames    1  during Bazooka hip
+    27.19-  27.21s  BazookaLeft Ring DIP sideways(vs rest) worst    23.7  frames    2  during Bazooka hip
+    27.19-  27.21s  BazookaRight Index MCP sideways(vs rest) worst   -44.1  frames    2  during Bazooka hip
+    27.19-  27.21s  BazookaRight Middle DIP flex       worst   -27.7  frames    2  during Bazooka hip
+    27.19-  27.21s  BazookaRight Ring DIP flex         worst   -47.7  frames    2  during Bazooka hip
+    27.19-  27.22s  BazookaLeft wristTwist(left in wrist) worst    49.9  frames    3  during Bazooka hip
+    27.19-  27.23s  BazookaLeft Middle DIP flex        worst   -23.9  frames    4  during Bazooka hip
+    27.19-  27.36s  BazookaRight Thumb skinToLauncher(mm) worst   -32.0  frames   12  during Bazooka hip
+    27.19-  29.60s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -64.7  frames  137  during Bazooka hip
+    27.19-  29.65s  BazookaRight wristTwist(left in wrist) worst   -55.0  frames  142  during Bazooka hip
+    27.19-  29.66s  BazookaLeft Index DIP sideways(vs rest) worst    19.2  frames  143  during Bazooka hip
+    27.19-  30.93s  BazookaLeft Thumb CMC twist(vs rest) worst    40.9  frames  177  during Bazooka hip / Bazooka aim
+    27.19-  30.98s  BazookaLeft Thumb CMC sideways(vs rest) worst   -68.7  frames  178  during Bazooka hip / Bazooka aim / Bazooka reload aim
+    27.19-  31.67s  BazookaRight wristFlex(+)/Ext(-)   worst  -165.7  frames  235  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.19-  31.72s  BazookaLeft wristFlex(+)/Ext(-)    worst   -85.7  frames  237  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.19-  31.72s  BazookaLeft Middle PIP sideways(vs rest) worst   -30.6  frames  237  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.19-  31.72s  BazookaLeft Thumb IP twist(vs rest) worst   -31.1  frames  237  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.19-  31.80s  BazookaRight wristRadial(+)/Ulnar(-) worst   181.2  frames  244  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.19-  38.74s  BazookaLeft Pinky DIP sideways(vs rest) worst    36.3  frames  633  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip / Bazooka switch hip
+    27.19-  38.74s  BazookaRight Pinky DIP flex        worst   -24.7  frames  633  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip / Bazooka switch hip
+    27.21-  29.65s  BazookaLeft Index DIP flex         worst   -38.4  frames  141  during Bazooka hip
+    27.22-  27.28s  BazookaLeft Thumb skinToLauncher(mm) worst    -8.3  frames    3  during Bazooka hip
+    27.22-  27.31s  BazookaLeft Index skinToLauncher(mm) worst   -14.6  frames    5  during Bazooka hip
+    27.22-  29.64s  BazookaLeft Pinky PIP sideways(vs rest) worst   -11.3  frames  139  during Bazooka hip
+    27.22-  29.64s  BazookaRight Middle PIP flex       worst   112.1  frames  139  during Bazooka hip
+    27.23-  29.71s  BazookaRight Index MCP sideways(vs rest) worst   -50.6  frames  145  during Bazooka hip / Bazooka aim
+    27.23-  30.93s  BazookaRight Thumb CMC twist(vs rest) worst   117.2  frames  174  during Bazooka hip / Bazooka aim
+    27.28-  30.93s  BazookaRight Thumb CMC sideways(vs rest) worst   -49.8  frames  173  during Bazooka hip / Bazooka aim
+    27.29-  29.69s  BazookaRight Thumb IP twist(vs rest) worst    39.3  frames  141  during Bazooka hip / Bazooka aim
+    27.35-  36.63s  BazookaRight Ring DIP flex         worst   -54.3  frames  447  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    29.64-  30.99s  BazookaLeft wristTwist(left in wrist) worst    67.8  frames   39  during Bazooka hip / Bazooka aim / Bazooka reload aim
+    29.64-  31.39s  BazookaLeft wristRadial(+)/Ulnar(-) worst    60.0  frames   70  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    29.65-  29.73s  BazookaRight elbowBend             worst   159.6  frames    8  during Bazooka hip / Bazooka aim
+    29.66-  29.68s  BazookaRight Middle skinToLauncher(mm) worst    -4.8  frames    3  during Bazooka hip / Bazooka aim
+    29.66-  29.69s  BazookaLeft Ring PIP sideways(vs rest) worst   -18.9  frames    4  during Bazooka hip / Bazooka aim
+    29.66-  29.69s  BazookaRight Middle DIP flex       worst   -31.7  frames    4  during Bazooka hip / Bazooka aim
+    29.66-  29.69s  BazookaLeft Middle skinToLauncher(mm) worst   -11.9  frames    4  during Bazooka hip / Bazooka aim
+    29.66-  29.69s  BazookaLeft Ring skinToLauncher(mm) worst   -10.1  frames    4  during Bazooka hip / Bazooka aim
+    29.66-  29.70s  BazookaLeft Ring DIP sideways(vs rest) worst    23.2  frames    5  during Bazooka hip / Bazooka aim
+    29.66-  29.80s  BazookaRight Thumb skinToLauncher(mm) worst   -30.4  frames   11  during Bazooka hip / Bazooka aim
+    29.67-  29.68s  BazookaRight Ring MCP twist(vs rest) worst   -21.6  frames    2  during Bazooka aim
+    29.67-  29.68s  BazookaRight Thumb MCP twist(vs rest) worst    34.1  frames    2  during Bazooka aim
+    29.67-  29.69s  BazookaLeft Index MCP twist(vs rest) worst    24.5  frames    3  during Bazooka aim
+    29.67-  29.69s  BazookaLeft Middle DIP flex        worst   -16.0  frames    3  during Bazooka aim
+    29.67-  29.69s  BazookaLeft Pinky MCP twist(vs rest) worst    26.5  frames    3  during Bazooka aim
+    29.67-  29.69s  BazookaRight Index MCP twist(vs rest) worst    22.2  frames    3  during Bazooka aim
+    29.67-  29.69s  BazookaRight Middle PIP sideways(vs rest) worst    16.1  frames    3  during Bazooka aim
+    29.67-  31.80s  BazookaRight wristTwist(left in wrist) worst  -163.1  frames  101  during Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    29.68-  29.68s  BazookaLeft Pinky DIP flex         worst   -13.1  frames    1  during Bazooka aim
+    29.68-  29.68s  BazookaLeft Pinky DIP twist(vs rest) worst   -15.4  frames    1  during Bazooka aim
+    29.68-  29.68s  BazookaRight Index PIP sideways(vs rest) worst    11.9  frames    1  during Bazooka aim
+    29.68-  29.68s  BazookaRight Ring PIP sideways(vs rest) worst   -10.4  frames    1  during Bazooka aim
+    29.69-  29.69s  BazookaRight Thumb IP sideways(vs rest) worst   -33.9  frames    1  during Bazooka aim
+    29.69-  30.93s  BazookaLeft Index DIP sideways(vs rest) worst    12.2  frames   32  during Bazooka aim
+    29.70-  30.93s  BazookaLeft Index DIP flex         worst   -29.0  frames   31  during Bazooka aim
+    29.71-  29.73s  BazookaLeft Thumb skinToLauncher(mm) worst    -6.3  frames    2  during Bazooka aim
+    29.71-  29.77s  BazookaLeft Index skinToLauncher(mm) worst   -12.6  frames    3  during Bazooka aim
+    29.71-  30.93s  BazookaLeft Pinky PIP sideways(vs rest) worst   -11.3  frames   30  during Bazooka aim
+    29.71-  30.93s  BazookaRight Middle PIP flex       worst   112.0  frames   30  during Bazooka aim
+    29.77-  36.64s  BazookaRight Index MCP sideways(vs rest) worst   -51.8  frames  309  during Bazooka aim / Bazooka reload aim / Bazooka reload hip / Bazooka hip
+    29.78-  38.74s  BazookaRight Thumb IP twist(vs rest) worst    39.9  frames  483  during Bazooka aim / Bazooka reload aim / Bazooka reload hip / Bazooka hip / Bazooka switch hip
+    30.98-  30.98s  BazookaLeft Index MCP twist(vs rest) worst    23.4  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Middle DIP flex        worst   -16.3  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Ring PIP sideways(vs rest) worst   -21.0  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Ring DIP sideways(vs rest) worst    23.4  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Pinky MCP twist(vs rest) worst    28.5  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Pinky DIP flex         worst   -21.2  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Pinky DIP twist(vs rest) worst   -18.5  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Index MCP twist(vs rest) worst    32.6  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Middle PIP sideways(vs rest) worst    17.3  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Middle DIP flex       worst   -44.0  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Middle DIP sideways(vs rest) worst    10.2  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Ring MCP twist(vs rest) worst   -22.4  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Ring PIP sideways(vs rest) worst   -10.4  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Ring DIP sideways(vs rest) worst   -10.3  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Thumb MCP flex        worst   -16.8  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Thumb MCP sideways(vs rest) worst   -37.0  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Thumb MCP twist(vs rest) worst    20.2  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight Thumb IP sideways(vs rest) worst   -50.3  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Middle skinToLauncher(mm) worst   -17.4  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaLeft Ring skinToLauncher(mm) worst   -12.6  frames    1  during Bazooka reload aim
+    30.99-  31.13s  BazookaLeft Thumb skinToLauncher(mm) worst   -29.1  frames   10  during Bazooka reload aim
+    30.99-  31.20s  BazookaRight Thumb skinToLauncher(mm) worst   -29.6  frames   14  during Bazooka reload aim
+    30.99-  31.50s  BazookaLeft Pinky PIP sideways(vs rest) worst   -11.3  frames   42  during Bazooka reload aim / Bazooka reload hip
+    30.99-  31.50s  BazookaRight Middle PIP flex       worst   112.1  frames   42  during Bazooka reload aim / Bazooka reload hip
+    30.99-  31.51s  BazookaLeft Index DIP flex         worst   -29.9  frames   43  during Bazooka reload aim / Bazooka reload hip
+    30.99-  31.52s  BazookaLeft Index DIP sideways(vs rest) worst    18.0  frames   44  during Bazooka reload aim / Bazooka reload hip
+    31.00-  31.06s  BazookaRight Index skinToLauncher(mm) worst    -7.6  frames    3  during Bazooka reload aim
+    31.06-  31.72s  BazookaLeft Thumb CMC twist(vs rest) worst    40.9  frames   56  during Bazooka reload aim / Bazooka reload hip
+    31.07-  31.43s  BazookaLeft wristTwist(left in wrist) worst    47.9  frames   31  during Bazooka reload aim / Bazooka reload hip
+    31.07-  31.54s  BazookaRight Thumb CMC sideways(vs rest) worst   -49.9  frames   42  during Bazooka reload aim / Bazooka reload hip
+    31.07-  31.67s  BazookaLeft Thumb CMC sideways(vs rest) worst   -66.3  frames   53  during Bazooka reload aim / Bazooka reload hip
+    31.07-  36.62s  BazookaRight Thumb CMC twist(vs rest) worst    69.5  frames  274  during Bazooka reload aim / Bazooka reload hip / Bazooka hip
+    31.31-  31.38s  BazookaRight elbowBend             worst   159.7  frames    8  during Bazooka reload aim / Bazooka reload hip
+    31.44-  31.65s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -64.7  frames   20  during Bazooka reload hip
+    31.51-  31.56s  BazookaLeft Ring DIP sideways(vs rest) worst    24.0  frames    5  during Bazooka reload hip
+    31.51-  31.56s  BazookaRight Middle DIP flex       worst   -46.8  frames    5  during Bazooka reload hip
+    31.51-  31.57s  BazookaLeft wristTwist(left in wrist) worst    50.6  frames    6  during Bazooka reload hip
+    31.51-  31.72s  BazookaRight Thumb skinToLauncher(mm) worst   -35.7  frames   17  during Bazooka reload hip
+    31.52-  31.54s  BazookaLeft Middle DIP flex        worst   -14.6  frames    3  during Bazooka reload hip
+    31.52-  31.56s  BazookaLeft Ring PIP sideways(vs rest) worst   -18.4  frames    4  during Bazooka reload hip
+    31.52-  31.56s  BazookaLeft Pinky MCP twist(vs rest) worst    26.3  frames    4  during Bazooka reload hip
+    31.52-  31.56s  BazookaRight Index MCP twist(vs rest) worst    22.4  frames    4  during Bazooka reload hip
+    31.52-  31.56s  BazookaRight Middle PIP sideways(vs rest) worst    15.9  frames    4  during Bazooka reload hip
+    31.52-  31.56s  BazookaRight Thumb IP sideways(vs rest) worst   -50.8  frames    4  during Bazooka reload hip
+    31.52-  31.56s  BazookaLeft Middle skinToLauncher(mm) worst   -13.0  frames    4  during Bazooka reload hip
+    31.52-  31.56s  BazookaLeft Ring skinToLauncher(mm) worst    -9.4  frames    4  during Bazooka reload hip
+    31.53-  31.54s  BazookaRight Index PIP sideways(vs rest) worst    11.9  frames    2  during Bazooka reload hip
+    31.53-  31.54s  BazookaRight Middle DIP sideways(vs rest) worst    10.9  frames    2  during Bazooka reload hip
+    31.53-  31.54s  BazookaRight Ring PIP sideways(vs rest) worst   -12.6  frames    2  during Bazooka reload hip
+    31.53-  31.56s  BazookaLeft Index MCP twist(vs rest) worst    23.7  frames    3  during Bazooka reload hip
+    31.53-  31.56s  BazookaLeft Pinky DIP flex         worst   -12.8  frames    3  during Bazooka reload hip
+    31.53-  31.56s  BazookaRight Ring MCP twist(vs rest) worst   -22.8  frames    3  during Bazooka reload hip
+    31.54-  31.54s  BazookaLeft Pinky DIP twist(vs rest) worst   -15.2  frames    1  during Bazooka reload hip
+    31.57-  31.61s  BazookaLeft Thumb skinToLauncher(mm) worst    -7.8  frames    4  during Bazooka reload hip
+    31.57-  31.62s  BazookaLeft Index skinToLauncher(mm) worst    -9.6  frames    5  during Bazooka reload hip
+    31.57-  31.64s  BazookaLeft Pinky PIP sideways(vs rest) worst   -11.1  frames    7  during Bazooka reload hip
+    31.57-  31.72s  BazookaLeft Index DIP flex         worst   -26.3  frames   12  during Bazooka reload hip
+    31.57-  31.76s  BazookaLeft Index DIP sideways(vs rest) worst    13.6  frames   15  during Bazooka reload hip
+    31.57-  36.58s  BazookaRight Middle PIP flex       worst   112.0  frames  227  during Bazooka reload hip / Bazooka hip
+    31.58-  36.61s  BazookaRight Thumb CMC sideways(vs rest) worst   -49.9  frames  229  during Bazooka reload hip / Bazooka hip
+    31.64-  31.72s  BazookaLeft wristTwist(left in wrist) worst   -72.0  frames    6  during Bazooka reload hip
+    31.65-  31.67s  BazookaLeft Ring skinToLauncher(mm) worst   -27.0  frames    3  during Bazooka reload hip
+    31.65-  31.68s  BazookaLeft Index skinToLauncher(mm) worst   -35.6  frames    4  during Bazooka reload hip
+    31.66-  31.67s  BazookaLeft Middle skinToLauncher(mm) worst   -30.8  frames    2  during Bazooka reload hip
+    31.66-  31.68s  BazookaLeft Thumb skinToLauncher(mm) worst   -21.8  frames    3  during Bazooka reload hip
+    31.74-  31.88s  BazookaLeft wristRadial(+)/Ulnar(-) worst    37.2  frames   15  during Bazooka reload hip
+    31.74-  38.74s  BazookaRight wristFlex(+)/Ext(-)   worst  -127.8  frames  396  during Bazooka reload hip / Bazooka hip / Bazooka switch hip
+    31.75-  33.33s  BazookaLeft wristTwist(left in wrist) worst   170.5  frames   72  during Bazooka reload hip
+    31.75-  33.48s  BazookaLeft Middle DIP flex        worst   -13.9  frames   88  during Bazooka reload hip
+    31.75-  34.27s  BazookaLeft Ring DIP sideways(vs rest) worst    11.3  frames   89  during Bazooka reload hip
+    31.82-  33.31s  BazookaRight wristTwist(left in wrist) worst    71.0  frames   63  during Bazooka reload hip
+    31.82-  38.74s  BazookaRight wristRadial(+)/Ulnar(-) worst   -73.9  frames  388  during Bazooka reload hip / Bazooka hip / Bazooka switch hip
+    32.28-  33.18s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -41.7  frames    9  during Bazooka reload hip
+    33.33-  38.74s  BazookaRight wristTwist(left in wrist) worst   -87.8  frames  324  during Bazooka reload hip / Bazooka hip / Bazooka switch hip
+    33.36-  38.74s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -72.3  frames  321  during Bazooka reload hip / Bazooka hip / Bazooka switch hip
+    33.39-  33.45s  BazookaLeft wristTwist(left in wrist) worst    29.6  frames    8  during Bazooka reload hip
+    33.41-  38.15s  BazookaLeft wristFlex(+)/Ext(-)    worst   -86.2  frames  282  during Bazooka reload hip / Bazooka hip / Bazooka switch hip
+    33.44-  33.48s  BazookaLeft Index skinToLauncher(mm) worst   -37.8  frames    5  during Bazooka reload hip
+    33.44-  34.27s  BazookaLeft Middle skinToLauncher(mm) worst   -40.4  frames    6  during Bazooka reload hip
+    33.45-  34.27s  BazookaLeft Ring skinToLauncher(mm) worst   -35.7  frames    5  during Bazooka reload hip
+    33.45-  34.27s  BazookaLeft Thumb skinToLauncher(mm) worst   -37.4  frames    5  during Bazooka reload hip
+    33.48-  34.27s  BazookaLeft Pinky skinToLauncher(mm) worst   -12.0  frames    2  during Bazooka reload hip
+    34.27-  34.27s  BazookaLeft Thumb MCP twist(vs rest) worst   -25.8  frames    1  during Bazooka reload hip
+    34.30-  36.58s  BazookaLeft Pinky PIP sideways(vs rest) worst   -11.3  frames  125  during Bazooka hip
+    34.30-  38.74s  BazookaLeft Thumb CMC sideways(vs rest) worst   -71.0  frames  306  during Bazooka hip / Bazooka switch hip
+    34.30-  38.74s  BazookaLeft Thumb IP twist(vs rest) worst   -31.1  frames  306  during Bazooka hip / Bazooka switch hip
+    34.30-  38.74s  BazookaLeft Thumb CMC twist(vs rest) worst    40.9  frames  306  during Bazooka hip / Bazooka switch hip
+    34.31-  36.60s  BazookaLeft Index DIP sideways(vs rest) worst    13.8  frames  126  during Bazooka hip
+    34.31-  38.74s  BazookaLeft Middle PIP sideways(vs rest) worst   -28.7  frames  305  during Bazooka hip / Bazooka switch hip
+    34.32-  34.35s  BazookaLeft Ring DIP flex          worst   -18.8  frames    3  during Bazooka hip
+    34.33-  36.59s  BazookaLeft Index DIP flex         worst   -29.6  frames  123  during Bazooka hip
+    36.59-  36.63s  BazookaLeft Ring DIP sideways(vs rest) worst    23.6  frames    5  during Bazooka hip
+    36.59-  36.63s  BazookaRight Middle DIP flex       worst   -37.2  frames    5  during Bazooka hip
+    36.59-  36.78s  BazookaRight Thumb skinToLauncher(mm) worst   -34.7  frames   19  during Bazooka hip
+    36.60-  36.60s  BazookaRight Middle skinToLauncher(mm) worst    -4.2  frames    1  during Bazooka hip
+    36.60-  36.62s  BazookaLeft Ring PIP sideways(vs rest) worst   -19.4  frames    3  during Bazooka hip
+    36.60-  36.62s  BazookaLeft Pinky MCP twist(vs rest) worst    26.8  frames    3  during Bazooka hip
+    36.60-  36.62s  BazookaLeft Pinky DIP flex         worst   -16.1  frames    3  during Bazooka hip
+    36.60-  36.62s  BazookaRight Index MCP twist(vs rest) worst    22.0  frames    3  during Bazooka hip
+    36.60-  36.62s  BazookaRight Middle PIP sideways(vs rest) worst    16.2  frames    3  during Bazooka hip
+    36.60-  36.62s  BazookaRight Thumb IP sideways(vs rest) worst   -55.2  frames    3  during Bazooka hip
+    36.60-  36.62s  BazookaLeft Middle skinToLauncher(mm) worst   -13.4  frames    3  during Bazooka hip
+    36.60-  36.62s  BazookaLeft Ring skinToLauncher(mm) worst   -10.5  frames    3  during Bazooka hip
+    36.60-  36.66s  BazookaLeft wristTwist(left in wrist) worst    50.1  frames    6  during Bazooka hip
+    36.61-  36.61s  BazookaLeft Middle DIP flex        worst   -12.9  frames    1  during Bazooka hip
+    36.61-  36.61s  BazookaRight Index PIP sideways(vs rest) worst    12.3  frames    1  during Bazooka hip
+    36.61-  36.61s  BazookaRight Ring PIP sideways(vs rest) worst   -10.5  frames    1  during Bazooka hip
+    36.61-  36.62s  BazookaLeft Index MCP twist(vs rest) worst    23.4  frames    2  during Bazooka hip
+    36.61-  36.62s  BazookaLeft Pinky DIP twist(vs rest) worst   -16.5  frames    2  during Bazooka hip
+    36.61-  36.62s  BazookaRight Ring MCP twist(vs rest) worst   -21.8  frames    2  during Bazooka hip
+    36.63-  38.74s  BazookaLeft Index DIP sideways(vs rest) worst    20.5  frames  177  during Bazooka hip / Bazooka switch hip
+    36.64-  36.67s  BazookaLeft Thumb skinToLauncher(mm) worst    -6.8  frames    3  during Bazooka hip
+    36.64-  36.72s  BazookaLeft Index skinToLauncher(mm) worst   -14.7  frames    8  during Bazooka hip
+    36.64-  37.84s  BazookaLeft Pinky PIP sideways(vs rest) worst   -11.3  frames  117  during Bazooka hip
+    36.64-  37.84s  BazookaRight Middle PIP flex       worst   112.0  frames  117  during Bazooka hip
+    36.66-  38.74s  BazookaLeft Index DIP flex         worst   -31.8  frames  175  during Bazooka hip / Bazooka switch hip
+    36.67-  38.74s  BazookaRight Thumb CMC twist(vs rest) worst    91.2  frames  174  during Bazooka hip / Bazooka switch hip
+    36.67-  38.74s  BazookaRight Index MCP sideways(vs rest) worst   -36.3  frames  174  during Bazooka hip / Bazooka switch hip
+    36.68-  38.74s  BazookaRight Thumb CMC sideways(vs rest) worst   -49.8  frames  173  during Bazooka hip / Bazooka switch hip
+    36.76-  37.86s  BazookaRight Ring DIP flex         worst   -21.5  frames  108  during Bazooka hip / Bazooka switch hip
+    37.85-  37.86s  BazookaLeft wristTwist(left in wrist) worst    24.0  frames    2  during Bazooka switch hip
+    37.85-  37.86s  BazookaLeft Ring PIP sideways(vs rest) worst   -10.8  frames    2  during Bazooka switch hip
+    37.85-  37.86s  BazookaLeft Ring DIP sideways(vs rest) worst    16.4  frames    2  during Bazooka switch hip
+    37.85-  37.86s  BazookaRight Middle DIP flex       worst   -21.0  frames    2  during Bazooka switch hip
+    37.85-  37.86s  BazookaLeft Middle skinToLauncher(mm) worst    -6.7  frames    2  during Bazooka switch hip
+    37.85-  37.86s  BazookaRight Thumb skinToLauncher(mm) worst    -5.0  frames    2  during Bazooka switch hip
+    37.86-  37.86s  BazookaRight Middle skinToLauncher(mm) worst    -4.1  frames    1  during Bazooka switch hip
+    37.86-  37.87s  BazookaRight Thumb MCP twist(vs rest) worst    21.0  frames    2  during Bazooka switch hip
+    37.89-  37.90s  BazookaLeft Index skinToLauncher(mm) worst    -8.1  frames    2  during Bazooka switch hip
+    37.89-  38.74s  BazookaRight Middle PIP flex       worst   112.0  frames   56  during Bazooka switch hip
+    37.89-  38.74s  BazookaLeft Pinky PIP sideways(vs rest) worst   -11.2  frames   56  during Bazooka switch hip
+    37.94-  38.74s  BazookaRight Ring DIP flex         worst   -14.0  frames   51  during Bazooka switch hip
+    38.11-  38.74s  BazookaLeft wristTwist(left in wrist) worst    86.5  frames   39  during Bazooka switch hip
+    41.06-  42.38s  M1Right wristSwing(total)          worst    83.7  frames   58  during M1 sprint hip / M1 hip
+ranges (min..max over the run):
+  BazookaLeft elbowBend                 33.8 ..   132.9
+  BazookaLeft elbowOutward(cm, <0 = inverted)     3.1 ..    18.8
+  BazookaLeft Index DIP flex           -38.4 ..    12.0
+  BazookaLeft Index DIP sideways(vs rest)    -3.7 ..    20.5
+  BazookaLeft Index DIP twist(vs rest)    -5.1 ..    -0.5
+  BazookaLeft Index MCP flex            40.0 ..    63.5
+  BazookaLeft Index MCP sideways(vs rest)   -14.8 ..    11.6
+  BazookaLeft Index MCP twist(vs rest)    -2.1 ..    24.5
+  BazookaLeft Index PIP flex            25.0 ..    82.8
+  BazookaLeft Index PIP sideways(vs rest)    -3.1 ..     5.4
+  BazookaLeft Index PIP twist(vs rest)     0.0 ..     0.5
+  BazookaLeft Index skinToLauncher(mm)   -37.8 ..    28.9
+  BazookaLeft Middle DIP flex          -23.9 ..    16.7
+  BazookaLeft Middle DIP sideways(vs rest)    -7.0 ..     7.2
+  BazookaLeft Middle DIP twist(vs rest)    -0.6 ..     0.4
+  BazookaLeft Middle MCP flex           14.6 ..    56.2
+  BazookaLeft Middle MCP sideways(vs rest)   -15.4 ..     4.4
+  BazookaLeft Middle MCP twist(vs rest)    -0.1 ..     1.6
+  BazookaLeft Middle PIP flex           62.5 ..   101.8
+  BazookaLeft Middle PIP sideways(vs rest)   -30.6 ..    -6.9
+  BazookaLeft Middle PIP twist(vs rest)    -0.1 ..     1.7
+  BazookaLeft Middle skinToLauncher(mm)   -40.4 ..    28.5
+  BazookaLeft Pinky DIP flex           -21.2 ..    20.3
+  BazookaLeft Pinky DIP sideways(vs rest)    28.1 ..    36.3
+  BazookaLeft Pinky DIP twist(vs rest)   -18.5 ..    -5.3
+  BazookaLeft Pinky MCP flex            24.8 ..    68.8
+  BazookaLeft Pinky MCP sideways(vs rest)   -23.1 ..     3.6
+  BazookaLeft Pinky MCP twist(vs rest)    -2.0 ..    28.5
+  BazookaLeft Pinky PIP flex            47.4 ..    89.5
+  BazookaLeft Pinky PIP sideways(vs rest)   -11.3 ..     0.0
+  BazookaLeft Pinky PIP twist(vs rest)     0.0 ..     0.5
+  BazookaLeft Pinky skinToLauncher(mm)   -12.0 ..    28.6
+  BazookaLeft Ring DIP flex            -18.8 ..    43.4
+  BazookaLeft Ring DIP sideways(vs rest)    -1.0 ..    24.0
+  BazookaLeft Ring DIP twist(vs rest)    -2.8 ..     1.8
+  BazookaLeft Ring MCP flex              7.6 ..    67.1
+  BazookaLeft Ring MCP sideways(vs rest)   -14.1 ..     5.4
+  BazookaLeft Ring MCP twist(vs rest)    -0.6 ..     8.2
+  BazookaLeft Ring PIP flex             43.0 ..    63.3
+  BazookaLeft Ring PIP sideways(vs rest)   -21.0 ..    -2.8
+  BazookaLeft Ring PIP twist(vs rest)    -0.3 ..     0.0
+  BazookaLeft Ring skinToLauncher(mm)   -35.7 ..    28.6
+  BazookaLeft Thumb CMC sideways(vs rest)   -71.0 ..    20.2
+  BazookaLeft Thumb CMC twist(vs rest)   -17.1 ..    40.9
+  BazookaLeft Thumb IP flex              3.3 ..    13.8
+  BazookaLeft Thumb IP sideways(vs rest)     2.5 ..    18.9
+  BazookaLeft Thumb IP twist(vs rest)   -31.1 ..   -13.8
+  BazookaLeft Thumb MCP flex            11.1 ..    35.7
+  BazookaLeft Thumb MCP sideways(vs rest)    -6.7 ..    10.5
+  BazookaLeft Thumb MCP twist(vs rest)   -25.8 ..    11.9
+  BazookaLeft Thumb skinToLauncher(mm)   -37.4 ..    27.9
+  BazookaLeft wristFlex(+)/Ext(-)      -86.2 ..    65.0
+  BazookaLeft wristRadial(+)/Ulnar(-)   -72.3 ..    69.0
+  BazookaLeft wristTwist(left in wrist)  -173.9 ..   170.5
+  BazookaRight elbowBend                94.4 ..   159.7
+  BazookaRight elbowOutward(cm, <0 = inverted)     5.3 ..    17.9
+  BazookaRight Index DIP flex           -9.5 ..    31.8
+  BazookaRight Index DIP sideways(vs rest)    -7.1 ..     1.5
+  BazookaRight Index DIP twist(vs rest)    -0.8 ..     0.4
+  BazookaRight Index MCP flex          -19.9 ..    52.9
+  BazookaRight Index MCP sideways(vs rest)   -51.8 ..   -24.0
+  BazookaRight Index MCP twist(vs rest)     8.0 ..    32.6
+  BazookaRight Index PIP flex            6.3 ..    47.8
+  BazookaRight Index PIP sideways(vs rest)    -0.1 ..    12.3
+  BazookaRight Index PIP twist(vs rest)    -0.3 ..     3.6
+  BazookaRight Index skinToLauncher(mm)    -7.6 ..    28.1
+  BazookaRight Middle DIP flex         -46.8 ..     9.9
+  BazookaRight Middle DIP sideways(vs rest)    -3.6 ..    10.9
+  BazookaRight Middle DIP twist(vs rest)     0.3 ..     1.2
+  BazookaRight Middle MCP flex           0.9 ..    27.1
+  BazookaRight Middle MCP sideways(vs rest)    -1.1 ..     0.4
+  BazookaRight Middle MCP twist(vs rest)    -1.0 ..    13.5
+  BazookaRight Middle PIP flex          97.8 ..   112.1
+  BazookaRight Middle PIP sideways(vs rest)     3.0 ..    17.3
+  BazookaRight Middle PIP twist(vs rest)    -0.2 ..     2.4
+  BazookaRight Middle skinToLauncher(mm)    -4.8 ..     6.1
+  BazookaRight Pinky DIP flex          -24.7 ..   -21.0
+  BazookaRight Pinky DIP sideways(vs rest)    -1.7 ..    -0.7
+  BazookaRight Pinky DIP twist(vs rest)    -0.7 ..     0.2
+  BazookaRight Pinky MCP flex           58.5 ..    70.5
+  BazookaRight Pinky MCP sideways(vs rest)     1.5 ..     6.5
+  BazookaRight Pinky MCP twist(vs rest)    -3.3 ..     0.2
+  BazookaRight Pinky PIP flex           94.4 ..   108.8
+  BazookaRight Pinky PIP sideways(vs rest)     4.1 ..     9.9
+  BazookaRight Pinky PIP twist(vs rest)    -0.2 ..     1.9
+  BazookaRight Pinky skinToLauncher(mm)    20.0 ..    22.2
+  BazookaRight Ring DIP flex           -54.3 ..    12.7
+  BazookaRight Ring DIP sideways(vs rest)   -10.3 ..     2.8
+  BazookaRight Ring DIP twist(vs rest)    -1.1 ..    -0.3
+  BazookaRight Ring MCP flex            42.1 ..    72.0
+  BazookaRight Ring MCP sideways(vs rest)    -5.8 ..    17.8
+  BazookaRight Ring MCP twist(vs rest)   -22.8 ..     1.7
+  BazookaRight Ring PIP flex            79.6 ..   101.4
+  BazookaRight Ring PIP sideways(vs rest)   -12.6 ..     1.4
+  BazookaRight Ring PIP twist(vs rest)     0.0 ..     0.6
+  BazookaRight Ring skinToLauncher(mm)    -3.6 ..    19.2
+  BazookaRight Thumb CMC sideways(vs rest)   -49.9 ..    20.6
+  BazookaRight Thumb CMC twist(vs rest)   -19.1 ..   117.2
+  BazookaRight Thumb IP flex            -9.4 ..    51.3
+  BazookaRight Thumb IP sideways(vs rest)   -55.2 ..     1.1
+  BazookaRight Thumb IP twist(vs rest)    -0.4 ..    39.9
+  BazookaRight Thumb MCP flex          -16.8 ..    49.4
+  BazookaRight Thumb MCP sideways(vs rest)   -37.0 ..    24.6
+  BazookaRight Thumb MCP twist(vs rest)    -7.2 ..    34.1
+  BazookaRight Thumb skinToLauncher(mm)   -35.7 ..    -0.3
+  BazookaRight wristFlex(+)/Ext(-)    -165.7 ..   -65.4
+  BazookaRight wristRadial(+)/Ulnar(-)  -168.6 ..   181.2
+  BazookaRight wristTwist(left in wrist)  -163.1 ..   149.5
+  M1Left elbowBend                      13.1 ..    86.9
+  M1Left forearmTwistShared            -27.1 ..    19.6
+  M1Left wristSwing(total)              14.5 ..    83.7
+  M1Right elbowBend                     52.8 ..   124.2
+  M1Right forearmTwistShared           -17.5 ..    56.3
+  M1Right Index DIP flex               -49.7 ..    64.8
+  M1Right Index DIP sideways(vs rest)   -78.6 ..    17.7
+  M1Right Index DIP twist(vs rest)     -72.9 ..    17.5
+  M1Right Index MCP flex               -31.2 ..    77.5
+  M1Right Index MCP sideways(vs rest)   -54.9 ..    45.7
+  M1Right Index MCP twist(vs rest)     -21.2 ..    29.3
+  M1Right Index PIP flex               -25.8 ..    72.8
+  M1Right Index PIP sideways(vs rest)   -70.5 ..     0.0
+  M1Right Index PIP twist(vs rest)     -33.0 ..     9.6
+  M1Right Middle DIP flex              -19.0 ..    56.0
+  M1Right Middle DIP sideways(vs rest)   -57.8 ..    38.2
+  M1Right Middle DIP twist(vs rest)     -5.5 ..    14.7
+  M1Right Middle MCP flex               28.8 ..    87.5
+  M1Right Middle MCP sideways(vs rest)   -94.6 ..     0.0
+  M1Right Middle MCP twist(vs rest)     -8.2 ..     9.2
+  M1Right Middle PIP flex              -25.8 ..    72.8
+  M1Right Middle PIP sideways(vs rest)   -15.5 ..    34.4
+  M1Right Middle PIP twist(vs rest)     -3.3 ..    14.7
+  M1Right Pinky DIP flex               -69.1 ..    33.5
+  M1Right Pinky DIP sideways(vs rest)   -75.7 ..     4.0
+  M1Right Pinky DIP twist(vs rest)      -4.0 ..     4.5
+  M1Right Pinky MCP flex                29.7 ..   117.1
+  M1Right Pinky MCP sideways(vs rest)   -22.6 ..    49.0
+  M1Right Pinky MCP twist(vs rest)     -10.2 ..    12.3
+  M1Right Pinky PIP flex               -25.8 ..    72.8
+  M1Right Pinky PIP sideways(vs rest)   -46.3 ..     4.2
+  M1Right Pinky PIP twist(vs rest)     -23.5 ..     1.1
+  M1Right Ring DIP flex                -25.2 ..    14.3
+  M1Right Ring DIP sideways(vs rest)   -47.6 ..    31.0
+  M1Right Ring DIP twist(vs rest)       -0.1 ..    17.9
+  M1Right Ring MCP flex                 29.7 ..   105.2
+  M1Right Ring MCP sideways(vs rest)   -60.1 ..    23.8
+  M1Right Ring MCP twist(vs rest)      -16.8 ..     4.5
+  M1Right Ring PIP flex                -25.8 ..    72.8
+  M1Right Ring PIP sideways(vs rest)   -19.5 ..    30.4
+  M1Right Ring PIP twist(vs rest)       -9.3 ..    10.8
+  M1Right Thumb CMC sideways(vs rest)   -88.4 ..     3.3
+  M1Right Thumb CMC twist(vs rest)     -10.8 ..    21.1
+  M1Right Thumb IP flex                -85.4 ..     1.5
+  M1Right Thumb IP sideways(vs rest)   -85.3 ..     0.0
+  M1Right Thumb IP twist(vs rest)      -10.4 ..     5.9
+  M1Right Thumb MCP flex                -7.9 ..    60.2
+  M1Right Thumb MCP sideways(vs rest)   -24.4 ..    50.1
+  M1Right Thumb MCP twist(vs rest)      -8.0 ..     2.9
+  M1Right wristSwing(total)             17.7 ..    83.7

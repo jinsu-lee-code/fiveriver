@@ -1,0 +1,100 @@
+RESULT playassault
+scouts done at 1.1s, section Scout, barrage Falling
+health after the barrage 100 (invulnerability on only for the screen check: hits taken would still show as a drop)
+assault over at 82.7s: section Regroup, max alive 3, bodies on the field 20, near shells 19, far 12, tracers 3
+frames during the assault (with a screenshot every 0.5 s): 3461 frames, avg 19.61 ms (51.0 fps), worst frame 583.1 ms (1.7 fps)
+  1.13s barrage Idle -> Falling, enemies hold fire True, ally ParkYongpal taking cover True, subtitle True
+  9.95s barrage Falling -> Breather, enemies hold fire True, ally ParkYongpal taking cover True, subtitle False
+  14.45s barrage Breather -> Idle, enemies hold fire False, ally ParkYongpal taking cover False, subtitle False
+  14.45s section Scout -> Assault
+  82.67s section Assault -> Regroup
+frames while the shells fall: 471 frames, avg 18.71 ms (53.5 fps), worst frame 67.4 ms (14.8 fps)
+frames in the breather: 202 frames, avg 22.30 ms (44.8 fps), worst frame 256.8 ms (3.9 fps)
+  sound 000.34s SFX_Impact_Dirt vol 0.183
+  sound 000.34s SFX_M1_Fire vol 0.137
+  sound 000.44s SFX_M1_Fire vol 0.137
+  sound 000.44s SFX_Impact_Dirt vol 0.183
+  sound 000.62s SFX_M1_Fire vol 0.137
+  sound 000.62s SFX_Impact_Dirt vol 0.183
+  sound 000.71s SFX_M1_Fire vol 0.137
+  sound 000.71s SFX_Impact_Dirt vol 0.183
+  sound 000.88s SFX_M1_Fire vol 0.137
+  sound 000.88s SFX_Impact_Dirt vol 0.183
+  sound 001.03s SFX_Impact_Dirt vol 0.183
+  sound 001.03s SFX_M1_Fire vol 0.137
+  sound 001.19s SFX_Stance_Change vol 0.122
+  sound 002.66s SFX_Artillery_Incoming vol 0.213
+  sound 003.16s SFX_Artillery_Incoming vol 0.213
+  sound 003.61s SFX_Artillery_Incoming vol 0.367
+  sound 004.23s SFX_Artillery_Near vol 0.522
+  sound 004.43s SFX_Artillery_Incoming vol 0.536
+  sound 004.67s SFX_Artillery_Near vol 0.532
+  sound 004.80s SFX_Debris_Fall vol 0.281
+  sound 004.98s SFX_Artillery_Near vol 0.570
+  sound 005.15s SFX_Artillery_Incoming vol 0.536
+  sound 005.53s SFX_Debris_Fall vol 0.288
+  sound 005.77s SFX_Artillery_Near vol 0.594
+  sound 005.85s SFX_Debris_Fall vol 0.316
+  sound 006.03s SFX_Artillery_Incoming vol 0.536
+  sound 006.42s SFX_Debris_Fall vol 0.333
+  sound 006.71s SFX_Artillery_Near vol 0.621
+  sound 006.79s SFX_Flare_Launch vol 0.612
+  sound 006.91s UI_Objective_Show vol 0.255
+  sound 006.94s SFX_Artillery_Incoming vol 0.536
+  sound 007.36s SFX_Debris_Fall vol 0.354
+  sound 007.47s SFX_Artillery_Near vol 0.657
+  sound 007.47s SFX_Artillery_Incoming vol 0.536
+  sound 008.13s SFX_Debris_Fall vol 0.380
+  sound 008.15s SFX_Artillery_Incoming vol 0.536
+  sound 008.35s SFX_Ear_Ring(dead) vol 0.122
+  sound 008.38s SFX_Artillery_Near vol 0.726
+  sound 008.84s SFX_Ear_Ring(dead) vol 0.122
+  sound 008.88s SFX_Artillery_Near vol 0.729
+  sound 009.25s SFX_Debris_Fall vol 0.431
+  sound 009.46s SFX_Debris_Fall vol 0.433
+  sound 009.61s SFX_Ear_Ring(dead) vol 0.122
+  sound 009.65s SFX_Artillery_Near vol 0.726
+  sound 010.46s SFX_Debris_Fall vol 0.230  <breather>
+  sound 010.47s SFX_Debris_Fall vol 0.431  <breather>
+  sound 012.01s SFX_Debris_Fall vol 0.138  <breather>
+  sound 014.45s UI_Objective_Show vol 0.255
+  sound 014.62s SFX_Stance_Change vol 0.306
+  sound 014.62s UI_Objective_Show vol 0.255
+  sound 016.22s SFX_Impact_Dirt vol 0.459
+  sound 016.22s SFX_M1_Fire vol 0.344
+  sound 016.34s SFX_M1_Fire vol 0.344
+  sound 016.34s SFX_Impact_Dirt vol 0.459
+  sound 016.39s SFX_M1_Fire vol 0.344
+  sound 016.45s SFX_M1_Fire vol 0.344
+  sound 016.45s SFX_Impact_Dirt vol 0.459
+  sound 016.84s SFX_M1_Fire vol 0.344
+  sound 016.84s SFX_Impact_Dirt vol 0.459
+  sound 017.51s SFX_Impact_Dirt vol 0.459
+  sound 017.51s SFX_M1_Fire vol 0.344
+  sound 018.72s SFX_Impact_Dirt vol 0.459
+  sound 018.72s SFX_M1_Fire vol 0.344
+  sound 019.71s SFX_Flare_Launch vol 0.612
+  sound 019.97s SFX_M1_Fire vol 0.137
+  sound 019.97s SFX_Impact_Dirt vol 0.183
+  sound 021.06s SFX_M1_Fire vol 0.137
+  sound 021.06s SFX_Impact_Dirt vol 0.183
+  sound 021.76s SFX_M1_Fire vol 0.137
+  sound 021.76s SFX_Impact_Dirt vol 0.183
+  sound 022.06s SFX_Artillery_Distant vol 0.113
+  sound 022.06s SFX_M1_Fire vol 0.137
+  sound 022.06s SFX_Impact_Dirt vol 0.183
+  total SFX_M1_Fire: 88
+  total SFX_Impact_Dirt: 82
+  total SFX_M1_Fire(far): 51
+  total SFX_Debris_Fall: 21
+  total SFX_Artillery_Incoming: 19
+  total SFX_Artillery_Near: 19
+  total UI_Objective_Show: 12
+  total SFX_Artillery_Distant: 10
+  total SFX_Flare_Launch: 4
+  total SFX_Ear_Ring(dead): 3
+  total SFX_Stance_Change: 2
+  total SFX_M1_Ping: 2
+  total SFX_M1_ClipInsert: 2
+  total SFX_Ear_Ring: 2
+  total UI_Menu_Click: 1

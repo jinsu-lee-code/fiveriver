@@ -1,0 +1,37 @@
+RESULT rocketteam
+=== B: 숙이기 (무적) ===
+  [entrance] t1.0 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Off  t0.00 w0.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t3.1 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Ready A_ROK_Trench_Ready_Idle t0.32 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t5.1 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Ready A_ROK_Trench_Ready_Idle t2.38 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t7.2 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Ready A_ROK_Trench_Ready_Idle t4.44 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t9.3 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Ready A_ROK_Trench_Ready_Idle t6.53 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t11.3 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Ready A_ROK_Trench_Ready_Idle t8.57 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t13.4 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Variation A_ROK_Trench_CheckRifle t0.43 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t15.4 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Variation A_ROK_Trench_CheckRifle t2.49 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t17.5 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Ready A_ROK_Trench_Ready_Idle t1.13 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  [entrance] t19.6 Tank | Idle/None load 0.00/2.2 ctrl False joined False loader Ally_3 | bz L1 R4 reloading False ext False | crouch False aim False | clip Ready A_ROK_Trench_Ready_Idle t3.21 w1.00 | loader (16.00, 0.00, -0.40) d=1.2
+  entrance over after 18.5s
+  [B-shot] FIRE at 26.3s Loaded now 0 reloading True
+  [B] crouch pressed at +0.89s after the shot
+  [B-crouched] t27.1 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t0.76 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t27.4 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t0.98 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t27.6 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t1.20 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t27.9 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t1.42 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t28.2 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t1.65 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t28.4 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t1.87 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t28.7 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t2.09 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t28.9 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t2.31 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t29.2 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t2.53 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t29.4 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t2.75 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t29.7 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t2.98 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t29.9 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t3.20 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t30.2 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t3.42 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-crouched] t30.4 Tank | Loading/Load load 0.67/2.2 PAUSED ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch True aim False | clip Story A_ROK_Loader_Load t3.64 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B] after 3.5 s crouched: Loaded 0, team paused True, loadElapsed 0.67
+  [B-stand] t31.2 Tank | Loading/Load load 1.18/2.2 ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch False aim False | clip Story A_ROK_Loader_Load t4.31 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-stand] t31.5 Tank | Loading/Load load 1.48/2.2 ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch False aim False | clip Story A_ROK_Loader_Load t4.57 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-stand] t31.8 Tank | Loading/Load load 1.77/2.2 ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch False aim False | clip Story A_ROK_Loader_Load t4.82 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-stand] t32.1 Tank | Loading/Load load 2.06/2.2 ctrl True joined True loader Ally_3 | bz L0 R4 reloading True ext True | crouch False aim False | clip Story A_ROK_Loader_Load t5.08 w1.00 | loader (18.19, 0.00, -1.82) d=0.7
+  [B-stand] LOADED after 5.98s from the shot (bazookaReloadTime 2.2)
+  [B] stood at +4.66s, loaded at +5.98s (crouched 3.8s; expect about reloadTime + crouched time)
+retries 0 deaths 0

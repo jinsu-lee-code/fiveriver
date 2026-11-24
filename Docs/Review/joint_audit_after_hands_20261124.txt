@@ -1,0 +1,915 @@
+== joint audit 2026-11-24 16:35:09: 2849 frames
+violations: 754 runs
+     0.12-   4.08s  M1Left wristSwing(total)           worst    83.7  frames  496  during M1 hip
+     0.12-   9.35s  M1Right Index MCP flex             worst   -31.2  frames  824  during M1 hip / M1 aim / M1 reload hip
+     7.69-   7.70s  M1Right wristSwing(total)          worst    71.1  frames    2  during M1 aim
+     9.39-  11.23s  M1Right Index DIP sideways(vs rest) worst   -78.5  frames  103  during M1 reload hip
+     9.39-  11.25s  M1Right Pinky DIP sideways(vs rest) worst   -75.8  frames  104  during M1 reload hip
+     9.41-  11.72s  M1Right Index PIP sideways(vs rest) worst   -71.4  frames  124  during M1 reload hip
+     9.42-   9.45s  M1Right Index MCP sideways(vs rest) worst    28.8  frames    3  during M1 reload hip
+     9.44-   9.47s  M1Right Pinky PIP sideways(vs rest) worst   -15.6  frames    3  during M1 reload hip
+     9.45-   9.47s  M1Right Pinky MCP sideways(vs rest) worst    25.7  frames    2  during M1 reload hip
+     9.47-  11.18s  M1Right Ring DIP sideways(vs rest) worst   -47.6  frames   96  during M1 reload hip
+     9.49-   9.76s  M1Right Middle PIP sideways(vs rest) worst    34.4  frames   15  during M1 reload hip
+     9.49-   9.86s  M1Right Middle DIP sideways(vs rest) worst   -57.5  frames   21  during M1 reload hip
+     9.49-   9.92s  M1Right Middle MCP sideways(vs rest) worst   -94.4  frames   25  during M1 reload hip
+     9.50-   9.76s  M1Right Ring PIP sideways(vs rest) worst    30.4  frames   14  during M1 reload hip
+     9.52-  10.53s  M1Right Index DIP twist(vs rest)   worst   -72.5  frames   59  during M1 reload hip
+     9.54-   9.84s  M1Right Ring MCP sideways(vs rest) worst   -60.1  frames   17  during M1 reload hip
+     9.55-  10.87s  M1Right Thumb MCP sideways(vs rest) worst    50.1  frames   74  during M1 reload hip
+     9.55-  10.87s  M1Right Thumb IP flex              worst   -85.4  frames   74  during M1 reload hip
+     9.55-  10.91s  M1Right Thumb IP sideways(vs rest) worst   -85.3  frames   76  during M1 reload hip
+     9.55-  11.20s  M1Right Pinky DIP flex             worst   -68.1  frames   92  during M1 reload hip
+     9.57-   9.64s  M1Right Thumb CMC sideways(vs rest) worst   -34.0  frames    5  during M1 reload hip
+     9.57-   9.83s  M1Right Index MCP sideways(vs rest) worst   -54.1  frames   14  during M1 reload hip
+     9.59-   9.76s  M1Right Ring DIP flex              worst   -24.3  frames    9  during M1 reload hip
+     9.62-   9.83s  M1Right Pinky MCP flex             worst   115.5  frames   11  during M1 reload hip
+     9.62-  10.59s  M1Right Index DIP flex             worst   -46.5  frames   56  during M1 reload hip
+     9.64-   9.70s  M1Right Index MCP twist(vs rest)   worst   -20.7  frames    5  during M1 reload hip
+     9.64-   9.70s  M1Right Ring DIP twist(vs rest)    worst    17.8  frames    5  during M1 reload hip
+     9.66-   9.70s  M1Right Ring MCP twist(vs rest)    worst   -16.5  frames    4  during M1 reload hip
+     9.66-   9.81s  M1Right Ring MCP flex              worst   104.0  frames    8  during M1 reload hip
+     9.76-   9.86s  M1Right Index PIP flex             worst   -25.9  frames    7  during M1 reload hip
+     9.76-   9.86s  M1Right Middle PIP flex            worst   -25.9  frames    7  during M1 reload hip
+     9.76-   9.86s  M1Right Ring PIP flex              worst   -25.9  frames    7  during M1 reload hip
+     9.76-   9.86s  M1Right Pinky PIP flex             worst   -25.9  frames    7  during M1 reload hip
+     9.76-  11.31s  M1Right Pinky PIP sideways(vs rest) worst   -47.2  frames   87  during M1 reload hip
+     9.79-  10.50s  M1Right Ring DIP flex              worst   -11.7  frames   43  during M1 reload hip
+     9.81-  10.65s  M1Right Thumb CMC sideways(vs rest) worst   -88.4  frames   51  during M1 reload hip
+     9.86-   9.89s  M1Right Ring PIP sideways(vs rest) worst   -20.4  frames    3  during M1 reload hip
+     9.87-   9.89s  M1Right Middle PIP sideways(vs rest) worst   -16.4  frames    2  during M1 reload hip
+     9.89-  10.62s  M1Right Pinky PIP twist(vs rest)   worst   -23.5  frames   44  during M1 reload hip
+     9.90-  11.25s  M1Right Pinky MCP sideways(vs rest) worst    49.0  frames   75  during M1 reload hip
+     9.93-  10.52s  M1Right Middle PIP sideways(vs rest) worst    13.3  frames   35  during M1 reload hip
+     9.94-  10.95s  M1Right Index MCP twist(vs rest)   worst    29.3  frames   56  during M1 reload hip
+    10.52-  11.25s  M1Right Index MCP sideways(vs rest) worst    45.7  frames   39  during M1 reload hip
+    10.57-  11.25s  M1Right Index PIP twist(vs rest)   worst   -33.2  frames   36  during M1 reload hip
+    10.60-  10.62s  M1Right Index DIP twist(vs rest)   worst    17.6  frames    2  during M1 reload hip
+    10.87-  11.14s  M1Right Index DIP twist(vs rest)   worst    16.8  frames   16  during M1 reload hip
+    10.95-  11.16s  M1Right Index DIP flex             worst   -27.1  frames   13  during M1 reload hip
+    10.96-  10.96s  M1Right Thumb MCP flex             worst    60.1  frames    1  during M1 reload hip
+    10.98-  11.16s  M1Right Middle PIP sideways(vs rest) worst    12.0  frames   11  during M1 reload hip
+    11.00-  11.14s  M1Right Ring DIP flex              worst   -11.7  frames    9  during M1 reload hip
+    11.20-  11.31s  M1Right Thumb CMC twist(vs rest)   worst    21.1  frames    6  during M1 reload hip
+    11.23-  11.61s  M1Right Middle DIP sideways(vs rest) worst    38.2  frames   20  during M1 reload hip
+    11.25-  11.49s  M1Right Ring DIP sideways(vs rest) worst    31.0  frames   13  during M1 reload hip
+    11.27-  11.45s  M1Right Middle MCP sideways(vs rest) worst   -34.9  frames   10  during M1 reload hip
+    11.29-  11.39s  M1Right Index DIP sideways(vs rest) worst    17.7  frames    6  during M1 reload hip
+    11.29-  11.53s  M1Right Middle PIP sideways(vs rest) worst    25.0  frames   13  during M1 reload hip
+    11.31-  11.47s  M1Right Middle DIP flex            worst   -19.2  frames    9  during M1 reload hip
+    11.31-  11.47s  M1Right Ring PIP sideways(vs rest) worst    21.1  frames    9  during M1 reload hip
+    11.43-  11.68s  M1Right Pinky PIP sideways(vs rest) worst   -22.8  frames   11  during M1 reload hip
+    11.45-  11.72s  M1Right Pinky DIP sideways(vs rest) worst   -30.8  frames   12  during M1 reload hip
+    11.49-  11.68s  M1Right Index MCP sideways(vs rest) worst    34.9  frames    8  during M1 reload hip
+    11.49-  11.68s  M1Right Pinky MCP sideways(vs rest) worst    34.3  frames    8  during M1 reload hip
+    11.55-  11.74s  M1Right Index DIP sideways(vs rest) worst   -21.8  frames    8  during M1 reload hip
+    11.80-  16.05s  M1Right Index MCP flex             worst   -31.2  frames  214  during M1 reload hip / M1 hip
+    16.12-  17.93s  M1Right Index DIP sideways(vs rest) worst   -54.1  frames   90  during M1 reload hip
+    16.12-  17.95s  M1Right Pinky DIP sideways(vs rest) worst   -40.2  frames   91  during M1 reload hip
+    16.12-  18.32s  M1Right Index PIP sideways(vs rest) worst   -56.1  frames  107  during M1 reload hip
+    16.14-  17.09s  M1Right Thumb CMC sideways(vs rest) worst   -88.4  frames   49  during M1 reload hip
+    16.18-  17.68s  M1Right Thumb IP sideways(vs rest) worst   -85.2  frames   75  during M1 reload hip
+    16.18-  17.90s  M1Right Ring DIP sideways(vs rest) worst   -15.8  frames   86  during M1 reload hip
+    16.18-  17.92s  M1Right Pinky DIP flex             worst   -42.4  frames   87  during M1 reload hip
+    16.18-  17.99s  M1Right Pinky PIP sideways(vs rest) worst   -31.9  frames   91  during M1 reload hip
+    16.20-  16.74s  M1Right Ring DIP flex              worst   -11.9  frames   29  during M1 reload hip
+    16.20-  16.87s  M1Right Index DIP twist(vs rest)   worst   -38.8  frames   34  during M1 reload hip
+    16.20-  17.60s  M1Right Thumb MCP sideways(vs rest) worst    50.1  frames   70  during M1 reload hip
+    16.20-  17.72s  M1Right Index MCP twist(vs rest)   worst    29.3  frames   76  during M1 reload hip
+    16.20-  17.95s  M1Right Pinky MCP sideways(vs rest) worst    49.0  frames   88  during M1 reload hip
+    16.23-  16.75s  M1Right Middle PIP sideways(vs rest) worst    13.3  frames   29  during M1 reload hip
+    16.23-  16.93s  M1Right Index DIP flex             worst   -34.5  frames   36  during M1 reload hip
+    16.25-  16.99s  M1Right Pinky PIP twist(vs rest)   worst   -23.5  frames   39  during M1 reload hip
+    16.27-  17.62s  M1Right Thumb IP flex              worst   -85.4  frames   68  during M1 reload hip
+    16.75-  17.93s  M1Right Index MCP sideways(vs rest) worst    45.7  frames   58  during M1 reload hip
+    16.89-  17.95s  M1Right Index PIP twist(vs rest)   worst   -32.9  frames   54  during M1 reload hip
+    16.95-  17.02s  M1Right Index DIP twist(vs rest)   worst    17.4  frames    6  during M1 reload hip
+    17.58-  17.88s  M1Right Index DIP twist(vs rest)   worst    16.8  frames   16  during M1 reload hip
+    17.72-  17.90s  M1Right Index DIP flex             worst   -27.1  frames   10  during M1 reload hip
+    17.75-  17.88s  M1Right Middle PIP sideways(vs rest) worst    12.0  frames    7  during M1 reload hip
+    17.75-  17.88s  M1Right Ring DIP flex              worst   -11.7  frames    7  during M1 reload hip
+    17.92-  17.99s  M1Right Thumb CMC twist(vs rest)   worst    21.1  frames    5  during M1 reload hip
+    17.93-  18.22s  M1Right Middle DIP sideways(vs rest) worst    37.7  frames   13  during M1 reload hip
+    17.95-  18.15s  M1Right Ring DIP sideways(vs rest) worst    30.9  frames    8  during M1 reload hip
+    17.97-  18.11s  M1Right Middle MCP sideways(vs rest) worst   -34.5  frames    5  during M1 reload hip
+    17.99-  18.06s  M1Right Index DIP sideways(vs rest) worst    17.7  frames    2  during M1 reload hip
+    17.99-  18.13s  M1Right Middle DIP flex            worst   -17.8  frames    5  during M1 reload hip
+    17.99-  18.13s  M1Right Ring PIP sideways(vs rest) worst    18.8  frames    5  during M1 reload hip
+    17.99-  18.16s  M1Right Middle PIP sideways(vs rest) worst    22.8  frames    7  during M1 reload hip
+    18.08-  18.28s  M1Right Pinky PIP sideways(vs rest) worst   -22.7  frames   11  during M1 reload hip
+    18.13-  18.32s  M1Right Pinky DIP sideways(vs rest) worst   -30.8  frames   11  during M1 reload hip
+    18.15-  18.26s  M1Right Pinky MCP sideways(vs rest) worst    34.3  frames    7  during M1 reload hip
+    18.15-  18.28s  M1Right Index MCP sideways(vs rest) worst    34.9  frames    8  during M1 reload hip
+    18.18-  18.32s  M1Right Index DIP sideways(vs rest) worst   -22.9  frames    8  during M1 reload hip
+    18.39-  45.52s  M1Right Index MCP flex             worst   -31.2  frames  904  during M1 reload hip / M1 hip / M1 switch hip / M1 sprint hip / M1 aim
+    27.21-  27.21s  BazookaLeft wristTwist(left in wrist) worst    15.0  frames    1  during Bazooka hip
+    27.21-  27.21s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.21-  27.21s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    27.21-  27.28s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    27.21-  31.52s  BazookaLeft Pinky PIP sideways(vs rest) worst   -10.6  frames  242  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.21-  31.54s  BazookaLeft Thumb CMC sideways(vs rest) worst   -41.9  frames  244  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.21-  31.60s  BazookaLeft Middle PIP sideways(vs rest) worst   -15.2  frames  245  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.21-  31.60s  BazookaLeft Thumb CMC twist(vs rest) worst    40.3  frames  245  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.21-  31.63s  BazookaLeft Index DIP sideways(vs rest) worst    11.3  frames  248  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.21-  34.05s  BazookaLeft Ring DIP sideways(vs rest) worst    12.5  frames  338  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip
+    27.21-  38.49s  BazookaRight Pinky DIP flex        worst   -21.5  frames  666  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip / Bazooka switch hip
+    27.21-  38.49s  BazookaLeft Pinky DIP sideways(vs rest) worst    32.7  frames  666  during Bazooka hip / Bazooka aim / Bazooka reload aim / Bazooka reload hip / Bazooka switch hip
+    27.23-  27.28s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    27.28-  27.28s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    27.33-  27.33s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.33-  27.33s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    27.34-  27.34s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    27.36-  27.37s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.36-  27.41s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    6  during Bazooka hip
+    27.37-  27.38s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    27.39-  27.39s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.40-  27.41s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    27.40-  27.44s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka hip
+    27.41-  27.42s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    27.44-  27.44s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.44-  27.47s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    4  during Bazooka hip
+    27.46-  27.47s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    27.47-  27.47s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    27.49-  27.51s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka hip
+    27.49-  27.51s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    27.50-  27.51s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    27.51-  27.52s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.52-  27.52s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.52-  27.52s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.53-  27.53s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.55-  27.55s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.55-  27.55s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.55-  27.55s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    27.55-  27.57s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    27.57-  27.58s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.59-  27.59s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.59-  27.59s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.60-  27.60s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    27.61-  27.62s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    27.62-  27.63s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.62-  27.66s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    5  during Bazooka hip
+    27.63-  27.64s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    27.65-  27.65s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.65-  27.66s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.68-  27.69s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.69-  27.69s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.69-  27.70s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    27.71-  27.73s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    27.71-  27.74s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    4  during Bazooka hip
+    27.75-  27.75s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.75-  27.75s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.76-  27.76s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.77-  27.77s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.79-  27.80s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    27.80-  27.80s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    27.81-  27.81s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.81-  27.81s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.82-  27.83s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.83-  27.88s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    27.83-  27.88s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    27.88-  27.88s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.89-  27.91s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    27.92-  27.92s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.92-  27.92s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.93-  27.93s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.95-  27.95s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.96-  27.97s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    27.97-  27.97s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.97-  27.97s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.97-  27.97s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    27.99-  27.99s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    27.99-  27.99s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    27.99-  27.99s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.01-  28.01s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.01-  28.03s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    28.03-  28.03s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.03-  28.03s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.03-  28.04s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    28.05-  28.05s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.06-  28.07s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    28.07-  28.07s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.09-  28.09s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.09-  28.10s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    28.09-  28.10s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    28.11-  28.14s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka hip
+    28.12-  28.12s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.12-  28.14s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka hip
+    28.13-  28.17s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    5  during Bazooka hip
+    28.14-  28.14s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.16-  28.16s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.16-  28.17s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    28.17-  28.17s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.19-  28.19s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.20-  28.22s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    28.21-  28.21s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.23-  28.25s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    28.24-  28.24s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.24-  28.24s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.24-  28.24s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.26-  28.27s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    28.27-  28.27s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.27-  28.27s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.29-  28.29s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.29-  28.29s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.31-  28.31s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.32-  28.32s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.32-  28.33s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    28.33-  28.33s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.33-  28.33s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.34-  28.34s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.35-  28.35s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.35-  28.35s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.37-  28.37s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.37-  28.37s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.37-  28.37s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.38-  28.40s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    28.39-  28.39s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.39-  28.40s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    28.42-  28.44s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    28.43-  28.44s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    28.44-  28.44s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.46-  28.46s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.46-  28.49s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    28.47-  28.49s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    28.49-  28.49s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    28.51-  28.52s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    28.52-  28.52s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.52-  28.61s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames   10  during Bazooka hip
+    28.53-  28.54s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    28.54-  28.54s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.54-  28.60s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    7  during Bazooka hip
+    28.58-  28.60s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    28.59-  28.59s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.62-  28.62s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.68-  28.68s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.69-  28.70s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    28.69-  28.70s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    28.70-  28.70s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    28.72-  28.73s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    28.73-  28.73s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    28.73-  28.73s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    28.73-  29.49s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    29.51-  29.53s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    29.52-  29.52s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    29.52-  29.52s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    29.54-  29.56s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    29.54-  29.58s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    5  during Bazooka hip
+    29.56-  29.57s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    29.57-  29.60s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka hip / Bazooka aim
+    29.58-  29.59s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    29.59-  29.59s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    29.60-  29.61s  BazookaRight wristTwist(left in wrist) worst    19.0  frames    2  during Bazooka aim
+    29.61-  29.61s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    29.61-  30.85s  BazookaRight elbowBend             worst   154.7  frames   34  during Bazooka aim / Bazooka reload aim
+    29.62-  29.62s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka aim
+    29.62-  29.62s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka aim
+    29.64-  29.64s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    29.65-  29.65s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka aim
+    29.65-  31.21s  BazookaRight wristTwist(left in wrist) worst    33.7  frames   56  during Bazooka aim / Bazooka reload aim
+    29.68-  29.68s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka aim
+    29.68-  29.68s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    29.72-  29.72s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka aim
+    29.72-  29.73s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka aim
+    29.72-  29.75s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka aim
+    29.74-  29.74s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka aim
+    29.74-  29.75s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka aim
+    29.76-  29.76s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    29.78-  29.78s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka aim
+    29.78-  29.78s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka aim
+    29.78-  29.78s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    29.78-  29.82s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    5  during Bazooka aim
+    29.81-  29.81s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka aim
+    29.81-  29.81s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    29.83-  29.83s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka aim
+    29.83-  29.84s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka aim
+    29.84-  29.85s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka aim
+    29.84-  29.86s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka aim
+    29.89-  29.89s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka aim
+    29.89-  29.90s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka aim
+    29.91-  29.93s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka aim
+    29.92-  29.92s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka aim
+    29.92-  29.92s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    29.94-  29.94s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka aim
+    29.96-  29.96s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka aim
+    30.01-  30.01s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka aim
+    30.01-  30.02s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka aim
+    30.01-  30.80s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka aim
+    30.02-  30.02s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka aim
+    30.85-  30.85s  BazookaLeft wristTwist(left in wrist) worst    16.4  frames    1  during Bazooka reload aim
+    30.85-  30.88s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka reload aim
+    30.86-  30.86s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload aim
+    30.88-  30.88s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload aim
+    30.92-  30.92s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload aim
+    30.94-  30.95s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka reload aim
+    30.95-  30.95s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    30.95-  30.97s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload aim
+    30.97-  30.97s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload aim
+    30.98-  30.98s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.00-  31.00s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload aim
+    31.00-  31.00s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload aim
+    31.01-  31.01s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.02-  31.02s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload aim
+    31.04-  31.04s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.04-  31.06s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka reload aim
+    31.09-  31.09s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload aim
+    31.10-  31.10s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload aim
+    31.10-  31.10s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.10-  31.21s  BazookaRight elbowBend             worst   154.7  frames   11  during Bazooka reload aim
+    31.11-  31.15s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    4  during Bazooka reload aim
+    31.12-  31.12s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.12-  31.16s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    4  during Bazooka reload aim
+    31.14-  31.14s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload aim
+    31.15-  31.15s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.16-  31.16s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload aim
+    31.18-  31.18s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload aim
+    31.18-  31.18s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.19-  31.19s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload aim
+    31.21-  31.21s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload aim
+    31.21-  31.21s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload aim
+    31.24-  31.27s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    4  during Bazooka reload hip
+    31.25-  31.25s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    31.25-  31.26s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka reload hip
+    31.27-  31.27s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    31.29-  31.29s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload hip
+    31.30-  31.30s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    31.30-  31.32s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    31.31-  31.33s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka reload hip
+    31.31-  31.33s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka reload hip
+    31.32-  31.32s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    31.35-  31.35s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka reload hip
+    31.35-  31.36s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    31.35-  31.40s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    6  during Bazooka reload hip
+    31.35-  31.41s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    6  during Bazooka reload hip
+    31.39-  31.39s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload hip
+    31.40-  31.41s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    31.41-  31.41s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload hip
+    31.41-  31.41s  BazookaLeft wristTwist(left in wrist) worst    15.5  frames    1  during Bazooka reload hip
+    31.42-  31.42s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    31.43-  31.43s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    31.43-  31.45s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    31.44-  31.45s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka reload hip
+    31.44-  31.45s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    31.45-  31.45s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    31.47-  31.47s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    31.48-  31.49s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka reload hip
+    31.49-  31.49s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    31.50-  31.50s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload hip
+    31.50-  31.52s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    31.51-  31.51s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    31.51-  31.52s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    31.51-  31.53s  BazookaLeft Ring skinToLauncher(mm) worst   -28.3  frames    3  during Bazooka reload hip
+    31.51-  31.54s  BazookaLeft Index skinToLauncher(mm) worst   -38.6  frames    4  during Bazooka reload hip
+    31.51-  31.54s  BazookaLeft Middle skinToLauncher(mm) worst   -37.6  frames    4  during Bazooka reload hip
+    31.52-  31.52s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload hip
+    31.52-  31.60s  BazookaLeft wristTwist(left in wrist) worst   -21.5  frames    4  during Bazooka reload hip
+    31.54-  31.60s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka reload hip
+    31.61-  31.61s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    31.62-  34.05s  BazookaLeft Middle DIP flex        worst   -13.9  frames   92  during Bazooka reload hip
+    31.63-  31.63s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    31.63-  31.65s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.3  frames    3  during Bazooka reload hip
+    31.64-  31.66s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka reload hip
+    31.64-  31.68s  BazookaLeft wristTwist(left in wrist) worst    21.1  frames    5  during Bazooka reload hip
+    31.65-  31.67s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    31.69-  31.70s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka reload hip
+    31.69-  31.70s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    31.69-  31.70s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka reload hip
+    31.72-  31.74s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka reload hip
+    31.72-  31.74s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    31.74-  31.86s  BazookaLeft wristTwist(left in wrist) worst    19.7  frames   13  during Bazooka reload hip
+    31.75-  31.75s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    31.77-  31.80s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    4  during Bazooka reload hip
+    31.79-  31.80s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    31.84-  31.84s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    31.84-  31.86s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka reload hip
+    31.87-  31.88s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    31.87-  31.88s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    31.91-  33.15s  BazookaLeft wristTwist(left in wrist) worst   -93.8  frames   44  during Bazooka reload hip
+    31.92-  31.92s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    31.92-  31.92s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    31.94-  31.96s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    31.94-  31.97s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    4  during Bazooka reload hip
+    31.98-  31.98s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    31.98-  32.01s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    4  during Bazooka reload hip
+    32.00-  32.01s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    32.03-  32.03s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    32.03-  32.03s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    32.04-  32.04s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    32.04-  32.04s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    32.06-  32.06s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    32.06-  32.07s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    32.08-  32.09s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    32.09-  32.09s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    32.10-  32.14s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    5  during Bazooka reload hip
+    32.11-  32.13s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    32.15-  32.94s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    32.94-  32.94s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    32.98-  32.98s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    32.98-  32.99s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    33.00-  33.00s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    33.00-  33.01s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    33.01-  33.02s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    33.01-  33.02s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka reload hip
+    33.04-  33.04s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    33.04-  33.04s  BazookaRight wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    33.16-  33.17s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka reload hip
+    33.17-  33.17s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka reload hip
+    33.18-  33.19s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.2  frames    2  during Bazooka reload hip
+    33.20-  33.21s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    33.21-  33.21s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    33.21-  33.23s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka reload hip
+    33.23-  33.23s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    33.23-  33.24s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka reload hip
+    33.24-  33.24s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    33.26-  33.26s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    33.26-  33.28s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka reload hip
+    33.27-  33.27s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka reload hip
+    33.27-  33.29s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka reload hip
+    33.27-  33.31s  BazookaLeft Index skinToLauncher(mm) worst   -38.3  frames    5  during Bazooka reload hip
+    33.27-  34.05s  BazookaLeft Thumb skinToLauncher(mm) worst   -30.7  frames    6  during Bazooka reload hip
+    33.28-  34.05s  BazookaLeft Middle skinToLauncher(mm) worst   -40.1  frames    5  during Bazooka reload hip
+    33.29-  34.05s  BazookaLeft Ring skinToLauncher(mm) worst   -35.0  frames    4  during Bazooka reload hip
+    33.30-  33.30s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    33.30-  33.30s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka reload hip
+    33.31-  34.05s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka reload hip
+    33.31-  34.05s  BazookaLeft Pinky skinToLauncher(mm) worst    -6.8  frames    2  during Bazooka reload hip
+    33.31-  34.07s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka reload hip / Bazooka hip
+    34.05-  34.05s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka reload hip
+    34.05-  34.09s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka reload hip / Bazooka hip
+    34.07-  38.49s  BazookaLeft Index DIP sideways(vs rest) worst    10.6  frames  328  during Bazooka hip / Bazooka switch hip
+    34.07-  38.49s  BazookaLeft Thumb CMC twist(vs rest) worst    40.3  frames  328  during Bazooka hip / Bazooka switch hip
+    34.07-  38.49s  BazookaLeft Pinky PIP sideways(vs rest) worst   -10.6  frames  328  during Bazooka hip / Bazooka switch hip
+    34.07-  38.49s  BazookaLeft Thumb CMC sideways(vs rest) worst   -41.9  frames  328  during Bazooka hip / Bazooka switch hip
+    34.09-  34.09s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    34.10-  34.11s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    34.11-  34.11s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    34.11-  38.49s  BazookaLeft Middle PIP sideways(vs rest) worst   -15.2  frames  325  during Bazooka hip / Bazooka switch hip
+    34.11-  38.49s  BazookaLeft Ring DIP sideways(vs rest) worst    13.7  frames  325  during Bazooka hip / Bazooka switch hip
+    34.12-  34.12s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    34.12-  34.12s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    34.13-  34.13s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    34.14-  34.16s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    34.15-  34.15s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    34.15-  34.16s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    34.17-  34.19s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    34.19-  34.19s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    34.19-  34.21s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    34.19-  34.21s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    34.26-  34.28s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    34.26-  34.30s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    34.26-  34.30s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    34.28-  34.31s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    34.31-  34.31s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    34.33-  34.33s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    34.33-  34.33s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    34.34-  34.38s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    5  during Bazooka hip
+    34.34-  34.39s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    6  during Bazooka hip
+    34.36-  34.36s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    34.38-  34.38s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    34.38-  34.38s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    34.40-  34.40s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    34.41-  35.21s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    34.41-  35.21s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    35.21-  35.21s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.22-  35.23s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    35.24-  35.25s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    35.24-  35.26s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka hip
+    35.24-  35.27s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    4  during Bazooka hip
+    35.25-  35.25s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.27-  35.27s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.29-  35.29s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.32-  35.32s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    35.35-  35.35s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    35.35-  35.35s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.35-  35.36s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    35.36-  35.36s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.37-  35.43s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    35.37-  35.43s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    35.43-  35.48s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    6  during Bazooka hip
+    35.44-  35.47s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka hip
+    35.45-  35.46s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    35.49-  35.49s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.49-  35.51s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka hip
+    35.50-  35.50s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.51-  35.51s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.52-  35.52s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.53-  35.53s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    35.53-  35.53s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.53-  35.53s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.54-  35.54s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.54-  35.56s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    35.54-  35.56s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    35.56-  35.56s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.58-  35.61s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    4  during Bazooka hip
+    35.60-  35.60s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.61-  35.61s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.61-  35.61s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.63-  35.63s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.63-  35.63s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.63-  35.64s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    35.63-  35.64s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    35.69-  35.69s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.70-  35.70s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.71-  35.71s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.72-  35.75s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    4  during Bazooka hip
+    35.73-  35.74s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    35.73-  35.74s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    35.74-  35.75s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    35.76-  35.76s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.77-  35.79s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    35.78-  35.78s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.79-  35.79s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    35.79-  35.84s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    6  during Bazooka hip
+    35.81-  35.83s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    35.81-  35.83s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    35.81-  35.89s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames   10  during Bazooka hip
+    35.85-  35.85s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.86-  35.87s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    35.87-  35.87s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.87-  35.88s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    35.88-  35.88s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.88-  35.92s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    5  during Bazooka hip
+    35.89-  35.89s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    35.91-  35.91s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    35.92-  35.92s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.92-  35.97s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    6  during Bazooka hip
+    35.94-  35.94s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.94-  35.95s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    35.97-  35.97s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    35.99-  35.99s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    35.99-  35.99s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    35.99-  36.00s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    35.99-  36.01s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    36.01-  36.02s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    36.02-  36.02s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.03-  36.03s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.04-  36.05s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    36.05-  36.05s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.06-  36.06s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.06-  36.14s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    5  during Bazooka hip
+    36.07-  36.14s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    4  during Bazooka hip
+    36.12-  36.12s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.12-  36.12s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.14-  36.18s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    5  during Bazooka hip
+    36.16-  36.18s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka hip
+    36.17-  36.19s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    36.18-  36.18s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.20-  36.21s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    36.20-  36.22s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    36.21-  36.21s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.22-  36.22s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.23-  36.23s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.23-  36.23s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.24-  36.24s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.25-  36.25s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.25-  36.25s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    36.26-  36.28s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    36.28-  36.30s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    36.29-  36.30s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    36.30-  36.30s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.31-  36.31s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.32-  36.32s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.32-  36.32s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.32-  36.33s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    36.33-  36.35s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka hip
+    36.33-  36.33s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.35-  36.35s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.35-  36.35s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.37-  36.37s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.38-  36.38s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.40-  36.40s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.40-  36.42s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    36.41-  36.41s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.41-  36.41s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.43-  36.44s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    36.44-  36.44s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.44-  36.46s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    36.46-  36.46s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.48-  36.48s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.48-  36.49s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    36.49-  36.49s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    36.49-  36.49s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    36.49-  36.52s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    4  during Bazooka hip
+    36.51-  36.51s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.51-  36.53s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    36.52-  36.52s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.55-  36.55s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.58-  36.59s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    36.58-  36.59s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    36.60-  36.60s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.60-  36.62s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    36.61-  36.64s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    4  during Bazooka hip
+    36.62-  36.65s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka hip
+    36.62-  36.66s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    5  during Bazooka hip
+    36.64-  36.64s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.68-  36.68s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.68-  36.68s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.68-  36.68s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.68-  36.69s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    36.70-  36.71s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    36.70-  36.71s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    36.72-  36.72s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.72-  36.74s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka hip
+    36.73-  36.73s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.73-  36.75s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    36.74-  36.74s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.75-  36.76s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    36.76-  36.77s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    36.77-  36.77s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.77-  36.77s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.78-  36.78s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.79-  36.79s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.79-  36.81s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka hip
+    36.80-  36.81s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    36.82-  36.83s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    36.83-  36.83s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    36.83-  36.83s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.83-  36.83s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.84-  36.85s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    36.84-  36.85s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    36.85-  36.87s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    36.87-  36.88s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    36.87-  36.90s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    4  during Bazooka hip
+    36.87-  36.90s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka hip
+    36.92-  36.92s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    36.92-  36.93s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    36.93-  36.93s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.96-  36.96s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    36.96-  36.96s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    36.98-  36.99s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    36.98-  37.03s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    6  during Bazooka hip
+    36.99-  37.01s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    37.02-  37.02s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.02-  37.03s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    37.03-  37.04s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    37.03-  37.04s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.04-  37.04s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.06-  37.06s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.06-  37.06s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.06-  37.06s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.07-  37.07s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.09-  37.09s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.09-  37.09s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.09-  37.10s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    37.09-  37.10s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    37.12-  37.13s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    37.12-  37.13s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.13-  37.13s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.13-  37.14s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    37.15-  37.17s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    3  during Bazooka hip
+    37.15-  37.17s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka hip
+    37.16-  37.17s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    37.17-  37.17s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.19-  37.19s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.19-  37.19s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.19-  37.20s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka hip
+    37.20-  37.20s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    37.20-  37.20s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.21-  37.21s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.23-  37.24s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.24-  37.24s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.26-  37.26s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.26-  37.26s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.27-  37.28s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    37.28-  37.28s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.28-  37.28s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.29-  37.30s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka hip
+    37.31-  37.32s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    37.31-  37.32s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.32-  37.32s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.33-  37.33s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.35-  37.35s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.35-  37.36s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.36-  37.36s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.36-  37.37s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    37.40-  37.40s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.40-  37.40s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.41-  37.41s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.41-  37.41s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.42-  37.42s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.43-  37.43s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.43-  37.43s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.44-  37.45s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.45-  37.45s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.45-  37.45s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.45-  37.45s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.47-  37.47s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.47-  37.48s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka hip
+    37.47-  37.48s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka hip
+    37.48-  37.48s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.49-  37.49s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.49-  37.49s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.50-  37.50s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.50-  37.50s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka hip
+    37.51-  37.52s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.52-  37.52s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.52-  37.55s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    4  during Bazooka hip
+    37.53-  37.57s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    5  during Bazooka hip
+    37.54-  37.54s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.54-  37.55s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka hip
+    37.56-  37.56s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.57-  37.57s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka hip
+    37.58-  37.58s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka hip
+    37.58-  37.58s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka hip
+    37.59-  37.60s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka switch hip
+    37.60-  37.60s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka switch hip
+    37.60-  37.60s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.62-  37.62s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.63-  37.63s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka switch hip
+    37.63-  37.65s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    3  during Bazooka switch hip
+    37.64-  37.65s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    2  during Bazooka switch hip
+    37.64-  37.66s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka switch hip
+    37.65-  37.66s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka switch hip
+    37.67-  37.67s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    1  during Bazooka switch hip
+    37.68-  37.71s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    5  during Bazooka switch hip
+    37.68-  37.72s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    6  during Bazooka switch hip
+    37.68-  37.69s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka switch hip
+    37.69-  37.69s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka switch hip
+    37.71-  37.72s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka switch hip
+    37.73-  37.74s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    2  during Bazooka switch hip
+    37.73-  37.75s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka switch hip
+    37.74-  37.74s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.76-  37.76s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.76-  37.78s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka switch hip
+    37.77-  37.78s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    2  during Bazooka switch hip
+    37.79-  37.79s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.80-  37.80s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka switch hip
+    37.80-  37.80s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.84-  37.86s  BazookaLeft wristRadial(+)/Ulnar(-) worst   -35.0  frames    2  during Bazooka switch hip
+    37.86-  37.86s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    1  during Bazooka switch hip
+    37.86-  37.86s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.86-  37.89s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    4  during Bazooka switch hip
+    37.88-  37.88s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.88-  37.88s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.88-  37.90s  BazookaLeft wristFlex(+)/Ext(-)    worst   -70.0  frames    3  during Bazooka switch hip
+    37.90-  37.90s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.90-  37.92s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    3  during Bazooka switch hip
+    37.91-  37.91s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.92-  37.92s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.93-  37.93s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.94-  37.94s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.94-  38.49s  BazookaLeft wristTwist(left in wrist) worst    18.1  frames   34  during Bazooka switch hip
+    37.95-  37.95s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.97-  37.97s  BazookaRight wristFlex(+)/Ext(-)   worst   -70.0  frames    1  during Bazooka switch hip
+    37.98-  37.98s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames    1  during Bazooka switch hip
+    37.98-  38.49s  BazookaRight wristRadial(+)/Ulnar(-) worst    20.0  frames   30  during Bazooka switch hip
+    38.01-  38.49s  BazookaLeft wristRadial(+)/Ulnar(-) worst    20.0  frames   28  during Bazooka switch hip
+    40.78-  42.12s  M1Right wristSwing(total)          worst    83.7  frames   84  during M1 sprint hip / M1 hip
+ranges (min..max over the run):
+  BazookaLeft elbowBend                 43.0 ..   132.9
+  BazookaLeft elbowOutward(cm, <0 = inverted)     5.9 ..    18.7
+  BazookaLeft Index DIP flex            -1.7 ..     5.6
+  BazookaLeft Index DIP sideways(vs rest)     0.2 ..    11.3
+  BazookaLeft Index DIP twist(vs rest)    -1.8 ..    -1.3
+  BazookaLeft Index MCP flex            45.9 ..    48.3
+  BazookaLeft Index MCP sideways(vs rest)     5.3 ..     6.1
+  BazookaLeft Index MCP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Index PIP flex            40.4 ..    78.9
+  BazookaLeft Index PIP sideways(vs rest)    -1.8 ..    -0.7
+  BazookaLeft Index PIP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Index skinToLauncher(mm)   -38.6 ..    30.4
+  BazookaLeft Middle DIP flex          -13.9 ..     5.2
+  BazookaLeft Middle DIP sideways(vs rest)    -2.5 ..     7.2
+  BazookaLeft Middle DIP twist(vs rest)    -0.6 ..     0.0
+  BazookaLeft Middle MCP flex           29.5 ..    48.1
+  BazookaLeft Middle MCP sideways(vs rest)     0.5 ..     4.4
+  BazookaLeft Middle MCP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Middle PIP flex           55.3 ..   100.2
+  BazookaLeft Middle PIP sideways(vs rest)   -15.2 ..    -5.1
+  BazookaLeft Middle PIP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Middle skinToLauncher(mm)   -40.1 ..    28.5
+  BazookaLeft Pinky DIP flex             2.4 ..     8.5
+  BazookaLeft Pinky DIP sideways(vs rest)    30.7 ..    32.7
+  BazookaLeft Pinky DIP twist(vs rest)    -8.9 ..    -8.9
+  BazookaLeft Pinky MCP flex            21.7 ..    59.7
+  BazookaLeft Pinky MCP sideways(vs rest)    -6.3 ..     3.1
+  BazookaLeft Pinky MCP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Pinky PIP flex            47.4 ..    85.5
+  BazookaLeft Pinky PIP sideways(vs rest)   -10.6 ..    -4.7
+  BazookaLeft Pinky PIP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Pinky skinToLauncher(mm)    -6.8 ..    31.8
+  BazookaLeft Ring DIP flex             -5.9 ..     7.5
+  BazookaLeft Ring DIP sideways(vs rest)    -0.6 ..    13.7
+  BazookaLeft Ring DIP twist(vs rest)    -3.6 ..    -2.2
+  BazookaLeft Ring MCP flex             12.6 ..    46.8
+  BazookaLeft Ring MCP sideways(vs rest)    -1.2 ..     3.6
+  BazookaLeft Ring MCP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Ring PIP flex             47.6 ..    98.0
+  BazookaLeft Ring PIP sideways(vs rest)    -8.9 ..    -2.4
+  BazookaLeft Ring PIP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Ring skinToLauncher(mm)   -35.0 ..    29.2
+  BazookaLeft Thumb CMC sideways(vs rest)   -41.9 ..    10.4
+  BazookaLeft Thumb CMC twist(vs rest)    -8.6 ..    40.3
+  BazookaLeft Thumb IP flex             17.4 ..    40.8
+  BazookaLeft Thumb IP sideways(vs rest)    -8.1 ..     8.4
+  BazookaLeft Thumb IP twist(vs rest)    -2.2 ..    -1.0
+  BazookaLeft Thumb MCP flex            38.3 ..    51.8
+  BazookaLeft Thumb MCP sideways(vs rest)   -12.2 ..    10.9
+  BazookaLeft Thumb MCP twist(vs rest)     0.0 ..     0.0
+  BazookaLeft Thumb skinToLauncher(mm)   -30.7 ..    27.9
+  BazookaLeft wristFlex(+)/Ext(-)      -70.0 ..    65.0
+  BazookaLeft wristRadial(+)/Ulnar(-)   -35.2 ..    20.3
+  BazookaLeft wristTwist(left in wrist)   -93.8 ..    81.9
+  BazookaRight elbowBend                86.6 ..   154.7
+  BazookaRight elbowOutward(cm, <0 = inverted)    14.1 ..    19.8
+  BazookaRight Index DIP flex            1.8 ..     1.8
+  BazookaRight Index DIP sideways(vs rest)     0.0 ..     0.0
+  BazookaRight Index DIP twist(vs rest)     0.1 ..     0.1
+  BazookaRight Index MCP flex           23.6 ..    23.6
+  BazookaRight Index MCP sideways(vs rest)   -19.8 ..   -19.8
+  BazookaRight Index MCP twist(vs rest)     6.5 ..     6.5
+  BazookaRight Index PIP flex           23.7 ..    23.7
+  BazookaRight Index PIP sideways(vs rest)     0.0 ..     0.0
+  BazookaRight Index PIP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Index skinToLauncher(mm)     7.6 ..     7.6
+  BazookaRight Middle DIP flex          -6.7 ..    -6.7
+  BazookaRight Middle DIP sideways(vs rest)    -3.3 ..    -3.3
+  BazookaRight Middle DIP twist(vs rest)     0.8 ..     0.8
+  BazookaRight Middle MCP flex          12.7 ..    12.7
+  BazookaRight Middle MCP sideways(vs rest)    -0.2 ..    -0.2
+  BazookaRight Middle MCP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Middle PIP flex         105.0 ..   105.0
+  BazookaRight Middle PIP sideways(vs rest)     3.6 ..     3.6
+  BazookaRight Middle PIP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Middle skinToLauncher(mm)     0.0 ..     0.0
+  BazookaRight Pinky DIP flex          -21.5 ..   -21.5
+  BazookaRight Pinky DIP sideways(vs rest)    -0.8 ..    -0.8
+  BazookaRight Pinky DIP twist(vs rest)     0.1 ..     0.1
+  BazookaRight Pinky MCP flex           60.0 ..    60.1
+  BazookaRight Pinky MCP sideways(vs rest)     1.9 ..     1.9
+  BazookaRight Pinky MCP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Pinky PIP flex          105.0 ..   105.0
+  BazookaRight Pinky PIP sideways(vs rest)     4.2 ..     4.2
+  BazookaRight Pinky PIP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Pinky skinToLauncher(mm)    25.5 ..    25.5
+  BazookaRight Ring DIP flex             5.0 ..     5.0
+  BazookaRight Ring DIP sideways(vs rest)     2.2 ..     2.2
+  BazookaRight Ring DIP twist(vs rest)    -0.4 ..    -0.4
+  BazookaRight Ring MCP flex            76.5 ..    76.5
+  BazookaRight Ring MCP sideways(vs rest)    -7.0 ..    -7.0
+  BazookaRight Ring MCP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Ring PIP flex            81.1 ..    81.1
+  BazookaRight Ring PIP sideways(vs rest)     1.2 ..     1.2
+  BazookaRight Ring PIP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Ring skinToLauncher(mm)     2.3 ..     2.3
+  BazookaRight Thumb CMC sideways(vs rest)    14.9 ..    14.9
+  BazookaRight Thumb CMC twist(vs rest)   -13.3 ..   -13.3
+  BazookaRight Thumb IP flex            41.1 ..    41.1
+  BazookaRight Thumb IP sideways(vs rest)     6.2 ..     6.2
+  BazookaRight Thumb IP twist(vs rest)     4.9 ..     4.9
+  BazookaRight Thumb MCP flex           57.7 ..    57.7
+  BazookaRight Thumb MCP sideways(vs rest)     3.6 ..     3.6
+  BazookaRight Thumb MCP twist(vs rest)     0.0 ..     0.0
+  BazookaRight Thumb skinToLauncher(mm)    -1.9 ..    -1.9
+  BazookaRight wristFlex(+)/Ext(-)     -70.0 ..   -65.3
+  BazookaRight wristRadial(+)/Ulnar(-)   -35.0 ..    20.0
+  BazookaRight wristTwist(left in wrist)   -43.6 ..    33.7
+  M1Left elbowBend                      13.1 ..    87.0
+  M1Left forearmTwistShared            -26.8 ..    20.3
+  M1Left wristSwing(total)              14.5 ..    83.7
+  M1Right elbowBend                     52.9 ..   124.4
+  M1Right forearmTwistShared           -17.5 ..    56.3
+  M1Right Index DIP flex               -46.5 ..    65.8
+  M1Right Index DIP sideways(vs rest)   -78.5 ..    17.7
+  M1Right Index DIP twist(vs rest)     -72.5 ..    17.6
+  M1Right Index MCP flex               -31.2 ..    77.5
+  M1Right Index MCP sideways(vs rest)   -54.1 ..    45.7
+  M1Right Index MCP twist(vs rest)     -20.7 ..    29.3
+  M1Right Index PIP flex               -25.9 ..    72.8
+  M1Right Index PIP sideways(vs rest)   -71.4 ..     0.0
+  M1Right Index PIP twist(vs rest)     -33.2 ..     9.5
+  M1Right Middle DIP flex              -19.2 ..    56.3
+  M1Right Middle DIP sideways(vs rest)   -57.5 ..    38.2
+  M1Right Middle DIP twist(vs rest)     -5.3 ..    14.7
+  M1Right Middle MCP flex               28.8 ..    86.9
+  M1Right Middle MCP sideways(vs rest)   -94.4 ..     0.0
+  M1Right Middle MCP twist(vs rest)     -8.2 ..     9.2
+  M1Right Middle PIP flex              -25.9 ..    72.8
+  M1Right Middle PIP sideways(vs rest)   -16.4 ..    34.4
+  M1Right Middle PIP twist(vs rest)     -3.4 ..    14.7
+  M1Right Pinky DIP flex               -68.1 ..    34.1
+  M1Right Pinky DIP sideways(vs rest)   -75.8 ..     3.9
+  M1Right Pinky DIP twist(vs rest)      -4.0 ..     4.5
+  M1Right Pinky MCP flex                29.8 ..   115.5
+  M1Right Pinky MCP sideways(vs rest)   -22.4 ..    49.0
+  M1Right Pinky MCP twist(vs rest)     -10.0 ..    12.3
+  M1Right Pinky PIP flex               -25.9 ..    72.8
+  M1Right Pinky PIP sideways(vs rest)   -47.2 ..     4.4
+  M1Right Pinky PIP twist(vs rest)     -23.5 ..     1.0
+  M1Right Ring DIP flex                -24.3 ..    14.2
+  M1Right Ring DIP sideways(vs rest)   -47.6 ..    31.0
+  M1Right Ring DIP twist(vs rest)       -0.1 ..    17.8
+  M1Right Ring MCP flex                 29.7 ..   104.0
+  M1Right Ring MCP sideways(vs rest)   -60.1 ..    23.8
+  M1Right Ring MCP twist(vs rest)      -16.5 ..     4.5
+  M1Right Ring PIP flex                -25.9 ..    72.8
+  M1Right Ring PIP sideways(vs rest)   -20.4 ..    30.4
+  M1Right Ring PIP twist(vs rest)       -9.3 ..    10.8
+  M1Right Thumb CMC sideways(vs rest)   -88.4 ..     3.3
+  M1Right Thumb CMC twist(vs rest)     -10.8 ..    21.1
+  M1Right Thumb IP flex                -85.4 ..     1.5
+  M1Right Thumb IP sideways(vs rest)   -85.3 ..     0.0
+  M1Right Thumb IP twist(vs rest)       -9.6 ..     5.9
+  M1Right Thumb MCP flex                -7.6 ..    60.1
+  M1Right Thumb MCP sideways(vs rest)   -23.5 ..    50.1
+  M1Right Thumb MCP twist(vs rest)      -8.0 ..     3.1
+  M1Right wristSwing(total)             17.8 ..    83.7

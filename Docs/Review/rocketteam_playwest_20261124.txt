@@ -1,0 +1,3 @@
+RESULT playwest
+west over at 19.9s: section Silence, max alive 1, bodies 9, health 100
+after: section Silence
