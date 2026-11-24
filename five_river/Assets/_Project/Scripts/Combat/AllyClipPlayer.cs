@@ -251,7 +251,17 @@ namespace FiveRivers.Combat
         }
 
         // ---- story clips: a director asks for one by name (Park kneeling by the body, Yun going prone; to come) ----
-        public bool PlayStory(string clipName, float fadeIn = 0.4f, bool hold = true) => bound && brain.RequestStory(clipName, fadeIn, hold);
+        public bool PlayStory(string clipName, float fadeIn = 0.4f, bool hold = true, float speed = 1f) => bound && brain.RequestStory(clipName, fadeIn, hold, speed);
+        // 로켓포반(2026-11-24): 지금 틀고 있는 클립의 배속을 바꾼다 (0 = 멈춤). 그래프가 없으면 아무 일도 없다.
+        public void SetClipSpeed(float speed) { if (graph.IsValid() && current.IsValid()) current.SetSpeed(Mathf.Max(0f, speed)); }
+        // 지금 틀고 있는 클립의 이름과 시각(초, 클립 시간). 클립이 없으면 false.
+        public bool TryGetClipTime(out string clip, out float time)
+        {
+            clip = null; time = 0f;
+            if (!graph.IsValid() || !current.IsValid() || currentClip == null) return false;
+            clip = currentClip.name; time = (float)current.GetTime();
+            return true;
+        }
         public void StopStory(float fadeOut = 0.4f) { if (bound) brain.StopStory(fadeOut); }
 
         void OnSectionChanged(FlowTransition t)
@@ -380,7 +390,7 @@ namespace FiveRivers.Combat
                         StartGraph();
                         BeginBlend(order.Fade, true);
                     }
-                    PlayInGraph(clip, order.StartTime, fresh ? 0f : order.Fade);
+                    PlayInGraph(clip, order.StartTime, fresh ? 0f : order.Fade, order.Speed > 0f ? order.Speed : 1f);
                     break;
                 }
                 case AllyClipOrderKind.Leave:
@@ -419,7 +429,7 @@ namespace FiveRivers.Combat
             fadeLength = fadeTime = 0f;
         }
 
-        void PlayInGraph(AllyRifleTracks.Clip clip, float startTime, float crossFade)
+        void PlayInGraph(AllyRifleTracks.Clip clip, float startTime, float crossFade, float speed = 1f)
         {
             if (previous.IsValid())
             {
@@ -443,6 +453,7 @@ namespace FiveRivers.Combat
             current = AnimationClipPlayable.Create(graph, clip.clip);
             current.SetApplyFootIK(false);
             current.SetTime(startTime);
+            current.SetSpeed(speed);
             currentClip = clip;
             graph.Connect(current, 0, mixer, 0);
             fadeTime = 0f;

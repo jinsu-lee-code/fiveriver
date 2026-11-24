@@ -1,0 +1,2917 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fb28fc70270e2d4db83dacdf9774a13, type: 3}
+  m_Name: LoaderPropTracks
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.LoaderPropTracks
+  clips:
+  - name: A_ROK_Loader_Kneel_In
+    fps: 30
+    frames:
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: -0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: -0}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.3192, y: 0.0056, z: 0.119}
+      rotation: {x: -0.0002667999, y: 0.6705219, z: 0.7418896, w: -0.00037592626}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.3176, y: 0.0227, z: 0.1211}
+      rotation: {x: 0.0131985005, y: 0.67001915, z: 0.74206597, w: -0.015438606}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.3111, y: 0.0437, z: 0.1242}
+      rotation: {x: 0.020557022, y: 0.66845083, z: 0.743066, w: -0.0245721}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.3006, y: 0.0679, z: 0.1284}
+      rotation: {x: 0.022776423, y: 0.6661705, z: 0.74489915, w: -0.028695459}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2871, y: 0.0947, z: 0.1334}
+      rotation: {x: 0.02070936, y: 0.663343, z: 0.74746996, w: -0.028913338}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2714, y: 0.1235, z: 0.1391}
+      rotation: {x: 0.015406106, y: 0.6601974, z: 0.75047624, w: -0.026222624}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2545, y: 0.1536, z: 0.1454}
+      rotation: {x: 0.007902208, y: 0.6567628, z: 0.75374335, w: -0.021706887}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2373, y: 0.1844, z: 0.1521}
+      rotation: {x: -0.00074203196, y: 0.65326315, z: 0.7569539, w: -0.016360657}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2203, y: 0.2152, z: 0.159}
+      rotation: {x: -0.00949577, y: 0.6497752, z: 0.75998443, w: -0.011209618}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2045, y: 0.2454, z: 0.1659}
+      rotation: {x: -0.017272806, y: 0.646492, z: 0.76269096, w: -0.0072330935}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1903, y: 0.2742, z: 0.1727}
+      rotation: {x: -0.023039838, y: 0.6436393, z: 0.76496303, w: -0.0053986292}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1783, y: 0.3009, z: 0.179}
+      rotation: {x: -0.025636211, y: 0.64135885, z: 0.76678276, w: -0.0067716357}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1691, y: 0.3249, z: 0.1846}
+      rotation: {x: -0.024055546, y: 0.63990104, z: 0.76798344, w: -0.012228711}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1633, y: 0.3454, z: 0.1892}
+      rotation: {x: -0.017044881, y: 0.63922536, z: 0.7684935, w: -0.0227639}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1614, y: 0.3571, z: 0.191}
+      rotation: {x: -0.03596826, y: 0.6377762, z: 0.7693815, w: -0.000119261545}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1592, y: 0.3683, z: 0.193}
+      rotation: {x: -0.05174578, y: 0.63601786, z: 0.769709, w: 0.018754352}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1527, y: 0.3812, z: 0.1966}
+      rotation: {x: -0.06332532, y: 0.63362896, z: 0.770418, w: 0.030989237}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1403, y: 0.3965, z: 0.2023}
+      rotation: {x: -0.0691696, y: 0.6306892, z: 0.77218324, w: 0.03434763}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1194, y: 0.4154, z: 0.2111}
+      rotation: {x: -0.066405125, y: 0.6271303, z: 0.7756894, w: 0.024573017}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2335, y: 0.4459, z: 0.1857}
+      rotation: {x: -0.2444408, y: 0.4927863, z: 0.7860069, w: -0.282141}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.162, y: 0.4572, z: 0.2035}
+      rotation: {x: -0.19120239, y: 0.52238035, z: 0.8004227, w: -0.22334698}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.0907, y: 0.4755, z: 0.2245}
+      rotation: {x: -0.12771614, y: 0.55447215, z: 0.80572855, w: -0.16447128}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.0371, y: 0.4955, z: 0.2462}
+      rotation: {x: -0.08443497, y: 0.5786323, z: 0.8044554, w: -0.10443639}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.0002, y: 0.515, z: 0.2632}
+      rotation: {x: -0.053802945, y: 0.59578466, z: 0.7986443, w: -0.06567513}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0222, y: 0.5309, z: 0.2731}
+      rotation: {x: -0.03541605, y: 0.6045217, z: 0.79451287, w: -0.04526087}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.029, y: 0.5399, z: 0.2745}
+      rotation: {x: -0.03689, y: 0.60065764, z: 0.79718494, w: -0.048433024}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+  - name: A_ROK_Loader_Kneel_Idle
+    fps: 30
+    frames:
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037678357, y: 0.59857017, z: 0.79860663, w: -0.05021515}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037678357, y: 0.59857017, z: 0.79860663, w: -0.05021515}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037678357, y: 0.59857017, z: 0.79860663, w: -0.05021515}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.03763866, y: 0.5985713, z: 0.79860955, w: -0.050185535}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+  - name: A_ROK_Loader_Load
+    fps: 30
+    frames:
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037648663, y: 0.59857196, z: 0.7986042, w: -0.05025477}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0338, y: 0.5426, z: 0.2786}
+      rotation: {x: -0.03662302, y: 0.6025449, z: 0.79587895, w: -0.046638653}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0636, y: 0.6198, z: 0.2843}
+      rotation: {x: -0.13389678, y: 0.5564792, z: 0.8198975, w: -0.0130644}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.1098, y: 0.705, z: 0.3049}
+      rotation: {x: -0.2899198, y: 0.50645226, z: 0.8111476, w: 0.038629778}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.1703, y: 0.7841, z: 0.3284}
+      rotation: {x: -0.4817949, y: 0.44852206, z: 0.7481849, w: 0.08319268}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.2183, y: 0.8633, z: 0.3441}
+      rotation: {x: 0.6971613, y: -0.34412268, z: -0.62596244, w: -0.060965538}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.28, y: 0.9251, z: 0.3521}
+      rotation: {x: 0.87832224, y: -0.21447237, z: -0.42709178, w: -0.012011621}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.3421, y: 0.963, z: 0.3422}
+      rotation: {x: 0.98159415, y: -0.065017715, z: -0.17829281, w: 0.021385903}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.309, y: 0.9875, z: 0.3468}
+      rotation: {x: 0.9952901, y: 0.056937605, z: -0.040661596, w: 0.067100056}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.2824, y: 1.0273, z: 0.2357}
+      rotation: {x: -0.26507378, y: -0.00035072197, z: 0.000044562956, w: 0.9642281}
+      state: 3
+      insert: 0
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.271, y: 1.0611, z: 0.2392}
+      rotation: {x: -0.016300159, y: 0.051115643, z: -0.022923263, w: 0.99829656}
+      state: 3
+      insert: 0
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.2444, y: 1.1714, z: 0.1949}
+      rotation: {x: -0.025260333, y: 0.023384484, z: -0.03337841, w: 0.99884987}
+      state: 3
+      insert: 0
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.2187, y: 1.3022, z: 0.1078}
+      rotation: {x: -0.095917955, y: -0.021228194, z: -0.019511295, w: 0.9949716}
+      state: 3
+      insert: 0
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1951, y: 1.3763, z: 0.0291}
+      rotation: {x: -0.02351903, y: -0.013588432, z: 0.0007192985, w: 0.9996308}
+      state: 3
+      insert: 0
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1637, y: 1.4897, z: -0.0343}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.159, y: 1.4874, z: -0.0344}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.159, y: 1.4874, z: -0.0344}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.159, y: 1.4874, z: -0.0344}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: -0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.1593, y: 1.4866, z: -0.0272}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.0118
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.16, y: 1.4845, z: -0.0069}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.0451
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.1611, y: 1.4812, z: 0.0245}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.0967
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.1625, y: 1.477, z: 0.0651}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.1635
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.1642, y: 1.472, z: 0.113}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.2423
+      gripLeft: 1
+      gripRight: 0.722
+    - position: {x: -0.1661, y: 1.4664, z: 0.1664}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.33
+      gripLeft: 1
+      gripRight: 0.167
+    - position: {x: -0.1681, y: 1.4605, z: 0.2231}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.4233
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1701, y: 1.4544, z: 0.2815}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.5192
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1722, y: 1.4483, z: 0.3394}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.6145
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1741, y: 1.4425, z: 0.395}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.7059
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1759, y: 1.4371, z: 0.4464}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.7904
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1775, y: 1.4324, z: 0.4917}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.8648
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1788, y: 1.4285, z: 0.5289}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.9259
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1798, y: 1.4256, z: 0.556}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.9706
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1803, y: 1.424, z: 0.5713}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 0.9957
+      gripLeft: 1
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 1
+      gripLeft: 0.833
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 4
+      insert: 1
+      gripLeft: 0.417
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: -0.1804, y: 1.4238, z: 0.5739}
+      rotation: {x: 0.05206021, y: -0.017574668, z: 0.0009370056, w: 0.9984889}
+      state: 0
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+  - name: A_ROK_Loader_Reach
+    fps: 30
+    frames:
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.3187, y: 0.0029, z: 0.1205}
+      rotation: {x: -0.00015187926, y: 0.67074716, z: 0.7416861, w: -0.00020476441}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.3113, y: 0.0194, z: 0.1237}
+      rotation: {x: -0.0009508803, y: 0.66925454, z: 0.7430316, w: -0.0012601954}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2985, y: 0.0479, z: 0.1292}
+      rotation: {x: -0.0023694518, y: 0.6667045, z: 0.74531186, w: -0.0031257977}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2817, y: 0.0853, z: 0.1365}
+      rotation: {x: -0.0041973046, y: 0.66334975, z: 0.7482769, w: -0.005591614}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.262, y: 0.1285, z: 0.1452}
+      rotation: {x: -0.0063297516, y: 0.6594033, z: 0.751715, w: -0.008479496}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2409, y: 0.1747, z: 0.1546}
+      rotation: {x: -0.008577885, y: 0.6551935, z: 0.75532526, w: -0.011478295}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2197, y: 0.2206, z: 0.164}
+      rotation: {x: -0.010864789, y: 0.650947, z: 0.7589065, w: -0.014524448}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1998, y: 0.2633, z: 0.1728}
+      rotation: {x: -0.012982581, y: 0.64697844, z: 0.7622011, w: -0.017318634}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1828, y: 0.2999, z: 0.1803}
+      rotation: {x: -0.014796975, y: 0.6435712, z: 0.76498955, w: -0.019702055}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1701, y: 0.3273, z: 0.1859}
+      rotation: {x: -0.016128162, y: 0.6410073, z: 0.76706415, w: -0.02149509}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1631, y: 0.3424, z: 0.189}
+      rotation: {x: -0.016867418, y: 0.6395819, z: 0.7682084, w: -0.022502914}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.162, y: 0.3459, z: 0.1896}
+      rotation: {x: -0.017124131, y: 0.6391035, z: 0.76859117, w: -0.022828199}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1568, y: 0.3597, z: 0.1929}
+      rotation: {x: -0.031936277, y: 0.63708735, z: 0.77010953, w: -0.005580871}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1429, y: 0.3771, z: 0.1993}
+      rotation: {x: -0.03841372, y: 0.63385844, z: 0.7724929, w: -0.0016170597}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1195, y: 0.3985, z: 0.2091}
+      rotation: {x: -0.03554541, y: 0.6293945, z: 0.7761797, w: -0.012011709}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.0889, y: 0.4232, z: 0.2212}
+      rotation: {x: -0.025111405, y: 0.62359357, z: 0.78062636, w: -0.033511486}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.0563, y: 0.4502, z: 0.2369}
+      rotation: {x: -0.02805739, y: 0.61779165, z: 0.7849491, w: -0.037431642}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.069, y: 0.4713, z: 0.2337}
+      rotation: {x: -0.093012966, y: 0.5730231, z: 0.80131674, w: -0.14451516}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.0134, y: 0.4981, z: 0.2546}
+      rotation: {x: -0.044360764, y: 0.5933208, z: 0.7977319, w: -0.098115034}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0172, y: 0.5212, z: 0.2683}
+      rotation: {x: -0.025868598, y: 0.602358, z: 0.79487866, w: -0.06829103}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0279, y: 0.5378, z: 0.2748}
+      rotation: {x: -0.036374398, y: 0.6021471, z: 0.7961566, w: -0.047228552}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+  - name: A_ROK_Loader_Brace
+    fps: 30
+    frames:
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0453, y: 0.5354, z: 0.2854}
+      rotation: {x: -0.05762724, y: 0.5679225, z: 0.8164138, w: -0.08724527}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0563, y: 0.5297, z: 0.294}
+      rotation: {x: -0.072926916, y: 0.5432977, z: 0.82835436, w: -0.11549175}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0644, y: 0.5257, z: 0.3004}
+      rotation: {x: -0.08337095, y: 0.52602315, z: 0.835577, w: -0.13475917}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0696, y: 0.523, z: 0.3049}
+      rotation: {x: -0.08887793, y: 0.5169715, z: 0.8389994, w: -0.14464158}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0723, y: 0.5215, z: 0.3075}
+      rotation: {x: -0.08949718, y: 0.5164269, z: 0.8391356, w: -0.14541359}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0724, y: 0.5215, z: 0.3076}
+      rotation: {x: -0.08947414, y: 0.5165198, z: 0.83909255, w: -0.14534593}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0729, y: 0.5212, z: 0.3083}
+      rotation: {x: -0.08829945, y: 0.5188929, z: 0.838175, w: -0.1428847}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0737, y: 0.5206, z: 0.3099}
+      rotation: {x: -0.08531356, y: 0.52494466, z: 0.83574617, w: -0.13668613}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0746, y: 0.5214, z: 0.3107}
+      rotation: {x: -0.08319679, y: 0.5313473, z: 0.8335471, w: -0.12628368}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0741, y: 0.5227, z: 0.3104}
+      rotation: {x: -0.07967319, y: 0.53889436, z: 0.830545, w: -0.1159313}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0718, y: 0.5244, z: 0.3086}
+      rotation: {x: -0.0751233, y: 0.5469096, z: 0.8269908, w: -0.10645548}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0678, y: 0.5266, z: 0.3055}
+      rotation: {x: -0.06989458, y: 0.5549075, z: 0.82311827, w: -0.098329805}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0614, y: 0.5291, z: 0.3006}
+      rotation: {x: -0.06454574, y: 0.562036, z: 0.81938106, w: -0.09254226}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0539, y: 0.5318, z: 0.2948}
+      rotation: {x: -0.05916718, y: 0.56854784, z: 0.8157869, w: -0.08800261}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0472, y: 0.535, z: 0.2882}
+      rotation: {x: -0.05527054, y: 0.57310283, z: 0.8135054, w: -0.081898496}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0409, y: 0.5377, z: 0.2821}
+      rotation: {x: -0.051505037, y: 0.5775386, z: 0.8111968, w: -0.07586923}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0359, y: 0.5399, z: 0.2773}
+      rotation: {x: -0.04777733, y: 0.58225375, z: 0.8086136, w: -0.069584}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0325, y: 0.5415, z: 0.2744}
+      rotation: {x: -0.04422019, y: 0.587322, z: 0.805669, w: -0.06320546}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0309, y: 0.5425, z: 0.2734}
+      rotation: {x: -0.04100972, y: 0.59242356, z: 0.8025522, w: -0.05711917}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0306, y: 0.543, z: 0.2737}
+      rotation: {x: -0.0386185, y: 0.5966593, z: 0.799856, w: -0.052313834}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+  - name: A_ROK_Loader_Wave
+    fps: 30
+    frames:
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.031, y: 0.5432, z: 0.2742}
+      rotation: {x: -0.03760901, y: 0.5987354, z: 0.7984961, w: -0.050055537}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0318, y: 0.5436, z: 0.2726}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.033, y: 0.5443, z: 0.2698}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0344, y: 0.5453, z: 0.2661}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0356, y: 0.5464, z: 0.2621}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0366, y: 0.5474, z: 0.2582}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.037, y: 0.5483, z: 0.2552}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0369, y: 0.5488, z: 0.2536}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0368, y: 0.5489, z: 0.2534}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0369, y: 0.5488, z: 0.2536}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.037, y: 0.5488, z: 0.2538}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0373, y: 0.5486, z: 0.2541}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0376, y: 0.5484, z: 0.2546}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.038, y: 0.5482, z: 0.2551}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0385, y: 0.548, z: 0.2558}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0391, y: 0.5477, z: 0.2565}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0397, y: 0.5474, z: 0.2572}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0399, y: 0.547, z: 0.2583}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0395, y: 0.5466, z: 0.26}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0391, y: 0.5461, z: 0.2616}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0387, y: 0.5457, z: 0.2632}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0379, y: 0.5452, z: 0.2651}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0369, y: 0.5447, z: 0.267}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0357, y: 0.5443, z: 0.2688}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0346, y: 0.5439, z: 0.2704}
+      rotation: {x: -0.037650563, y: 0.59852225, z: 0.79864097, w: -0.05026086}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: -0.0307, y: 0.5446, z: 0.2782}
+      rotation: {x: -0.060172893, y: 0.61917406, z: 0.781302, w: -0.05069444}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0316, y: 0.5438, z: 0.2754}
+      rotation: {x: -0.04536208, y: 0.6065438, z: 0.7921905, w: -0.04981177}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0319, y: 0.5434, z: 0.2739}
+      rotation: {x: -0.037370734, y: 0.59941715, z: 0.7980347, w: -0.049427886}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0311, y: 0.5432, z: 0.2742}
+      rotation: {x: -0.037563685, y: 0.5987864, z: 0.79846185, w: -0.050024834}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+  - name: A_ROK_Loader_ToRifle_Stand
+    fps: 30
+    frames:
+    - position: {x: -0.0308, y: 0.5432, z: 0.2743}
+      rotation: {x: -0.037652973, y: 0.5985606, z: 0.79861224, w: -0.05025905}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: -0.0238, y: 0.5325, z: 0.271}
+      rotation: {x: -0.03697604, y: 0.5998623, z: 0.7977183, w: -0.04943252}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.0017, y: 0.5017, z: 0.2589}
+      rotation: {x: -0.045617666, y: 0.59550357, z: 0.79979235, w: -0.060222294}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.0409, y: 0.4563, z: 0.2401}
+      rotation: {x: -0.055397328, y: 0.59002465, z: 0.80204344, w: -0.07435306}
+      state: 1
+      insert: 0
+      gripLeft: 1
+      gripRight: 1
+    - position: {x: 0.0598, y: 0.4022, z: 0.2349}
+      rotation: {x: -0.02791725, y: 0.6180806, z: 0.784734, w: -0.037278775}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.0999, y: 0.3381, z: 0.2192}
+      rotation: {x: -0.023493709, y: 0.62673324, z: 0.7782473, w: -0.031380728}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1344, y: 0.315, z: 0.2095}
+      rotation: {x: -0.0220513, y: 0.6342398, z: 0.7724711, w: -0.023283321}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.1702, y: 0.2912, z: 0.1995}
+      rotation: {x: -0.020524435, y: 0.6419358, z: 0.7663387, w: -0.014908847}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2058, y: 0.2676, z: 0.1893}
+      rotation: {x: -0.018990763, y: 0.64952826, z: 0.7600725, w: -0.0064912094}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2398, y: 0.2453, z: 0.1796}
+      rotation: {x: -0.01754777, y: 0.6566538, z: 0.75398654, w: 0.0014941938}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.2751, y: 0.2223, z: 0.1694}
+      rotation: {x: -0.015997607, y: 0.66392475, z: 0.74756396, w: 0.009804456}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.3039, y: 0.2036, z: 0.1611}
+      rotation: {x: -0.014765145, y: 0.6698018, z: 0.7422079, w: 0.016585208}
+      state: 2
+      insert: 0
+      gripLeft: 0
+      gripRight: 1
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+    - position: {x: 0.32, y: 0, z: 0.12}
+      rotation: {x: 0, y: 0.6710053, z: 0.7414526, w: 0}
+      state: 5
+      insert: 0
+      gripLeft: 0
+      gripRight: 0
+  pile:
+  - position: {x: 0.32, y: 0, z: 0.12}
+    rotation: {x: -0.6710053, y: 0, z: -0, w: 0.7414526}
+  - position: {x: 0.4, y: 0, z: 0.05}
+    rotation: {x: -0.6710053, y: 0, z: -0, w: 0.7414526}
+  - position: {x: 0.46, y: 0, z: -0.05}
+    rotation: {x: -0.6710053, y: 0, z: -0, w: 0.7414526}
+  rocketLength: 0.6
+  gunnerFeet: {x: -0.42, y: 0, z: 0.8}
+  gunnerEye: {x: -0.42, y: 1.6, z: 0.8}
+  rearMouth: {x: -0.18, y: 1.425, z: 0.562}
+  tubeAxis: {x: -0.035, y: -0.104, z: 0.994}
+  tapPoint: {x: -0.24, y: 1.3, z: 0.62}

@@ -98,13 +98,16 @@ namespace FiveRivers.Narrative
                 if (!ally.isActiveAndEnabled) continue; // a fallen man (Choi Man-su) stays where he is
                 var animator = ally.GetComponentInChildren<Animator>();
                 if (animator == null) continue;
+                // 로켓포반 탄약수(2026-11-24)는 사수 자리에서 출발하지만 돌아갈 자리는 원래 참호 자리다
+                var home = ally.transform.position; var homeFacing = ally.transform.rotation;
+                if (LoaderHandoff.TryGetPost(ally, out var post, out var postFacing)) { home = post; homeFacing = postFacing; }
                 followers.Add(new Follower
                 {
                     combat = ally,
                     body = ally.transform,
                     animator = animator,
-                    homePosition = ally.transform.position,
-                    homeRotation = ally.transform.rotation,
+                    homePosition = home,
+                    homeRotation = homeFacing,
                     rigScale = animator.humanScale * animator.transform.lossyScale.y,
                     hasAdvance = animator.HasState(0, AdvanceState),
                     frontLine = FrontLine(ally.transform),
@@ -118,7 +121,7 @@ namespace FiveRivers.Narrative
             {
                 followers[i].order = i;
                 followers[i].slot = Slots[i % Slots.Length];
-                followers[i].startAt = Time.time + 0.3f + StartGap * i;
+                followers[i].startAt = Time.time + 0.3f + StartGap * i + LoaderHandoff.DelayFor(followers[i].combat); // 탄약수는 소총을 다시 들 때까지 기다린다
             }
         }
 
@@ -237,6 +240,7 @@ namespace FiveRivers.Narrative
             {
                 var a = followers[i].body;
                 if (a == null || !a.gameObject.activeInHierarchy) continue;
+                if (LoaderHandoff.DelayFor(followers[i].combat) > 0f) continue; // 소총을 다시 드는 탄약수는 밀리지 않는다 (발이 미끄러짐)
                 var away = a.position - player; away.y = 0f;
                 float gap = away.magnitude;
                 if (gap < PlayerSpace)

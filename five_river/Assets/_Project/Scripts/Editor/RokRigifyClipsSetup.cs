@@ -67,6 +67,14 @@ namespace FiveRivers.EditorTools
             // 기존 클립은 꿇은 뒷발이 발끝 하나로 세로로 서 있었다 → 새 클립은 뒷발 발등이 땅, 무릎이 땅
             ("A_ROK_Kneel_Watch_Idle", AllyClipRole.KneelIdle, true),
             ("A_ROK_FireCrouch_Fire", AllyClipRole.KneelFire, false),
+            // 로켓포반 탄약수 (2026-11-24, 이야기 클립: LoaderTeamDirector 가 PlayStory 로 부른다). 반복은 Kneel_Idle 만. 로켓 궤적(_prop.json)은 RocketTeamSetup 이 읽는다.
+            ("A_ROK_Loader_Kneel_In", AllyClipRole.Story, false),
+            ("A_ROK_Loader_Kneel_Idle", AllyClipRole.Story, true),
+            ("A_ROK_Loader_Load", AllyClipRole.Story, false),
+            ("A_ROK_Loader_Reach", AllyClipRole.Story, false),
+            ("A_ROK_Loader_Brace", AllyClipRole.Story, false),
+            ("A_ROK_Loader_Wave", AllyClipRole.Story, false),
+            ("A_ROK_Loader_ToRifle_Stand", AllyClipRole.Story, false),
         };
 
         [MenuItem("FiveRivers/Setup/ROK Rigify Clips")]

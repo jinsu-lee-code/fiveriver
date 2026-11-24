@@ -42,6 +42,7 @@ namespace FiveRivers.Combat
         public float StartTime;     // Play: 클립 어디서 시작하나(초)
         public bool FromController; // Play: 그래프가 아직 없다(컨트롤러 자세에서 들어간다)
         public float LeaveSeconds;  // Leave: 컨트롤러 자세로 돌아가는 시간 (0 = 즉시)
+        public float Speed;         // Play: 재생 배속 (0 = 1배, 이야기 클립만 바꾼다)
 
         public static AllyClipOrder None => new AllyClipOrder { Kind = AllyClipOrderKind.None };
     }
@@ -90,7 +91,7 @@ namespace FiveRivers.Combat
         public string LastVariation { get; private set; }
         public float NextVariationAt { get; private set; } = float.MaxValue;
         float enterAt = -1f, reenterAt = -100f, lastDuckAt = -100f;
-        string storyRequest; float storyFade; bool storyHold, storyStop; float storyStopSeconds;
+        string storyRequest; float storyFade, storySpeed = 1f; bool storyHold, storyStop; float storyStopSeconds;
 
         public bool Active => Phase != AllyClipPhase.Off;
         public bool HasBase => baseClip != null;
@@ -129,10 +130,10 @@ namespace FiveRivers.Combat
         float Length(string clip) => clip != null && byName.TryGetValue(clip, out var info) ? info.Length : 0f;
 
         // 이야기 장면이 부르는 클립 (예: 시신 곁 무릎 꿇기). hold: 끝 프레임에 머문다(StopStory 까지).
-        public bool RequestStory(string clip, float fade, bool hold)
+        public bool RequestStory(string clip, float fade, bool hold, float speed = 1f)
         {
             if (clip == null || !byName.ContainsKey(clip)) return false;
-            storyRequest = clip; storyFade = fade; storyHold = hold; storyStop = false;
+            storyRequest = clip; storyFade = fade; storyHold = hold; storyStop = false; storySpeed = speed > 0f ? speed : 1f;
             return true;
         }
 
@@ -140,7 +141,7 @@ namespace FiveRivers.Combat
 
         public AllyClipOrder Tick(in AllyClipSituation s, float dt)
         {
-            if (Phase != AllyClipPhase.Off) ClipTime += dt;
+            if (Phase != AllyClipPhase.Off) ClipTime += dt * (Phase == AllyClipPhase.Story ? storySpeed : 1f);
 
             if (s.Reset || s.Teleported) { storyRequest = null; storyStop = false; return Active ? Leave(0f) : AllyClipOrder.None; }
             if (!s.Alive) { storyRequest = null; return Active ? Leave(0f) : AllyClipOrder.None; }
@@ -150,7 +151,7 @@ namespace FiveRivers.Combat
             {
                 bool fromController = !Active;
                 string clip = storyRequest; storyRequest = null;
-                return Play(AllyClipPhase.Story, clip, storyFade, 0f, fromController);
+                { var order = Play(AllyClipPhase.Story, clip, storyFade, 0f, fromController); order.Speed = storySpeed; return order; }
             }
             if (Phase == AllyClipPhase.Story)
             {
