@@ -42,7 +42,7 @@ namespace FiveRivers.Narrative
         CanvasGroup bars;
         Terrain terrain;
         float time, clockBefore;
-        bool playedThisRun, pending, cutDone;
+        bool playedThisRun, pending, cutDone, pausedLastFrame;
         Vector3 flarePoint, eye, slopeFocus, focus;
         Quaternion eyeView;
         FiveRivers.Data.GameText copy;
@@ -110,10 +110,16 @@ namespace FiveRivers.Narrative
                 pending = false;
                 Begin();
             }
-            if (!Playing || director.Flow.Paused) return;
+            if (!Playing) return;
+            if (director.Flow.Paused)
+            {
+                pausedLastFrame = true;
+                return;
+            }
+            bool resumed = CutsceneRig.Resumed(ref pausedLastFrame);
             time += Time.deltaTime;
             var keys = Keyboard.current;
-            if (keys != null && time > SkipAfter && time < Duration - HandBack
+            if (keys != null && !resumed && time > SkipAfter && time < Duration - HandBack
                 && (keys.spaceKey.wasPressedThisFrame || keys.enterKey.wasPressedThisFrame))
                 time = Duration - HandBack;
 
@@ -377,6 +383,7 @@ namespace FiveRivers.Narrative
             EnsureCamera();
             EnsureBars();
             time = 0f;
+            pausedLastFrame = false;
             Playing = true;
             director.InputGate.Block(this);
             Cursor.lockState = CursorLockMode.Locked;

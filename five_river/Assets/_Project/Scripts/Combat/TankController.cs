@@ -64,6 +64,7 @@ namespace FiveRivers.Combat
         float approachElapsed;
         // 조준해 들어옴 (2026-11-24): 노출된 채 쏘면 멀리 → 가까이 → 직격
         TankGunnery gunnery;
+        TankRunningGear runningGear;
         Vector3 lastShotPlayerAt;
         bool hasLastShot;
         static readonly RaycastHit[] sightHits = new RaycastHit[24];
@@ -103,7 +104,8 @@ namespace FiveRivers.Combat
             turretBasis = Quaternion.Inverse(body.rotation) * turret.rotation;
             turretRest = turret.localRotation;
             // wheels turn and the track belts run with the distance the hull travels (TankRunningGear)
-            body.gameObject.AddComponent<TankRunningGear>().Build(body);
+            runningGear = body.gameObject.AddComponent<TankRunningGear>();
+            runningGear.Build(body);
             // where its rounds land the ground is blown out (ShellCraters, undone on a new run or a retry)
             gunnery = new TankGunnery(new GunneryRules
             {
@@ -114,6 +116,13 @@ namespace FiveRivers.Combat
             craters = gameObject.AddComponent<ShellCraters>();
             craters.Bind(director, config, driveTerrain);
             Hide();
+        }
+
+        // body는 씬에 꺼진 채 저장되어 있어, 전차가 한 번도 나오지 않으면 TankRunningGear.OnDestroy가 불리지 않는다 (2026-11-25).
+        // 같은 장면 정리에서 body가 먼저 파괴돼도 관리 객체는 남아 있으므로 Unity null 비교를 쓰지 않는다.
+        void OnDestroy()
+        {
+            if (!(runningGear is null)) runningGear.Release();
         }
 
         void Start()

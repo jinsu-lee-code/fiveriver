@@ -40,7 +40,7 @@ namespace FiveRivers.Narrative
         TankEntranceTake take;
         float time, clockBefore;
         int nextCue;
-        bool pending, lineSaid;
+        bool pending, lineSaid, pausedLastFrame;
 
         public bool Playing { get; private set; }
         public float Elapsed => time;
@@ -102,10 +102,16 @@ namespace FiveRivers.Narrative
                 pending = false;
                 Begin();
             }
-            if (!Playing || director.Flow.Paused) return;
+            if (!Playing) return;
+            if (director.Flow.Paused)
+            {
+                pausedLastFrame = true;
+                return;
+            }
+            bool resumed = CutsceneRig.Resumed(ref pausedLastFrame);
             time += Time.deltaTime;
             var keys = Keyboard.current;
-            if (keys != null && time > SkipAfter && time < take.Duration - HandBack
+            if (keys != null && !resumed && time > SkipAfter && time < take.Duration - HandBack
                 && (keys.spaceKey.wasPressedThisFrame || keys.enterKey.wasPressedThisFrame))
                 time = take.Duration - HandBack; // skip straight to the hand-back
             float at = Mathf.Min(time, take.Duration);
@@ -142,6 +148,7 @@ namespace FiveRivers.Narrative
             // the player comes out of it looking up the road the tank is on
             var road = Vector3.Lerp(tank.RouteStart, tank.RouteHold, 0.62f) - player.transform.position;
             road.y = 0f;
+            var facingBefore = player.transform.rotation;
             if (road.sqrMagnitude > 1f) player.transform.rotation = Quaternion.LookRotation(road);
 
             var leader = points.parkSpot != null ? points.parkSpot.position : player.transform.position;
@@ -163,6 +170,7 @@ namespace FiveRivers.Narrative
                 Debug.LogWarning("[TankEntrance] take " + take.Name + " cannot play (data missing): the section starts as usual.");
                 subtitles.Say(copy.tankArrives);
                 take = null;
+                player.transform.rotation = facingBefore; // no sequence, so no unexplained turn (2026-11-25)
                 return;
             }
 
@@ -171,6 +179,7 @@ namespace FiveRivers.Narrative
             time = 0f;
             nextCue = 0;
             lineSaid = false;
+            pausedLastFrame = false;
             Playing = true;
             tank.BeginScripted();
             director.InputGate.Block(this);
