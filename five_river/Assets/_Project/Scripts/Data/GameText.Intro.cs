@@ -20,5 +20,14 @@ namespace FiveRivers.Data
         public string guideTurnLeft = "왼쪽으로 돌아라";
         public string guideTurnRight = "오른쪽으로 돌아라";
         public string guideTurnBack = "뒤로 돌아라";
+
+        // 조작 한 가지를 해냈을 때 분대장의 짧은 대답 (차례로 돌려 씀, 마지막 단계는 holdTrenchLine). 다른 대사 중이면 건너뜀.
+        public Line[] tutorialAcks =
+        {
+            new Line { speaker = "분대장", text = "그렇지.", duration = 1.4f },
+            new Line { speaker = "분대장", text = "좋아.", duration = 1.4f },
+            new Line { speaker = "분대장", text = "옳지, 그렇게.", duration = 1.6f },
+            new Line { speaker = "분대장", text = "잘했다.", duration = 1.4f },
+        };
     }
 }

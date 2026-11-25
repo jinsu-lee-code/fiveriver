@@ -35,10 +35,16 @@ namespace FiveRivers.Tutorial
         bool manualReloadPending;
         int runToken;          // 늦게 끝난 대기가 다음 회차의 학습을 끝내지 않게
         Coroutine pendingGoal;
+        // 2026-11-26 가시성: 배치 · 진행 표시 (TutorialPromptView)
+        TutorialPromptView view;
+        int lastDone;
 
         public TutorialTracker Tracker => tracker;
         // 다섯 조작을 다 익혔다. 정찰 구간은 TutorialConfig.holdBridge 뒤에 시작한다 (2026-11-26, TrenchIntroDirector가 안내).
         public event Action Completed;
+        // 화면에 보이던 안내를 해냈다 (해낸 수, 전체). 분대장의 짧은 대답은 TrenchIntroDirector가 한다.
+        // 2026-11-26: "완료" 표시와 클릭 소리는 1950년 참호 분위기와 어긋나 뺐다(진행 점이 채워지는 것으로 충분).
+        public event Action<int, int> StepDone;
 
         void Start()
         {
@@ -55,6 +61,7 @@ namespace FiveRivers.Tutorial
                 manualReloadPending = false;
             };
             weapons.LoadoutReset += () => manualReloadPending = false;
+            view = new TutorialPromptView(promptGroup, promptBox, promptText, hintText);
             promptGroup.alpha = 0f;
             remainingGroup.alpha = 0f;
         }
@@ -69,6 +76,7 @@ namespace FiveRivers.Tutorial
                 manualReloadPending = false;
                 tracker = new TutorialTracker(config.highlightAfter, config.hintAfter);
                 tracker.Completed += OnCompleted;
+                lastDone = 0;
                 player.ResetTutorialCounters();
                 active = true;
             }
@@ -101,6 +109,18 @@ namespace FiveRivers.Tutorial
             pendingGoal = null;
         }
 
+        // 보이던 안내를 해냈으면 알린다. 안내가 뜨기 전에 미리 해낸 것은 조용히 넘긴다.
+        // 판정이 어디서 보고되든 게임 루프 안에서 알리도록 Update에서 해낸 수가 늘었는지 본다.
+        void CheckStepDone()
+        {
+            if (tracker == null) return;
+            int done = tracker.DoneCount;
+            if (done <= lastDone) return;
+            lastDone = done;
+            if (promptGroup.alpha < 0.5f || director.Flow.Section != FlowSection.Tutorial) return;
+            StepDone?.Invoke(done, tracker.StepCount);
+        }
+
         void Report(TutorialStep step)
         {
             if (active && tracker != null) tracker.Report(step);
@@ -126,14 +146,16 @@ namespace FiveRivers.Tutorial
                 if (inTutorial) tracker.Tick(Time.deltaTime);
             }
 
+            CheckStepDone();
             promptGroup.alpha = Mathf.MoveTowards(promptGroup.alpha, inTutorial && !tracker.Complete ? 1f : 0f, Time.unscaledDeltaTime * 4f);
             remainingGroup.alpha = Mathf.MoveTowards(remainingGroup.alpha, leftover ? 1f : 0f, Time.unscaledDeltaTime * 4f);
 
             if (inTutorial && !tracker.Complete)
             {
                 var step = tracker.Current;
-                promptText.text = $"{Keys(step)}  {text.tutorialSteps[(int)step].prompt}";
-                hintText.text = tracker.ShowHint ? text.tutorialSteps[(int)step].hint : "";
+                view.ShowStep($"{Keys(step)}  {text.tutorialSteps[(int)step].prompt}",
+                    tracker.ShowHint ? text.tutorialSteps[(int)step].hint : "");
+                view.SetProgress(tracker.DoneCount, tracker.StepCount);
                 float pulse = tracker.Highlight ? 1f + pulseScale * Mathf.Sin(Time.unscaledTime * 6f) : 1f;
                 promptBox.localScale = Vector3.one * pulse;
             }

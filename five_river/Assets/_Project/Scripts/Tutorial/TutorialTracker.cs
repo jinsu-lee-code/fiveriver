@@ -38,6 +38,17 @@ namespace FiveRivers.Tutorial
         public float StepTime { get; private set; }
         public bool Highlight => !Complete && StepTime >= highlightAfter;
         public bool ShowHint => !Complete && StepTime >= hintAfter;
+        // 진행 표시용 (2026-11-26): 해낸 행동 수 / 전체
+        public int StepCount => Order.Length;
+        public int DoneCount
+        {
+            get
+            {
+                int n = 0;
+                foreach (bool d in done) if (d) n++;
+                return n;
+            }
+        }
 
         public event Action<TutorialStep> StepChanged;
         public event Action Completed;

@@ -1,11 +1,41 @@
 using FiveRivers.Data;
 using FiveRivers.Narrative;
+using FiveRivers.Tutorial;
 using FiveRivers.UI;
 using NUnit.Framework;
 using UnityEngine;
 
 namespace FiveRivers.Tests
 {
+    // 조작 안내 가시성 (2026-11-26 피드백): 진행 표시와 해낸 행동 수.
+    public class TutorialVisibilityTests
+    {
+        [Test]
+        public void Progress_ShowsDoneDotsAndCurrentStepNumber()
+        {
+            string p = TutorialPromptView.Progress(2, 5);
+            StringAssert.Contains("●●</color>○○○", p);
+            StringAssert.EndsWith("3 / 5", p);
+            StringAssert.EndsWith("1 / 5", TutorialPromptView.Progress(0, 5));
+            StringAssert.EndsWith("5 / 5", TutorialPromptView.Progress(5, 5), "다 끝나도 6 / 5가 되지 않는다");
+        }
+
+        [Test]
+        public void Tracker_CountsDoneSteps_IncludingOnesDoneAhead()
+        {
+            var t = new TutorialTracker(15f, 30f);
+            Assert.AreEqual(5, t.StepCount);
+            Assert.AreEqual(0, t.DoneCount);
+            t.Report(TutorialStep.Stance); // 차례보다 먼저
+            Assert.AreEqual(1, t.DoneCount);
+            Assert.AreEqual(TutorialStep.Look, t.Current);
+            t.Report(TutorialStep.Look);
+            t.Report(TutorialStep.Move);
+            Assert.AreEqual(3, t.DoneCount);
+            Assert.AreEqual(TutorialStep.ShootTarget, t.Current, "먼저 해낸 자세 단계는 건너뛴다");
+        }
+    }
+
     // 시작 컷씬(검은 화면 날짜)과 참호 방어로 잇는 안내 (2026-11-26 피드백).
     public class IntroFlowTests
     {
@@ -84,6 +114,12 @@ namespace FiveRivers.Tests
                     Assert.Greater(line.duration, 1f);
                 }
                 Assert.IsNotEmpty(text.objectiveHoldTrench);
+                Assert.IsNotEmpty(text.tutorialAcks, "조작을 해냈을 때의 분대장 대답");
+                foreach (var ack in text.tutorialAcks)
+                {
+                    Assert.IsNotEmpty(ack.text);
+                    Assert.That(ack.duration, Is.InRange(1f, 2.5f), "짧게");
+                }
                 Assert.IsNotEmpty(text.guideTurnLeft);
                 Assert.IsNotEmpty(text.guideTurnRight);
                 Assert.IsNotEmpty(text.guideTurnBack);

@@ -36,13 +36,29 @@ namespace FiveRivers.Narrative
             hasValley = TryValley(points, out valley);
             director.Flow.SectionChanged += OnSectionChanged;
             tutorial = FindAnyObjectByType<TutorialDirector>();
-            if (tutorial != null) tutorial.Completed += OnTutorialCompleted;
+            if (tutorial != null)
+            {
+                tutorial.Completed += OnTutorialCompleted;
+                tutorial.StepDone += OnTutorialStepDone;
+            }
         }
 
         void OnDestroy()
         {
             if (director != null && director.Flow != null) director.Flow.SectionChanged -= OnSectionChanged;
-            if (tutorial != null) tutorial.Completed -= OnTutorialCompleted;
+            if (tutorial == null) return;
+            tutorial.Completed -= OnTutorialCompleted;
+            tutorial.StepDone -= OnTutorialStepDone;
+        }
+
+        // 조작 하나를 해냈다: 분대장이 짧게 대답한다 (2026-11-26, "완료" 표시 · 클릭 소리 대신).
+        // 마지막 단계는 "제자리 지켜라"가 이어지므로 대답하지 않고, 다른 대사 중이면 겹치지 않게 건너뛴다.
+        void OnTutorialStepDone(int done, int total)
+        {
+            if (done >= total || subtitles.Speaking) return;
+            var acks = text.tutorialAcks;
+            if (acks == null || acks.Length == 0) return;
+            subtitles.Say(acks[(done - 1) % acks.Length]);
         }
 
         static bool TryValley(LevelPoints points, out Vector3 center)

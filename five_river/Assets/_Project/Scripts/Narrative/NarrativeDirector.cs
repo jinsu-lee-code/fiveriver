@@ -128,7 +128,9 @@ namespace FiveRivers.Narrative
                     subtitles.Clear();
                     flareLineSaid = darkLineSaid = ricochetLineSaid = false;
                     blanketBody.SetActive(false);
-                    objective.Show(text.objectiveTutorial);
+                    // 2026-11-26: 학습 중에는 목표 줄을 숨긴다 — 가운데 위 조작 안내와 같은 말이라 화면만 붐볐다.
+                    // 학습을 마치면 TrenchIntroDirector가 "참호에서 골짜기 쪽을 지켜라"를 처음 목표로 띄운다.
+                    objective.Hide();
                     break;
                 case FlowSection.Scout:
                     objective.Show(text.objectiveScout);

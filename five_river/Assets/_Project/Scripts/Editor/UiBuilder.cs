@@ -88,7 +88,9 @@ namespace FiveRivers.EditorTools
             lines[3] = Img(cross, "Right", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10, 2), UiStyle.Text, null).rectTransform;
             var interact = Txt(combat, "Interact", new Vector2(1, 0), new Vector2(-64, 18), new Vector2(360, 36), 26, UiStyle.Text, TextAlignmentOptions.BottomRight, new Vector2(1, 0));
 
-            // 튜토리얼 안내 (가운데 아래) · 남은 행동 (오른쪽 위)
+            // 튜토리얼 안내 · 남은 행동 (오른쪽 위)
+            // 2026-11-26: 안내의 실제 배치 · 크기 · 진행 표시는 실행 중 TutorialPromptView가 다시 잡는다(위쪽 가운데, 40px, 검정 78%).
+            // 여기 값은 연결용 뼈대이고, 바꿀 때는 TutorialPromptView를 고친다.
             var tutorial = Rect(combat, "Tutorial", new Vector2(0.5f, 0f), new Vector2(0, 250), new Vector2(900, 140), new Vector2(0.5f, 0f));
             var tutGroup = tutorial.gameObject.AddComponent<CanvasGroup>();
             var promptBox = Img(tutorial, "PromptBox", new Vector2(0.5f, 1f), new Vector2(0, 0), new Vector2(820, 62), UiStyle.Band, null, new Vector2(0.5f, 1f)).rectTransform;
