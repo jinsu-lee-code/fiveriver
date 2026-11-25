@@ -97,13 +97,13 @@ namespace FiveRivers.EditorTools
             g.objectiveAssault = "진지를 지켜라 · 밝을 때 엄폐해서 쏴라";
             g.objectiveSilence = "탄약 상자에서 탄약을 보충하라";
             g.objectiveTankMove = "측면 둔덕으로 이동하라";
-            g.objectiveTankFire = "바주카로 전차 옆면을 노려라";
+            g.objectiveTankFire = "로켓포로 전차 옆면을 노려라";
             g.objectiveAllySupport = "엎드려라";
 
             g.resupplyPrompt = "탄약 보충";
-            g.bazookaPrompt = "바주카 꺼내기";
-            g.m1Name = "M1 개런드";
-            g.bazookaName = "M20 바주카";
+            g.bazookaPrompt = "로켓포 꺼내기";
+            g.m1Name = "M1 소총";
+            g.bazookaName = "M20 3.5인치 로켓포";
 
             g.scoutSpotted = Line("분대장", "앞에 움직임 있다! 쏴!", 2.5f, "");
             g.flareUp = Line("분대장", "조명탄이다! 엄폐하고 쏴!", 2.8f, "");

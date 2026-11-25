@@ -88,7 +88,7 @@ namespace FiveRivers.Data
         public string letterClose = "[Enter]  편지 접기";
         public string missionReturn = "[Enter]  처음 화면으로";
         public string seokguLetter = "여보, 오늘 밤에도 하늘에 해가 몇 번이나 떴다 졌소.\n만수가 제 얘기도 한 줄 써 달라기에 그러마 했소.\n오늘 새로 온 아이 이름은 태석이오.\n이름을 잊을까 봐, 아침이 가기 전에 적어 두오.\n\n다부동에서, 석구";
-        public Line mansuLetter = new Line { speaker = "최만수", text = "형님, 편지 쓰실 때 제 얘기도 한 줄 써 주이소. 제가 글을 모르가지고예.", duration = 5f };
+        public Line mansuLetter = new Line { speaker = "최만수", text = "형님, 편지 쓰실 때 제 얘기도 한 줄 써 주이소. 제가 글을 몰라가꼬예.", duration = 5f };
         public Line mansuMorning = new Line { speaker = "최만수", text = "아침 되면… 좀 조용해지겠지예.", duration = 3f };
         public Line westWarning = new Line { speaker = "박용팔", text = "옆구리다! 서쪽이다잉!", duration = 3f };
         public Line mansuLost = new Line { speaker = "박용팔", text = "만수야!", duration = 2f };

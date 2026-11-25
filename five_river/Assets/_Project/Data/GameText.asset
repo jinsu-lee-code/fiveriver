@@ -33,8 +33,7 @@ MonoBehaviour:
       \uCC38\uD638 \uC55E \uD45C\uC801\uC5D0 \uB9DE\uCD94\uACE0, \uC67C\uCABD \uBC84\uD2BC\uC73C\uB85C
       \uC3D8\uC138\uC694."
   - prompt: "\uC7A5\uC804\uD55C\uB2E4"
-    hint: "M1\uC740 8\uBC1C\uC744 \uB2E4 \uC3D8\uBA74 \uD074\uB9BD\uC774 \uD280\uC5B4\uB098\uC635\uB2C8\uB2E4.
-      \uB0A8\uC740 \uD0C4\uC774 \uC788\uC5B4\uB3C4 \uC7A5\uC804\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+    hint: "M1\uC740 8\uBC1C\uC744 \uB2E4 \uC3D8\uBA74 \uD074\uB9BD\uC774 \uD280\uC5B4\uB098\uC635\uB2C8\uB2E4. \uB0A8\uC740 \uD0C4\uC774 \uC788\uC744 \uB54C \uC7A5\uC804\uD558\uBA74 \uB0A8\uC740 \uD074\uB9BD\uC744 \uBE7C\uACE0 \uC0C8 \uD074\uB9BD\uC744 \uB123\uC2B5\uB2C8\uB2E4."
   tutorialRemainingHeader: "\uC775\uD600 \uB458 \uC870\uC791"
   mouseKeyLabel: "\uB9C8\uC6B0\uC2A4"
   objectiveLabel: "\uBAA9\uD45C"
@@ -45,17 +44,17 @@ MonoBehaviour:
   combatDarkHint: "\uC5B4\uB460: \uC774\uB3D9\xB7\uD0C4\uC57D \uBCF4\uCDA9"
   objectiveSilence: "\uD0C4\uC57D \uC0C1\uC790\uC5D0\uC11C \uD0C4\uC57D\uC744 \uBCF4\uCDA9\uD558\uB77C"
   objectiveTankMove: "\uC624\uB978\uCABD \uCC38\uD638 \uB05D\uC73C\uB85C \uC774\uB3D9\uD558\uB77C"
-  objectiveTankEquip: "2 \uD0A4\uB85C \uBC14\uC8FC\uCE74\uB97C \uC7A5\uBE44\uD558\uC2ED\uC2DC\uC624"
-  objectiveTankFire: "\uBC14\uC8FC\uCE74\uB85C \uC804\uCC28 \uC606\uBA74\uC744 \uB178\uB824\uB77C"
+  objectiveTankEquip: "2 \uD0A4\uB85C \uB85C\uCF13\uD3EC\uB97C \uAEBC\uB0B4\uB77C"
+  objectiveTankFire: "\uB85C\uCF13\uD3EC\uB85C \uC804\uCC28 \uC606\uBA74\uC744 \uB178\uB824\uB77C"
   objectiveTankFinish: "\uAC19\uC740 \uC606\uBA74\uC5D0 \uD55C \uBC1C \uB354 \uC3F4\uB77C"
   objectiveTankWait: "\uC5C4\uD3D0\uD558\uBA70 \uC804\uCC28\uC758 \uC811\uADFC\uC744
     \uAE30\uB2E4\uB824\uB77C"
   objectiveAllySupport: "\uC5CE\uB4DC\uB824\uB77C"
   objectiveDawn: "\uB4A4\uCABD \uBCF4\uCDA9 \uC778\uC6D0\uC744 \uD655\uC778\uD558\uB77C"
   resupplyPrompt: "\uD0C4\uC57D \uBCF4\uCDA9"
-  bazookaPrompt: "\uBC14\uC8FC\uCE74 \uAEBC\uB0B4\uAE30"
-  m1Name: "M1 \uAC1C\uB7F0\uB4DC"
-  bazookaName: "M20 \uBC14\uC8FC\uCE74"
+  bazookaPrompt: "\uB85C\uCF13\uD3EC \uAEBC\uB0B4\uAE30"
+  m1Name: "M1 \uC18C\uCD1D"
+  bazookaName: "M20 3.5\uC778\uCE58 \uB85C\uCF13\uD3EC"
   scoutSpotted:
     speaker: "\uBD84\uB300\uC7A5"
     text: "\uC55E\uC5D0 \uC6C0\uC9C1\uC784 \uC788\uB2E4! \uC3F4!"
@@ -88,8 +87,7 @@ MonoBehaviour:
     voice: 
   tankArrives:
     speaker: "\uBD84\uB300\uC7A5"
-    text: "\uC804\uCC28\uB2E4! \uC815\uBA74\uC740 \uC548 \uB3FC, \uC606\uC73C\uB85C
-      \uB3CC\uC544!"
+    text: "\uC804\uCC28\uB2E4! \uC815\uBA74\uC5D0 \uC11C\uC9C0 \uB9C8, \uC606\uC73C\uB85C \uB3CC\uC544!"
     duration: 3.5
     voice: 
   tankRicochet:
@@ -127,7 +125,7 @@ MonoBehaviour:
   seokguLetter: "여보, 오늘 밤에도 하늘에 해가 몇 번이나 떴다 졌소.\n만수가 제 얘기도 한 줄 써 달라기에 그러마 했소.\n오늘 새로 온 아이 이름은 태석이오.\n이름을 잊을까 봐, 아침이 가기 전에 적어 두오.\n\n다부동에서, 석구"
   mansuLetter:
     speaker: "최만수"
-    text: "형님, 편지 쓰실 때 제 얘기도 한 줄 써 주이소. 제가 글을 모르가지고예."
+    text: "\uD615\uB2D8, \uD3B8\uC9C0 \uC4F0\uC2E4 \uB54C \uC81C \uC598\uAE30\uB3C4 \uD55C \uC904 \uC368 \uC8FC\uC774\uC18C. \uC81C\uAC00 \uAE00\uC744 \uBAB0\uB77C\uAC00\uAF2C\uC608."
     duration: 5
     voice: ""
   mansuMorning:
