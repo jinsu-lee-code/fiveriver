@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Linq;
 using FiveRivers.Combat;
 using FiveRivers.Core;
@@ -31,8 +33,12 @@ namespace FiveRivers.Tutorial
         TutorialTracker tracker;
         bool active; // 추적 중 (S1 또는 시간 초과 뒤 남은 힌트)
         bool manualReloadPending;
+        int runToken;          // 늦게 끝난 대기가 다음 회차의 학습을 끝내지 않게
+        Coroutine pendingGoal;
 
         public TutorialTracker Tracker => tracker;
+        // 다섯 조작을 다 익혔다. 정찰 구간은 TutorialConfig.holdBridge 뒤에 시작한다 (2026-11-26, TrenchIntroDirector가 안내).
+        public event Action Completed;
 
         void Start()
         {
@@ -55,8 +61,11 @@ namespace FiveRivers.Tutorial
 
         void OnSectionChanged(FlowTransition t)
         {
+            if (t.To != FlowSection.Tutorial) CancelPendingGoal();
             if (t.To == FlowSection.Tutorial)
             {
+                CancelPendingGoal();
+                runToken++;
                 manualReloadPending = false;
                 tracker = new TutorialTracker(config.highlightAfter, config.hintAfter);
                 tracker.Completed += OnCompleted;
@@ -72,7 +81,24 @@ namespace FiveRivers.Tutorial
         void OnCompleted()
         {
             active = false;
-            director.Flow.ReportGoalMet(FlowSection.Tutorial);
+            Completed?.Invoke();
+            if (config.holdBridge <= 0f) director.Flow.ReportGoalMet(FlowSection.Tutorial);
+            else pendingGoal = StartCoroutine(ReportGoalLater(runToken, config.holdBridge));
+        }
+
+        // 게임 시간으로 기다린다 (일시정지 중에는 멈춘다).
+        IEnumerator ReportGoalLater(int token, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            pendingGoal = null;
+            if (token == runToken) director.Flow.ReportGoalMet(FlowSection.Tutorial);
+        }
+
+        void CancelPendingGoal()
+        {
+            if (pendingGoal == null) return;
+            StopCoroutine(pendingGoal);
+            pendingGoal = null;
         }
 
         void Report(TutorialStep step)
@@ -83,7 +109,8 @@ namespace FiveRivers.Tutorial
         void Update()
         {
             var flow = director.Flow;
-            bool inTutorial = active && flow.Section == FlowSection.Tutorial;
+            // 첫 안내는 분대장의 첫 대사를 들은 뒤에 띄운다 (TutorialConfig.promptDelay). 그동안 정체 시간도 세지 않는다.
+            bool inTutorial = active && flow.Section == FlowSection.Tutorial && flow.SectionTime >= config.promptDelay;
             bool leftover = active && flow.Section != FlowSection.Tutorial && tracker != null && !tracker.Complete;
             // The practice board stands 18 m in front of the trench. It stayed there for the whole night, a black
             // man-shaped board in the middle of the fighting (2026-11-15). It is kept only while it is needed: on the

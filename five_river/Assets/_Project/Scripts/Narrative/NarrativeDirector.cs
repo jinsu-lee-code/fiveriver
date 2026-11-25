@@ -92,6 +92,8 @@ namespace FiveRivers.Narrative
             mansuCut.Configure(director, player, objective, text);
             blanketCut = gameObject.AddComponent<BlanketCutDirector>();
             blanketCut.Configure(director, player);
+            // opening of the run: squad leader's first words, the "hold your place" beat and the facing guide (2026-11-26)
+            gameObject.AddComponent<TrenchIntroDirector>().Configure(director, subtitles, objective, text, points);
         }
 
         void OnRetry(FlowCheckpoint checkpoint)
