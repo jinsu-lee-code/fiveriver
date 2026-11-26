@@ -593,7 +593,7 @@ namespace FiveRivers.Combat
             float w = graphWeight;
             if (w <= 0f || weapon == null || !armsSnapped) return;
             if (!TrenchTrack(out var position, out var rotation, out float gripLeft, out float gripRight)) return;
-            if (unslinging && twoHanded && blending && !blendingIn) Unsling(weapon, w, position, rotation);
+            if (unslinging && twoHanded && blending) Unsling(weapon, w, position, rotation);   // (unslinging is only set easing out)
             else Hold(weapon, w, position, rotation, gripLeft, gripRight);
         }
 

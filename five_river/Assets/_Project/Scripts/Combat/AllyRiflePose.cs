@@ -500,7 +500,7 @@ namespace FiveRivers.Combat
             Solve(upper, fore, hand, target, handRotation, Vector3.zero, null);
 
         // (2026-11-25) The last place each hand was asked for this frame, so a rifle the arms cannot reach can be brought in.
-        struct Request { public int frame; public Vector3 target; public Quaternion rotation; }
+        struct Request { public int frame; public Vector3 target; }
         static readonly System.Collections.Generic.Dictionary<Transform, Request> requests = new System.Collections.Generic.Dictionary<Transform, Request>();
 
         public static bool BringIntoReach = true;
@@ -535,15 +535,14 @@ namespace FiveRivers.Combat
             if (!AskedThisFrame(leftUpper, leftHand, out var lTarget) || !AskedThisFrame(rightUpper, rightHand, out var rTarget)) return false;
             // the grips in the rifle's frame: they move with it
             var lLocal = weapon.InverseTransformPoint(lTarget); var rLocal = weapon.InverseTransformPoint(rTarget);
-            // (the wrists as they were left: a fitted solve may have stopped short of the asked turn)
-            var lRot = Quaternion.Inverse(weapon.rotation) * leftHand.rotation; var rRot = Quaternion.Inverse(weapon.rotation) * rightHand.rotation;
-            float lReach = (Vector3.Distance(leftUpper.position, leftFore.position) + Vector3.Distance(leftFore.position, leftHand.position)) * ReachShare;
-            float rReach = (Vector3.Distance(rightUpper.position, rightFore.position) + Vector3.Distance(rightFore.position, rightHand.position)) * ReachShare;
+            var lShoulder = leftUpper.position; var rShoulder = rightUpper.position;   // the rifle moves, the shoulders do not
+            float lReach = (Vector3.Distance(lShoulder, leftFore.position) + Vector3.Distance(leftFore.position, leftHand.position)) * ReachShare;
+            float rReach = (Vector3.Distance(rShoulder, rightFore.position) + Vector3.Distance(rightFore.position, rightHand.position)) * ReachShare;
             bool moved = false;
             for (int i = 0; i < 6; i++)
             {
-                var le = Excess(leftUpper.position, weapon.TransformPoint(lLocal), lReach);
-                var re = Excess(rightUpper.position, weapon.TransformPoint(rLocal), rReach);
+                var le = Excess(lShoulder, weapon.TransformPoint(lLocal), lReach);
+                var re = Excess(rShoulder, weapon.TransformPoint(rLocal), rReach);
                 if (le.sqrMagnitude < 1e-6f && re.sqrMagnitude < 1e-6f) break;
                 // both short: halfway each, and again (they may pull apart)
                 var move = le.sqrMagnitude > 1e-6f && re.sqrMagnitude > 1e-6f ? (le + re) * 0.5f : le + re;
@@ -551,10 +550,15 @@ namespace FiveRivers.Combat
                 moved = true;
             }
             if (!moved) return false;
+            // the wrists as they were left (a fitted solve may have stopped short of the asked turn); moving the rifle did not turn it
+            var lRot = Quaternion.Inverse(weapon.rotation) * leftHand.rotation; var rRot = Quaternion.Inverse(weapon.rotation) * rightHand.rotation;
             Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(lLocal), weapon.rotation * lRot, Vector3.zero, null);
             Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(rLocal), weapon.rotation * rRot, Vector3.zero, null);
             return true;
         }
+
+        // this man's rifle and arms
+        public bool KeepInReach() => KeepInReach(weapon, leftUpper, leftFore, leftHand, rightUpper, rightFore, rightHand);
 
         // how far past reach a grip is, along shoulder -> grip (zero within reach)
         static Vector3 Excess(Vector3 shoulder, Vector3 grip, float reach)
@@ -565,7 +569,7 @@ namespace FiveRivers.Combat
 
         static void Solve(Transform upper, Transform fore, Transform hand, Vector3 target, Quaternion rotation, Vector3 elbowDirection, AlliedRifleFit fit, bool palmContact = false)
         {
-            requests[hand] = new Request { frame = Time.frameCount, target = target, rotation = rotation };
+            requests[hand] = new Request { frame = Time.frameCount, target = target };
             float a = Vector3.Distance(upper.position, fore.position);
             float b = Vector3.Distance(fore.position, hand.position);
             var delta = target - upper.position;

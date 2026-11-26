@@ -92,7 +92,6 @@ namespace FiveRivers.Narrative
                 along.sqrMagnitude > 0.04f ? Quaternion.LookRotation(along.normalized, Vector3.up) : blanketBody.transform.rotation);
         }
 
-
         // ---- the squad leader's lines have a man saying them (2026-11-18) ----
         // "분대장" gave every order of the night and was nobody on screen. The rifleman on the player's right in the
         // trench (Ally_2) is the squad leader: when one of his lines starts and he is not in a fight (the lull, the

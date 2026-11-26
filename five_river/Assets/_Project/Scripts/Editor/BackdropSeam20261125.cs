@@ -1,7 +1,5 @@
 using System.IO;
-using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace FiveRivers.EditorTools
@@ -73,12 +71,10 @@ namespace FiveRivers.EditorTools
             mesh.RecalculateBounds();
             EditorUtility.SetDirty(mesh);
             AssetDatabase.SaveAssets();
-            // the colour: the land round the map was a pale beige (0.76, 0.72, 0.65 on its texture) while the terrain's
-            // layers average a dark soil brown, so the terrain showed as a dark card sunk in it. The backdrop's tint is set
-            // so its texture comes out at the terrain's mean colour (the fog still pales it with distance).
-            string colourNote = "colour unchanged (the texture already comes out at the terrain mean)";
+            // the colour: the backdrop's tint is kept at its own (0.76, 0.72, 0.65): its texture already comes out at the terrain's
+            // mean colour (the fog still pales it with distance)
             var bm = go.GetComponent<Renderer>().sharedMaterial; var c0 = new Color(.76f, .72f, .65f); bm.SetColor("_BaseColor", c0); bm.SetColor("_Color", c0); EditorUtility.SetDirty(bm);
-            var msg = $"backdrop seam: {splits} long sides split near the map ({original.vertexCount} -> {dst.Length} vertices), {moved} vertices let down within {SeamWidth} m of the terrain (most {most:0.0} m), from {OriginalPath}; {colourNote}";
+            var msg = $"backdrop seam: {splits} long sides split near the map ({original.vertexCount} -> {dst.Length} vertices), {moved} vertices let down within {SeamWidth} m of the terrain (most {most:0.0} m), from {OriginalPath}; colour unchanged (the texture already comes out at the terrain mean)";
             File.WriteAllText("Temp/backdrop_seam.txt", msg);
             Debug.Log("[BackdropSeam20261125] " + msg);
             return msg;
@@ -139,48 +135,6 @@ namespace FiveRivers.EditorTools
             m.subMeshCount = subs.Length;
             for (int sm = 0; sm < subs.Length; sm++) m.SetTriangles(subs[sm], sm);
             return total;
-        }
-
-        static Color MeanOf(Texture2D tex)
-        {
-            if (tex == null) return Color.white;
-            // read through a small render target (the texture may not be readable)
-            var rt = RenderTexture.GetTemporary(64, 64, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
-            Graphics.Blit(tex, rt);
-            var prev = RenderTexture.active; RenderTexture.active = rt;
-            var read = new Texture2D(64, 64, TextureFormat.RGBA32, false, false);
-            read.ReadPixels(new Rect(0, 0, 64, 64), 0, 0); read.Apply();
-            RenderTexture.active = prev; RenderTexture.ReleaseTemporary(rt);
-            var px = read.GetPixels(); Object.DestroyImmediate(read);
-            Color sum = Color.clear; foreach (var p in px) sum += p.linear;
-            return sum / px.Length;   // linear
-        }
-
-        static string MatchColour(Material backdrop, Terrain terrain)
-        {
-            var td = terrain.terrainData;
-            var maps = td.GetAlphamaps(0, 0, td.alphamapWidth, td.alphamapHeight);
-            var layers = td.terrainLayers;
-            var weight = new float[layers.Length];
-            int w = td.alphamapWidth, h = td.alphamapHeight;
-            // weigh the layers by how much of the ground near the edge (outer fifth) they cover: that is what meets the backdrop
-            for (int y = 0; y < h; y++)
-                for (int x = 0; x < w; x++)
-                {
-                    float e = Mathf.Min(Mathf.Min(x, w - 1 - x) / (float)w, Mathf.Min(y, h - 1 - y) / (float)h);
-                    if (e > .2f) continue;
-                    for (int l = 0; l < layers.Length; l++) weight[l] += maps[y, x, l];
-                }
-            float total = weight.Sum();
-            Color ground = Color.clear;
-            for (int l = 0; l < layers.Length; l++)
-                if (layers[l] != null && total > 0f) ground += MeanOf(layers[l].diffuseTexture) * (Color)layers[l].diffuseRemapMax * (weight[l] / total);
-            var tex = MeanOf(backdrop.GetTexture("_BaseMap") as Texture2D);
-            var tint = new Color(Mathf.Clamp01(ground.r / Mathf.Max(.01f, tex.r)), Mathf.Clamp01(ground.g / Mathf.Max(.01f, tex.g)), Mathf.Clamp01(ground.b / Mathf.Max(.01f, tex.b)), 1f).gamma;
-            Undo.RecordObject(backdrop, "Backdrop Seam");
-            backdrop.SetColor("_BaseColor", tint); backdrop.SetColor("_Color", tint);
-            EditorUtility.SetDirty(backdrop);
-            return $"terrain edge mean {ground} (linear), backdrop texture mean {tex}, backdrop tint now {tint}";
         }
     }
 }

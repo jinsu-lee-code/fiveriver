@@ -61,9 +61,8 @@ namespace FiveRivers.EditorTools
                 go.name = old.name + Suffix;
                 go.transform.SetPositionAndRotation(new Vector3(old.transform.position.x, foot, old.transform.position.z), Quaternion.Euler(0f, old.transform.eulerAngles.y + (float)rng.NextDouble() * 40f, 0f));
                 float s = Mathf.Clamp(h / pineHeight[v], .25f, 2.2f);
-                go.transform.localScale = Vector3.one;
-                go.transform.localScale = new Vector3(s, s, s);
-                if (go.transform.parent != null) { var ps = go.transform.parent.lossyScale; go.transform.localScale = new Vector3(s / ps.x, s / ps.y, s / ps.z); }
+                var ps = go.transform.parent != null ? go.transform.parent.lossyScale : Vector3.one;   // s in the world
+                go.transform.localScale = new Vector3(s / ps.x, s / ps.y, s / ps.z);
                 RedPineSetup20261125.TuneLods(go);
                 GameObjectUtility.SetStaticEditorFlags(go, GameObjectUtility.GetStaticEditorFlags(old));
                 foreach (var r in rs) { Undo.RecordObject(r, "Map Pines"); r.enabled = false; hidden++; }

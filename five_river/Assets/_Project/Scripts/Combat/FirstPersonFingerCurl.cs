@@ -355,9 +355,13 @@ namespace FiveRivers.Combat
             float Depth(Vector3 g)
             {
                 Bones(g, out var p2, out var p3, out var pt);
-                float d = 0f;
-                foreach (var p in new[] { (f.p0 + p2) * 0.5f, p2, (p2 + p3) * 0.5f, p3, (p3 + pt) * 0.5f, pt }) d = Mathf.Max(d, f.t - Sdf(h, p));
-                return d;
+                // (the six points along the finger one by one: an array here was made twice a frame while held)
+                float d = Mathf.Max(0f, f.t - Sdf(h, (f.p0 + p2) * 0.5f));
+                d = Mathf.Max(d, f.t - Sdf(h, p2));
+                d = Mathf.Max(d, f.t - Sdf(h, (p2 + p3) * 0.5f));
+                d = Mathf.Max(d, f.t - Sdf(h, p3));
+                d = Mathf.Max(d, f.t - Sdf(h, (p3 + pt) * 0.5f));
+                return Mathf.Max(d, f.t - Sdf(h, pt));
             }
             // coarse on taking hold (or when lost), then a small search round last frame's answer
             Vector3 best = h.triggerAngles; float bestCost = Cost(best);

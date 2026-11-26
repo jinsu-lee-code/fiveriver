@@ -51,10 +51,9 @@ namespace FiveRivers.Narrative
         bool arrivalStarted;
         Transform climber;
         Animator climberAnimator;
-        // seconds into Park's last line before the recruit moves, and how much longer the scene is held for it
         // the river beat at the end (2026-11-25): how long the view is drawn to the river, how fast, how long it stays after
         public static float RiverLookSeconds = 3.2f, RiverTurnSpeed = 38f, RiverHoldAfter = 2.4f;
-        Vector3 river; float riverLookUntil; int riverLine;
+        Vector3 river; float riverLookUntil; bool riverCrossSaid;
         Transform riverPoint;
 
         // where the Nakdong shows (the scene's RiverLookPoint); if the river was not laid, down the valley to the south-west
@@ -267,7 +266,7 @@ namespace FiveRivers.Narrative
                     riverLookUntil = Time.time + RiverLookSeconds;
                     allies.Hold(river);   // the squad turns from the newcomer to the river
                     nextLineAt = Time.time + copy.parkRiverSeen.duration + .4f;
-                    riverLine = 1;
+                    riverCrossSaid = false;
                     arrival = Arrival.Closing;
                     break;
                 case Arrival.Closing:
@@ -279,11 +278,11 @@ namespace FiveRivers.Narrative
                     }
                     if (Time.time < riverLookUntil) player.LookToward(river + Vector3.up * 6f, RiverTurnSpeed * Time.deltaTime);
                     if (Time.time < nextLineAt) break;
-                    if (riverLine == 1)
+                    if (!riverCrossSaid)
                     {
                         subtitles.Say(copy.parkRiverCross);
                         nextLineAt = Time.time + copy.parkRiverCross.duration + RiverHoldAfter;
-                        riverLine = 2;
+                        riverCrossSaid = true;
                     }
                     else flow.ReportGoalMet(FlowSection.Dawn);
                     break;

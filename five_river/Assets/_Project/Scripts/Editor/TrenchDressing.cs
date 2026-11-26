@@ -34,11 +34,11 @@ namespace FiveRivers.EditorTools
         // firing places along the front wall (squad, Park, the player) and other short runs of planks; x ranges
         static readonly (float a, float b)[] FrontPlanks = { };
         static readonly (float a, float b)[] RearPlanksExtra = { };
-        const float NicheEndMargin = 1.5f;
+        const float NicheEndMargin = 1.5f;   // niche panels stop this far short of the trench ends (there they stood out of the ramp)
         // 2026-11-25: where the sandbags stay — the firing places on the parapet (Ally_1, Park, the player, Ally_2, Ally_3
         // and the bazooka) and the ammunition niches in the parados
         public static readonly float[] FiringPlaces = { -14f, -6.5f, 0f, 11f, 16.5f };
-        public static readonly float[] Niches = { 0f, 5f, 18.5f };   // niche panels stop this far short of the trench ends (there they stood out of the ramp)
+        public static readonly float[] Niches = { 0f, 5f, 18.5f };
 
         [MenuItem("FiveRivers/Setup/Trench Dressing (Existing Assets)")]
         public static string Apply()
