@@ -25,7 +25,10 @@ namespace FiveRivers.Environment
                 else if (child.name == "StreamWater")
                 {
                     var r = child.GetComponent<Renderer>();
-                    if (r != null) water = r.material; // an instance: the asset is not written to while playing
+                    // 2026-11-25: the stream's water is the URP 3D sample's flowing surface (it moves by itself, no main
+                    // texture to scroll; setting the offset of a material without one logs an error every frame)
+                    if (r != null && r.sharedMaterial != null && HasMainTexture(r.sharedMaterial))
+                        water = r.material; // an instance: the asset is not written to while playing
                 }
             }
             trees = list.ToArray();
@@ -50,6 +53,14 @@ namespace FiveRivers.Environment
                 trees[i].localRotation = Quaternion.Euler(lean * 0.35f, 0f, -lean) * rest[i]; // leaning about the foot of the trunk
             }
             if (water != null) water.mainTextureOffset = Ripple * t;
+        }
+
+        static bool HasMainTexture(Material m)
+        {
+            var shader = m.shader;
+            for (int i = 0; i < shader.GetPropertyCount(); i++)
+                if ((shader.GetPropertyFlags(i) & UnityEngine.Rendering.ShaderPropertyFlags.MainTexture) != 0 || shader.GetPropertyName(i) == "_MainTex") return true;
+            return false;
         }
 
         void OnDestroy()
