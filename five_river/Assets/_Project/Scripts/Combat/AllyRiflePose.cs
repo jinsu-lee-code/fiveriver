@@ -499,8 +499,73 @@ namespace FiveRivers.Combat
         public static void SolveArm(Transform upper, Transform fore, Transform hand, Vector3 target, Quaternion handRotation) =>
             Solve(upper, fore, hand, target, handRotation, Vector3.zero, null);
 
+        // (2026-11-25) The last place each hand was asked for this frame, so a rifle the arms cannot reach can be brought in.
+        struct Request { public int frame; public Vector3 target; public Quaternion rotation; }
+        static readonly System.Collections.Generic.Dictionary<Transform, Request> requests = new System.Collections.Generic.Dictionary<Transform, Request>();
+
+        public static bool BringIntoReach = true;
+        public static float ReachShare = 0.995f;   // of the arm's full length: the farthest a grip may be (a hair short of locking the elbow)
+
+        // 2026-11-25 (고지 출발 손): the grip this hand was last asked for this frame, if the hand is still on its way there
+        // (on it, or stopped short of it straight out from the shoulder). AllyPoseFade remembers this, not where the hand
+        // stopped short, so the fade and KeepInReach after it aim at the same grip. A grip asked before something else moved
+        // the rifle and the arm again this frame (a clip easing out, AllyClipPlayer.Hold) is not where he holds it: measured
+        // at the hill start, KeepInReach put both hands on such a grip, 53-64 cm off the rifle.
+        public static bool AskedThisFrame(Transform upper, Transform hand, out Vector3 target)
+        {
+            target = default;
+            if (upper == null || hand == null || !requests.TryGetValue(hand, out var r) || r.frame != Time.frameCount) return false;
+            float off = Vector3.Distance(hand.position, r.target);
+            float beyond = Vector3.Distance(upper.position, r.target) - Vector3.Distance(upper.position, hand.position);
+            if (off > 0.005f && off > beyond + 0.02f) return false;
+            target = r.target;
+            return true;
+        }
+
+        // 2026-11-25 (인계 남은 일 3, 1배속 측정): changing between ways of holding (the crouched run's port arms, the standing aim,
+        // the hill start's run) the rifle is mixed in the body's frame while the body itself crouches or stands up, so for 0.1-0.4 s
+        // the rifle hung where the arms could not reach: grips 1.2-1.5 arm lengths from the shoulder, the left hand 13-17 cm and the
+        // right 24 cm off it. After everything has placed rifle and hands this frame: if a hand asked for a grip it cannot reach, the
+        // rifle (and both grips with it) comes in toward the shoulders until both are in reach, and the arms are solved again.
+        // A frame where both reach is left as it is. False when there was nothing to do.
+        public static bool KeepInReach(Transform weapon, Transform leftUpper, Transform leftFore, Transform leftHand,
+            Transform rightUpper, Transform rightFore, Transform rightHand)
+        {
+            if (!BringIntoReach || weapon == null || leftUpper == null|| leftFore == null || leftHand == null || rightUpper == null || rightFore == null || rightHand == null) return false;
+            if (!AskedThisFrame(leftUpper, leftHand, out var lTarget) || !AskedThisFrame(rightUpper, rightHand, out var rTarget)) return false;
+            // the grips in the rifle's frame: they move with it
+            var lLocal = weapon.InverseTransformPoint(lTarget); var rLocal = weapon.InverseTransformPoint(rTarget);
+            // (the wrists as they were left: a fitted solve may have stopped short of the asked turn)
+            var lRot = Quaternion.Inverse(weapon.rotation) * leftHand.rotation; var rRot = Quaternion.Inverse(weapon.rotation) * rightHand.rotation;
+            float lReach = (Vector3.Distance(leftUpper.position, leftFore.position) + Vector3.Distance(leftFore.position, leftHand.position)) * ReachShare;
+            float rReach = (Vector3.Distance(rightUpper.position, rightFore.position) + Vector3.Distance(rightFore.position, rightHand.position)) * ReachShare;
+            bool moved = false;
+            for (int i = 0; i < 6; i++)
+            {
+                var le = Excess(leftUpper.position, weapon.TransformPoint(lLocal), lReach);
+                var re = Excess(rightUpper.position, weapon.TransformPoint(rLocal), rReach);
+                if (le.sqrMagnitude < 1e-6f && re.sqrMagnitude < 1e-6f) break;
+                // both short: halfway each, and again (they may pull apart)
+                var move = le.sqrMagnitude > 1e-6f && re.sqrMagnitude > 1e-6f ? (le + re) * 0.5f : le + re;
+                weapon.position -= move;
+                moved = true;
+            }
+            if (!moved) return false;
+            Solve(leftUpper, leftFore, leftHand, weapon.TransformPoint(lLocal), weapon.rotation * lRot, Vector3.zero, null);
+            Solve(rightUpper, rightFore, rightHand, weapon.TransformPoint(rLocal), weapon.rotation * rRot, Vector3.zero, null);
+            return true;
+        }
+
+        // how far past reach a grip is, along shoulder -> grip (zero within reach)
+        static Vector3 Excess(Vector3 shoulder, Vector3 grip, float reach)
+        {
+            var d = grip - shoulder; float m = d.magnitude;
+            return m > reach + 0.001f ? d * ((m - reach) / m) : Vector3.zero;
+        }
+
         static void Solve(Transform upper, Transform fore, Transform hand, Vector3 target, Quaternion rotation, Vector3 elbowDirection, AlliedRifleFit fit, bool palmContact = false)
         {
+            requests[hand] = new Request { frame = Time.frameCount, target = target, rotation = rotation };
             float a = Vector3.Distance(upper.position, fore.position);
             float b = Vector3.Distance(fore.position, hand.position);
             var delta = target - upper.position;

@@ -63,7 +63,7 @@ namespace FiveRivers.Combat
             || (animator.IsInTransition(0) && animator.GetNextAnimatorStateInfo(0).shortNameHash == id);
         static readonly int RunRifleId = Animator.StringToHash("Run_Rifle");
         static readonly int CrouchRunRifleId = Animator.StringToHash("CrouchRun_Rifle");
-        Transform rightHand, leftHand;
+        Transform rightHand, leftHand, leftUpper, leftFore, rightUpper, rightFore;
         Quaternion restingRotation;
         Vector3 defensiveForward;
         EnemyAgent target;
@@ -131,7 +131,9 @@ namespace FiveRivers.Combat
             restingRotation = Quaternion.LookRotation(defensiveForward, Vector3.up);
             rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-            rifleFit = animator.GetComponent<AlliedRifleFit>();
+            leftUpper = animator.GetBoneTransform(HumanBodyBones.LeftUpperArm); leftFore = animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
+            rightUpper = animator.GetBoneTransform(HumanBodyBones.RightUpperArm); rightFore = animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
+            rifleFit =animator.GetComponent<AlliedRifleFit>();
             riflePose = new AllyRiflePose(animator, transform, weapon);
             poseFade = new AllyPoseFade(animator, transform, weapon, HoldFadeSeconds);
             director.Flow.SectionChanged += OnSectionChanged;
@@ -315,6 +317,10 @@ namespace FiveRivers.Combat
             if (pending || Time.time < nextShot || Quaternion.Angle(transform.rotation, aimRotation) > 8f) return;
             // still coming up from the low wait to one knee (AllyClipPlayer): the rifle is not at his shoulder yet
             if (Clips != null && Clips.HoldsFire) return;
+            // 2026-11-25 (고지 출발 손, 1배속 측정): still standing up into the standing aim (Posture's 0.3 s cross-fade from a
+            // crouch or the crouched run): the shot's 0.05 s cross-fade to Fire_Stand finished the rise in one or two frames,
+            // the whole body and rifle 37 cm up at once. He fires once he is up.
+            if (StandsToFire && StateWeight(AimStandId) + StateWeight(FireStandId) < 0.95f) return;
             if (!suppressing && !CanSee(target)) { target = FindTarget(); nextShot = Time.time + 0.25f; return; }
             if (StandsToFire) animator.CrossFadeInFixedTime(FireStandId, 0.05f, 0, 0f);
             else animator.SetTrigger(FireId);
@@ -521,12 +527,16 @@ namespace FiveRivers.Combat
             if (wasShouldering && !Shouldering && !StandsToFire && (InState(AimStandId) || InState(FireStandId)))
                 animator.CrossFadeInFixedTime(IdleStandId, 0.3f);
             // going into or out of a clip: what was done above is kept in proportion (nothing when no clip plays)
-            if (Clips != null) Clips.HoldRifle(weapon);
+            if (Clips != null) Clips.HoldRifle(weapon, PoseFadeClock.BringsIntoReach(holdMode));
             if (!engaged && (Clips == null || Clips.RifleWeight <= 0f)
                 && (director.Flow.Section == FlowSection.Title || director.Flow.Section == FlowSection.Tutorial))
                 riflePose.LookAt(transform.position + defensiveForward * 60f + Vector3.up * 1.4f);
             // the way he holds the rifle changed this frame (port arms ↔ aim ↔ carry): from the pose last on screen, not in one frame
             if (poseFade != null && HoldFadeSeconds > 0f) { poseFade.Clock.Duration = HoldFadeSeconds; poseFade.Apply(holdMode, Time.deltaTime); }
+            // 2026-11-25: held in both hands (aim, watch, port arms) but put where the arms cannot reach while the body crouches
+            // or stands up: brought in until both hands are on it (AllyRiflePose.KeepInReach; a frame both reach is left alone)
+            if (PoseFadeClock.BringsIntoReach(holdMode))
+                AllyRiflePose.KeepInReach(weapon, leftUpper, leftFore, leftHand, rightUpper, rightFore, rightHand);
             if (!pending || Time.time < cueAt) return;
             pending = false;
             if (suppressing ? !SuppressActive
