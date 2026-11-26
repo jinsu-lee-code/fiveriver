@@ -52,10 +52,17 @@ namespace FiveRivers.Narrative
         Transform climber;
         Animator climberAnimator;
         // seconds into Park's last line before the recruit moves, and how much longer the scene is held for it
-        public static float TakePlaceAfter = 1.5f, TakePlaceExtra = 1.6f;
-        static readonly int CrouchId = Animator.StringToHash("Crouch"), KneelState = Animator.StringToHash("Idle_Trench");
-        float takePlaceAt;
-        bool tookPlace;
+        // the river beat at the end (2026-11-25): how long the view is drawn to the river, how fast, how long it stays after
+        public static float RiverLookSeconds = 3.2f, RiverTurnSpeed = 38f, RiverHoldAfter = 2.4f;
+        Vector3 river; float riverLookUntil; int riverLine;
+        Transform riverPoint;
+
+        // where the Nakdong shows (the scene's RiverLookPoint); if the river was not laid, down the valley to the south-west
+        Vector3 RiverPoint()
+        {
+            if (riverPoint == null) { var go = GameObject.Find("RiverLookPoint"); if (go != null) riverPoint = go.transform; }
+            return riverPoint != null ? riverPoint.position : player.transform.position + Quaternion.Euler(0f, -145f, 0f) * Vector3.forward * 300f;
+        }
         bool climberWalking;
         readonly List<Vector3> climbPath = new List<Vector3>();
         int climbCorner;
@@ -124,6 +131,7 @@ namespace FiveRivers.Narrative
         void ResetArrival()
         {
             arrival = Arrival.Waiting;
+            climbWaitSince = -1f;
             arrivalStarted = false;
             climber = null; // DawnDirector owns and destroys the body
             climberAnimator = null;
@@ -206,7 +214,8 @@ namespace FiveRivers.Narrative
             }
         }
 
-        // Dawn on the crest: hold the squad, bring Tae-seok up the slope, greet him, then Park's line ends the episode.
+        // Dawn on the crest: hold the squad, bring Tae-seok up the slope, greet him; then Park shows them the Nakdong far
+        // off down the valley and says they will cross it the other way one day (2026-11-25), which ends the episode.
         void UpdateArrival(DemoFlow flow)
         {
             if (!arrivalStarted)
@@ -249,35 +258,34 @@ namespace FiveRivers.Narrative
                     if (Time.time < greetUntil && climber != null)
                         player.LookToward(climber.position + Vector3.up * FaceHeight, GreetTurnSpeed * Time.deltaTime);
                     if (Time.time < nextLineAt) return;
-                    subtitles.Say(copy.parkMansuPlace);
-                    nextLineAt = Time.time + copy.parkMansuPlace.duration + .5f + TakePlaceExtra;
-                    takePlaceAt = Time.time + TakePlaceAfter;
-                    tookPlace = false;
+                    // 2026-11-25 (사용자 지시 "마지막에 능선에서 만수자리에 엎드리라고 이야기하는건 모습도 이상하고 이해도 되지않으니까
+                    // 지우고 다음장을 암시하는 장면 하나 넣어주고", 사용자 선택 "강을 내려다봄"): no more "만수 자리다. 거기 엎드려라"
+                    // and Tae-seok going down on one knee on the open crest. Park points out the Nakdong far down the valley
+                    // (RiverHint20261125); everyone turns to it; the second line says they will cross it the other way.
+                    subtitles.Say(copy.parkRiverSeen);
+                    river = RiverPoint();
+                    riverLookUntil = Time.time + RiverLookSeconds;
+                    allies.Hold(river);   // the squad turns from the newcomer to the river
+                    nextLineAt = Time.time + copy.parkRiverSeen.duration + .4f;
+                    riverLine = 1;
                     arrival = Arrival.Closing;
                     break;
                 case Arrival.Closing:
-                    // 2026-11-18: told "that is Man-su's place, get down there", he went on standing and looking at the
-                    // player until the screen changed. He now turns to the line he has been given and goes down on one knee.
-                    if (Time.time < takePlaceAt || climber == null) FaceClimberToPlayer();
-                    else
+                    // Tae-seok turns to look where Park looks; the player's view is drawn round to it for a moment, then left free
+                    if (climber != null)
                     {
-                        var outward = climber.position - points.assaultCovers[9].position; outward.y = 0f; // on, the way the assault was going
-                        if (outward.sqrMagnitude > .01f)
-                        {
-                            var want = Quaternion.LookRotation(outward);
-                            climber.rotation = Quaternion.RotateTowards(climber.rotation, want, 150f * Time.deltaTime);
-                            if (!tookPlace && Quaternion.Angle(climber.rotation, want) < 12f)
-                            {
-                                tookPlace = true;
-                                if (climberAnimator != null)
-                                {
-                                    climberAnimator.SetBool(CrouchId, true);
-                                    if (climberAnimator.HasState(0, KneelState)) climberAnimator.CrossFadeInFixedTime(KneelState, .4f);
-                                }
-                            }
-                        }
+                        var toRiver = river - climber.position; toRiver.y = 0f;
+                        if (toRiver.sqrMagnitude > .01f) climber.rotation = Quaternion.RotateTowards(climber.rotation, Quaternion.LookRotation(toRiver), 90f * Time.deltaTime);
                     }
-                    if (Time.time >= nextLineAt) flow.ReportGoalMet(FlowSection.Dawn);
+                    if (Time.time < riverLookUntil) player.LookToward(river + Vector3.up * 6f, RiverTurnSpeed * Time.deltaTime);
+                    if (Time.time < nextLineAt) break;
+                    if (riverLine == 1)
+                    {
+                        subtitles.Say(copy.parkRiverCross);
+                        nextLineAt = Time.time + copy.parkRiverCross.duration + RiverHoldAfter;
+                        riverLine = 2;
+                    }
+                    else flow.ReportGoalMet(FlowSection.Dawn);
                     break;
             }
         }
@@ -291,15 +299,42 @@ namespace FiveRivers.Narrative
             if (downhill.sqrMagnitude < .01f) downhill = -player.transform.forward;
             downhill.Normalize();
             GeometryUtility.CalculateFrustumPlanes(view, planes);
-            for (int i = 0; i < 8; i++)
+            // 2026-11-25: he must come up the slope inside the map. Fanned out to the side he came up along the crest by
+            // the map's north edge, and when the player turned to greet him the land round the map stood behind him (the
+            // seam between the terrain and the backdrop). Spots near the terrain's edge are left out; if every spot left is
+            // in view for a while, the one furthest from the middle of the view is taken.
+            var terrain = Terrain.activeTerrain;
+            bool Inside(Vector3 p)
             {
-                // Straight down the slope first, then fanning out to either side.
-                float yaw = (i % 2 == 0 ? 1 : -1) * ((i + 1) / 2) * 35f;
+                if (terrain == null) return true;
+                var tp = terrain.transform.position; var ts = terrain.terrainData.size;
+                return p.x > tp.x + ClimbEdgeMargin && p.x < tp.x + ts.x - ClimbEdgeMargin && p.z > tp.z + ClimbEdgeMargin && p.z < tp.z + ts.z - ClimbEdgeMargin;
+            }
+            if (climbWaitSince < 0f) climbWaitSince = Time.time;
+            bool anyway = Time.time - climbWaitSince > ClimbWaitMax;
+            float bestScore = float.MaxValue; NavMeshHit best = default; bool haveBest = false;
+            for (int i = 0; i < 7; i++)
+            {
+                // Straight down the slope first, then fanning out to either side (not past 90 degrees).
+                float yaw = (i % 2 == 0 ? 1 : -1) * ((i + 1) / 2) * 30f;
                 var candidate = crest + Quaternion.Euler(0f, yaw, 0f) * downhill * ClimbStartDistance;
-                if (!NavMesh.SamplePosition(candidate, out var hit, 6f, NavMesh.AllAreas)) continue;
+                if (!NavMesh.SamplePosition(candidate, out var hit, 6f, NavMesh.AllAreas) || (!Inside(hit.position) && Time.time - climbWaitSince < ClimbWaitMax * 2f)) continue;   // (never stalls: after 8 s the edge is allowed)
                 // Generous box: a spawn just past the screen edge would still read as popping in.
                 var body = new Bounds(hit.position + Vector3.up, new Vector3(5f, 5f, 5f));
-                if (GeometryUtility.TestPlanesAABB(planes, body)) continue;
+                if (GeometryUtility.TestPlanesAABB(planes, body))
+                {
+                    var toHit = hit.position - view.transform.position;
+                    float score = Vector3.Dot(view.transform.forward, toHit.normalized);   // smaller: nearer the edge of the view
+                    if (score < bestScore) { bestScore = score; best = hit; haveBest = true; }
+                    if (!anyway || i < 6) continue;
+                }
+                else { best = hit; haveBest = true; bestScore = float.MinValue; }
+                break;
+            }
+            if (haveBest && (bestScore == float.MinValue || anyway))
+            {
+                var hit = best;
+                climbWaitSince = -1f;
                 var facing = crest - hit.position;
                 facing.y = 0f;
                 climber = dawn.SpawnClimber(hit.position, facing.sqrMagnitude > .01f ? Quaternion.LookRotation(facing) : Quaternion.identity);
@@ -316,6 +351,8 @@ namespace FiveRivers.Narrative
             }
             return false;
         }
+        const float ClimbEdgeMargin = 10f, ClimbWaitMax = 4f;
+        float climbWaitSince = -1f;
 
         void TickClimber()
         {
