@@ -34,7 +34,11 @@ namespace FiveRivers.EditorTools
         // firing places along the front wall (squad, Park, the player) and other short runs of planks; x ranges
         static readonly (float a, float b)[] FrontPlanks = { };
         static readonly (float a, float b)[] RearPlanksExtra = { };
-        const float NicheEndMargin = 1.5f;   // niche panels stop this far short of the trench ends (there they stood out of the ramp)
+        const float NicheEndMargin = 1.5f;
+        // 2026-11-25: where the sandbags stay — the firing places on the parapet (Ally_1, Park, the player, Ally_2, Ally_3
+        // and the bazooka) and the ammunition niches in the parados
+        public static readonly float[] FiringPlaces = { -14f, -6.5f, 0f, 11f, 16.5f };
+        public static readonly float[] Niches = { 0f, 5f, 18.5f };   // niche panels stop this far short of the trench ends (there they stood out of the ramp)
 
         [MenuItem("FiveRivers/Setup/Trench Dressing (Existing Assets)")]
         public static string Apply()
@@ -50,7 +54,18 @@ namespace FiveRivers.EditorTools
             Directory.CreateDirectory(Folder + "/Meshes");
 
             // materials from the delivered textures
-            var sandMat = Mat("M_TD_SandbagRow", "Maps/Dabudong_Env/Textures/T_sandbag_row_0_BaseColor.jpg", "Maps/Dabudong_Env/Textures/T_sandbag_row_0_Normal.png", Color.white, .12f, 1f);
+            // 2026-11-25 (사용자 지시 "모래주머니 실사감이 느껴지게 각져있지않게 다시 다듬어서 리얼리티 느낌을주게 끔해"): the
+            // delivered row (one AI-made 3 m lump, two courses of 60 cm sacks, ends like torn paper, the same lump
+            // repeated, the parados row squashed to half) is replaced by rows of separate sacks made in Blender
+            // (source/environment/trench_sandbags_20261125/make_sandbag_rows.py): FM 5-15 filled sacks about
+            // 12 x 25 x 48 cm, stretcher and header courses, each course set back, every sack a little different, two
+            // shades of the hessian_230 scan with mud worked in. 3 m rows for the parapet, 1.5 m rows for the parados.
+            const string Bags = "MapPolish20261105/TrenchDressing/Sandbags20261125/";
+            var sandMats = new[]
+            {
+                Mat("M_TD_SandbagBurlap_A", Bags + "T_TD_SandbagBurlap_BaseColor.png", "Maps/ClaudePolish20261030/Scan/hessian_230_nor_gl_2k.jpg", Color.white, .06f, .8f),
+                Mat("M_TD_SandbagBurlap_B", Bags + "T_TD_SandbagBurlap_BaseColor.png", "Maps/ClaudePolish20261030/Scan/hessian_230_nor_gl_2k.jpg", new Color(.88f, .83f, .76f), .05f, .8f),
+            };
             var plankMat = Mat("M_TD_Planks", "Maps/ClaudePolish20261030/Scan/brown_planks_04_diff_2k.jpg", "Maps/ClaudePolish20261030/Scan/brown_planks_04_nor_gl_2k.jpg", new Color(.78f, .72f, .66f), .18f, 1f);
             var earthMat = Mat("M_TD_EarthWall", "MapPolish20261105/dirt_floor_diff_2k.jpg", "MapPolish20261105/dirt_floor_nor_gl_2k.jpg", new Color(.70f, .67f, .63f), .08f, 1f);
             // posts: the boards' own scan, a shade darker (the RL_Wood texture and a .46-.66 tint read as black bars on the
@@ -76,34 +91,61 @@ namespace FiveRivers.EditorTools
             report.AppendLine($"old sandbag wall renderers hidden {hidden} (colliders kept)");
 
             // 2. sandbag rows
-            var row = AssetDatabase.LoadAssetAtPath<GameObject>(Art + "Maps/Dabudong_Env/Models/ENV_sandbag_row.fbx");
+            var rowsLong = "ABC".Select(v => AssetDatabase.LoadAssetAtPath<GameObject>(Art + Bags + $"SM_TD_SandbagRow3m_{v}.fbx")).ToArray();
+            var rowsShort = "ABC".Select(v => AssetDatabase.LoadAssetAtPath<GameObject>(Art + Bags + $"SM_TD_SandbagRow1m5_{v}.fbx")).ToArray();
+            if (rowsLong.Concat(rowsShort).Any(r => r == null)) throw new System.InvalidOperationException("모래주머니 줄 FBX가 없습니다: " + Art + Bags);
             const float RowLen = 3.0f, RowDepth = .67f, RowHigh = .47f;
             // on the elbow rest, its face at the top of the wall, so the whole face shows above the rest (the back of the
             // row goes into the parapet's rise); the top stays 3 cm over the crest, as before for sight and fire
             float frontZ = TrenchDig.FrontFloorZ + TrenchDig.WallRunZ + RowDepth * .5f + .02f;
             int rows = 0;
-            void PlaceRow(Transform parent, float x, float z, float top, float lenScale, float yaw)
+            void PlaceRow(GameObject row, Transform parent, float x, float z, float top, float lenScale, float yaw)
             {
                 var go = (GameObject)PrefabUtility.InstantiatePrefab(row, parent);
                 go.transform.position = new Vector3(x, top - RowHigh, z);
                 go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
                 go.transform.localScale = new Vector3(lenScale, 1f, 1f);
-                foreach (var r in go.GetComponentsInChildren<Renderer>(true)) { r.sharedMaterial = sandMat; r.shadowCastingMode = ShadowCastingMode.On; }
+                foreach (var r in go.GetComponentsInChildren<Renderer>(true)) { r.sharedMaterials = sandMats; r.shadowCastingMode = ShadowCastingMode.On; }
                 foreach (var c in go.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(c);
                 rows++;
+            }
+            // 2026-11-25 (사용자 지시 "이느낌으로 아군 진지 다시 바꾸어봐", 1950 산비탈 진지 사진 — 결정: 참호 모양은 그대로,
+            // 꾸미기 먼저): sandbags only where men fire from (the squad's, Park's and the player's places on the parapet)
+            // and round the ammunition niches on the parados; elsewhere the dug-out earth slumped onto the elbow rest
+            // (PD_Spoil_*, a lumpy mound, made in source/environment/position_dressing_20261125/make_position_props.py).
+            var spoilMeshes = AssetDatabase.LoadAllAssetsAtPath(Art + "MapPolish20261105/PositionDressing20261125/SM_PD_PositionProps.fbx").OfType<Mesh>()
+                .Where(m => m.name.StartsWith("PD_Spoil_")).OrderBy(m => m.name).ToArray();
+            if (spoilMeshes.Length == 0) throw new System.InvalidOperationException("흙 둔덕 FBX가 없습니다 (PositionDressing20261125/SM_PD_PositionProps.fbx)");
+            var spoilMat = Mat("M_PD_Spoil", "MapPolish20261105/dirt_floor_diff_2k.jpg", "MapPolish20261105/dirt_floor_nor_gl_2k.jpg", new Color(.74f, .69f, .62f), .06f, 1f);
+            var gSpoil = Group("Spoil");
+            int spoils = 0, rearSlot = 0;
+            void PlaceSpoil(float x, float z, float baseY, float lenScale, float yaw)
+            {
+                var go = new GameObject("PD_Spoil");
+                go.transform.SetParent(gSpoil, false);
+                go.transform.SetPositionAndRotation(new Vector3(x, baseY, z), Quaternion.Euler(0f, yaw, 0f));
+                go.transform.localScale = new Vector3(lenScale, 1f, 1f);
+                go.AddComponent<MeshFilter>().sharedMesh = spoilMeshes[spoils % spoilMeshes.Length];
+                var r = go.AddComponent<MeshRenderer>(); r.sharedMaterial = spoilMat; r.shadowCastingMode = ShadowCastingMode.On;
+                spoils++;
             }
             for (float x = TrenchDig.TrenchWest + 1.4f; x <= TrenchDig.TrenchEast - 1.2f; x += RowLen * .96f)
             {
                 float s = R(.95f, 1.03f);
-                PlaceRow(gSand, x, frontZ + R(-.03f, .03f), Pre(x, frontZ) + TrenchDig.ParapetHeight * TrenchDig.EndFade(x) + .03f, s, 180f + R(-2.5f, 2.5f));
+                float z = frontZ + R(-.03f, .03f), top = Pre(x, frontZ) + TrenchDig.ParapetHeight * TrenchDig.EndFade(x) + .03f, yaw = R(-2.5f, 2.5f);
+                if (FiringPlaces.Any(f => Mathf.Abs(f - x) < 1.6f)) PlaceRow(rowsLong[rows % 3], gSand, x, z, top, s, 180f + yaw);
+                else PlaceSpoil(x, z, top - RowHigh, s, yaw);
             }
             for (float x = TrenchDig.TrenchWest + .7f; x <= TrenchDig.TrenchEast - .6f; x += RowLen * .5f * .95f)
             {
                 float zr = Mathf.Min(TrenchDig.RearFloorZ(x - .7f), TrenchDig.RearFloorZ(x), TrenchDig.RearFloorZ(x + .7f));
                 float z = zr - TrenchDig.WallRunZ - RowDepth * .5f - .02f;
-                PlaceRow(gSand, x, z + R(-.03f, .03f), Pre(x, z) + TrenchDig.ParadosHeight * TrenchDig.EndFade(x) + .02f, .5f * R(.95f, 1.03f), R(-3f, 3f));
+                float zz = z + R(-.03f, .03f), top = Pre(x, z) + TrenchDig.ParadosHeight * TrenchDig.EndFade(x) + .02f, s = R(.95f, 1.03f), yaw = R(-3f, 3f);
+                if (Niches.Any(n => Mathf.Abs(n - x) < 1.3f)) PlaceRow(rowsShort[(rows + 1) % 3], gSand, x, zz, top, s, yaw);
+                else if ((rearSlot & 1) == 0) PlaceSpoil(x + .7f, zz, top - RowHigh, s, 180f + yaw);   // full length every other slot (squashed to half its ridges read as comb teeth)
+                rearSlot++;
             }
-            report.AppendLine($"sandbag rows {rows}, torn sacks 0");
+            report.AppendLine($"sandbag rows {rows}, spoil mounds {spoils}, torn sacks 0");
 
             // 3. wall faces. surfaceZ: where the wall face is at height h above the floor, found on the terrain itself
             float FloorY(float x) => H(x, (TrenchDig.FrontFloorZ + TrenchDig.RearFloorZ(x)) * .5f);
