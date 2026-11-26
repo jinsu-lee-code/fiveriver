@@ -70,6 +70,7 @@ namespace FiveRivers.Combat
         }
 
         readonly List<Track> tracks = new List<Track>();
+        bool released;
         Transform body;
 
         // milliseconds the last belt update took (all tracks that moved), for the debug window
@@ -525,6 +526,7 @@ namespace FiveRivers.Combat
 
         void LateUpdate()
         {
+            if (released) return;
             bool timed = false;
             float started = Time.realtimeSinceStartup;
             foreach (var track in tracks)
@@ -626,8 +628,15 @@ namespace FiveRivers.Combat
             }
         }
 
-        void OnDestroy()
+        void OnDestroy() => Release();
+
+        // Frees the jobs' native arrays and the split meshes, once. The tank body is saved inactive in the scene and
+        // Unity skips OnDestroy on objects that were never active, so TankController calls this from its own
+        // OnDestroy too: a session that ended before the tank section leaked them (2026-11-25).
+        public void Release()
         {
+            if (released) return;
+            released = true;
             foreach (var track in tracks)
             {
                 if (track.running) track.handle.Complete();

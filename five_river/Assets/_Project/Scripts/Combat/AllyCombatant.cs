@@ -131,6 +131,8 @@ namespace FiveRivers.Combat
             restingRotation = Quaternion.LookRotation(defensiveForward, Vector3.up);
             rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
             leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+            talkHead = animator.GetBoneTransform(HumanBodyBones.Head);
+            talkNeck = animator.GetBoneTransform(HumanBodyBones.Neck);
             rifleFit = animator.GetComponent<AlliedRifleFit>();
             riflePose = new AllyRiflePose(animator, transform, weapon);
             poseFade = new AllyPoseFade(animator, transform, weapon, HoldFadeSeconds);
@@ -171,6 +173,7 @@ namespace FiveRivers.Combat
             if (!isActiveAndEnabled) return;
             StopFiring();
             poseFade?.Clear(); // a new section or retry starts from where he is put, not from the last pose
+            talkTo = null; talkWeight = 0f;
             Shouldering = false; standingSince = -1f;
             watching = false;
             lastTargetAt = -100f;
@@ -315,6 +318,10 @@ namespace FiveRivers.Combat
             if (pending || Time.time < nextShot || Quaternion.Angle(transform.rotation, aimRotation) > 8f) return;
             // still coming up from the low wait to one knee (AllyClipPlayer): the rifle is not at his shoulder yet
             if (Clips != null && Clips.HoldsFire) return;
+            // 2026-11-25 (고지 출발 손, 1배속 측정): still standing up into the standing aim (Posture's 0.3 s cross-fade from a
+            // crouch or the crouched run): the shot's 0.05 s cross-fade to Fire_Stand finished the rise in one or two frames,
+            // the whole body and rifle 37 cm up at once. He fires once he is up.
+            if (StandsToFire && StandingAimWeight < 0.95f) return;
             if (!suppressing && !CanSee(target)) { target = FindTarget(); nextShot = Time.time + 0.25f; return; }
             if (StandsToFire) animator.CrossFadeInFixedTime(FireStandId, 0.05f, 0, 0f);
             else animator.SetTrigger(FireId);
@@ -423,9 +430,11 @@ namespace FiveRivers.Combat
         public static float ToeRest = 0.06f, StandDropMost = 0.25f;
         Transform standHips, leftToe, rightToe;
         float standDrop;
+        // how much of the standing aim (Aim_Stand / Fire_Stand) is on screen
+        float StandingAimWeight => StateWeight(AimStandId) + StateWeight(FireStandId);
         void StandOnFloor()
         {
-            float w = Mathf.Clamp01(StateWeight(AimStandId) + StateWeight(FireStandId));
+            float w = Mathf.Clamp01(StandingAimWeight);
             if (w <= 0f) { standDrop = 0f; return; }
             if (standHips == null)
             {
@@ -521,12 +530,17 @@ namespace FiveRivers.Combat
             if (wasShouldering && !Shouldering && !StandsToFire && (InState(AimStandId) || InState(FireStandId)))
                 animator.CrossFadeInFixedTime(IdleStandId, 0.3f);
             // going into or out of a clip: what was done above is kept in proportion (nothing when no clip plays)
-            if (Clips != null) Clips.HoldRifle(weapon);
+            bool twoHanded = PoseFadeClock.BringsIntoReach(holdMode);
+            if (Clips != null) Clips.HoldRifle(weapon, twoHanded);
             if (!engaged && (Clips == null || Clips.RifleWeight <= 0f)
                 && (director.Flow.Section == FlowSection.Title || director.Flow.Section == FlowSection.Tutorial))
                 riflePose.LookAt(transform.position + defensiveForward * 60f + Vector3.up * 1.4f);
             // the way he holds the rifle changed this frame (port arms ↔ aim ↔ carry): from the pose last on screen, not in one frame
             if (poseFade != null && HoldFadeSeconds > 0f) { poseFade.Clock.Duration = HoldFadeSeconds; poseFade.Apply(holdMode, Time.deltaTime); }
+            // 2026-11-25: held in both hands (aim, watch, port arms) but put where the arms cannot reach while the body crouches
+            // or stands up: brought in until both hands are on it (AllyRiflePose.KeepInReach; a frame both reach is left alone)
+            if (twoHanded) riflePose.KeepInReach();
+            TalkHead();
             if (!pending || Time.time < cueAt) return;
             pending = false;
             if (suppressing ? !SuppressActive
@@ -547,6 +561,42 @@ namespace FiveRivers.Combat
             if (flash != null) MuzzleEffectsSpawned++;
             AudioCuesRequested++;
 #endif
+        }
+
+        // ---- talking to the player: the head turns, the body and the rifle stay at his post ----
+        // 2026-11-25 (사용자 지시 "나랑 이야기할때 고개만 돌아가게 해 몸전체를 나한테 돌리면 총구가 내쪽으로 오니까
+        // 이상해지잖아"): the speaker used to turn his whole body to the player, the shouldered rifle with it, its muzzle
+        // on the player. Now the neck and head turn (a man's reach from his chest: TalkYawMost to the side, TalkPitchMost
+        // up or down), eased in and out over TalkSeconds; a listener further round is looked at as far as the neck goes.
+        public static float TalkYawMost = 70f, TalkPitchMost = 25f, TalkSeconds = 0.35f, TalkNeckShare = 0.4f;
+        Transform talkTo, talkNeck, talkHead;
+        float talkWeight;
+        Vector3 talkLook;   // where he was last looking (kept while the head turns back)
+
+        // the one he speaks to (null: back to his post)
+        public void TalkTo(Transform listener) => talkTo = listener;
+        public bool Talking => talkTo != null;
+
+        void TalkHead()
+        {
+            float goal = talkTo != null ? 1f : 0f;
+            talkWeight = Mathf.MoveTowards(talkWeight, goal, PoseFadeClock.Step(Time.deltaTime) / Mathf.Max(0.01f, TalkSeconds));
+            if (talkWeight <= 0f || talkHead == null) return;
+            if (talkTo != null) talkLook = talkTo.position;
+            // the body's own frame (his facing, level): yaw about up, pitch up/down
+            var forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+            var toListener = talkLook - talkHead.position;
+            var flat = Vector3.ProjectOnPlane(toListener, Vector3.up);
+            if (flat.sqrMagnitude < 0.0001f) return;
+            float yaw = Mathf.Clamp(Vector3.SignedAngle(forward, flat, Vector3.up), -TalkYawMost, TalkYawMost);
+            float pitch = Mathf.Clamp(Mathf.Atan2(toListener.y, flat.magnitude) * Mathf.Rad2Deg, -TalkPitchMost, TalkPitchMost);
+            var look = Quaternion.AngleAxis(yaw, Vector3.up) * Quaternion.AngleAxis(-pitch, Vector3.Cross(Vector3.up, forward)) * forward;
+            float w = Mathf.SmoothStep(0f, 1f, talkWeight);
+            var face = talkHead.forward;   // these Mixamo rigs face +Z (AllyRiflePose.LookAt)
+            var aim = Vector3.Slerp(face, look, w);
+            var turn = Quaternion.FromToRotation(face, aim);
+            if (talkNeck != null) talkNeck.rotation = Quaternion.Slerp(Quaternion.identity, turn, TalkNeckShare) * talkNeck.rotation;
+            talkHead.rotation = Quaternion.FromToRotation(talkHead.forward, aim) * talkHead.rotation;
         }
 
         [System.Diagnostics.Conditional("UNITY_EDITOR"), System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]

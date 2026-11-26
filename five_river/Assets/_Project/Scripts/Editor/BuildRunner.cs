@@ -33,7 +33,16 @@ namespace FiveRivers.EditorTools
         static void Build(bool development)
         {
             if (File.Exists(SummaryPath)) File.Delete(SummaryPath);
+            // 실행 빌드는 창이 뒤로 가면 멈추지만(runInBackground 끔), 에디터 Play는 계속 돌아야 하므로
+            // 빌드가 끝나면 원래 값으로 되돌린다 (2026-11-25, TASKS 11-10 "runInBackground 결정 필요")
+            bool editorRunInBackground = PlayerSettings.runInBackground;
             ApplyPlayerSettings();
+            try { BuildPlayer(development); }
+            finally { PlayerSettings.runInBackground = editorRunInBackground; }
+        }
+
+        static void BuildPlayer(bool development)
+        {
             string dir = development ? "Builds/WindowsDev" : "Builds/Windows";
             var options = new BuildPlayerOptions
             {

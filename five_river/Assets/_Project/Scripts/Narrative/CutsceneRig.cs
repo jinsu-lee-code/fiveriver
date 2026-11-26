@@ -74,6 +74,7 @@ namespace FiveRivers.Narrative
             }
             playerRenderers = HidePlayer(player);
             cutDone = false;
+            pausedLastFrame = false;
             PlayerCamera.enabled = false;
             sequenceCamera.enabled = true;
             bars.gameObject.SetActive(true);
@@ -84,10 +85,16 @@ namespace FiveRivers.Narrative
         // Advances the clock; false while the game is paused. Space or Enter jumps to the hand-back.
         public bool Advance()
         {
-            if (!Playing || director.Flow.Paused) return false;
+            if (!Playing) return false;
+            if (director.Flow.Paused)
+            {
+                pausedLastFrame = true;
+                return false;
+            }
+            bool resumed = Resumed(ref pausedLastFrame);
             Time += UnityEngine.Time.deltaTime;
             var keys = Keyboard.current;
-            if (keys != null && Time > SkipAfter && Time < Duration - HandBack
+            if (keys != null && !resumed && Time > SkipAfter && Time < Duration - HandBack
                 && (keys.spaceKey.wasPressedThisFrame || keys.enterKey.wasPressedThisFrame))
                 Time = Duration - HandBack;
             return true;
@@ -136,12 +143,27 @@ namespace FiveRivers.Narrative
             if (bars != null) bars.gameObject.SetActive(false);
         }
 
-        bool cutDone;
+        bool cutDone, pausedLastFrame;
+
+        // The frame play comes back from the pause menu: the menu freed the cursor while the input gate is still
+        // blocked, so lock it again, and tell the caller not to take this frame's Enter (the key that closed the
+        // menu) as a skip (2026-11-25).
+        public static bool Resumed(ref bool pausedLastFrame)
+        {
+            if (!pausedLastFrame) return false;
+            pausedLastFrame = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            return true;
+        }
 
         // The first-person arms and weapons are not part of a staged shot. Shared by every sequence.
         public static Renderer[] HidePlayer(PlayerController player)
         {
-            var renderers = player.GetComponentsInChildren<Renderer>(false);
+            // inactive ones too: a weapon switch that finishes during the sequence turns its model on (2026-11-25).
+            // Only the rear aperture's flag is set anywhere else (WeaponHolder, every frame), so clearing all of them
+            // afterwards is safe.
+            var renderers = player.GetComponentsInChildren<Renderer>(true);
             foreach (var r in renderers) r.forceRenderingOff = true;
             var weapons = player.GetComponentInChildren<WeaponHolder>(true);
             if (weapons != null) weapons.CutsceneHidden = true;

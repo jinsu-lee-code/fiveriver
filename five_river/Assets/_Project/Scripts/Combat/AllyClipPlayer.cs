@@ -407,8 +407,11 @@ namespace FiveRivers.Combat
                         animator.Play(IdleTrenchId, 0, 0f);
                     FreezeTrack();
                     StopGraph();
-                    if (order.LeaveSeconds > 0f) BeginBlend(order.LeaveSeconds, false);
+                    // the clip had both hands off the rifle (the loader's rockets, the rifle slung): it is unslung (Unsling)
+                    bool handsOff = frozenValid && frozenGripLeft < 0.5f && frozenGripRight < 0.5f;
+                    if (order.LeaveSeconds > 0f) BeginBlend(handsOff ? Mathf.Max(order.LeaveSeconds, UnslingSeconds) : order.LeaveSeconds, false);
                     else { blending = false; graphWeight = 0f; wrote = false; }
+                    unslinging = handsOff && blending;
                     break;
                 }
             }
@@ -468,7 +471,7 @@ namespace FiveRivers.Combat
         void TickFade(float dt)
         {
             if (!graph.IsValid() || !previous.IsValid()) return;
-            fadeTime += dt;
+            fadeTime += PoseFadeClock.Step(dt);   // a hitched frame does not jump the mix (PoseFadeClock.MaxStep)
             if (fadeTime >= fadeLength)
             {
                 graph.Disconnect(mixer, 1);
@@ -494,6 +497,7 @@ namespace FiveRivers.Combat
         {
             for (int i = 0; i < bones.Length; i++) from[i] = bones[i].localRotation;
             hipsFrom = hips.localPosition;
+            unslinging = false;
             blendTime = 0f;
             blendLength = Mathf.Max(0.01f, seconds);
             blending = seconds > 0f;
@@ -523,7 +527,9 @@ namespace FiveRivers.Combat
             else if (!graphOn) ApplyKneelFloor();
             if (blending)
             {
-                blendTime += Time.deltaTime;
+                // 2026-11-25 (고지 출발 손): leaving the advance clips on the hill start's hitched frame (141 ms) took the graph
+                // from 1 to 0.64 in one frame and the rifle 30-37 cm with it. At most one 30 fps frame per frame.
+                blendTime += PoseFadeClock.Step(Time.deltaTime);
                 float w = Mathf.SmoothStep(0f, 1f, blendTime / blendLength);
                 for (int i = 0; i < bones.Length; i++) bones[i].localRotation = Quaternion.Slerp(from[i], bones[i].localRotation, w);
                 hips.localPosition = Vector3.Lerp(hipsFrom, hips.localPosition, w);
@@ -581,12 +587,41 @@ namespace FiveRivers.Combat
 
         // ---- the rifle: called by AllyCombatant.LateUpdate after its own carry / aim ------------------------------
         // weight < 1 (going in or out): what AllyCombatant did is kept in proportion.
-        internal void HoldRifle(Transform weapon)
+        // twoHanded: what AllyCombatant did this frame holds the rifle in both hands (aim, watch, port arms)
+        internal void HoldRifle(Transform weapon, bool twoHanded)
         {
             float w = graphWeight;
             if (w <= 0f || weapon == null || !armsSnapped) return;
             if (!TrenchTrack(out var position, out var rotation, out float gripLeft, out float gripRight)) return;
-            Hold(weapon, w, position, rotation, gripLeft, gripRight);
+            if (unslinging && twoHanded && blending) Unsling(weapon, w, position, rotation);   // (unslinging is only set easing out)
+            else Hold(weapon, w, position, rotation, gripLeft, gripRight);
+        }
+
+        // 2026-11-25 (고지 출발 손, 1배속 측정): the loader leaves his clip (both hands on the rockets, the rifle slung on his
+        // back) for the hill's port arms. Mixed as any clip, the rifle flew from his back to his front by itself for 0.35 s,
+        // both hands 36-64 cm off it. Now: the right hand reaches the rifle where it hangs, then the rifle comes round with
+        // it to where AllyCombatant holds it, the left hand taking it on the way.
+        // UnslingSwing: straight from his back to his front the rifle went through his chest (its middle 2 cm from the
+        // body's axis, measured); it comes round his right side, this far out at the middle of the way.
+        public static float UnslingSeconds = 0.7f, UnslingReachShare = 0.35f, UnslingSwing = 0.35f;
+        bool unslinging;
+
+        void Unsling(Transform weapon, float w, Vector3 slungPosition, Quaternion slungRotation)
+        {
+            float u = 1f - w;    // how far out of the clip
+            float reach = Mathf.SmoothStep(0f, 1f, u / UnslingReachShare);
+            float bring = Mathf.SmoothStep(0f, 1f, (u - UnslingReachShare) / (1f - UnslingReachShare));
+            float take = Mathf.SmoothStep(0f, 1f, (bring - 0.45f) / 0.55f);   // the left hand once the rifle is coming in front
+            // what AllyCombatant did: the rifle and both arms on it
+            carryPosition = weapon.position; carryRotation = weapon.rotation;
+            Save(left); Save(right);
+            Restore(left); Restore(right);
+            // out to the side early (it left his back toward his spine first: 11 cm from the axis), back in late
+            var swing = body.right * (UnslingSwing * Mathf.Sin(Mathf.Pow(bring, 0.6f) * Mathf.PI));
+            weapon.SetPositionAndRotation(Vector3.Lerp(slungPosition, carryPosition, bring) + swing, Quaternion.Slerp(slungRotation, carryRotation, bring));
+            Mix(left, w); Mix(right, w);
+            Contact(right, reach, Data.rightWrist, weapon);
+            Contact(left, take, Data.leftWrist, weapon);
         }
 
         // Hill assault: the new run clips carry the rifle in both hands. run / advance: how much of each moving state
@@ -636,7 +671,7 @@ namespace FiveRivers.Combat
             // fade of AllyCombatant (the run state is gone and its track with it).
             if (Time.frameCount - moveHoldFrame > 2) moveHold = 0f;
             moveHoldFrame = Time.frameCount;
-            moveHold = w > moveHold ? Mathf.MoveTowards(moveHold, w, Time.deltaTime / MoveHoldSeconds) : w;
+            moveHold = w > moveHold ? Mathf.MoveTowards(moveHold, w, PoseFadeClock.Step(Time.deltaTime) / MoveHoldSeconds) : w;
             Hold(weapon, moveHold, position, rotation, 1f, 1f);
         }
 

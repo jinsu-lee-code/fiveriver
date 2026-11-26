@@ -44,6 +44,8 @@ namespace FiveRivers.Combat
             [NonSerialized] public Vector3 thumbLift;                // the thumb base's second axis (palmar abduction), in its own space
             [NonSerialized] public float lift, liftTarget;           // its angle now / sought (degrees, + lifts the thumb toward the palm side)
             [NonSerialized] public Vector3[] lastDir;                // each finger's last bone, its direction from its own skin (bone space)
+            [NonSerialized] public int[] guarded = new int[5];       // the frame each finger was last solved again for being in the launcher
+            [NonSerialized] public int triggerSearched;              // the same for the forefinger on the trigger
             [NonSerialized] public bool ready, held, wrote, first = true;
         }
 
@@ -83,6 +85,7 @@ namespace FiveRivers.Combat
         const float LiftMax = 60f, LiftNatural = 25f;
         const float MaxSpread = 20f;          // the forefinger's spread to the trigger, either way (index abduction ~20)
         const float Touch = 0.004f, Allowed = -0.002f;
+        const float Guard = -0.003f;          // deeper than this in the launcher after easing: solved again now (pass 4)
         static float Lo(bool thumb, int k) => thumb ? ThumbMin[k] : MinCurl[k];
         static float Hi(bool thumb, int k) => thumb ? ThumbMax[k] : MaxCurl[k];
         // the fold added on top of the rest pose that keeps the joint's real bend within range
@@ -132,16 +135,49 @@ namespace FiveRivers.Combat
                     chains[0][0].rotation = Quaternion.AngleAxis(h.triggerAngles.x * weight, PalmNormal(h)) * chains[0][0].rotation;
                 }
                 var natural = c == 4 ? thumbCurl : fingerCurl;
-                if (!held) { h.target[c] = natural * relaxed; if (c == 4) h.liftTarget = LiftNatural * relaxed; }
-                else if (fresh || Due(h, c)) h.target[c] = Solve(h, c, natural);
+                // (2026-11-25, pass 4) a hand off its grip but near it (coming back from the reload) eased its fingers half-open
+                // whatever was there, and they swept through the grip for 0.1-0.2 s before it counted as held (left forefinger
+                // 43 mm in, measured in play): half-open, but not in the launcher
+                bool touch = held;
+                var seek = held ? natural : natural * relaxed;
+                float seekLift = held ? LiftNatural : LiftNatural * relaxed;
+                if (!held)
+                {
+                    if (fresh || Due(h, c))
+                    {
+                        h.target[c] = seek; if (c == 4) h.liftTarget = seekLift;
+                        if (Inside(h, c, seek, seekLift) < Allowed) h.target[c] = Solve(h, c, seek, seekLift, false);
+                    }
+                }
+                else if (fresh || Due(h, c)) h.target[c] = Solve(h, c, natural, seekLift, true);
+                float lift = c == 4 ? Mathf.Clamp(Mathf.Lerp(h.lift, h.liftTarget, k), 0f, LiftMax) : 0f;
+                var g = Vector3.zero;
+                for (int j = 0; j < 3; j++) g[j] = Mathf.Clamp(Mathf.Lerp(h.angle[c][j], h.target[c][j], k), Lo(h, c, j), Hi(h, c, j));
+                // (pass 4) the fingers ease toward their answer (and only two are solved again each frame), so when the hand slid along
+                // the grip (into the aim, back from the reload) they lagged and lay in it for a few frames (thumb 44 mm, middle finger
+                // 41 mm, measured in play): eased into the launcher, a finger takes its answer for where the hand is now at once
+                if (Inside(h, c, g, lift) < Guard)
+                {
+                    // the last answer still clear where the hand is now: taken as it is; else solved again (not every frame
+                    // for a finger that has no clear way at all: it keeps the least-inside answer it found)
+                    float tl = c == 4 ? h.liftTarget : 0f;
+                    if (Inside(h, c, h.target[c], tl) < Allowed && h.guarded[c] != Time.frameCount - 1)
+                    {
+                        h.target[c] = Solve(h, c, seek, seekLift, touch);
+                        // no clear way found: not looked for again next frame
+                        h.guarded[c] = Inside(h, c, h.target[c], c == 4 ? h.liftTarget : 0f) < Allowed ? Time.frameCount : -10;
+                    }
+                    for (int j = 0; j < 3; j++) g[j] = Mathf.Clamp(h.target[c][j], Lo(h, c, j), Hi(h, c, j));
+                    if (c == 4) lift = Mathf.Clamp(h.liftTarget, 0f, LiftMax);
+                }
                 if (c == 4)
                 {
-                    h.lift = Mathf.Clamp(Mathf.Lerp(h.lift, h.liftTarget, k), 0f, LiftMax);
+                    h.lift = lift;
                     chains[4][0].localRotation *= Quaternion.AngleAxis(h.lift * weight, h.thumbLift);
                 }
                 for (int j = 0; j < 3; j++)
                 {
-                    h.angle[c][j] = Mathf.Clamp(Mathf.Lerp(h.angle[c][j], h.target[c][j], k), Lo(h, c, j), Hi(h, c, j));
+                    h.angle[c][j] = g[j];
                     chains[c][j].localRotation *= Quaternion.AngleAxis(h.angle[c][j] * weight, h.axes[c][j]);
                 }
             }
@@ -211,10 +247,20 @@ namespace FiveRivers.Combat
             return Mathf.Min(Sdf(h, e), Sdf(h, (s + e) * 0.5f)) - f.t;
         }
 
+        // How far the finger's deepest bone stands off the launcher in pose g (thumb lifted by `lift`); < 0 in it.
+        // Far from the grip (or with no field) it is clear.
+        float Inside(Hand h, int c, Vector3 g, float lift)
+        {
+            if (h.field == null || h.space == null) return float.MaxValue;
+            h.toLocal = h.space.worldToLocalMatrix; h.unit = h.space.lossyScale.x;
+            var f = Read(h, c); f.b = c == 4 ? lift : 0f;
+            return Mathf.Min(Clear(h, f, g, 0), Mathf.Min(Clear(h, f, g, 1), Clear(h, f, g, 2)));
+        }
+
         // The fold of one finger. For a range of knuckle folds, the next joints each fold until their own bone meets the
         // launcher (or open until out of it); of those with no bone inside, the one nearest the natural grasp, a finger
-        // whose last bones touch nothing counting as far off.
-        Vector3 Solve(Hand h, int c, Vector3 natural)
+        // whose last bones touch nothing counting as far off (`touch`: a hand off its grip only keeps out of it).
+        Vector3 Solve(Hand h, int c, Vector3 natural, float liftNatural = LiftNatural, bool touch = true)
         {
             var f = Read(h, c);
             bool thumb = c == 4;
@@ -234,8 +280,8 @@ namespace FiveRivers.Combat
                 if (worst > leastIn) { leastIn = worst; least = g; leastLift = lift; }
                 if (worst < Allowed) continue;
                 float cost = (g.x - natural.x) * (g.x - natural.x) + (g.y - natural.y) * (g.y - natural.y) + 0.5f * (g.z - natural.z) * (g.z - natural.z)
-                    + (thumb ? 0.5f * (lift - LiftNatural) * (lift - LiftNatural) : 0f);
-                if (Mathf.Min(c1, c2) > Touch) cost += 3000f;
+                    + (thumb ? 0.5f * (lift - liftNatural) * (lift - liftNatural) : 0f);
+                if (touch && Mathf.Min(c1, c2) > Touch) cost += 3000f;
                 if (cost < bestCost) { bestCost = cost; best = g; bestLift = lift; }
             }
             if (thumb) h.liftTarget = bestCost < float.MaxValue ? bestLift : leastLift;
@@ -285,24 +331,44 @@ namespace FiveRivers.Combat
             float reach = ((f.p1 - f.p0).magnitude + (f.p2 - f.p1).magnitude + (f.p3 - f.p2).magnitude) * 0.85f;
             var toward = face - f.p0;
             var target = toward.magnitude > reach ? f.p0 + toward.normalized * reach : face;
-            float Cost(Vector3 g)
+            void Bones(Vector3 g, out Vector3 p2, out Vector3 p3, out Vector3 pt)
             {
                 var r1 = Quaternion.AngleAxis(g.x, palm) * Quaternion.AngleAxis(g.y, f.a0);
-                var p2 = f.p0 + r1 * (f.p1 - f.p0);
+                p2 = f.p0 + r1 * (f.p1 - f.p0);
                 var r2 = Quaternion.AngleAxis(g.z, r1 * f.a1) * r1;
-                var p3 = p2 + r2 * (f.p2 - f.p1);
+                p3 = p2 + r2 * (f.p2 - f.p1);
                 var r3 = Quaternion.AngleAxis(g.z * 0.65f, r2 * f.a2) * r2;
-                var pt = p3 + r3 * (f.p3 - f.p2);
+                pt = p3 + r3 * (f.p3 - f.p2);
+            }
+            float Cost(Vector3 g)
+            {
+                Bones(g, out var p2, out var p3, out var pt);
                 var pad = Vector3.Lerp(p3, pt, 0.6f);
                 float cost = (pad - target).sqrMagnitude;
                 // resting on the launcher rather than in the air: the pad's skin near its surface
                 float rest = Sdf(h, pad) - f.t; if (rest > 0f) cost += 0.3f * rest * rest;
-                cost += In(h, (f.p0 + p2) * 0.5f, f.t) + In(h, p2, f.t) + In(h, (p2 + p3) * 0.5f, f.t) + In(h, p3, f.t) + In(h, (p3 + pt) * 0.5f, f.t);
+                // (pass 4: the tip too - left out, it went 30 mm into the trigger and its guard past the pad, measured in play)
+                cost += In(h, (f.p0 + p2) * 0.5f, f.t) + In(h, p2, f.t) + In(h, (p2 + p3) * 0.5f, f.t) + In(h, p3, f.t) + In(h, (p3 + pt) * 0.5f, f.t) + In(h, pt, f.t);
                 return cost + 1e-7f * (g.x * g.x + 0.2f * g.y * g.y);
+            }
+            // the deepest the finger's skin goes into the launcher in pose g (m; 0 when out)
+            float Depth(Vector3 g)
+            {
+                Bones(g, out var p2, out var p3, out var pt);
+                // (the six points along the finger one by one: an array here was made twice a frame while held)
+                float d = Mathf.Max(0f, f.t - Sdf(h, (f.p0 + p2) * 0.5f));
+                d = Mathf.Max(d, f.t - Sdf(h, p2));
+                d = Mathf.Max(d, f.t - Sdf(h, (p2 + p3) * 0.5f));
+                d = Mathf.Max(d, f.t - Sdf(h, p3));
+                d = Mathf.Max(d, f.t - Sdf(h, (p3 + pt) * 0.5f));
+                return Mathf.Max(d, f.t - Sdf(h, pt));
             }
             // coarse on taking hold (or when lost), then a small search round last frame's answer
             Vector3 best = h.triggerAngles; float bestCost = Cost(best);
-            if (search || (bestCost > 4e-4f && Time.frameCount % 20 == 0))   // lost: looked for again now and then, not every frame
+            // lost: looked for again now and then, not every frame; in the launcher (the hand slid along the grip): now
+            bool inside = Depth(best) > -Guard && h.triggerSearched != Time.frameCount - 1;
+            if (inside) h.triggerSearched = Time.frameCount;
+            if (search || inside || (bestCost > 4e-4f && Time.frameCount % 20 == 0))
                 for (float x = -MaxSpread; x <= MaxSpread; x += 5f) for (float y = Lo(h, 0, 0); y <= Hi(h, 0, 0); y += 7f) for (float z = Lo(h, 0, 1); z <= Mathf.Min(100f, Hi(h, 0, 1)); z += 8f)
                 { var g = new Vector3(x, y, z); float cst = Cost(g); if (cst < bestCost) { bestCost = cst; best = g; } }
             for (float s = 4f; s >= 0.5f; s *= 0.5f)
@@ -316,7 +382,9 @@ namespace FiveRivers.Combat
                     float cst = Cost(g); if (cst < bestCost) { bestCost = cst; best = g; }
                 }
             }
-            h.triggerAngles = Vector3.Lerp(h.triggerAngles, best, k);
+            // eased toward its answer, unless easing leaves it in the launcher: then at once
+            var eased = Vector3.Lerp(h.triggerAngles, best, k);
+            h.triggerAngles = Depth(eased) > -Guard ? best : eased;
             var a = h.triggerAngles * weight;
             ch[0].rotation = Quaternion.AngleAxis(a.x, palm) * Quaternion.AngleAxis(a.y, f.a0) * ch[0].rotation;
             ch[1].localRotation *= Quaternion.AngleAxis(a.z, h.axes[0][1]);

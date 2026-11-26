@@ -51,6 +51,22 @@ namespace FiveRivers.Tests
             Assert.AreEqual(0f, c.HoldWeight, "a new section or retry does not fade from the old pose");
         }
 
+        // 2026-11-25 (고지 출발 손): 141 ms 끊긴 프레임 하나가 섞기를 한 번에 넘기지 않는다 (30 fps 한 프레임만큼만)
+        [Test]
+        public void AHitchedFrameAdvancesTheFadeOneStepOnly()
+        {
+            var c = new PoseFadeClock(0.4f);
+            c.Note(PoseFadeClock.PortMove, Dt); c.Note(PoseFadeClock.Aim, Dt);
+            c.Note(PoseFadeClock.Aim, 0.141f);
+            var even = new PoseFadeClock(0.4f);
+            even.Note(PoseFadeClock.PortMove, Dt); even.Note(PoseFadeClock.Aim, Dt);
+            even.Note(PoseFadeClock.Aim, PoseFadeClock.MaxStep);
+            Assert.AreEqual(even.HoldWeight, c.HoldWeight, 1e-5f);
+            Assert.Greater(c.HoldWeight, 0.9f, "most of the last pose is still shown after the hitch");
+            Assert.AreEqual(0f, PoseFadeClock.Step(-1f));
+            Assert.AreEqual(Dt, PoseFadeClock.Step(Dt), 1e-6f);
+        }
+
         [Test]
         public void ChangingAgainMidwayStartsOver()
         {

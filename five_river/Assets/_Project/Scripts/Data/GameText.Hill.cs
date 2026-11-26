@@ -31,7 +31,10 @@ namespace FiveRivers.Data
         public Line parkSummit = ParkLine("마지막 능선이다. 끝까지 올라가!");
 
         public Line taeSeokMeets = new Line { speaker = "윤태석", text = "포항에서 왔습니다. 윤태석입니다.", duration = 3.5f };
-        public Line parkMansuPlace = ParkLine("만수 자리다. 거기 엎드려라.");
+        // 2026-11-25 (사용자 지시): "만수 자리다. 거기 엎드려라." 를 지우고, 다음 장(다섯 개의 강, 첫 강 낙동강)을 암시하는 두 줄.
+        // 새로 쓴 대사: 기획(D) 확인 필요.
+        public Line parkRiverSeen = new Line { speaker = "박용팔", text = "저 아래, 낙동강이다.", duration = 3.0f };
+        public Line parkRiverCross = new Line { speaker = "박용팔", text = "언젠가 저 강, 거꾸로 건너간다잉.", duration = 3.8f };
 
         static Line ParkLine(string content) => new Line { speaker = "박용팔", text = content, duration = 3.5f };
     }
