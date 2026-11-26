@@ -173,6 +173,7 @@ namespace FiveRivers.Combat
             if (!isActiveAndEnabled) return;
             StopFiring();
             poseFade?.Clear(); // a new section or retry starts from where he is put, not from the last pose
+            talkTo = null; talkWeight = 0f;
             Shouldering = false; standingSince = -1f;
             watching = false;
             lastTargetAt = -100f;
@@ -537,6 +538,7 @@ namespace FiveRivers.Combat
             // or stands up: brought in until both hands are on it (AllyRiflePose.KeepInReach; a frame both reach is left alone)
             if (PoseFadeClock.BringsIntoReach(holdMode))
                 AllyRiflePose.KeepInReach(weapon, leftUpper, leftFore, leftHand, rightUpper, rightFore, rightHand);
+            TalkHead();
             if (!pending || Time.time < cueAt) return;
             pending = false;
             if (suppressing ? !SuppressActive
@@ -558,6 +560,48 @@ namespace FiveRivers.Combat
             AudioCuesRequested++;
 #endif
         }
+
+        // ---- talking to the player: the head turns, the body and the rifle stay at his post ----
+        // 2026-11-25 (사용자 지시 "나랑 이야기할때 고개만 돌아가게 해 몸전체를 나한테 돌리면 총구가 내쪽으로 오니까
+        // 이상해지잖아"): the speaker used to turn his whole body to the player, the shouldered rifle with it, its muzzle
+        // on the player. Now the neck and head turn (a man's reach from his chest: TalkYawMost to the side, TalkPitchMost
+        // up or down), eased in and out over TalkSeconds; a listener further round is looked at as far as the neck goes.
+        public static float TalkYawMost = 70f, TalkPitchMost = 25f, TalkSeconds = 0.35f, TalkNeckShare = 0.4f;
+        Transform talkTo, talkNeck, talkHead;
+        float talkWeight;
+
+        // the one he speaks to (null: back to his post)
+        public void TalkTo(Transform listener) => talkTo = listener;
+        public bool Talking => talkTo != null;
+
+        void TalkHead()
+        {
+            float goal = talkTo != null ? 1f : 0f;
+            talkWeight = Mathf.MoveTowards(talkWeight, goal, PoseFadeClock.Step(Time.deltaTime) / Mathf.Max(0.01f, TalkSeconds));
+            if (talkWeight <= 0f) return;
+            if (talkHead == null)
+            {
+                talkHead = animator.GetBoneTransform(HumanBodyBones.Head);
+                talkNeck = animator.GetBoneTransform(HumanBodyBones.Neck);
+                if (talkHead == null) { talkWeight = 0f; return; }
+            }
+            if (talkTo != null) talkLook = talkTo.position;
+            // the body's own frame (his facing, level): yaw about up, pitch up/down
+            var forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
+            var toListener = talkLook - talkHead.position;
+            var flat = Vector3.ProjectOnPlane(toListener, Vector3.up);
+            if (flat.sqrMagnitude < 0.0001f) return;
+            float yaw = Mathf.Clamp(Vector3.SignedAngle(forward, flat, Vector3.up), -TalkYawMost, TalkYawMost);
+            float pitch = Mathf.Clamp(Mathf.Atan2(toListener.y, flat.magnitude) * Mathf.Rad2Deg, -TalkPitchMost, TalkPitchMost);
+            var look = Quaternion.AngleAxis(yaw, Vector3.up) * Quaternion.AngleAxis(-pitch, Vector3.Cross(Vector3.up, forward)) * forward;
+            float w = Mathf.SmoothStep(0f, 1f, talkWeight);
+            var face = talkHead.forward;   // these Mixamo rigs face +Z (AllyRiflePose.LookAt)
+            var aim = Vector3.Slerp(face, look, w);
+            var turn = Quaternion.FromToRotation(face, aim);
+            if (talkNeck != null) talkNeck.rotation = Quaternion.Slerp(Quaternion.identity, turn, TalkNeckShare) * talkNeck.rotation;
+            talkHead.rotation = Quaternion.FromToRotation(talkHead.forward, aim) * talkHead.rotation;
+        }
+        Vector3 talkLook;
 
         [System.Diagnostics.Conditional("UNITY_EDITOR"), System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
         void NoteCarry(string mode)

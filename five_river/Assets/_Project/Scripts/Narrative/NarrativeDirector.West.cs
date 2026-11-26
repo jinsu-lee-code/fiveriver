@@ -92,7 +92,6 @@ namespace FiveRivers.Narrative
                 along.sqrMagnitude > 0.04f ? Quaternion.LookRotation(along.normalized, Vector3.up) : blanketBody.transform.rotation);
         }
 
-        public static float MansuTalkTurn = 140f; // degrees per second
 
         // ---- the squad leader's lines have a man saying them (2026-11-18) ----
         // "분대장" gave every order of the night and was nobody on screen. The rifleman on the player's right in the
@@ -102,7 +101,6 @@ namespace FiveRivers.Narrative
         public const string SquadLeaderName = "Ally_2";
         AllyCombatant squadLeader;
         Coroutine leaderTurn;
-        Quaternion leaderPost;
 
         void OnSquadLeaderLine(FiveRivers.Data.GameText.Line line)
         {
@@ -115,28 +113,21 @@ namespace FiveRivers.Narrative
                 foreach (var ally in FindObjectsByType<AllyCombatant>(FindObjectsSortMode.None))
                     if (ally.gameObject.name == SquadLeaderName) squadLeader = ally;
             if (squadLeader == null || !squadLeader.isActiveAndEnabled || squadLeader.Engaged || squadLeader.Advancing) return;
-            if (leaderTurn == null) leaderPost = squadLeader.transform.rotation;
-            else StopCoroutine(leaderTurn);
+            if (leaderTurn != null) StopCoroutine(leaderTurn);
             leaderTurn = StartCoroutine(LeaderSpeaks(Mathf.Max(1.2f, line.duration)));
         }
 
+        // 2026-11-25 (사용자 지시 "나랑 이야기할때 고개만 돌아가게 해 몸전체를 나한테 돌리면 총구가 내쪽으로 오니까"):
+        // he looks round at the player (AllyCombatant.TalkTo), his body and rifle stay on the field
         IEnumerator LeaderSpeaks(float seconds)
         {
-            var body = squadLeader.transform;
+            squadLeader.TalkTo(player.CameraPivot);
             for (float t = 0f; t < seconds; t += Time.deltaTime)
             {
-                if (squadLeader.Engaged || squadLeader.Advancing) { leaderTurn = null; yield break; } // the fight has him again
-                var toPlayer = player.transform.position - body.position; toPlayer.y = 0f;
-                if (toPlayer.sqrMagnitude > 0.04f && !director.Flow.Paused)
-                    body.rotation = Quaternion.RotateTowards(body.rotation, Quaternion.LookRotation(toPlayer), MansuTalkTurn * Time.deltaTime);
+                if (squadLeader.Engaged || squadLeader.Advancing) break; // the fight has him again
                 yield return null;
             }
-            for (float t = 0f; t < 1.5f && Quaternion.Angle(body.rotation, leaderPost) > 1f; t += Time.deltaTime)
-            {
-                if (squadLeader.Engaged || squadLeader.Advancing) break;
-                body.rotation = Quaternion.RotateTowards(body.rotation, leaderPost, MansuTalkTurn * Time.deltaTime);
-                yield return null;
-            }
+            squadLeader.TalkTo(null);
             leaderTurn = null;
         }
 
@@ -145,7 +136,7 @@ namespace FiveRivers.Narrative
             if (leaderTurn == null) return;
             StopCoroutine(leaderTurn);
             leaderTurn = null;
-            if (squadLeader != null) squadLeader.transform.rotation = leaderPost;
+            if (squadLeader != null) squadLeader.TalkTo(null);   // (2026-11-25: his body no longer turns, only his head)
         }
 
         // ---- the silence after he was seen to fall (2026-11-18) ----
@@ -222,24 +213,11 @@ namespace FiveRivers.Narrative
             subtitles.Say(text.mansuLetter);
             subtitles.Say(text.mansuMorning);
             // 2026-11-18: he asked the favour with his back to the man he was asking, still facing the field. While he
-            // speaks he turns to the player, and back to his post when he has finished.
-            var post = mansu != null ? mansu.transform.rotation : Quaternion.identity;
-            while (subtitles.Speaking || director.Flow.Paused)
-            {
-                if (mansu != null && !director.Flow.Paused)
-                {
-                    var toPlayer = player.transform.position - mansu.transform.position; toPlayer.y = 0f;
-                    if (toPlayer.sqrMagnitude > 0.04f)
-                        mansu.transform.rotation = Quaternion.RotateTowards(mansu.transform.rotation,
-                            Quaternion.LookRotation(toPlayer), MansuTalkTurn * Time.deltaTime);
-                }
-                yield return null;
-            }
-            for (float t = 0f; mansu != null && t < 1.2f && Quaternion.Angle(mansu.transform.rotation, post) > 1f; t += Time.deltaTime)
-            {
-                mansu.transform.rotation = Quaternion.RotateTowards(mansu.transform.rotation, post, MansuTalkTurn * 1.3f * Time.deltaTime);
-                yield return null;
-            }
+            // speaks he looks round at the player. 2026-11-25 (사용자 지시 "나랑 이야기할때 고개만 돌아가게 해"): only his
+            // head turns (AllyCombatant.TalkTo); his body and the shouldered rifle stay on the field, the muzzle off the player.
+            if (mansu != null) mansu.TalkTo(player.CameraPivot);
+            while (subtitles.Speaking || director.Flow.Paused) yield return null;
+            if (mansu != null) mansu.TalkTo(null);
             westBeat = null;
             director.Flow.ReportGoalMet(FlowSection.Regroup);
         }
