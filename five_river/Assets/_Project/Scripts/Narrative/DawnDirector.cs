@@ -101,6 +101,7 @@ namespace FiveRivers.Narrative
         void Start()
         {
             director.Flow.SectionChanged += OnSectionChanged;
+            ProbeScenarioBlend.Blend(0f);
         }
 
         void OnSectionChanged(FlowTransition t)
@@ -164,6 +165,7 @@ namespace FiveRivers.Narrative
             RenderSettings.fogDensity = Mathf.Lerp(nightFogDensity, dawnFogDensity, e);
             view.backgroundColor = Color.Lerp(nightBackground, dawnFog, e);
             if (dawnGrade != null) dawnGrade.weight = e;
+            ProbeScenarioBlend.Blend(e); // 구워 둔 간접광(APV)도 같은 비율로 밤 → 새벽 (2026-11-26)
             if(runtimeSky!=null)
             {
                 runtimeSky.SetFloat("_DawnBlend",e);
