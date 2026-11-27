@@ -195,7 +195,10 @@ namespace FiveRivers.Combat
                 var lag=new Vector2(-Mathf.DeltaAngle(0,delta.y),Mathf.DeltaAngle(0,delta.x))*.006f/Mathf.Max(Time.deltaTime,.001f);
                 lag=Vector2.ClampMagnitude(lag,1.1f);
                 lookLag=Vector2.Lerp(lookLag,lag,1f-Mathf.Exp(-Time.deltaTime*14));
-                walkPhase+=Time.deltaTime*(player.Sprinting?12f:8f)*moving;
+                // on the player's step cycle (by the ground covered, 2026-11-26 GAPS 8): the rifle dips as each foot lands
+                // (-|cos| lowest at phase 0 and 0.5) and swings once over two steps, on the beat of the footsteps
+                walkPhase=player.Steps.Phase*Mathf.PI*2f;
+                moving=Mathf.Min(moving,player.Steps.Moving);
             }
             float breath=Mathf.Sin(Time.time*1.45f)*.00065f;
             var handling=new Vector3(Mathf.Sin(walkPhase)*.0025f*moving,breath-Mathf.Abs(Mathf.Cos(walkPhase))*.0018f*moving,0)*steadiness;

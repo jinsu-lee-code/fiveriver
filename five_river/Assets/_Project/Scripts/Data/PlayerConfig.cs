@@ -24,6 +24,14 @@ namespace FiveRivers.Data
         public float pitchLimit;
         public float recoilRecovery; // 도 / 초
 
+        [Header("걸음 박자 카메라 흔들림 (2026-11-26, 부족한 점 8번) : BALANCE 2-4c. 멀미 나지 않게 작게")]
+        [Tooltip("발이 닿을 때마다 눈높이가 내려가는 깊이 m (걷기 / 달리기)")] public float headBobWalk = 0.004f;
+        public float headBobSprint = 0.009f;
+        [Tooltip("두 걸음에 한 번 디딘 발 쪽으로 기우는 각도 (도, 걷기 / 달리기)")] public float headRollWalk = 0.1f;
+        public float headRollSprint = 0.3f;
+        [Tooltip("발이 닿은 뒤 가장 낮아지기까지 늦춤 (한 주기 비율)")] [Range(0f, 0.25f)] public float headBobLag = 0.06f;
+        [Tooltip("조준 중 흔들림 남는 비율")] [Range(0f, 1f)] public float headBobAimScale = 0.25f;
+
         [Header("체력")]
         public float maxHealth;
         public float regenDelay;

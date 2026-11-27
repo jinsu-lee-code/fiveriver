@@ -71,7 +71,11 @@ namespace FiveRivers.Combat
         {
             if (weapons == null) return;
             if (IsActive(m1Animator))
-                m1Animator.SetBool(Sprint, player.Sprinting && !weapons.Switching && !weapons.M1.Reloading);
+            {
+                bool sprint = player.Sprinting && !weapons.Switching && !weapons.M1.Reloading;
+                m1Animator.SetBool(Sprint, sprint);
+                LockSprintToSteps(sprint);
+            }
             if (!reloadQueued) return;
             if (!weapons.Bazooka.Reloading)
             {
@@ -81,6 +85,37 @@ namespace FiveRivers.Combat
             if (Time.time < fireEnd) return;
             reloadQueued = false;
             Play(bazookaAnimator, Reload, "A_FP_Bazooka_Reload", queuedReloadEnd - Time.time, .045f);
+        }
+
+        // The sprint clip (A_FP_M1_Sprint, 0.7 s, its root dips twice and swings once) is one cycle of two steps. Played by
+        // time it drifted against the footsteps (0.786 s at 5.6 m/s, in and out of step every ~3 s). While it plays, its speed
+        // follows the player's step cycle and is nudged toward the step phase, so a dip lands with each footstep
+        // (2026-11-26, GAPS 8). Transitions are left alone; other states set their own speed in Play().
+        const float SprintFootfallAt = .12f; // share of the clip where the first foot lands (its root dips lowest a little after)
+        const float SprintLockGain = 3f;     // how fast a phase error is taken up (per second)
+        bool sprintLocked;
+
+        void LockSprintToSteps(bool sprinting)
+        {
+            var state = m1Animator.GetCurrentAnimatorStateInfo(0);
+            // only while he is still meant to sprint: a reload or a switch asked for this frame has set its own speed
+            bool inSprint = sprinting && state.shortNameHash == Sprint && !m1Animator.IsInTransition(0);
+            if (inSprint)
+            {
+                float length = Length("A_FP_M1_Sprint");
+                if (length <= 0f) return;
+                float want = Mathf.Repeat(player.Steps.Phase + SprintFootfallAt, 1f);
+                float error = Mathf.Repeat(want - state.normalizedTime + .5f, 1f) - .5f;
+                float cycles = Mathf.Clamp(player.Steps.CyclesPerSecond + error * SprintLockGain, 0f, 3f / length);
+                m1Animator.speed = cycles * length;
+                sprintLocked = true;
+            }
+            else if (sprintLocked)
+            {
+                sprintLocked = false;
+                // leaving to idle: normal speed again (a reload or a switch has already set its own)
+                if (!weapons.M1.Reloading && !weapons.Switching) m1Animator.speed = 1f;
+            }
         }
 
         void OnM1Fired()

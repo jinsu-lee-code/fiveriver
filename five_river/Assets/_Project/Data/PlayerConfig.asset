@@ -24,6 +24,25 @@ MonoBehaviour:
   aimLookScale: 0.6
   pitchLimit: 80
   recoilRecovery: 10
+  headBobWalk: 0.004
+  headBobSprint: 0.009
+  headRollWalk: 0.1
+  headRollSprint: 0.3
+  headBobLag: 0.06
+  headBobAimScale: 0.25
   maxHealth: 100
   regenDelay: 4
   regenPerSecond: 25
+  woundBigHitFraction: 0.4
+  woundSevereFraction: 0.75
+  woundMinSeconds: 10
+  woundMaxSeconds: 20
+  woundFadeSeconds: 4
+  woundBaseIntensity: 0.55
+  woundIntensityCap: 1
+  woundTremorHipDegrees: 0.35
+  woundTremorAimDegrees: 0.1
+  woundTremorHz: 3
+  woundBreathMax: 0.8
+  woundDeafSeconds: 2.5
+  woundDeafAmount: 0.55

@@ -44,7 +44,6 @@ namespace FiveRivers.Combat
         [SerializeField] Vector3 sprintOffset = new Vector3(-.06f, -.04f, -.05f);
         [SerializeField] Vector3 sprintEuler = new Vector3(14f, -28f, 18f);
         [SerializeField, Min(.01f)] float sprintBlendSeconds = .22f;
-        [SerializeField, Min(0f)] float sprintStepsPerSecond = 3.4f;
         [Header("Short muzzle exhaust; existing rear backblast is retained")]
         [SerializeField, Range(0, 32)] int smokeCount = 12;
         [SerializeField, Min(0f)] float flashIntensity = .65f;
@@ -183,8 +182,9 @@ namespace FiveRivers.Combat
             if (sprintBlend > 0f)
             {
                 float s = Mathf.SmoothStep(0f, 1f, sprintBlend);
-                float step = Time.time * Mathf.PI * sprintStepsPerSecond;
-                var bob = new Vector3(Mathf.Sin(step) * .012f, -Mathf.Abs(Mathf.Sin(step)) * .018f, 0f);
+                // on the player's step cycle (2026-11-26, GAPS 8): dips as each foot lands, swings once over two steps
+                float step = player.Steps.Phase * Mathf.PI * 2f;
+                var bob = new Vector3(Mathf.Sin(step) * .012f, -Mathf.Abs(Mathf.Cos(step)) * .018f, 0f) * player.Steps.Moving;
                 position += (sprintOffset + bob) * s;
                 rotation = Quaternion.Euler(sprintEuler * s) * rotation;
             }

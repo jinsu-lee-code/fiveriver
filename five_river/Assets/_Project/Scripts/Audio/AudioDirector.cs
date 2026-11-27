@@ -57,8 +57,6 @@ namespace FiveRivers.Audio
         // After the barrage: his own breath, whether he ran or not.
         float breathHoldUntil, breathHold;
         float duck = 1f;
-        float stepDistance;
-        float lastMoved;
         bool wasPaused;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -107,6 +105,10 @@ namespace FiveRivers.Audio
             weapons.Switched += _ => Play2D("SFX_Weapon_Switch");
             resupplier.Resupplied += () => Play2D("SFX_Ammo_Pickup");
             player.StanceChanged += () => Play2D("SFX_Stance_Change");
+            // footsteps on the player's step cycle (2026-11-26, GAPS 8): the same beat the rifle and the head move to
+            player.Steps.WalkStride = config.walkStride;
+            player.Steps.RunStride = config.runStride;
+            player.Steps.Landed += _ => Footfall();
             health.Damaged += (_, __) =>
             {
                 Play2D("SFX_Player_Hit");
@@ -266,25 +268,16 @@ namespace FiveRivers.Audio
                 if (weapons.M1.Reloading) Play2D("SFX_M1_ClipRemove");
                 clipRemovePending = false;
             }
-            UpdateFootsteps();
             UpdateBreath();
         }
 
-        void UpdateFootsteps()
+        // Footsteps come from the player's step cycle (PlayerController.Steps, by the ground covered, one step per stride),
+        // so they land on the same beat as the rifle sway and the head bob (2026-11-26, GAPS 8). Teleports are ignored there.
+        void Footfall()
         {
-            float moved = player.MovedDistance;
-            float delta = moved - lastMoved;
-            lastMoved = moved;
-            if (delta <= 0f || delta > 2f) return; // 순간이동(복구) 무시
-            stepDistance += delta;
-            float stride = player.Sprinting ? config.runStride : config.walkStride;
-            if (stepDistance >= stride)
-            {
-                stepDistance = 0f;
-                Play2D(player.Sprinting ? "SFX_Foot_Dirt_Run" : "SFX_Foot_Dirt");
-                // Rifle, sling and webbing move with every running step; walking only stirs them now and then.
-                if (player.Sprinting || Random.value < 0.3f) Play("SFX_Gear_Run", null, gain: player.Sprinting ? Random.Range(0.8f, 1f) : 0.4f);
-            }
+            Play2D(player.Sprinting ? "SFX_Foot_Dirt_Run" : "SFX_Foot_Dirt");
+            // Rifle, sling and webbing move with every running step; walking only stirs them now and then.
+            if (player.Sprinting || Random.value < 0.3f) Play("SFX_Gear_Run", null, gain: player.Sprinting ? Random.Range(0.8f, 1f) : 0.4f);
         }
 
         // Heavy breathing builds up after a few seconds of running and dies away after stopping.
@@ -567,8 +560,7 @@ namespace FiveRivers.Audio
             ClearDeafness();
             lastPlayed.Clear();
             lastVariant.Clear();
-            stepDistance = 0f;
-            lastMoved = player.MovedDistance;
+            player.Steps.Reset();
             duck = 1f;
         }
 

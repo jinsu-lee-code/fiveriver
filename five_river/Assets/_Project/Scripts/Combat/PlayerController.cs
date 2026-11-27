@@ -48,6 +48,9 @@ namespace FiveRivers.Combat
 
         public event Action StanceChanged;
 
+        // walking rhythm by the ground covered (2026-11-26, GAPS 8): footsteps, rifle sway, head bob and the sprint clip all follow it
+        public StepCycle Steps { get; } = new StepCycle();
+
         void Awake()
         {
             body = GetComponent<CharacterController>();
@@ -104,6 +107,7 @@ namespace FiveRivers.Combat
             var moved = transform.position - before;
             moved.y = 0f;
             MovedDistance += moved.magnitude;
+            Steps.Advance(moved.magnitude, Sprinting, dt);
 
             float targetEye = Crouched ? config.crouchEyeHeight : config.standEyeHeight;
             eye = Mathf.MoveTowards(eye, targetEye, config.stanceChangeSpeed * dt);
@@ -152,7 +156,16 @@ namespace FiveRivers.Combat
                 // Perlin noise stays near its middle: scaled so the swing really reaches about the asked angle
                 jolt = new Vector3((Mathf.PerlinNoise(t, 3.1f) - 0.5f) * 3.6f, (Mathf.PerlinNoise(7.7f, t) - 0.5f) * 2.6f, (Mathf.PerlinNoise(t, t * 0.5f + 11f) - 0.5f) * 0.9f) * amount;
             }
-            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil + jolt.x + AimTremor.y, jolt.y + AimTremor.x, jolt.z);
+            // head bob on the footfalls (2026-11-26, GAPS 8), small so it does not sicken: the head dips a little after each
+            // foot lands and the view leans a touch over the foot that bears the weight. Drawn only, like the jolt: Update puts
+            // the eye back before the weapons cast their rays. Almost none while aiming.
+            float bobScale = Steps.Moving * (Aiming ? config.headBobAimScale : 1f);
+            float bobHeight = (Sprinting ? config.headBobSprint : config.headBobWalk) * bobScale;
+            float bobRoll = (Sprinting ? config.headRollSprint : config.headRollWalk) * bobScale;
+            float cycle = Steps.Phase * Mathf.PI * 2f;
+            float dip = 0.5f + 0.5f * Mathf.Cos(2f * cycle - config.headBobLag * Mathf.PI * 2f);
+            cameraPivot.localPosition = new Vector3(0f, eye - bobHeight * dip, 0f);
+            cameraPivot.localRotation = Quaternion.Euler(pitch - recoil + jolt.x + AimTremor.y, jolt.y + AimTremor.x, jolt.z + bobRoll * Mathf.Sin(cycle));
         }
 
         float shakeDegrees, shakeLeft, shakeFor = 1f;
@@ -190,6 +203,7 @@ namespace FiveRivers.Combat
             Crouched = false;
             eye = config.standEyeHeight;
             ApplyEye();
+            Steps.Reset();
         }
 
         public void ResetTutorialCounters()
