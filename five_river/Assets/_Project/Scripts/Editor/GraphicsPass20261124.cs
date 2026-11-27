@@ -236,12 +236,9 @@ namespace FiveRivers.EditorTools
             {
                 var b = water.bounds;
                 Probe(root, "Probe_Stream", b.center + Vector3.up * 2f, new Vector3(b.size.x + 14f, 10f, b.size.z + 6f), 3f);
-                var m = water.sharedMaterial;
-                if (m != null && m.HasProperty("_Smoothness"))
-                {
-                    float old = m.GetFloat("_Smoothness");
-                    if (old < .86f) { m.SetFloat("_Smoothness", .86f); EditorUtility.SetDirty(m); Log($"{m.name} _Smoothness {old:0.###} -> 0.86 (still water)"); }
-                }
+                // (2026-11-27: this menu used to raise the stream's smoothness to 0.86 for the probe's reflection; at that value the
+                // pools ran to white at a low angle. The stream's look is now kept by FiveRivers/Setup/Water Look 20261127.)
+                WaterLook20261127.Apply();
             }
             else Log("StreamWater not found: no stream probe");
 

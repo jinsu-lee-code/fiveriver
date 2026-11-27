@@ -21,6 +21,7 @@ namespace FiveRivers.EditorTools
         static readonly Vector2 Start = new Vector2(34f, -58f), TurnCentre = new Vector2(39f, -4f), Pulled = new Vector2(43f, 1.2f);
         static readonly Vector2 Parked = new Vector2(31.5f, 3f); // under the parked truck's front wheels
         const float TurnRadius = 5f;
+        public const float PreserveSpecular = 0f;   // BALANCE 4-3: the ruts' reflected light fades with their alpha
 
         [MenuItem("FiveRivers/Map/Dawn Truck Road Ruts 20261107")]
         public static void Apply()
@@ -159,6 +160,13 @@ namespace FiveRivers.EditorTools
             m.SetOverrideTag("RenderType", "Transparent");
             m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
             m.renderQueue = (int)RenderQueue.Transparent - 50; // before other transparents (smoke, effects)
+            // 2026-11-27 (아트 검수 "새벽 · 고지에서 원경의 … 순백 줄무늬 띠"): URP's material check had put the ruts on "preserve
+            // specular" blending (premultiplied alpha; the reflected light is added whatever the alpha), so from the summit,
+            // 150 m off at a grazing angle, the sky's reflection lay over the whole ribbon, its faded edges too, as two pale
+            // lines (1.22 of the land around them under a flare; 0.92 at 10 m). The reflection now fades with the alpha like
+            // the mud itself. (A lower render queue does not hold: the Lit material check puts it back on 3000.)
+            m.SetFloat("_BlendModePreserveSpecular", PreserveSpecular);
+            m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
             m.SetFloat("_ReceiveShadows", 1f);
             EditorUtility.SetDirty(m);
             return m;

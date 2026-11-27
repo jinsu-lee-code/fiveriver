@@ -163,29 +163,29 @@ Material:
     - _Float: 4.05
     - _Flow_Density: 1.42
     - _Foam_Distance: 0.1
-    - _Foam_Strength: 0.35
+    - _Foam_Strength: 0.04
     - _Metallic: 0
     - _Normal_Offset: 1.24
-    - _Normal_Strength: 0.25
+    - _Normal_Strength: 0.18
     - _Normal_speed: 15
     - _QueueControl: 1
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Reflection_Strength: 0.06
+    - _Reflection_Strength: 0.04
     - _Shore_Foam_Scale: 4.42
-    - _Smoothness: 0.8
+    - _Smoothness: 0.5
     - _SrcBlend: 1
     - _Surface: 1
     - _WPOS_UV_scale: 8.15
     - _Water_Trail_Mask: 4.05
     - _Water_Trail_Scale: 18.4
-    - _Water_Trail_Strength: 0.12
+    - _Water_Trail_Strength: 0.05
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
     m_Colors:
-    - _Foam_Color: {r: 0.3, g: 0.27, b: 0.21, a: 0.35}
+    - _Foam_Color: {r: 0.29999998, g: 0.26999995, b: 0.20999995, a: 0.05}
     - _Foam_Texture_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _Noise_Tiling: {r: 2.02, g: 1.51, b: 0, a: 0}
     - _Normal_Tiling: {r: 0.8, g: 0.8, b: 0, a: 0}

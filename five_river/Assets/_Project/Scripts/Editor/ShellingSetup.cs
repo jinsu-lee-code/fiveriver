@@ -18,7 +18,11 @@ namespace FiveRivers.EditorTools
         const string ConfigPath = DabudongSetup.DataDir + "ShellingConfig.asset";
         const string SmokeMat = "Assets/_Project/Art/Materials/M_VFX_Smoke.mat";
         const string GlowMat = "Assets/_Project/Art/Materials/M_VFX_Glow.mat";
-        const string DebrisMat = "Assets/_Project/Art/JMO Assets/WarFX/Desktop/Materials/Impacts/WFX_M_Impact Debris.mat";
+        // 2026-11-27 (아트 검수 "검은 납작 다각형 파편"): the thrown earth was unlit dark squares (WarFX "Impact Debris"), up to 26 cm
+        // across in the burst — black flat polygons against a flare-lit slope. Now the lit clod material of BattleVfxLook20261127,
+        // smaller, stretched along its flight (BALANCE 4-7).
+        const string DebrisMat = BattleVfxLook20261127.DebrisLitPath;
+        const float BlastClodMin = 0.03f, BlastClodMax = 0.11f;   // was 0.07 - 0.26
 
         [MenuItem("FiveRivers/Setup/Shelling")]
         public static void Run() => Apply();
@@ -27,6 +31,7 @@ namespace FiveRivers.EditorTools
         {
             if (EditorApplication.isPlaying) return "not in play mode";
             Directory.CreateDirectory(Dir);
+            BattleVfxLook20261127.SmokeLit(); BattleVfxLook20261127.DebrisLit();   // the lit particle materials the prefabs below use
             var config = EnsureConfig();
             config.horizonGlow = HorizonMaterial();
             config.blastPrefab = BlastPrefab();
@@ -249,6 +254,7 @@ namespace FiveRivers.EditorTools
             rot = debris.rotationOverLifetime; rot.enabled = true; rot.z = new ParticleSystem.MinMaxCurve(-9f, 9f);
             col = debris.colorOverLifetime; col.enabled = true;
             col.color = Fade(new Color(1f, 1f, 1f, 1f), 0f, new Color(1f, 1f, 1f, 1f), 0.3f, new Color(1f, 1f, 1f, 1f), 0.85f, new Color(1f, 1f, 1f, 0f));
+            BattleVfxLook20261127.Clods(debris, AssetDatabase.LoadAssetAtPath<Material>(DebrisMat), BlastClodMin, BlastClodMax);
 
             // 불티
             var sparks = System(root.transform, "Sparks", GlowMat, new Vector3(0f, 0.4f, 0f));
@@ -315,6 +321,7 @@ namespace FiveRivers.EditorTools
             var hit = clods.collision; hit.enabled = true; hit.type = ParticleSystemCollisionType.World; hit.mode = ParticleSystemCollisionMode.Collision3D;
             hit.bounce = 0.2f; hit.dampen = 0.55f; hit.lifetimeLoss = 0.35f; hit.quality = ParticleSystemCollisionQuality.Low;
             hit.collidesWith = FiveRivers.Core.WorldQuery.Solid;
+            BattleVfxLook20261127.Clods(clods, AssetDatabase.LoadAssetAtPath<Material>(DebrisMat), 0.02f, 0.075f);
             // a thin veil of dust carried over with it
             var veil = System(root.transform, "Veil", SmokeMat, Vector3.zero);
             m = veil.main;
@@ -352,6 +359,7 @@ namespace FiveRivers.EditorTools
             var hit = grains.collision; hit.enabled = true; hit.type = ParticleSystemCollisionType.World; hit.mode = ParticleSystemCollisionMode.Collision3D;
             hit.bounce = 0.15f; hit.dampen = 0.6f; hit.lifetimeLoss = 0.5f; hit.quality = ParticleSystemCollisionQuality.Low;
             hit.collidesWith = FiveRivers.Core.WorldQuery.Solid; hit.radiusScale = 1f;
+            BattleVfxLook20261127.Clods(grains, AssetDatabase.LoadAssetAtPath<Material>(DebrisMat), 0.012f, 0.045f);
             return Save(root, "VFX_Trench_Dust");
         }
     }

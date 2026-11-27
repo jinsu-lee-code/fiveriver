@@ -102,7 +102,7 @@ var water = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Material>(dir 
 if (water == null) { water = new UnityEngine.Material(UnityEngine.Shader.Find("Universal Render Pipeline/Lit")); UnityEditor.AssetDatabase.CreateAsset(water, dir + "M_StreamWater.mat"); }
 // shallow, still, silty water: mostly a mirror of the sky, the bed just showing through
 water.SetColor("_BaseColor", new UnityEngine.Color(0.075f, 0.075f, 0.06f, 0.66f));
-water.SetFloat("_Smoothness", 0.90f); water.SetFloat("_Metallic", 0f);
+water.SetFloat("_Smoothness", 0.50f); water.SetFloat("_Metallic", 0f);   // 2026-11-27: 0.90 ran to white at a low angle; the stream's look is kept by FiveRivers/Setup/Water Look 20261127 (BALANCE 4-3)
 water.SetFloat("_Surface", 1f); water.SetFloat("_Blend", 0f); water.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha); water.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
 water.SetFloat("_ZWrite", 0f); water.EnableKeyword("_SURFACE_TYPE_TRANSPARENT"); water.SetOverrideTag("RenderType", "Transparent");
 water.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;

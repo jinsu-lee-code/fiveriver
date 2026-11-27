@@ -8,12 +8,20 @@ namespace FiveRivers.Combat
     // assault begins. It is a signal, not illumination: dim, green, and it takes no part in the game's light.
     public sealed class KpaSignalFlare : MonoBehaviour
     {
-        public static float Rise = 2.2f, Burn = 6f, Height = 30f, Intensity = 3f, Range = 60f, Size = 2.2f;
+        // 2026-11-27 (아트 검수 "조명탄 머리가 연녹색 납작 원반 · 녹색 세로 가시로 보임" — 녹색은 이 신호탄의 의도, 모양만 정리):
+        // the star was a 2.2 m unlit ball (a flat pale-green disc from the trench) and its trail a 0.5 m wide band (a green spike
+        // under it). Now a small bright core that the bloom spreads, and a thin streak only while it climbs. BALANCE 2-5.
+        public static float Rise = 2.2f, Burn = 6f, Height = 30f, Intensity = 3f, Range = 60f, Size = 1.0f;
+        public static float TrailWidth = 0.12f, TrailSeconds = 0.45f, CoreBright = 4f;
+        // the star's own colour: a purer green than the light's, so that at CoreBright its red and blue stay under 1 and the tone
+        // curve leaves it green (at (0.25, 1, 0.35) x 6 all three channels clipped: a white dot among the stars, 0 % green)
+        static readonly Color Core = new Color(0.12f, 1f, 0.22f);
         static readonly Color Green = new Color(0.25f, 1f, 0.35f);
 
         Vector3 from, drift;
         float born;
         Light glow;
+        TrailRenderer streak;
         Transform star;
         Material starMaterial;
 
@@ -37,16 +45,17 @@ namespace FiveRivers.Combat
             var shader = Shader.Find("Universal Render Pipeline/Unlit") ?? Shader.Find("Universal Render Pipeline/Particles/Unlit")
                 ?? Shader.Find("Sprites/Default") ?? Shader.Find("Universal Render Pipeline/Lit");
             flare.starMaterial = new Material(shader);
-            if (flare.starMaterial.HasProperty("_Color")) flare.starMaterial.SetColor("_Color", Green * 3f);
-            if (flare.starMaterial.HasProperty("_EmissionColor")) { flare.starMaterial.EnableKeyword("_EMISSION"); flare.starMaterial.SetColor("_EmissionColor", Green * 3f); }
-            flare.starMaterial.SetColor("_BaseColor", Green * 3f);
+            if (flare.starMaterial.HasProperty("_Color")) flare.starMaterial.SetColor("_Color", Core * CoreBright);
+            if (flare.starMaterial.HasProperty("_EmissionColor")) { flare.starMaterial.EnableKeyword("_EMISSION"); flare.starMaterial.SetColor("_EmissionColor", Core * CoreBright); }
+            flare.starMaterial.SetColor("_BaseColor", Core * CoreBright);
             var renderer = ball.GetComponent<Renderer>();
             renderer.sharedMaterial = flare.starMaterial;
             renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             // the streak it leaves going up
             var trail = go.AddComponent<TrailRenderer>();
-            trail.time = 0.9f; trail.startWidth = 0.5f; trail.endWidth = 0f; trail.sharedMaterial = flare.starMaterial;
-            trail.startColor = Green; trail.endColor = new Color(Green.r, Green.g, Green.b, 0f);
+            trail.time = TrailSeconds; trail.startWidth = TrailWidth; trail.endWidth = 0f; trail.sharedMaterial = flare.starMaterial;
+            trail.startColor = new Color(Green.r, Green.g, Green.b, 0.5f); trail.endColor = new Color(Green.r, Green.g, Green.b, 0f);
+            flare.streak = trail;
             trail.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
 
@@ -55,6 +64,7 @@ namespace FiveRivers.Combat
             float age = Time.time - born;
             if (age >= Rise + Burn) { Destroy(gameObject); return; }
             // up fast, slowing to the top; then a slow fall as it burns out
+            if (streak != null && age >= Rise * 0.85f) streak.emitting = false;   // no streak hanging from it as it burns
             float up = age < Rise ? 1f - Mathf.Pow(1f - age / Rise, 2f) : 1f - 0.22f * (age - Rise) / Burn;
             transform.position = from + Vector3.up * (Height * up) + drift * (age / (Rise + Burn));
             float b = age < Rise ? Mathf.Clamp01(age / 0.3f) * 0.6f : Mathf.Clamp01(1f - (age - Rise - Burn * 0.7f) / (Burn * 0.3f));

@@ -20,6 +20,12 @@ namespace FiveRivers.EditorTools
     public static class PositionDressing20261125
     {
         const string RootName = "PositionDressing_20261125";
+        // ---- boughs before the firing places (2026-11-27, BALANCE.md 4-5)
+        public const float FiringClear = 1.5f, FiringLow = 2.6f;   // metres along the trench from a firing place: nothing / only flat boughs
+        public const float TankFiringPlace = 17f;                   // where the player stands for the tank (LevelPoints.tankCheckpoint), not in TrenchDressing.FiringPlaces
+        static readonly float[] ClearPlaces = TrenchDressing.FiringPlaces.Concat(new[] { TankFiringPlace }).ToArray();
+        static readonly int[] LowBoughs = { 1, 2, 4, 5 };           // PD_Bough_0 stands up to a metre and 3 is the bushiest
+        public static readonly Color Needles = new Color(.17f, .25f, .10f);   // was (.10, .16, .055): it read as black, by day too
         const string Art = "Assets/_Project/Art/";
         const string Props = Art + "MapPolish20261105/PositionDressing20261125/SM_PD_PositionProps.fbx";
         const string Folder = "Assets/_Project/Art/MapPolish20261105/PositionDressing20261125";
@@ -62,7 +68,7 @@ namespace FiveRivers.EditorTools
             var twigMat = AssetDatabase.LoadAssetAtPath<Material>(Art + "Megascans20261107/FallenPineTree/M_MS_FallenPineTree.mat");
             var ponchoMat = PonchoMaterial();
             // cut pine boughs (PD_Bough_*, needles as thin crossed blades): bark, fresh needles, needles going yellow
-            var boughMats = new[] { twigMat, Plain("M_PD_PineNeedles", new Color(.10f, .16f, .055f), .28f, true), Plain("M_PD_PineNeedlesDry", new Color(.30f, .27f, .11f), .2f, true) };
+            var boughMats = new[] { twigMat, Plain("M_PD_PineNeedles", Needles, .28f, true), Plain("M_PD_PineNeedlesDry", new Color(.30f, .27f, .11f), .2f, true) };
             var grassMats = new Dictionary<GameObject, Material>
             {
                 { grass, GrassMat("M_PD_GrassClump", Color.white, .30f, .45f) },
@@ -129,19 +135,35 @@ namespace FiveRivers.EditorTools
             // 1. camouflage: cut pine boughs piled on the parapet, butts back, tips hanging toward the trench (a bough lies
             // along its +x: yaw 90 points it at -z). Two or three to a pile; not in front of a firing place.
             var gCamo = Group("Camouflage");
-            int camo = 0, piles = 0;
+            int camo = 0, piles = 0, cleared = 0, laid = 0;
             for (float x = west + .8f; x <= east - .6f; x += R(1.2f, 1.9f))
             {
                 if (NearFiring(x, 1.15f)) continue;
                 int n = rng.NextDouble() < .45 ? 3 : 2;
+                bool any = false;
                 for (int k = 0; k < n; k++)
                 {
                     float bx = x + R(-.35f, .35f), z = R(parapetZ0 + .15f, parapetZ0 + .55f);
-                    var rot = Quaternion.Euler(0f, 90f + R(-35f, 35f), 0f) * Quaternion.Euler(R(-12f, 12f), 0f, R(-18f, -4f));   // tip a little down
-                    PutBough(rng.Next(6), gCamo, new Vector3(bx, H(bx, z) + .02f + k * .05f, z), rot, R(.85f, 1.2f));
-                    camo++;
+                    float yaw = R(-35f, 35f);
+                    var rot = Quaternion.Euler(0f, 90f + yaw, 0f) * Quaternion.Euler(R(-12f, 12f), 0f, R(-18f, -4f));   // tip a little down
+                    int kind = rng.Next(6); float scale = R(.85f, 1.2f); float y = H(bx, z) + .02f + k * .05f;
+                    // 2026-11-27 (아트 검수 "흉장 위 솔가지가 세로 병솔처럼 서서 전차 구간 사격 자리 시야를 가림"): in front of a firing
+                    // place — the tank section's too, which was not in the list — nothing within FiringClear of it, and out to
+                    // FiringLow only boughs laid flat on the enemy's side of the crest, tips down the slope, the low kinds.
+                    // (The same random numbers are drawn as before, so everything placed after this stands where it stood.)
+                    float clear = ClearPlaces.Min(p => Mathf.Abs(p - bx));
+                    if (clear < FiringClear) { cleared++; continue; }
+                    if (clear < FiringLow)
+                    {
+                        kind = LowBoughs[kind % LowBoughs.Length]; scale = Mathf.Min(scale, .95f);
+                        z = parapetZ0 + .95f + (z - parapetZ0 - .15f); y = H(bx, z) + .02f;
+                        rot = OnGround(bx, z, -90f + yaw) * Quaternion.Euler(0f, 0f, -8f);
+                        laid++;
+                    }
+                    PutBough(kind, gCamo, new Vector3(bx, y, z), rot, scale);
+                    camo++; any = true;
                 }
-                piles++;
+                if (any) piles++;
             }
             // boughs against the parados (butt behind, leaning up over the trench edge) and over the niche sandbags
             foreach (var x in new[] { -16.2f, -11.8f, -9.5f, -2.6f, 0.6f, 5.4f, 7.8f, 13.6f, 18.0f })
@@ -151,7 +173,7 @@ namespace FiveRivers.EditorTools
                 PutBough(rng.Next(6), gCamo, new Vector3(x, H(x, z) + .05f, z), rot, R(.85f, 1.15f));
                 camo++;
             }
-            report.AppendLine($"camouflage boughs {camo} ({piles} piles on the parapet)");
+            report.AppendLine($"camouflage boughs {camo} ({piles} piles on the parapet; before the firing places {cleared} left out, {laid} laid flat beyond the crest)");
 
             // 2. litter, twigs, stones on the floor and the berms
             var gLitter = Group("Litter");
