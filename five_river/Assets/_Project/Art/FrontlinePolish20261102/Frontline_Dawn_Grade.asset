@@ -145,6 +145,7 @@ MonoBehaviour:
   - {fileID: -4349901694371704091}
   - {fileID: 1072658003098987496}
   - {fileID: 3331242509193619257}
+  - {fileID: 5122660655021937009}
 --- !u!114 &1072658003098987496
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -339,6 +340,9 @@ MonoBehaviour:
   lightNearRadius:
     m_OverrideState: 1
     m_Value: 2
+  lightCeiling:
+    m_OverrideState: 0
+    m_Value: 0
   noise:
     m_OverrideState: 1
     m_Value: 0.45
@@ -351,6 +355,40 @@ MonoBehaviour:
   steps:
     m_OverrideState: 1
     m_Value: 18
+--- !u!114 &5122660655021937009
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
+  m_Name: ShadowsMidtonesHighlights
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ShadowsMidtonesHighlights
+  active: 1
+  shadows:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  midtones:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  highlights:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  shadowsStart:
+    m_OverrideState: 1
+    m_Value: 0
+  shadowsEnd:
+    m_OverrideState: 1
+    m_Value: 0.2
+  highlightsStart:
+    m_OverrideState: 0
+    m_Value: 0.55
+  highlightsEnd:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &6760523553387437286
 MonoBehaviour:
   m_ObjectHideFlags: 3

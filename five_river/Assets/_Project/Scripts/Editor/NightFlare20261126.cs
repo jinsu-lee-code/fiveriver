@@ -24,10 +24,14 @@ namespace FiveRivers.EditorTools
         const string SkyMaterialPath = "Assets/_Project/Art/FrontlinePolish20261102/Frontline_NightDawnSky.mat";
         const string FlarePath = "Assets/_Project/Data/FlareConfig.asset";
 
-        public struct Values { public float exposure, saturation, flareRange, fogLight, sky; }
+        // shadowLift (2026-11-27): lifts only the darkest tones of the night grade (ShadowsMidtonesHighlights, shadows below
+        // shadowEnd), so the trench wall and sandbags right in front read without raising the flare-lit field; 0 = off
+        public struct Values { public float exposure, saturation, flareRange, fogLight, sky, shadowLift, shadowEnd; }
 
-        public static readonly Values Now = new Values { exposure = 1.0f, saturation = -60f, flareRange = 90f, fogLight = 0.7f, sky = 0.06f };
-        public static readonly Values Before = new Values { exposure = 1.8f, saturation = -32f, flareRange = 110f, fogLight = 1.5f, sky = 0.085f };
+        // 2026-11-27 (사용자 "지금 밝기가 너무 어두운 거 같지 않니?", 후보 A 1.25 · B 1.4 · C 1.2+그늘 들기를 같은 자리에서 비교,
+        // 감독 결정 B): 밤 노출만 1.0 -> 1.4. 조명탄 없을 때 참호 앞 모래주머니 · 발밑 길이 읽히고, 하늘 · 먼 능선은 어둡게 남는다.
+        public static readonly Values Now = new Values { exposure = 1.4f, saturation = -60f, flareRange = 90f, fogLight = 0.7f, sky = 0.06f, shadowLift = 0f, shadowEnd = 0.2f };
+        public static readonly Values Before = new Values { exposure = 1.8f, saturation = -32f, flareRange = 110f, fogLight = 1.5f, sky = 0.085f, shadowLift = 0f, shadowEnd = 0.2f };
 
         [MenuItem("FiveRivers/Setup/Night Flare 20261126")]
         public static string Apply() => Set(Now);
@@ -46,6 +50,7 @@ namespace FiveRivers.EditorTools
                     float x = float.Parse(q[1], System.Globalization.CultureInfo.InvariantCulture);
                     if (q[0] == "exposure") v.exposure = x; else if (q[0] == "saturation") v.saturation = x; else if (q[0] == "flareRange") v.flareRange = x;
                     else if (q[0] == "fogLight") v.fogLight = x; else if (q[0] == "sky") v.sky = x;
+                    else if (q[0] == "shadowLift") v.shadowLift = x; else if (q[0] == "shadowEnd") v.shadowEnd = x;
                 }
             return Set(v);
         }
@@ -68,6 +73,19 @@ namespace FiveRivers.EditorTools
             var grade = Effect<ColorAdjustments>(night);
             log.AppendLine($"night exposure {grade.postExposure.value:0.##} -> {v.exposure:0.##}");
             grade.postExposure.Override(v.exposure);
+            var lift = Effect<ShadowsMidtonesHighlights>(night);
+            log.AppendLine($"night shadow lift {lift.shadows.value.w:0.###} -> {v.shadowLift:0.###} (below {v.shadowEnd:0.##})");
+            lift.shadows.Override(new Vector4(1f, 1f, 1f, v.shadowLift));
+            lift.shadowsStart.Override(0f); lift.shadowsEnd.Override(v.shadowEnd);
+            lift.active = v.shadowLift > 0f;
+            // the dawn grade (priority 1, weight rising with the dawn) puts the shadows back to neutral, so the dawn is unchanged
+            var dawnProfile = AssetDatabase.LoadAssetAtPath<VolumeProfile>("Assets/_Project/Art/FrontlinePolish20261102/Frontline_Dawn_Grade.asset");
+            if (dawnProfile != null && v.shadowLift > 0f)
+            {
+                var dawnLift = Effect<ShadowsMidtonesHighlights>(dawnProfile);
+                dawnLift.shadows.Override(new Vector4(1f, 1f, 1f, 0f)); dawnLift.shadowsStart.Override(0f); dawnLift.shadowsEnd.Override(v.shadowEnd);
+                EditorUtility.SetDirty(dawnProfile);
+            }
             var atmosphere = AssetDatabase.LoadAssetAtPath<VolumeProfile>(AtmosphereProfilePath);
             var sat = Effect<ColorAdjustments>(atmosphere);
             log.AppendLine($"night saturation {sat.saturation.value:0} -> {v.saturation:0}");

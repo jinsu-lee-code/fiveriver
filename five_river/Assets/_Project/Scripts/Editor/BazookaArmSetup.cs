@@ -23,7 +23,7 @@ namespace FiveRivers.EditorTools
         // (2026-11-24, pass 2: refitted at armScale 1.9 - the 2026-11-23 values plus what ClaudeHandProbe.Measure then measured
         // from the closed fingers' loop to each grip's axis, with the loop 8.6 cm from the palm's bones: left 2.6 cm, right 1.2 cm)
         const float ArmScale = 1.9f;
-        static readonly Vector3 HipViewPosition = new Vector3(0.20f, -0.16f, 0.24f), HipViewEuler = new Vector3(8f, -4f, 10f);
+        static readonly Vector3 HipViewPosition = BazookaHipHands20261127.HipPosition, HipViewEuler = BazookaHipHands20261127.HipEuler; // 2026-11-27: was (0.20, -0.16, 0.24) / (8, -4, 10)
         // (2026-11-23 grip pose: moved out by 3.3 / 4.4 cm, so the palm's skin, not its bones, lies on the grip: the grips are
         // 6.6 / 7.4 cm across, the palm 3-4 cm thick to its bone, all measured in play by fitting the grip's cross-section)
 
