@@ -182,7 +182,7 @@
 | S3 첫 조명탄 · 간격 | 5초 뒤 · 24초마다 | `assaultFirstDelay` · `assaultInterval` |
 | 타는 시간 · 꺼지는 시간 | 16초 · 3초 (어두운 구간 약 5초 → 이동 · 보충 기회) | `burnTime` · `fadeTime` |
 | 높이 · 낙하 속도 · 흔들림 | 45 m · 1.6 m/s · 1.5 m | `launchHeight` · `fallSpeed` · `swayAmplitude` |
-| 밝기 · 범위 | 1500 · 110 m (URP 점광원, 화면으로 맞춤) | `lightIntensity` · `lightRange` |
+| 탄막의 안전 거리 | 플레이어 6.5 m · 아군 6 m · 탄약 상자 6 m · 참호(흉벽) 4.5 m · 엄폐 지점 5 m. 참호 안 · 사람 · 탄약 상자 · 엄폐물 위에는 떨어지지 않는다 | `bigKeep*` · `keepCover` |
 | 땅에서 튕겨 올라오는 빛 (2026-11-26, 부족한 점 2번) | 조명탄을 땅 표면에 대칭으로 비춘 자리(땅 아래)의 그림자 없는 점광. 세기 = 조명탄 세기 × 흙 반사율 0.22 × 배율 1, 색 = 조명탄 색 × 흙색 (0.62, 0.50, 0.38), 범위 = 높이 × 2 + 30 m. 안개 산란 층은 뺌. 배율 0 이면 끔 | `bounceAlbedo` · `bounceStrength` · `bounceSoil` · `bounceRangePad` |
 
 ### 2-2. 무기 (2026-10-27 1차 값, 그레이박스 기준 · 관찰 테스트로 조정)
