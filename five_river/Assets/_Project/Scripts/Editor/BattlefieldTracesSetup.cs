@@ -254,7 +254,7 @@ namespace FiveRivers.EditorTools
             var rot = ps.rotationOverLifetime; rot.enabled = true; rot.z = new ParticleSystem.MinMaxCurve(-0.03f, 0.03f);
             // the wind leans it, more the higher it gets
             var force = ps.forceOverLifetime; force.enabled = true; force.space = ParticleSystemSimulationSpace.World;
-            force.x = 0.055f; force.z = -0.018f;
+            force.x = 0.055f; force.z = 0.0185f;   // 2026-11-27: the same wind as the fog, the poplars and the grass (east, a little north)
             var noise = ps.noise; noise.enabled = true; noise.strength = 0.9f; noise.frequency = 0.02f; noise.scrollSpeed = 0.05f;
         }
     }
