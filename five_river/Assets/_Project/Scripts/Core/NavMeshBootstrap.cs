@@ -18,7 +18,7 @@ namespace FiveRivers.Core
             var skipped = new List<Collider>();
             foreach (var c in GetComponentsInChildren<Collider>())
             {
-                if (!c.enabled || !IsPerson(c.transform)) continue;
+                if (!c.enabled || !(IsPerson(c.transform) || IsBackdrop(c))) continue;
                 c.enabled = false;
                 skipped.Add(c);
             }
@@ -27,6 +27,14 @@ namespace FiveRivers.Core
             surface.BuildNavMesh();
             foreach (var c in skipped) c.enabled = true;
         }
+
+        // 2026-11-27 (사용자 지시 "오류 나는 거 고쳐"): the distant ridge backdrop's collider (Ridges_Continuous_Backdrop,
+        // 3000 x 169 x 3000 m) is over the NavMesh builder's 1e9 m3 source limit: the editor skipped it with a warning every
+        // play ("RuntimeNavMeshBuilder: Editor Only - Ignoring source mesh Ridges_Backdrop ..."). It is scenery nobody walks
+        // on, so it is left out of the bake here, in the editor and in a build alike. Its collider is back on after the bake.
+        public const float SourceVolumeLimit = 1e9f;
+        public static bool TooLargeForNavMesh(Vector3 size) => (double)size.x * size.y * size.z > SourceVolumeLimit;
+        static bool IsBackdrop(Collider c) => c is MeshCollider && TooLargeForNavMesh(c.bounds.size);   // (the terrain is not a mesh source)
 
         static bool IsPerson(Transform t)
         {

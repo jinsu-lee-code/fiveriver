@@ -7,6 +7,18 @@ namespace FiveRivers.Tests
 {
     // 걷은 소매 (2026-11-27, 사용자 결정 "소매 걷기"): M1 천 튜브의 링 반지름 — 위팔은 그대로, 팔꿈치 아래 접힌 띠는 소매보다
     // 두껍고, 그 아래는 손목 맨살 굵기로 줄어드는 팔뚝(소매보다 굵어지지 않음), 손목에서는 손 잘린 테두리 반지름과 맞는다.
+    // (2026-11-27) the NavMesh bake leaves out mesh colliders over the builder's 1e9 m3 limit (the ridge backdrop), not the rest
+    public sealed class NavMeshBackdropTests
+    {
+        [Test]
+        public void OnlyTheHugeBackdropIsLeftOut()
+        {
+            Assert.IsTrue(FiveRivers.Core.NavMeshBootstrap.TooLargeForNavMesh(new Vector3(3000f, 169f, 3000f)));   // Ridges_Continuous_Backdrop
+            Assert.IsFalse(FiveRivers.Core.NavMeshBootstrap.TooLargeForNavMesh(new Vector3(500f, 60f, 500f)));    // a map-sized piece
+            Assert.IsFalse(FiveRivers.Core.NavMeshBootstrap.TooLargeForNavMesh(new Vector3(2f, 1f, 1f)));
+        }
+    }
+
     public sealed class RolledSleeveShapeTests
     {
         RolledSleeveConfig config;
