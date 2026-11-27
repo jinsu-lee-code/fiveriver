@@ -12,9 +12,12 @@
 // details in coverage mode (0..255): 1.6% cover, so nothing showed.
 var terrain = UnityEngine.Terrain.activeTerrain;
 var data = terrain.terrainData;
-var dry = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>("Assets/_Project/Art/Maps/Dabudong1950/T_Grass_DryTuft.png");
-var tall = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>("Assets/_Project/Art/Maps/Dabudong1950/T_Grass_SeedingTall.png");
-if (dry == null || tall == null) return "grass textures missing";
+// 2026-11-27: the look of the grass (textures darker toward the root, colours, waving tint) is kept by the editor menu
+// FiveRivers/Setup/Terrain Grass Look 20261127 (Scripts/Editor/TerrainGrassLook20261127.cs, BALANCE.md 4-2). The values
+// here are the same, so running this again does not bring back the pale grass that floated over the soil under a flare.
+var dry = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>("Assets/_Project/Art/Maps/Dabudong1950/T_Grass_DryTuft_Rooted.png");
+var tall = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Texture2D>("Assets/_Project/Art/Maps/Dabudong1950/T_Grass_SeedingTall_Rooted.png");
+if (dry == null || tall == null) return "grass textures missing (run FiveRivers/Setup/Terrain Grass Look 20261127 once: it draws the _Rooted textures)";
 // GLSL-style smoothstep: 0 below a, 1 above b (Mathf.SmoothStep is an interpolation, not this)
 float Edge(float a, float b, float x) { return UnityEngine.Mathf.SmoothStep(0f, 1f, UnityEngine.Mathf.InverseLerp(a, b, x)); }
 UnityEditor.Undo.RegisterCompleteObjectUndo(data, "Dabudong 1950 dry grass");
@@ -31,12 +34,12 @@ UnityEngine.DetailPrototype Make(UnityEngine.Texture2D tex, float w0, float w1, 
 data.detailPrototypes = new[]
 {
     // short summer grass burnt by the drought: ankle to knee high, so a kneeling man is not hidden by it
-    Make(dry, 0.70f, 1.20f, 0.24f, 0.52f, new UnityEngine.Color(0.34f, 0.44f, 0.21f), new UnityEngine.Color(0.54f, 0.53f, 0.29f)),
+    Make(dry, 0.70f, 1.20f, 0.24f, 0.52f, new UnityEngine.Color(0.33f, 0.41f, 0.20f), new UnityEngine.Color(0.48f, 0.47f, 0.26f)),
     // seeding grass in a few thin stands
-    Make(tall, 0.55f, 0.90f, 0.60f, 0.95f, new UnityEngine.Color(0.46f, 0.52f, 0.28f), new UnityEngine.Color(0.66f, 0.62f, 0.38f)),
+    Make(tall, 0.55f, 0.90f, 0.60f, 0.95f, new UnityEngine.Color(0.44f, 0.49f, 0.27f), new UnityEngine.Color(0.59f, 0.56f, 0.34f)),
 };
 data.SetDetailScatterMode(UnityEngine.DetailScatterMode.CoverageMode);
-data.wavingGrassTint = new UnityEngine.Color(0.72f, 0.78f, 0.56f, 1f);
+data.wavingGrassTint = new UnityEngine.Color(0.69f, 0.73f, 0.55f, 1f);
 // the ground under it is parched too: the grass layer is pulled from green toward ochre
 var grassLayer = data.terrainLayers[0];
 grassLayer.diffuseRemapMax = new UnityEngine.Vector4(0.93f, 0.97f, 0.72f, 1f);
