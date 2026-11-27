@@ -49,6 +49,11 @@ foreach (var v in new[] { "A", "B" })
     var model = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>(fbx);
     var root = new UnityEngine.GameObject("PF_Poplar_" + v);
     var inst = (UnityEngine.GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(model, root.transform);
+    // (2026-11-27) The meshes are named *_LOD0..2, so Unity's model import puts its own LODGroup on the model (0.25 / 0.125 /
+    // 0.01). With the root's LODGroup below, each renderer was in two LODGroups ("registered with more than one LODGroup"
+    // warning for every tree, play and edit). The model importer has no setting to turn that off: the model's own group
+    // is removed here and the root's (these distances, LOD2 without shadows, the height) is the one that counts.
+    foreach (var own in inst.GetComponentsInChildren<UnityEngine.LODGroup>(true)) UnityEngine.Object.DestroyImmediate(own);
     var lods = new UnityEngine.LOD[3];
     float[] until = { 0.30f, 0.10f, 0.012f };
     float height = 0f;
