@@ -82,6 +82,13 @@ namespace FiveRivers.Narrative
         public int JoinedCount { get; private set; }
         public bool Stopped => stopped;
 
+        // where each man who is showing stands now, this far above his feet (SummitDawnDirector keeps the view to them clear)
+        public void CollectPassengerPoints(List<Vector3> into, float above)
+        {
+            foreach (var p in passengers)
+                if (p.body != null && p.body.gameObject.activeInHierarchy) into.Add(p.body.position + Vector3.up * above);
+        }
+
         public bool Begin(GameObject passengerPrefab, int count, Transform destination,
             float speed, Terrain terrain, Transform arrivalStart, Transform arrivalStop)
         {
@@ -107,6 +114,7 @@ namespace FiveRivers.Narrative
             elapsed = 0f;
             stopped = false;
             JoinedCount = 0; arrivedRaised = false;
+            gathered.Clear();
             arrivalPresented = false;
             arrivalView = Camera.main;
             audioPaused = false;
@@ -429,9 +437,14 @@ namespace FiveRivers.Narrative
                     p.stage = 2; // the pose stays on: EaseOutOfSquat lets the rest of the squat out as he walks
                     p.route.Clear();
                     p.next = 0;
-                    var slot = gatherOrigin + new Vector3(index * 1.05f, 0f, (index % 2) * .45f);
+                    // 2026-11-27 (검수 dawn/after_1cut_05 · 07): 1.05 m apart with a 0.45 m stagger stood them shoulder to
+                    // shoulder (1.14 m). GatherSpacing apart, each a different depth (JoinDepth), and never closer than
+                    // HillAllies.MinGap to one already there or onto anything solid (the same rule as the squad on the crest)
+                    var slot = gatherOrigin + new Vector3(index * GatherSpacing, 0f, JoinDepth[index % JoinDepth.Length]);
                     var target = transform.TransformPoint(slot);
                     Ground(ref target);
+                    target = GatherSpot(target, p.body);
+                    gathered.Add(target);
                     p.route.Add(target);
                     SetWalk(p, true);
                     return;
@@ -453,6 +466,23 @@ namespace FiveRivers.Narrative
                     return;
             }
         }
+        public static float GatherSpacing = 1.25f;
+        readonly List<Vector3> gathered = new List<Vector3>();
+        readonly Vector3[] gatherOne = new Vector3[1];
+
+        // the nearest spot to the planned one that keeps him clear of those already gathered and of anything solid
+        Vector3 GatherSpot(Vector3 planned, Transform body)
+        {
+            gatherOne[0] = planned;
+            var spot = StandSpacing.Spread(gatherOne, HillAllies.MinGap, (p, i) =>
+            {
+                var feet = p; Ground(ref feet);
+                return HillAllies.SpotClear(feet, planned.y, body);
+            }, gathered, HillAllies.MinGap)[0];
+            Ground(ref spot);
+            return spot;
+        }
+
         void SetWalk(Passenger p, bool walking)
         {
             if (p.animator == null) return;

@@ -45,6 +45,18 @@ namespace FiveRivers.Combat
         const float MoveFrom = 0.15f, StopBelow = 1.0f, MoveBlend = 0.2f;
         static readonly int WalkStateId = Animator.StringToHash("Walk"), IdleAimStateId = Animator.StringToHash("Idle_Aim");
         float stridePhase; // where in the stride this man's run begins (0-1), his own
+        // 2026-11-27 (검수 reveal/s0.6_022_cut: the same beat, the same pose): his own pace in the states that are not fitted
+        // to the ground speed (aim, crouched aim, walk, fire), and his own start in the idle he spawns in and in the cover
+        // aims. EnemyPoseVariety.
+        public static float PaceSpread = 0.08f;
+        float pace = 1f;
+        bool phaseSeeded;
+        const float CoverAimPhaseSeconds = 2f; // A_KPA_Crouch_Aim is 2.0 s, A_KPA_Idle_Aim 3.1 s; both loop
+        // Waiting at his cover (not about to fire) he hunches behind it with the muzzle down instead of kneeling bolt
+        // upright over the sandbags; he comes up as before to fire. Degrees: spine (shared with the chest), head, muzzle.
+        public static bool CoverHunch = true;
+        public static float HunchSpine = 16f, HunchHead = 10f, HunchMuzzle = 22f, HunchRate = 2.5f;
+        float hunch;
         static readonly int CrouchRunStateId = Animator.StringToHash("CrouchRun");
         static readonly int CrouchAimStateId = Animator.StringToHash("Crouch_Aim");
         static readonly int FireCrouchStateId = Animator.StringToHash("Fire_Crouch");
@@ -168,6 +180,7 @@ namespace FiveRivers.Combat
                 rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
                 leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
                 stridePhase = Random.value;
+                pace = EnemyPoseVariety.Pace(Random.value, PaceSpread);
                 runFootSpeed = RunClipSpeed * animator.humanScale * animator.transform.lossyScale.y;
                 crouchFootSpeed = CrouchRunClipSpeed * animator.humanScale * animator.transform.lossyScale.y;
                 leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
@@ -239,6 +252,10 @@ namespace FiveRivers.Combat
             shoulderTurn = Mathf.MoveTowards(shoulderTurn, ShoulderAim && state == State.Cover ? 1f : 0f, Time.deltaTime * ShoulderRate);
             float shoulderW = Mathf.SmoothStep(0f, 1f, shoulderTurn) * (1f - Mathf.Max(RunCarryWeight(), crouchCarry));
             Blade(shoulderW);
+            // waiting at the cover: hunched behind it, muzzle down (2026-11-27); up again to fire
+            hunch = EnemyPoseVariety.Ease(hunch, EnemyPoseVariety.KeepsLow(CoverHunch, state == State.Cover, Standing, shotPending), HunchRate, Time.deltaTime);
+            float hunchW = Mathf.SmoothStep(0f, 1f, hunch) * (1f - Mathf.Max(RunCarryWeight(), crouchCarry));
+            Hunch(hunchW);
             var support = handIK != null && handIK.HasAnimatedHand ? handIK.AnimatedLeftHand : leftHand.position;
             var along = support + transform.forward * AimAhead - rightHand.position;
             if (along.sqrMagnitude < 0.0025f) return;
@@ -267,6 +284,7 @@ namespace FiveRivers.Combat
                 var pocket = rightShoulder.position + transform.TransformDirection(ShoulderPocket);
                 var to = (owner != null ? owner.AimPointFor(this) : pocket + transform.forward * 10f) - pocket;
                 var aimRotation = to.sqrMagnitude > 0.01f ? Quaternion.LookRotation(to, transform.up) : transform.rotation;
+                if (hunchW > 0f) aimRotation = Quaternion.AngleAxis(HunchMuzzle * hunchW, transform.right) * aimRotation; // low ready while he waits
                 var shouldered = pocket - aimRotation * Vector3.Scale(buttLocal, rifle.lossyScale);
                 rotation = Quaternion.Slerp(rifle.rotation, aimRotation, shoulderW);
                 rifle.SetPositionAndRotation(Vector3.Lerp(rifle.position, shouldered, shoulderW), rotation);
@@ -282,6 +300,16 @@ namespace FiveRivers.Combat
             // seen close in the flare sequence the aiming clips also left the support hand open and floating under
             // the rifle (2026-11-13), so the hands now always hold it while he is alive.
             if (handIK != null) { handIK.Shoulder = shoulderW; handIK.Shape(1f, 1f - Mathf.Max(carry, crouchCarry), crouchCarry); }
+        }
+
+        // hunched behind the cover: the back rounds forward (spine and chest), the head goes down behind it
+        void Hunch(float w)
+        {
+            if (w <= 0f || bladeSpine == null) return;
+            var right = transform.right;
+            bladeSpine.rotation = Quaternion.AngleAxis(HunchSpine * 0.6f * w, right) * bladeSpine.rotation;
+            if (bladeChest != null) bladeChest.rotation = Quaternion.AngleAxis(HunchSpine * 0.4f * w, right) * bladeChest.rotation;
+            if (bladeHead != null) bladeHead.rotation = Quaternion.AngleAxis(HunchHead * w, right) * bladeHead.rotation;
         }
 
         // Period footage and accounts (2026-11-15): a 1950 rifleman going forward under fire stoops low and carries
@@ -376,6 +404,8 @@ namespace FiveRivers.Combat
             rifle.SetParent(owner != null ? owner.transform : null, true);
             rifle.gameObject.layer = 2; // Ignore Raycast: never blocks sight lines or shots
             var box = rifle.gameObject.AddComponent<BoxCollider>();
+            // 2026-11-27: fitted to the rifle's mesh (unfitted, with the mesh on a child it was a 1 m cube: the rifle stood on end)
+            DroppedRifle.FitBox(box, rifle, rifle.GetComponentInChildren<MeshFilter>());
             var rb = rifle.gameObject.AddComponent<Rigidbody>();
             rb.mass = 4f;
             rb.linearDamping = 0.2f;
@@ -388,6 +418,9 @@ namespace FiveRivers.Combat
             rb.linearVelocity = transform.right * (Random.value < 0.5f ? -1f : 1f) * Random.Range(1.7f, 2.3f) + transform.forward * Random.Range(0.2f, 0.7f) + Vector3.up * 0.35f;
             rb.angularVelocity = Random.insideUnitSphere * 2.5f;
             if (body != null) Physics.IgnoreCollision(box, body);
+            // 2026-11-27: it comes to rest on its own (DroppedRifle: frozen once still or asleep, laid flat if it stands
+            // up more than 25 degrees), no longer frozen mid-lean when the body settles
+            DroppedRifle.Attach(rifle.gameObject, rb, box, ragdoll);
             // 2026-11-18: the rifle stays where it fell for the rest of the run (EnemyDirector clears it with the body).
             if (owner == null) Destroy(rifle.gameObject, 8f);
         }
@@ -398,7 +431,8 @@ namespace FiveRivers.Combat
         public static event Action<EnemyAgent> BodySettled;
         public bool Fallen { get; private set; }
 
-        // Once he has come to rest the pose is frozen: no animator, no foot or hand solving, no physics on the rifle.
+        // Once he has come to rest the pose is frozen: no animator, no foot or hand solving. The rifle he dropped
+        // freezes itself when it has come to rest (DroppedRifle, 2026-11-27): cut off here it froze leaning on end.
         public void Settle()
         {
             if (Settled) return;
@@ -413,7 +447,8 @@ namespace FiveRivers.Combat
                 animator.enabled = false;
                 foreach (var skin in animator.GetComponentsInChildren<SkinnedMeshRenderer>()) skin.updateWhenOffscreen = false;
             }
-            if (rifle != null && rifleDropped)
+            // a rifle without its own rest keeper (should not happen): frozen here as before
+            if (rifle != null && rifleDropped && rifle.GetComponent<DroppedRifle>() == null)
             {
                 var rb = rifle.GetComponent<Rigidbody>();
                 if (rb != null) Destroy(rb);
@@ -545,6 +580,13 @@ namespace FiveRivers.Combat
             {
                 float speed = agent.velocity.magnitude;
                 animator.SetFloat(SpeedId, speed);
+                // his own place in the state he spawned in (all of a wave used to start their idle on the same frame)
+                if (!phaseSeeded && animator.isInitialized)
+                {
+                    phaseSeeded = true;
+                    var first = animator.GetCurrentAnimatorStateInfo(0);
+                    if (first.fullPathHash != 0 && !animator.IsInTransition(0)) animator.Play(first.fullPathHash, 0, stridePhase);
+                }
                 int current = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
                 // 전진은 숙인 달리기, 철수는 선 달리기 (2026-11-13).
                 // 2026-11-23 (사용자 지시 "달리기 모션이 어색한 부분도 고치고"), 1초에 30장 기록으로 본 세 가지:
@@ -561,11 +603,11 @@ namespace FiveRivers.Combat
                     else if (state == State.Retreat && speed > MoveFrom && current != RunStateId && next != RunStateId)
                         animator.CrossFadeInFixedTime(RunStateId, MoveBlend, 0, stridePhase * 0.7f);
                     else if (state == State.Cover && speed < StopBelow && !turning && (current == CrouchRunStateId || current == RunStateId || current == WalkStateId))
-                        animator.CrossFadeInFixedTime(Standing ? IdleAimStateId : CrouchAimStateId, MoveBlend);
+                        animator.CrossFadeInFixedTime(Standing ? IdleAimStateId : CrouchAimStateId, MoveBlend, 0, stridePhase * CoverAimPhaseSeconds);
                 }
-                // 달리기 상태에서만 지면 속도에 재생 속도를 맞춘다 (사격 · 피격 등 다른 동작은 원래 속도)
+                // 달리기 상태에서만 지면 속도에 재생 속도를 맞춘다 (사격 · 피격 등 다른 동작은 사람마다 ±8 % 다른 박자, 2026-11-27)
                 animator.speed = current == RunStateId ? Mathf.Clamp(speed / runFootSpeed, MinRunAnimSpeed, MaxRunAnimSpeed)
-                    : current == CrouchRunStateId ? Mathf.Clamp(speed / crouchFootSpeed, MinCrouchAnimSpeed, MaxCrouchAnimSpeed) : 1f;
+                    : current == CrouchRunStateId ? Mathf.Clamp(speed / crouchFootSpeed, MinCrouchAnimSpeed, MaxCrouchAnimSpeed) : pace;
                 animator.SetBool(CrouchId, state == State.Cover && !Standing);
                 animator.SetBool(AimId, state == State.Cover);
                 animator.SetBool(RetreatId, state == State.Retreat);

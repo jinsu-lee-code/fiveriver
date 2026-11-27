@@ -58,5 +58,15 @@ namespace FiveRivers.Data
         [Header("맞은 방향으로 쓰러지는 쪽 고르기")]
         [Tooltip("이 확률로 맞은 방향에 맞는 동작을 먼저 고른다 (앞에서 맞으면 뒤로, 뒤에서 맞으면 앞으로). 나머지는 지금처럼 무작위")]
         [Range(0f, 1f)] public float directionBias = 0.65f;
+
+        [Header("떨어진 소총 (2026-11-27, 검수: 땅에 비스듬히 선 채 굳음) — Combat/DroppedRifle")]
+        [Tooltip("소총 강체가 이 속도(m/s) 아래, 회전이 rifleRestSpin(rad/s) 아래로 rifleRestHold(초) 머물거나 잠들면 굳힌다 (시신이 굳는 때와 따로)")]
+        public float rifleRestSpeed = 0.05f;
+        public float rifleRestSpin = 0.25f;
+        public float rifleRestHold = 0.4f;
+        [Tooltip("떨어진 뒤 이 시간(초)이 지나면 그래도 굳힌다")] public float rifleMost = 6f;
+        [Tooltip("굳힐 때 긴 축이 지면에서 이 각도(도)보다 서 있으면 지면 법선에 맞춰 눕힌다 (눕힐 자리가 막히면 그대로)")]
+        public float rifleMaxTilt = 25f;
+        [Tooltip("눕히는 데 걸리는 시간(초)")] public float rifleLaySeconds = 0.3f;
     }
 }

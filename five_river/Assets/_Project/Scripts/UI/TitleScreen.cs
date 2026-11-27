@@ -24,12 +24,19 @@ namespace FiveRivers.UI
         float shownAt;
         bool wasTitle;
 
+        // The "operator restart Ctrl + Shift + R" line under the title: only on the exhibition run (legacyExhibitMode),
+        // never on the general release (DemoFlow.IsExpanded)
+        public static bool ShowsOperatorHint(bool expandedRun) => !expandedRun;
+
         void Start()
         {
             title.text = text.gameTitle;
             subtitle.text = text.gameSubtitle;
             startPrompt.text = text.startPrompt;
             operatorHint.text = text.operatorHint;
+            // 2026-11-27 (검수 itch_20261126/06_title_a): the operator's restart key belongs to the exhibition stand; the
+            // general release does not show it (the words stay in GameText.operatorHint, the key itself still works)
+            operatorHint.gameObject.SetActive(ShowsOperatorHint(director != null && director.Flow != null && director.Flow.IsExpanded));
             soundSetting = GameSoundSetting.AddRowBelow(startPrompt);
             var canvas = GetComponentInParent<Canvas>();
             if (canvas != null) intro = IntroCard.Create(canvas.rootCanvas.transform, canvas.rootCanvas.GetComponent<UiFonts>(), text);

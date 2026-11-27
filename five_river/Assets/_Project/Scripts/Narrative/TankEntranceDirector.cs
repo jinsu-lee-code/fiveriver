@@ -41,6 +41,20 @@ namespace FiveRivers.Narrative
         float time, clockBefore;
         int nextCue;
         bool pending, lineSaid, pausedLastFrame;
+        // 2026-11-27 (검수 itch_20261126/raw/0070_Tank_048.9 · 0076_Tank_053.2): trees and boughs between the take's camera
+        // and the tank draw only their shadow for the length of the sequence (CutsceneSightline). The whole take is
+        // looked through when it starts, so nothing disappears in the middle of a shot; put back in Finish (run out,
+        // skipped, section left, retry) and OnDestroy.
+        readonly CutsceneSightline sightline = new CutsceneSightline();
+        public static float SightlineStep = 0.1f, TankMidHeight = 1.3f, TankHalfWidth = 2f, TankHeight = 2.8f;
+        public int SightlineHidden => sightline.HiddenCount;
+
+        void ClearSightline(Vector3 eye, Vector3 tankOnPlane)
+        {
+            var terrain = Terrain.activeTerrain;
+            float ground = terrain != null ? terrain.SampleHeight(tankOnPlane) + terrain.transform.position.y : tankOnPlane.y;
+            sightline.Clear(eye, new Vector3(tankOnPlane.x, ground + TankMidHeight, tankOnPlane.z), TankHalfWidth, TankHeight);
+        }
 
         public bool Playing { get; private set; }
         public float Elapsed => time;
@@ -69,6 +83,7 @@ namespace FiveRivers.Narrative
         void OnDestroy()
         {
             if (Playing) Finish(false);
+            sightline.Restore();
             if (director == null || director.Flow == null) return;
             director.Flow.SectionChanged -= OnSectionChanged;
             director.Flow.RetryRequested -= OnRetry;
@@ -130,6 +145,8 @@ namespace FiveRivers.Narrative
                 position += new Vector3(Mathf.PerlinNoise(t, 0.3f) - 0.5f, Mathf.PerlinNoise(0.7f, t) - 0.5f, 0f) * (0.07f * amount);
                 rotation *= Quaternion.Euler((Mathf.PerlinNoise(t, 5.1f) - 0.5f) * 1.4f * amount, (Mathf.PerlinNoise(9.2f, t) - 0.5f) * 1.4f * amount, 0f);
             }
+            // the shot as it is now (with its shake), until the view starts back into the player's eyes
+            if (back <= 0f) ClearSightline(position, frame.tankPosition);
             var eye = playerCamera.transform;
             sequenceCamera.transform.SetPositionAndRotation(Vector3.Lerp(position, eye.position, back), Quaternion.Slerp(rotation, eye.rotation, back));
             sequenceCamera.fieldOfView = Mathf.Lerp(frame.fieldOfView > 1f ? frame.fieldOfView : playerCamera.fieldOfView, playerCamera.fieldOfView, back);
@@ -176,6 +193,13 @@ namespace FiveRivers.Narrative
 
             EnsureCamera();
             EnsureBars();
+            // every shot of the take, before the first frame is drawn (a take's Evaluate is a function of time only)
+            sightline.Restore();
+            for (float t = 0f; t <= take.Duration - HandBack; t += Mathf.Max(0.02f, SightlineStep))
+            {
+                var shot = take.Evaluate(t);
+                ClearSightline(shot.cameraPosition, shot.tankPosition);
+            }
             time = 0f;
             nextCue = 0;
             lineSaid = false;
@@ -225,6 +249,7 @@ namespace FiveRivers.Narrative
         void Finish(bool completed)
         {
             Playing = false;
+            sightline.Restore();
             tank.EndScripted();
             director.InputGate.Unblock(this);
             director.ClockScale = clockBefore;

@@ -39,3 +39,9 @@ MonoBehaviour:
   flinchLeg: 14
   flinchHips: 8
   directionBias: 0.65
+  rifleRestSpeed: 0.05
+  rifleRestSpin: 0.25
+  rifleRestHold: 0.4
+  rifleMost: 6
+  rifleMaxTilt: 25
+  rifleLaySeconds: 0.3

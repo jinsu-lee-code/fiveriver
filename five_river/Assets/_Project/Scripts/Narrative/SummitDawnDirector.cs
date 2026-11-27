@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FiveRivers.Combat;
 using FiveRivers.Core;
 using FiveRivers.DebugTools;
@@ -39,6 +40,14 @@ namespace FiveRivers.Narrative
         bool playedThisRun, pending;
         Vector3 toSun, downhill, eye, truckFocus, truckCamera, truckSide;
         bool truckCameraSet;
+        // 2026-11-27 (검수 dawn/after_1cut_05 · 07): a tree stood in front of the student soldiers jumping off the truck.
+        // In shot 2 the trees and boughs between the camera and them draw only their shadow (CutsceneSightline): the
+        // whole slide of the camera is looked through on the cut into the shot, then each man every frame as he moves.
+        // Put back on the cut into the player's eyes, in Finish and in OnDestroy.
+        readonly CutsceneSightline sightline = new CutsceneSightline();
+        readonly List<Vector3> passengerPoints = new List<Vector3>();
+        public static float StudentHalfWidth = 0.45f, StudentHeight = 1.8f, GatherHalfWidth = 3f, GatherHeight = 2.2f;
+        public int SightlineHidden => sightline.HiddenCount;
 
         public bool Playing => rig != null && rig.Playing;
         public float Elapsed => rig != null ? rig.Time : 0f;
@@ -60,6 +69,7 @@ namespace FiveRivers.Narrative
 
         void OnDestroy()
         {
+            sightline.Restore();
             if (rig != null) rig.End();
             if (fill != null) Destroy(fill.gameObject);
             if (director != null && director.Flow != null) director.Flow.SectionChanged -= OnSectionChanged;
@@ -118,12 +128,26 @@ namespace FiveRivers.Narrative
                         var from = truckCamera + Vector3.up * 0.6f;
                         fill.transform.SetPositionAndRotation(from, Quaternion.LookRotation(truckFocus + Vector3.up * 0.4f - from));
                     }
+                    // the whole slide of this shot, toward where the men gather and toward each man now
+                    CollectPassengers();
+                    for (float k = 0f; k <= 1.0001f; k += 0.05f)
+                    {
+                        var at = truckCamera + truckSide * (TruckSlide * k);
+                        sightline.Clear(at, truckFocus, GatherHalfWidth, GatherHeight);
+                        foreach (var p in passengerPoints) sightline.Clear(at, p, StudentHalfWidth, StudentHeight);
+                    }
                 }
                 if (truckCameraSet)
                 {
                     position = truckCamera + truckSide * (TruckSlide * u);
                     rotation = Quaternion.LookRotation(truckFocus - position);
                     fov = Mathf.Lerp(34f, 28f, u);
+                    // each man where he is now (they jump down and walk while the camera is on them)
+                    if (time < rig.Duration - rig.HandBack * .5f)
+                    {
+                        CollectPassengers();
+                        foreach (var p in passengerPoints) sightline.Clear(position, p, StudentHalfWidth, StudentHeight);
+                    }
                 }
                 else
                 {
@@ -133,7 +157,16 @@ namespace FiveRivers.Narrative
                     fov = 44f;
                 }
             }
-            if (rig.Frame(position, rotation, fov)) Finish();
+            bool done = rig.Frame(position, rotation, fov);
+            // the rig cuts into the player's own eyes here (CutBack): the trees come back under that cut, not after it
+            if (rig.Time >= rig.Duration - rig.HandBack * .5f) sightline.Restore();
+            if (done) Finish();
+        }
+
+        void CollectPassengers()
+        {
+            passengerPoints.Clear();
+            if (dawn.TruckSequence != null) dawn.TruckSequence.CollectPassengerPoints(passengerPoints, StudentHeight * 0.5f);
         }
 
         Vector3 OnGround(Vector3 p, float above)
@@ -145,6 +178,7 @@ namespace FiveRivers.Narrative
 
         void Finish()
         {
+            sightline.Restore();
             dawn.DawnRate = 1f;
             if (fill != null) { Destroy(fill.gameObject); fill = null; }
             rig.End();

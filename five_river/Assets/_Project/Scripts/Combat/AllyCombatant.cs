@@ -49,6 +49,21 @@ namespace FiveRivers.Combat
         public static Vector3 ParkStandShoulder = new Vector3(0.025f, 0.015f, 0.067f);
         public static Vector2 ParkStandHead = new Vector2(12f, -6f);
         public bool StandsToFire { get; private set; }
+        // 2026-11-27 (검수 itch_20261126/R_03_hill_assault_a: on the open slope of the hill assault the men stopped and fired
+        // standing bolt upright, feet together, in the KPA standing-fire clips). Out of the trench on the hill a man who
+        // halts to fire goes down on one knee (Fire_Crouch / Idle_Trench, with the Rigify kneel clips where installed),
+        // as he already does to watch the ridge (HillWatch); standing fire stays for the trench parapet.
+        public static bool KneelOnHill = true;
+        public static bool FiresStandingFor(bool standToFire, bool kneelOnHill, bool outOnTheHill) => standToFire && !(kneelOnHill && outOnTheHill);
+        bool FiresStanding => FiresStandingFor(StandToFire, KneelOnHill, HillWatch);
+        // 2026-11-27 (07 재측정, 1배속 고지 통플레이 Logs/claude_probe/war/07_Ally_2_2_027.2): a man who halted on the slope could be
+        // left in the crouched advance (CrouchRun_Rifle, no transition out of it in the controller) and his rounds went off from it,
+        // upright, feet together - the kneeling shot is a trigger the advance does not answer. Out on the hill he now goes down from
+        // the gait to the kneel (Idle_Trench) and fires only once the gait has faded off the screen (at most KneelGaitMax of it left).
+        // Separate from the standing aim's own wait (StandingAimWeight 0.95), which is for the trench parapet's standing shot.
+        public static float KneelGaitMax = 0.05f;
+        public static bool KneelReadyToFire(bool standsToFire, bool outOnTheHill, float gaitWeight) => standsToFire || !outOnTheHill || gaitWeight <= KneelGaitMax;
+        float GaitWeight => StateWeight(CrouchRunRifleId) + StateWeight(RunRifleId);
         void Posture(bool stand)
         {
             StandsToFire = stand;
@@ -57,6 +72,12 @@ namespace FiveRivers.Combat
             // into them: he is cross-faded there from here, and out again by StopFiring or by kneeling.
             if (stand) { if (!InState(AimStandId) && !InState(FireStandId)) animator.CrossFadeInFixedTime(AimStandId, 0.3f); }
             else if (InState(AimStandId) || InState(FireStandId)) animator.CrossFadeInFixedTime(IdleTrenchId, 0.3f);
+            // halted on the hill still in a moving gait (not cut short: only once no cross-fade is under way)
+            else if (HillWatch && !Advancing && !animator.IsInTransition(0))
+            {
+                int now = animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
+                if (now == CrouchRunRifleId || now == RunRifleId) animator.CrossFadeInFixedTime(IdleTrenchId, 0.3f);
+            }
         }
         static readonly int IdleTrenchId = Animator.StringToHash("Idle_Trench"), IdleStandId = Animator.StringToHash("Idle_Stand");
         bool InState(int id) => animator.GetCurrentAnimatorStateInfo(0).shortNameHash == id
@@ -80,6 +101,8 @@ namespace FiveRivers.Combat
         // 2026-11-24 (검수): 0.22 s raised the rifle from port arms to the shoulder faster than a man does; 0.4 s.
         public static float HoldFadeSeconds = 0.4f;
         AllyPoseFade poseFade;
+        // 2026-11-27 (부족한 점 7번 소총 멜빵): on his back the rifle lies against it and its sling runs over his right shoulder
+        RifleSling sling; bool slingTried, slungNow;
         Vector3 standWatch; float standWatchAt = -1f;
         // shouldering while standing in the trench (not firing): AllyClipPlayer may start its trench clips from it
         public bool Shouldering { get; private set; }
@@ -162,17 +185,23 @@ namespace FiveRivers.Combat
             if (animator != null) StopFiring();
         }
 
+        // 2026-11-27 (새벽 시작 총 튐, TASKS 「고지 출발 손」 · HANDOFF_20261126 2절 6번): from the hill assault into the dawn the
+        // men stay where they are on the crest. Clearing the hold fade there made the port arms -> slung change in one frame
+        // (rifle 14.6-26.8 cm, 23-31 degrees, all four), and the facing was snapped back to the trench's. Across that change
+        // the fade is kept (the rifle is slung over HoldFadeSeconds) and so is the facing (HillAllies.Hold turns them).
+        public static bool StaysPutAcross(FlowSection from, FlowSection to) => from == FlowSection.HillAssault && to == FlowSection.Dawn;
         void OnSectionChanged(FlowTransition transition) => ResetCombat(
-            transition.To == FlowSection.Title || transition.To == FlowSection.Tutorial);
+            transition.To == FlowSection.Title || transition.To == FlowSection.Tutorial,
+            StaysPutAcross(transition.From, transition.To));
         void OnRetry(FlowCheckpoint checkpoint) => ResetCombat(true);
 
         public void ResetForNewRun() => ResetCombat(true);
 
-        void ResetCombat(bool resetCounts)
+        void ResetCombat(bool resetCounts, bool staysPut = false)
         {
             if (!isActiveAndEnabled) return;
             StopFiring();
-            poseFade?.Clear(); // a new section or retry starts from where he is put, not from the last pose
+            if (!staysPut) poseFade?.Clear(); // a new section or retry starts from where he is put, not from the last pose
             talkTo = null; talkWeight = 0f;
             Shouldering = false; standingSince = -1f;
             watching = false;
@@ -180,7 +209,7 @@ namespace FiveRivers.Combat
             if (resetCounts && takingCover) { takingCover = false; LookUp(); }
             hasAdvanced = advancing; // already walking (HillAllies may hear the section change first): keep it
             recoilAt = -100f;
-            transform.rotation = restingRotation;
+            if (!staysPut) transform.rotation = restingRotation;
             nextShot = Time.time + Random.Range(config.fireIntervalMin, config.fireIntervalMax) * 0.5f;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (resetCounts) ShotsFired = MuzzleEffectsSpawned = AudioCuesRequested = 0;
@@ -293,7 +322,7 @@ namespace FiveRivers.Combat
                 CancelCue();
                 suppressing = false;
                 suppressAim = lastAim; // LateUpdate aims through AimPoint(): the rifle stays on that spot
-                Posture(StandToFire);
+                Posture(FiresStanding);
                 var hold = lastAim - transform.position; hold.y = 0f;
                 if (hold.sqrMagnitude > 0.01f)
                     transform.rotation = Quaternion.RotateTowards(transform.rotation,
@@ -309,7 +338,7 @@ namespace FiveRivers.Combat
             if (target == null && (!suppressing || (!pending && Time.time >= nextPick))) PickSuppressAim();
             suppressing = target == null;
             engaged = true;
-            Posture(StandToFire);
+            Posture(FiresStanding);
             var direction = AimPoint() - transform.position;
             direction.y = 0f;
             if (direction.sqrMagnitude < 0.01f) return;
@@ -322,6 +351,7 @@ namespace FiveRivers.Combat
             // crouch or the crouched run): the shot's 0.05 s cross-fade to Fire_Stand finished the rise in one or two frames,
             // the whole body and rifle 37 cm up at once. He fires once he is up.
             if (StandsToFire && StandingAimWeight < 0.95f) return;
+            if (!KneelReadyToFire(StandsToFire, HillWatch, GaitWeight)) return;   // still coming down from the advance to the kneel
             if (!suppressing && !CanSee(target)) { target = FindTarget(); nextShot = Time.time + 0.25f; return; }
             if (StandsToFire) animator.CrossFadeInFixedTime(FireStandId, 0.05f, 0, 0f);
             else animator.SetTrigger(FireId);
@@ -429,12 +459,20 @@ namespace FiveRivers.Combat
         // is at its idle height over the ground.
         public static float ToeRest = 0.06f, StandDropMost = 0.25f;
         Transform standHips, leftToe, rightToe;
-        float standDrop;
+        float standDrop, standWeight;
+        // 2026-11-27 (Ally_2 견착 -> 앞에총, 한 프레임에 몸 14~20 cm): the hips' drop followed the standing aim's weight as the
+        // animator reported it, and a cross-fade that interrupts another takes that weight from 1 to 0 in one frame. The
+        // drop now eases in and out over StandDropEase seconds whatever the animator does.
+        public static float StandDropEase = 0.25f;
+        public static float EaseStandWeight(float current, float target, float deltaTime, float seconds)
+            => seconds <= 0f ? target : Mathf.MoveTowards(current, Mathf.Clamp01(target), Mathf.Max(0f, deltaTime) / seconds);
         // how much of the standing aim (Aim_Stand / Fire_Stand) is on screen
         float StandingAimWeight => StateWeight(AimStandId) + StateWeight(FireStandId);
         void StandOnFloor()
         {
-            float w = Mathf.Clamp01(StandingAimWeight);
+            float aim = Mathf.Clamp01(StandingAimWeight);
+            standWeight = EaseStandWeight(standWeight, aim, Time.deltaTime, StandDropEase);
+            float w = standWeight;
             if (w <= 0f) { standDrop = 0f; return; }
             if (standHips == null)
             {
@@ -447,8 +485,9 @@ namespace FiveRivers.Combat
             foreach (var toe in new[] { leftToe, rightToe })
                 if (Physics.Raycast(toe.position + Vector3.up * 0.6f, Vector3.down, out var hit, 3f, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore))
                     low = Mathf.Min(low, toe.position.y - hit.point.y);
-            if (low == float.MaxValue) return;
-            standDrop = Mathf.MoveTowards(standDrop, Mathf.Clamp(low - ToeRest, 0f, StandDropMost), Time.deltaTime * 0.6f);
+            // measured only while the aim is on (the toes of another pose would give another drop): kept as it was while it eases out
+            if (aim > 0f && low != float.MaxValue)
+                standDrop = Mathf.MoveTowards(standDrop, Mathf.Clamp(low - ToeRest, 0f, StandDropMost), Time.deltaTime * 0.6f);
             standHips.position += Vector3.down * (standDrop * w);
         }
 
@@ -459,6 +498,7 @@ namespace FiveRivers.Combat
             // Rigify clips (2026-11-18, AllyClipPlayer): while a trench clip has the whole pose, the rifle follows the
             // clip's own track and the hands hold it as the clip has them. The aim, the carry and the tutorial look rest.
             bool clipRifle = Clips != null && Clips.OwnsRifle;
+            slungNow = false;
             int holdMode = PoseFadeClock.Clip;
             bool wasShouldering = Shouldering;
             Shouldering = false;
@@ -487,7 +527,7 @@ namespace FiveRivers.Combat
                 Vector3 slungPosition = Vector3.zero; Quaternion slungRotation = Quaternion.identity;
                 bool slung = director.Flow.IsExpanded && section == FlowSection.Dawn && advance <= 0f && run <= 0f
                     && Clips != null && Clips.SlungPose(out slungPosition, out slungRotation);
-                if (slung) { weapon.SetPositionAndRotation(slungPosition, slungRotation); riflePose.ApplySlungArms(); }
+                if (slung) { weapon.SetPositionAndRotation(slungPosition, slungRotation); riflePose.ApplySlungArms(); slungNow = true; }
                 bool portArms = !slung && director.Flow.IsExpanded && (section == FlowSection.HillAssault || section == FlowSection.Dawn)
                     && riflePose.ApplyPortArms(clipAdvance ? 0f : advance, clipRun ? 0f : run, section == FlowSection.Dawn ? 1f : 0f);
                 if (portArms && (clipRun || clipAdvance)) Clips.HoldMovingRifle(weapon, clipRun ? run : 0f, clipAdvance ? advance : 0f);
@@ -527,7 +567,9 @@ namespace FiveRivers.Combat
                     }
                 }
             }
-            if (wasShouldering && !Shouldering && !StandsToFire && (InState(AimStandId) || InState(FireStandId)))
+            // not while HillAllies moves him off (it cross-fades him into the run itself: two cross-fades a frame apart cut the
+            // first short, 2026-11-27)
+            if (wasShouldering && !Shouldering && !StandsToFire && !Advancing && (InState(AimStandId) || InState(FireStandId)))
                 animator.CrossFadeInFixedTime(IdleStandId, 0.3f);
             // going into or out of a clip: what was done above is kept in proportion (nothing when no clip plays)
             bool twoHanded = PoseFadeClock.BringsIntoReach(holdMode);
@@ -540,6 +582,15 @@ namespace FiveRivers.Combat
             // 2026-11-25: held in both hands (aim, watch, port arms) but put where the arms cannot reach while the body crouches
             // or stands up: brought in until both hands are on it (AllyRiflePose.KeepInReach; a frame both reach is left alone)
             if (twoHanded) riflePose.KeepInReach();
+            // the rifle slung on his back (standing, or resting on one knee at dawn in the clip the slung pose was baked from)
+            if (clipRifle && director.Flow.Section == FlowSection.Dawn && Clips.TryGetClipTime(out var slungClip, out _) && slungClip == AllyClipPlayer.SlungSourceClip)
+                slungNow = true;
+            if (slungNow)
+            {
+                if (sling == null && !slingTried) { sling = RifleSling.For(weapon, animator); slingTried = true; }
+                if (sling != null) sling.Drape(poseFade == null || poseFade.Clock.HoldWeight <= 0f);
+            }
+            else if (sling != null && sling.Draped) sling.Rest();
             TalkHead();
             if (!pending || Time.time < cueAt) return;
             pending = false;

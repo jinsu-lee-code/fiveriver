@@ -76,7 +76,35 @@ namespace FiveRivers.Narrative
             // The clip foot speeds this man really has: the Rigify run clips (2026-11-18) are swapped into his two moving
             // states by AllyClipPlayer when their data is in, and run faster than the old ones (measured by the menu).
             public float runClip = RunClipSpeed, advanceClip = AdvanceClipSpeed;
+            // holding the crest at dawn (2026-11-27): a step or two apart, his own facing, his own pose and pace
+            public bool shuffle;                // the short tired walk to his own place on the crest
+            public Vector3 holdFace = Vector3.forward;
+            public DawnPose pose;
+            public bool poseGiven, kneeling;
+            public float poseAt, lookScatter, pace = 1f;
+            public HeadBow bow;
+            public AllyClipPlayer kneelClips;
         }
+
+        // ---- the crest at dawn (2026-11-27, 검수 캡처 itch_20261126/raw/0430_Dawn_079.8 · 1050_Dawn_107.3 · dawn/after_1cut_07) ----
+        // They used to stop where they were, side by side or inside one another, and all stand in the one slung-rifle pose
+        // breathing in step. Now on the first Hold each man takes a place at least MinGap from the others and from the
+        // player (StandSpacing, on standable ground: no step down into the trench or up onto a rock, nothing solid there,
+        // not inside an art rock or sandbag), walks the step or two there at the tired walk, faces the way given plus his
+        // own offset (within ±LookScatter degrees), and settles into one of the poses the project already has:
+        //   Stand    the slung-rifle stand (Idle_Stand under AllyRiflePose.ApplySlungArms), his own phase and pace
+        //   LookDown the same with the head bowed to the ground in front of him (HeadBow)
+        //   Kneel    down on one knee resting, rifle slung (story clip A_ROK_Loader_Kneel_Idle, the clip the slung rifle
+        //            was baked from; its kneel-in clip starts with the rifle in the hands, so it is blended into instead)
+        // Park (he speaks and points out the river) always stands. Everything is undone by End().
+        public enum DawnPose { Stand = 0, LookDown = 1, Kneel = 2 }
+        public static float MinGap = 1.2f, PlayerGap = 1.4f, ShuffleFrom = 0.2f, ShuffleSpeed = 1.0f, MaxStepAside = 0.45f;
+        public static float LookScatter = 30f, ParkScatter = 0.3f, PaceSpread = 0.08f, LookDownDegrees = 16f, LookDownSeconds = 1.8f;
+        public static float PoseDelay = 0.6f, PoseStagger = 0.45f, KneelFade = 0.8f;
+        public const string KneelRestClip = AllyClipPlayer.SlungSourceClip;   // A_ROK_Loader_Kneel_Idle
+        const float IdleStandSeconds = 2.83f;  // A_ROK_Idle_Stand, frames 0-85 at 30 fps
+        const float BodyRadius = 0.3f;
+        bool holding;
 
         readonly List<Follower> followers = new List<Follower>();
         NavMeshPath navPathInstance;
@@ -91,6 +119,7 @@ namespace FiveRivers.Narrative
         public void Begin(Vector3 trenchExit)
         {
             End();
+            holding = false;
             exit = trenchExit;
             lastForward = Vector3.forward;
             foreach (var ally in Object.FindObjectsByType<AllyCombatant>(FindObjectsSortMode.InstanceID))
@@ -129,35 +158,160 @@ namespace FiveRivers.Narrative
         {
             foreach (var f in followers)
             {
+                ClearDawnPose(f);
                 if (f.body == null) continue;
                 f.body.SetPositionAndRotation(f.homePosition, f.homeRotation);
                 Stop(f);
             }
             followers.Clear();
+            holding = false;
         }
 
-        // The crest is held through the dawn arrival: everyone stops where he is and turns to the player
-        // (Settle eases the turn), and is only sent home by End() when the episode closes.
+        // The crest is held through the dawn arrival: everyone stops and turns to the player (Settle eases the turn),
+        // and is only sent home by End() when the episode closes. The first Hold also spaces them out and gives each his
+        // own pose (see DawnPose above; the first call's point is the player, as HillAssaultDirector calls it); a later
+        // Hold (the river) only turns them, each with his own offset, the kneeling men staying as they are.
         public void Hold(Vector3 player)
         {
+            bool first = !holding;
+            holding = true;
+            if (first)
+            {
+                playerNow = player;
+                foreach (var f in followers)
+                {
+                    if (f.body == null) continue;
+                    Stop(f);
+                    string who = f.body.name;
+                    bool park = AlliedRifleFit.IsParkAvatar(f.animator);
+                    f.lookScatter = StandSpacing.Unit(who, 1) * LookScatter * (park ? ParkScatter : 1f);
+                    f.pace = 1f + StandSpacing.Unit(who, 2) * PaceSpread;
+                    f.poseGiven = false;
+                    f.kneeling = false;
+                }
+                Spread(player);
+                var poses = StandSpacing.Poses(followers.Count, 3, Mathf.FloorToInt((StandSpacing.Unit("crest", 3) + 1f) * 1.5f),
+                    i => followers[i].animator == null || AlliedRifleFit.IsParkAvatar(followers[i].animator));
+                for (int i = 0; i < followers.Count; i++)
+                {
+                    followers[i].pose = (DawnPose)poses[i];
+                    followers[i].poseAt = Time.time + PoseDelay + PoseStagger * i;
+                }
+            }
             foreach (var f in followers)
             {
                 if (f.body == null) continue;
-                Stop(f);
-                var toPlayer = player - f.body.position;
+                var stand = f.walking && f.path.Count > 0 ? f.path[f.path.Count - 1] : f.body.position;
+                var toPlayer = player - stand;
                 toPlayer.y = 0f;
                 if (toPlayer.sqrMagnitude <= .01f) continue;
-                f.settle = Quaternion.LookRotation(toPlayer);
+                f.holdFace = Quaternion.Euler(0f, f.lookScatter, 0f) * toPlayer.normalized;
+                if (f.walking || f.kneeling) continue; // turned on arrival / stays on his knee
+                f.settle = Quaternion.LookRotation(f.holdFace);
                 f.settleUntil = Time.time + SettleFor;
             }
         }
 
         // Eases a man who has just stopped into the facing he was given. Called every frame while they hold.
+        // Holding the crest it also walks the men still on their way to their places and gives each his pose.
         public void Settle()
         {
             foreach (var f in followers)
-                if (f.body != null && !f.walking && Time.time < f.settleUntil && !f.combat.Engaged)
+            {
+                if (f.body == null) continue;
+                if (holding)
+                {
+                    if (f.walking)
+                    {
+                        if (f.shuffle && f.body.gameObject.activeInHierarchy) Move(f, f.holdFace);
+                        continue;
+                    }
+                    if (!f.poseGiven && Time.time >= f.poseAt) GiveDawnPose(f);
+                    if (f.kneeling) continue;
+                }
+                if (!f.walking && Time.time < f.settleUntil && !f.combat.Engaged)
                     f.body.rotation = Quaternion.RotateTowards(f.body.rotation, f.settle, SettleRate * Time.deltaTime);
+            }
+        }
+
+        // Each man to a place at least MinGap from the others and PlayerGap from the player, the fewest steps away.
+        void Spread(Vector3 player)
+        {
+            var from = new List<Vector3>(followers.Count);
+            var who = new List<Follower>(followers.Count);
+            foreach (var f in followers)
+            {
+                if (f.body == null || !f.body.gameObject.activeInHierarchy) continue;
+                from.Add(f.body.position);
+                who.Add(f);
+            }
+            if (from.Count == 0) return;
+            var spots = StandSpacing.Spread(from, MinGap, (p, i) => SpotClear(Ground(p, who[i].body), who[i].body.position.y, who[i].body)
+                && SpotClear(Ground(Vector3.Lerp(from[i], p, .5f), who[i].body), who[i].body.position.y, who[i].body), new[] { player }, PlayerGap);
+            for (int i = 0; i < who.Count; i++)
+            {
+                if (Flat(spots[i] - from[i]) < ShuffleFrom) continue;
+                var f = who[i];
+                f.path.Clear();
+                f.path.Add(f.body.position);
+                f.path.Add(Ground(spots[i], f.body));
+                f.corner = 1;
+                f.speed = 0f;
+                f.walking = true;
+                f.shuffle = true;
+            }
+        }
+
+        // Can a man stand here: about level with where he is (not down in the trench or up on a rock), on ground that is
+        // not steep, with nothing solid where his body would be and no art rock or sandbag round him. Also used for the
+        // student soldiers gathering behind the truck (DawnTruckSequence).
+        static readonly Collider[] overlaps = new Collider[16];
+        internal static bool SpotClear(Vector3 feet, float levelWith, Transform self)
+        {
+            if (Mathf.Abs(feet.y - levelWith) > MaxStepAside) return false;
+            if (Physics.Raycast(feet + Vector3.up * 0.5f, Vector3.down, out var ground, 1.2f, FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore)
+                && ground.normal.y < 0.82f) return false; // steeper than about 35 degrees
+            int n = Physics.OverlapCapsuleNonAlloc(feet + Vector3.up * (BodyRadius + 0.2f), feet + Vector3.up * 1.6f, BodyRadius, overlaps,
+                FiveRivers.Core.WorldQuery.Solid, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < n; i++)
+            {
+                var c = overlaps[i];
+                if (c == null || c is TerrainCollider || IsPerson(c, self) || c.GetComponentInParent<Animator>() != null) continue;
+                return false;
+            }
+            return !CoverVisuals.Blocks(feet + Vector3.up * 0.5f, BodyRadius, feet + Vector3.up * 50f);
+        }
+
+        void GiveDawnPose(Follower f)
+        {
+            f.poseGiven = true;
+            if (f.animator == null || !f.animator.isActiveAndEnabled) return;
+            if (f.pose == DawnPose.Kneel)
+            {
+                var clips = f.animator.GetComponent<AllyClipPlayer>();
+                if (clips != null && clips.PlayStory(KneelRestClip, KneelFade, true, f.pace))
+                {
+                    f.kneelClips = clips;
+                    f.kneeling = true;
+                    return;
+                }
+                f.pose = DawnPose.LookDown; // no clip data on this man: the other pose that is not the plain stand
+            }
+            // his own place in the idle and his own pace: four men breathing in step read as one man copied
+            f.animator.CrossFadeInFixedTime(IdleState, 0.3f, 0, Random.value * IdleStandSeconds);
+            f.animator.speed = f.pace;
+            if (f.pose == DawnPose.LookDown) f.bow = HeadBow.On(f.body, LookDownDegrees, LookDownSeconds);
+        }
+
+        static void ClearDawnPose(Follower f)
+        {
+            if (f.bow != null) Object.Destroy(f.bow);
+            f.bow = null;
+            if (f.kneelClips != null && f.kneeling) f.kneelClips.StopStory(0f);
+            f.kneelClips = null;
+            f.kneeling = false;
+            f.poseGiven = false;
+            f.shuffle = false;
         }
 
         // forward: direction the assault is heading (player -> current objective)
@@ -343,7 +497,8 @@ namespace FiveRivers.Narrative
                 }
             }
 
-            float want = f.running ? JogSpeed : WalkSpeed;
+            // the step or two to his own place on the crest is the tired walk (2026-11-27), not the crouched advance
+            float want = f.shuffle ? ShuffleSpeed : f.running ? JogSpeed : WalkSpeed;
             if (remaining < BrakeDistance) want = Mathf.Min(want, Mathf.Lerp(MinSpeed, WalkSpeed, remaining / BrakeDistance));
             // turn towards the way before stepping off, and ease round corners instead of sliding sideways
             float off = distance > 0.01f ? Vector3.Angle(Vector3.ProjectOnPlane(f.body.forward, Vector3.up), steer) : 0f;
@@ -369,20 +524,36 @@ namespace FiveRivers.Narrative
             // (AllyCombatant.StopFiring) cross-faded away.
             bool stepping = f.speed > StepOffSpeed;
             f.runGait = f.speed > (f.runGait ? RunGaitBelow : RunGaitAbove);
-            int state = !stepping ? IdleState : f.runGait ? RunState : f.hasAdvance ? AdvanceState : TiredWalkState;
-            float clip = f.runGait ? f.runClip : f.hasAdvance ? f.advanceClip : TiredWalkClipSpeed;
-            Play(f.animator, state, stepping ? 0.2f : 0.15f);
+            int state = !stepping ? IdleState : f.runGait ? RunState : f.hasAdvance && !f.shuffle ? AdvanceState : TiredWalkState;
+            float clip = f.runGait ? f.runClip : f.hasAdvance && !f.shuffle ? f.advanceClip : TiredWalkClipSpeed;
+            Play(f.animator, state, stepping ? 0.2f : 0.15f, true);
             f.animator.speed = stepping ? Mathf.Clamp(f.speed / (clip * f.rigScale), MinAnimSpeed, MaxAnimSpeed) : 1f;
             // The controller's own Idle <-> Walk_Tired transitions listen to Speed: only the old walk may use it.
             f.animator.SetFloat(SpeedId, stepping && state == TiredWalkState ? f.speed : 0f);
             if (f.stride != null) f.stride.Active = stepping;
         }
 
-        static void Play(Animator animator, int state, float fade)
+        // 2026-11-27 (Ally_2 견착 -> 앞에총 · 살핌 -> 앞에총, 손은 붙은 채 몸이 한 프레임에 14~20 cm): moving off, the stand
+        // (Aim_Stand -> Idle_Stand, 0.15-0.3 s) and the gait (-> CrouchRun_Rifle, 0.2 s) were cross-faded a few frames apart, the
+        // second cutting the first short. Called every frame from Move, a change of gait now waits for a cross-fade under way
+        // to end (at most its 0.3 s); one-off calls (Stop) still cut in as before. WaitForFade false: as before.
+        public static bool WaitForFade = true;
+        public static bool WaitsForFade(bool waitAllowed, bool changing, bool alreadyGoingThere) => WaitForFade && waitAllowed && changing && !alreadyGoingThere;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        public static int WaitedFades; // how many frames a gait change waited (debug)
+#endif
+        static void Play(Animator animator, int state, float fade, bool canWait = false)
         {
             bool changing = animator.IsInTransition(0);
-            if (changing ? animator.GetNextAnimatorStateInfo(0).shortNameHash == state
-                : animator.GetCurrentAnimatorStateInfo(0).shortNameHash == state) return;
+            bool changingThere = changing && animator.GetNextAnimatorStateInfo(0).shortNameHash == state;
+            if (changing ? changingThere : animator.GetCurrentAnimatorStateInfo(0).shortNameHash == state) return;
+            if (WaitsForFade(canWait, changing, changingThere))
+            {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                WaitedFades++;
+#endif
+                return;
+            }
             animator.CrossFadeInFixedTime(state, fade);
         }
 
@@ -400,6 +571,7 @@ namespace FiveRivers.Narrative
         {
             f.walking = false;
             f.running = false;
+            f.shuffle = false;
             f.runGait = false;
             f.speed = 0f;
             f.path.Clear();
