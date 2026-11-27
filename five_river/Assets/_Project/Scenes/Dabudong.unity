@@ -176193,6 +176193,7 @@ MonoBehaviour:
   rightSkinCap: {x: -0.0019636275, y: 0.005968325, z: -0.0012560356}
   leftSkinRadius: 0.04558778
   rightSkinRadius: 0.027590573
+  rolledSleeve: {fileID: 11400000, guid: 18815c8cb1ed63c44b6dd58cfb5da64e, type: 2}
 --- !u!4 &7784125397096892822
 Transform:
   m_ObjectHideFlags: 0

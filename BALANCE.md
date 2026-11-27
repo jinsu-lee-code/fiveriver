@@ -352,6 +352,20 @@
 | 흙 튐의 흙덩이 크기 · 그리기 | 1.2~3 cm, 날아가는 방향으로 길쭉하게(길이 ×2 + 속도 × 0.004) | 3~6 cm 네모 조각 | `ClodSizeMin/Max` · `ClodStretch` · `ClodVelocityStretch` |
 | 포탄 폭발의 흙덩이 크기 | 3~11 cm, 같은 방식 | 7~26 cm 네모 조각 (조명탄 아래 검은 다각형) | `ShellingSetup.BlastClodMin/Max` |
 
+### 4-8. 걷은 소매 — 1인칭 팔 (2026-11-27, 사용자 결정 "소매 걷기", 데이터 `Data/RolledSleeveConfig.asset`, 메뉴 `FiveRivers/Setup/Rolled Sleeves 20261127`(M1) · `Bazooka Tripo Arms`(바주카, 원본 `source/characters/fp_arms_tripo_20261123/roll_sleeves.py`))
+1950년 8월 한여름 국군처럼 소매를 팔꿈치 근처까지 두세 번 접어 걷고 팔뚝은 맨살. 두 무기(M1 · 바주카)가 같은 수치를 쓴다. 팔뚝 비율 f = 팔꿈치 0 · 손목 1.
+
+| 항목 | 값 | 키 |
+|---|---|---|
+| 접힌 띠 | f −0.14 ~ 0.14 (팔꿈치 바로 위~아래), 골 −0.14 · −0.05 · 0.04 · 0.14, 굵기 = 소매 × 1.08, 겹마다 볼록 9 %, 입술에서 맨살로 0.025 | `bandTop` · `bandBottom` · `folds` · `bandScale` · `ridge` · `lipLength` |
+| 맨살 팔뚝 굵기 (손목 맨살 반지름 배수) | f 0.14 → 1.62, 0.30 → 1.58, 0.50 → 1.42, 0.70 → 1.22, 0.86 → 1.06, 0.95 → 1.0 (실제 손목 둘레 약 17 cm, 팔뚝 가장 굵은 곳 약 27 cm) | `skinProfile` |
+| 팔뚝 모양 | 손목 쪽 단면 가로/세로 1.24 타원, 팔꿈치 아래 폄근 +7 % (f 0.24) · 굽힘근 +5 % (f 0.34, 반대쪽), 자뼈 끝 돌기 +4.5 % (f 0.90) | `ellipse` · `extensors` · `flexors` · `ulna` |
+| M1 천 튜브 | 피부 재질은 관 길이 t 0.585 부터(팔꿈치 0.5). 손목: 손 잘린 테두리 자리 1.0 배 → 손 안으로 0.95 배(약 1.5 mm 안쪽, 전 1.03 배로 덮을 때 밝은 선). 띠의 팔꿈치 안쪽 면은 굽힘에 비례해 반지름 × (1 − 0.5 × 눌림) — 조준 때 띠가 아래 팔뚝을 4.8 mm 뚫던 것 → 0.9 mm | `m1SkinFromT` · `m1SkinOverRim` · `m1SkinTuck` · `bandInsideSquash` |
+| M1 팔뚝 피부 | 색 = 그 손 텍스처 피부의 65 % 밝기 × 왼손 1.0 · 오른손 1.0, 손목 3~4 cm(uv v 0.875~0.94)에서 손 색으로 넘어감, 피부결 = 오른손과 같은 `Skin_DetailNormal` 세기 0.45(손 0.9 의 절반) · 반복 (5, 12)(손등과 같은 결 크기) | `m1SkinPercentile` · `m1SkinToneLeft/Right` · `m1WristBlend` · `m1RimToneLeft/Right` · `m1PoreStrength` · `m1PoreTiling` |
+| 바주카 손목 (roll_sleeves.py) | 옛 끝단 자리 텍셀(t 0.93 ± 0.06)을 피부색 · 평평한 노멀로 최대 85 % 섞음 | `WRIST_LINE` |
+| 바주카 팔뚝 피부 (roll_sleeves.py 상수) | 색 = 이 팔 손등 피부 중앙값, 얼룩 = 손등 밝기 편차 × 0.45, 원래 소매 단면 굴곡 15 % 만 남김 | `MOTTLE` · `KEEP_SHAPE` |
+| 바주카 색 맞춤의 천 / 피부 판정 | 띠 위 끝 f < −0.14 는 삼각형째 천(전 0.65 — 그대로 두면 칠한 팔뚝을 다시 초록으로 바꿈), 그 아래 팔뚝(손 제외)은 roll_sleeves.py 의 피부 마스크로 텍셀마다(삼각형째는 띠 입술에 초록 · 카키 조각) | `BazookaArmSetup.ClothAbove` (= `bandTop`) |
+
 ## 5. 측정 기준선과 목표
 
 ### 5-1. 합격 목표 (기획안 05번, 달성 기록 아님)

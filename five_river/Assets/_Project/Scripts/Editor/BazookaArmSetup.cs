@@ -347,9 +347,22 @@ namespace FiveRivers.EditorTools
         }
 
         // where the base colour is cloth (1 = all of it, between = blended), from the arms' triangles (see above)
-        static float[] ClothWeight(ArmFile data, SkinnedMeshRenderer[] arms, float[] rg, int w, int h)
+        static bool Rolled => AssetDatabase.LoadAssetAtPath<FiveRivers.Data.RolledSleeveConfig>(FiveRivers.Data.RolledSleeveConfig.AssetPath) != null;
+        static float ClothAbove
+        {
+            get
+            {
+                var rolled = AssetDatabase.LoadAssetAtPath<FiveRivers.Data.RolledSleeveConfig>(FiveRivers.Data.RolledSleeveConfig.AssetPath);
+                // (the band itself is repainted in one sleeve colour, so the per-texel colour test takes it as cloth along its
+                // own rounded edge; forcing it per triangle up to the lip made that edge follow the uv triangles)
+                return rolled != null ? rolled.bandTop : 0.65f;
+            }
+        }
+
+        static float[] ClothWeight(ArmFile data, SkinnedMeshRenderer[] arms, float[] rg, int w, int h, Color32[] skinMask = null)
         {
             var region = new byte[w * h]; var covered = new bool[w * h];
+            bool rolled = Rolled; float clothAbove = ClothAbove;   // (read once: an asset lookup)
             foreach (var a in data.arms)
             {
                 var arm = arms.FirstOrDefault(r => r.name == a.name); if (arm == null) continue;
@@ -383,7 +396,14 @@ namespace FiveRivers.EditorTools
                     // (pass 2) the sleeve up the forearm and the arm is all cloth whatever its colour: the scan's orange-brown grime
                     // there read as skin and kept the skin's colour, streaks on the green sleeve. Bare skin begins 70 % of the way
                     // down the forearm (measured: skin-coloured vertices from 0.7 of elbow-to-wrist on, both arms).
-                    if (cnt > 0 && !isHand[t] && (along[i0] + along[i1] + along[i2]) / 3f < 0.65f) kind[t] = 2;
+                    // (2026-11-27 rolled sleeves) with the sleeve rolled to the elbow (roll_sleeves.py) the forearm below the band is
+                    // bare skin: the forced cloth ends at RolledSleeveConfig.bandTop instead of 0.65.
+                    if (cnt > 0 && !isHand[t] && (along[i0] + along[i1] + along[i2]) / 3f < clothAbove) kind[t] = 2;
+                    // (rolled) below the band top the forearm is what roll_sleeves.py painted: cloth or skin is read texel by texel
+                    // from its skin mask (kind 3), not by triangle - by triangle the lip's triangles came out as khaki or pale-green
+                    // patches (a mostly-skin triangle taking its band texels as skin, or the "outer" rule below taking the lip's
+                    // skin as cloth)
+                    else if (rolled && cnt > 0 && !isHand[t]) kind[t] = 3;
                 }
                 start[tc] = tex.Count;
                 for (int ring = 0; ring < 3; ring++)
@@ -405,7 +425,7 @@ namespace FiveRivers.EditorTools
                     int changed = 0;
                     for (int t = 0; t < tc; t++)
                     {
-                        if (kind[t] == 2 || start[t + 1] == start[t]) continue;
+                        if (kind[t] == 2 || kind[t] == 3 || start[t + 1] == start[t]) continue;
                         int i0 = a.triangles[t * 3], i1 = a.triangles[t * 3 + 1], i2 = a.triangles[t * 3 + 2];
                         if (!clothV[i0] && !clothV[i1] && !clothV[i2]) continue;
                         float meanNa = (na[i0] + na[i1] + na[i2]) / 3f, meanNr = (nr[i0] + nr[i1] + nr[i2]) / 3f, meanR = (rad[i0] + rad[i1] + rad[i2]) / 3f;
@@ -423,7 +443,8 @@ namespace FiveRivers.EditorTools
             var weight = new float[w * h];
             for (int i = 0; i < weight.Length; i++)
             {
-                if (region[i] == 2 || (!covered[i] && near[i] > 0f)) weight[i] = 1f;
+                if (region[i] == 3) weight[i] = skinMask != null ? 1f - skinMask[i].r / 255f : 0f;
+                else if (region[i] == 2 || (!covered[i] && near[i] > 0f)) weight[i] = 1f;
                 else if (region[i] == 1) weight[i] = Mathf.Clamp01((ClothRGHigh - rg[i]) / (ClothRGHigh - ClothRGLow));
             }
             return weight;
@@ -451,7 +472,7 @@ namespace FiveRivers.EditorTools
             float skinLum = Lum(skinSrc), sleeveLum = Lum(sleeveSrc);
             var rg = new float[w * h];
             for (int i = 0; i < rg.Length; i++) rg[i] = lin[px[i].r] / Mathf.Max(lin[px[i].g], 1e-4f);
-            var cloth = ClothWeight(data, arms, rg, w, h);
+            var cloth = ClothWeight(data, arms, rg, w, h, mp);
             rg = null;
             // grime: the skin round each texel, at half resolution (it is a 24-texel average)
             int hw = w / 2, hh = h / 2;

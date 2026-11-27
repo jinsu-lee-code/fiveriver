@@ -26,11 +26,14 @@ namespace FiveRivers.Combat
 
         [SerializeField] Vector3 leftSkinCap,rightSkinCap;
         [SerializeField] float leftSkinRadius,rightSkinRadius;
+        // 2026-11-27 (사용자 결정 "소매 걷기"): set, the cloth tube ends in a rolled band below the elbow and the rings below it
+        // are bare forearm (a second submesh in the skin material) down to the hand's cut rim. Null: the full sleeve as before.
+        [SerializeField] FiveRivers.Data.RolledSleeveConfig rolledSleeve;
         Mesh leftSleeveMesh,rightSleeveMesh;
         Vector3[] leftSleeveVertices,rightSleeveVertices;
         const int LeftBodyRings=65;
         readonly Vector3[] sleeveCentres=new Vector3[LeftBodyRings],sleeveTangents=new Vector3[LeftBodyRings];
-        readonly Vector4[] leftClothTangents=new Vector4[(LeftBodyRings+2)*33],rightClothTangents=new Vector4[35*33];
+        readonly Vector4[] leftClothTangents=new Vector4[(LeftBodyRings+2)*33],rightClothTangents=new Vector4[35*33],rightRolledTangents=new Vector4[(LeftBodyRings+2)*33];
         Quaternion leftWristRest, rightWristRest;
         Quaternion leftForearmHandRest,rightForearmHandRest;
         Transform[] bones;
@@ -78,6 +81,13 @@ namespace FiveRivers.Combat
             var leftCloth=Resources.Load<Material>("M1_FP_LeftCloth");
             if(leftCloth!=null)leftCuff.GetComponent<Renderer>().sharedMaterial=leftCloth;
             rightSleeveMesh=Instantiate(rightCuff.GetComponent<MeshFilter>().sharedMesh);
+            if(rolledSleeve!=null)
+            {
+                // the right sleeve gets the left one's ring count, so the band's folds have rings to sit on
+                RefineLeftCloth(rightSleeveMesh);
+                SplitSkin(leftSleeveMesh,leftCuff.GetComponent<Renderer>(),rolledSleeve.leftSkin);
+                SplitSkin(rightSleeveMesh,rightCuff.GetComponent<Renderer>(),rolledSleeve.rightSkin);
+            }
             leftCuff.GetComponent<MeshFilter>().sharedMesh=leftSleeveMesh;
             rightCuff.GetComponent<MeshFilter>().sharedMesh=rightSleeveMesh;
             leftSleeveVertices=new Vector3[leftSleeveMesh.vertexCount];rightSleeveVertices=new Vector3[rightSleeveMesh.vertexCount];
@@ -137,10 +147,14 @@ namespace FiveRivers.Combat
             // the narrow sleeve read as a single overlong arm in first person.
             var start=shoulder-upperAxis*.025f;
             float upperLength=Vector3.Distance(start,elbow),lowerLength=Vector3.Distance(elbow,end);
+            float tCap=1f-.5f*overlap/Mathf.Max(lowerLength,1e-4f);   // the tube's t at the hand's cut rim (beyond it: inside the hand)
             const int count=32;
             bool leftCloth=sleeve==leftCuff;
-            int bodyRings=leftCloth?LeftBodyRings:33;
-            var clothTangents=leftCloth?leftClothTangents:rightClothTangents;
+            var rolled=rolledSleeve;
+            bool refined=leftCloth||rolled!=null;
+            int bodyRings=refined?LeftBodyRings:33;
+            float wristSkin=Mathf.Max(.026f,skinRadius);
+            var clothTangents=leftCloth?leftClothTangents:refined?rightRolledTangents:rightClothTangents;   // (rolled: the right sleeve has the left's ring count)
             var centres=sleeveCentres;
             var tangents=sleeveTangents;
             Vector3 Bezier(Vector3 a,Vector3 b,Vector3 c,Vector3 d,float t)
@@ -195,6 +209,15 @@ namespace FiveRivers.Combat
                         +.0011f*Mathf.Exp(-Mathf.Pow((t-.50f)/.034f,2))
                         -.0013f*Mathf.Exp(-Mathf.Pow((t-.55f)/.022f,2));
                     float foldedRadius=radius+fold*compression;
+                    bool skin=false;
+                    if(rolled!=null)
+                    {
+                        float ff=RolledSleeveShape.ForearmFraction(t,upperLength,lowerLength);
+                        foldedRadius=RolledSleeveShape.Radius(rolled,ff,angle,foldedRadius,wristSkin,out skin);
+                        // the band's thickness on the inside of the bent elbow is squeezed flat, as cloth folded there is
+                        // (it otherwise pressed into the forearm below it: up to 7 mm in the aim, measured 2026-11-27)
+                        if(!skin&&ff>=rolled.bandTop-.04f)foldedRadius*=1f-rolled.bandInsideSquash*compression;
+                    }
                     float depth=Mathf.Lerp(.93f,.98f,Mathf.SmoothStep(0,1,t));
                     var point=centres[ring]+(frameSide*Mathf.Cos(angle)+other*Mathf.Sin(angle)*depth)*foldedRadius;
                     if(fittedRim)
@@ -203,18 +226,21 @@ namespace FiveRivers.Combat
                         // hidden skeletal hand. Follow its measured rim, including during recoil.
                         var contour=hand.TransformVector(rim[i%count]-localCap);
                         // The left cuff hangs a little loose around the wrist like a cotton sleeve end.
-                        var fitted=centres[ring]+contour*(leftCloth?.96f:1.06f);
+                        // Bare skin meets the hand's cut rim (m1SkinOverRim there) and, past it into the hand, tucks just
+                        // inside the hand's surface (m1SkinTuck), so no skin ring stands proud of the hand as a bright line.
+                        float skinFit=skin?Mathf.Lerp(rolled.m1SkinOverRim,rolled.m1SkinTuck,Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(tCap,1f,t))):1f;
+                        var fitted=centres[ring]+contour*(skin?skinFit:leftCloth?.96f:1.06f);
                         float blend=Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.86f,1f,t));
                         point=Vector3.Lerp(point,fitted,blend);
                         // An uneven hem: the cloth end rides up and down a few millimetres around the wrist.
-                        if(leftCloth)point+=wristAxis*(CuffHemWave(angle)*Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.70f,1f,t)));
+                        if(leftCloth&&!skin)point+=wristAxis*(CuffHemWave(angle)*Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(.70f,1f,t)));
                     }
                     // Relief belongs only to the visible cloth surface. Keep the
                     // arm centreline, nominal radius and measured wrist rim intact.
-                    float clothRelief=leftCloth?ForearmClothRelief(t,angle):0f;
+                    float clothRelief=leftCloth&&!skin?ForearmClothRelief(t,angle):0f;
                     // A shallow turn-back before the exact measured wrist opening.
                     // The opening and both inner lip rings retain their delivered fit.
-                    if(leftCloth && t>.95f && t<1f)
+                    if(leftCloth && !skin && t>.95f && t<1f)
                         clothRelief+=.0008f*Mathf.Exp(-Mathf.Pow((t-.982f)/.012f,2f));
                     point+=(point-centres[ring]).normalized*clothRelief;
                     vertices[ring*(count+1)+i]=sleeve.InverseTransformPoint(point);
@@ -228,8 +254,9 @@ namespace FiveRivers.Combat
             {
                 float angle=i*Mathf.PI*2f/count;
                 var centre=cap+wristAxis*(ring==bodyRings?overlap:Mathf.Max(.001f,overlap-.005f));
-                if(leftCloth)centre+=wristAxis*CuffHemWave(angle);
-                var offset=fittedRim?hand.TransformVector(rim[i%count]-localCap)*(ring==bodyRings?(leftCloth?.98f:.96f):(leftCloth?.93f:.91f)):(hand.right*Mathf.Cos(angle)-hand.forward*Mathf.Sin(angle))*(skinRadius-.003f);
+                if(leftCloth&&rolled==null)centre+=wristAxis*CuffHemWave(angle);
+                // (rolled: the skin's end tucks just inside the hand's rim, out of sight)
+                var offset=fittedRim?hand.TransformVector(rim[i%count]-localCap)*(rolled!=null?(ring==bodyRings?.97f:.92f):ring==bodyRings?(leftCloth?.98f:.96f):(leftCloth?.93f:.91f)):(hand.right*Mathf.Cos(angle)-hand.forward*Mathf.Sin(angle))*(skinRadius-.003f);
                 vertices[ring*(count+1)+i]=sleeve.InverseTransformPoint(centre+offset);
                 var tangent=sleeve.InverseTransformDirection(-hand.right*Mathf.Sin(angle)-hand.forward*Mathf.Cos(angle));
                 clothTangents[ring*(count+1)+i]=new Vector4(tangent.x,tangent.y,tangent.z,1f);
@@ -243,10 +270,31 @@ namespace FiveRivers.Combat
                 int a=ring*33,b=a+32;var normal=(normals[a]+normals[b]).normalized;
                 normals[a]=normals[b]=normal;
             }
+            // (rolled) the skin's end: the tucked lip turns inward, and its faces bent the last visible ring's normal into a
+            // bright line at the wrist. Toward the hand those rings take the plain outward normal of the arm's surface, as the
+            // hand's own skin at its rim has.
+            if(rolled!=null)
+            {
+                int from=Mathf.Clamp(Mathf.FloorToInt((tCap-.04f)*(bodyRings-1)),1,bodyRings-1);
+                for(int ring=from;ring<bodyRings+2;ring++)
+                {
+                    var centre=Vector3.zero;for(int i=0;i<count;i++)centre+=vertices[ring*(count+1)+i];centre/=count;
+                    int ra=Mathf.Max(0,Mathf.Min(ring,bodyRings-1)-1),rb=Mathf.Min(bodyRings-1,ra+2);
+                    var ca=Vector3.zero;var cb=Vector3.zero;for(int i=0;i<count;i++){ca+=vertices[ra*(count+1)+i];cb+=vertices[rb*(count+1)+i];}
+                    var along=(cb-ca).normalized;
+                    float w=ring>=bodyRings-1?1f:Mathf.SmoothStep(0f,1f,Mathf.InverseLerp(from,bodyRings-1,ring));
+                    for(int i=0;i<=count;i++)
+                    {
+                        int k=ring*(count+1)+i;
+                        var radial=Vector3.ProjectOnPlane(vertices[k]-centre,along).normalized;
+                        normals[k]=Vector3.Slerp(normals[k],radial,w).normalized;
+                    }
+                }
+            }
             mesh.normals=normals;
             // The left folds change the angular AND lengthwise surface slope.
             // Derive their normal-map frame from the deformed surface, not a cylinder.
-            if(leftCloth)mesh.RecalculateTangents();
+            if(refined)mesh.RecalculateTangents();
             else mesh.tangents=clothTangents;
             mesh.RecalculateBounds();
         }
@@ -282,6 +330,24 @@ namespace FiveRivers.Combat
             mesh.Clear();mesh.vertices=vertices;mesh.uv=uv;mesh.triangles=triangles;
             mesh.RecalculateNormals();mesh.RecalculateTangents();mesh.RecalculateBounds();
         }
+
+        // 2026-11-27 rolled sleeve: the triangles from the ring at m1SkinFromT down to the wrist go to a second submesh drawn in
+        // the bare-skin material (the rolled band and the upper sleeve stay cloth). The ring layout is RefineLeftCloth's.
+        void SplitSkin(Mesh mesh,Renderer renderer,Material skinMaterial)
+        {
+            const int segments=32,stride=segments+1;
+            int rings=mesh.vertexCount/stride;
+            if(rings!=LeftBodyRings+2||skinMaterial==null||renderer==null)return;
+            int fromRing=SkinFromRing(rolledSleeve.m1SkinFromT,LeftBodyRings);
+            var all=mesh.triangles;
+            int split=Mathf.Clamp(fromRing*segments*6,0,all.Length);
+            var cloth=new int[split];System.Array.Copy(all,cloth,split);
+            var bare=new int[all.Length-split];System.Array.Copy(all,split,bare,0,bare.Length);
+            mesh.subMeshCount=2;
+            mesh.SetTriangles(cloth,0);mesh.SetTriangles(bare,1);
+            renderer.sharedMaterials=new[]{renderer.sharedMaterial,skinMaterial};
+        }
+        public static int SkinFromRing(float fromT,int bodyRings)=>Mathf.Clamp(Mathf.CeilToInt(fromT*(bodyRings-1)),1,bodyRings-1);
 
         // Unequal diagonal folds sit on the measured near face of the support sleeve.
         // Their angles are fixed in the cloth frame, so they cannot slide with the camera.
