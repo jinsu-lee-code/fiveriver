@@ -242,6 +242,16 @@ namespace FiveRivers.Narrative
             // 2026-11-16: the two close shots stand right under the flare, where the ground burnt out to plain white
             // (243 of 255). Those shots are stopped down; the trench shots keep the night exposure.
             EnsureStopDown();
+            // 2026-11-27: stopped down from the night exposure of the moment (read while this volume is off), by the
+            // FlareConfig amount; only the exposure is overridden, so the night's saturation and contrast stay on
+            if (stopDown.weight <= 0f)
+            {
+                var stack = UnityEngine.Rendering.VolumeManager.instance.stack;
+                var night = stack != null ? stack.GetComponent<ColorAdjustments>() : null;
+                if (night != null) nightExposure = night.postExposure.value;
+            }
+            float stops = flares != null && flares.Config != null ? flares.Config.revealCloseStopsDown : CloseShotStops;
+            stopDownGrade.postExposure.value = nightExposure - stops;
             stopDown.weight = time >= Shot2 && back < 1f ? 1f : 0f;
             // 2026-11-16: the long lens looks 50-70 m down the slope through the night haze, which washed it out to a
             // flat grey. A long lens compresses haze rather than adding it, so the shot thins the fog while it is on.
@@ -402,13 +412,19 @@ namespace FiveRivers.Narrative
             cutDone = false;
             playerCamera.enabled = false;
             sequenceCamera.enabled = true;
+            // the shells of this sequence go off a few metres from the lens: their flash is scaled down while it watches
+            if (shelling == null) shelling = FindFirstObjectByType<ShellingDirector>();
+            if (shelling != null) shelling.Lens = sequenceCamera;
             bars.gameObject.SetActive(true);
             bars.alpha = 0f;
         }
 
-        // the exposure of the close shots themselves (the night grade is 1.8): about 1.2 stops down
+        // the close shots are stopped down from the night exposure by FlareConfig.revealCloseStopsDown (2026-11-27; before
+        // that an absolute 0.6 against a night grade of 1.8). This is only the fallback when no config is wired.
         public static float CloseShotStops = 0.6f;
         UnityEngine.Rendering.Volume stopDown;
+        ColorAdjustments stopDownGrade;
+        float nightExposure = 1f;
 
         void EnsureStopDown()
         {
@@ -423,14 +439,18 @@ namespace FiveRivers.Narrative
             stopDown.priority = 100f;
             stopDown.weight = 0f;
             var profile = ScriptableObject.CreateInstance<UnityEngine.Rendering.VolumeProfile>();
-            var grade = profile.Add<ColorAdjustments>(true);
-            grade.postExposure.Override(CloseShotStops);
+            // false: no parameter overridden but the exposure set below. With true every colour parameter was overridden at
+            // its default, so for the close shots the night's saturation -60 and contrast went to 0 (bright green grass,
+            // 2026-11-27)
+            stopDownGrade = profile.Add<ColorAdjustments>(false);
+            stopDownGrade.postExposure.Override(nightExposure - CloseShotStops);
             stopDown.profile = profile;
         }
 
         void Finish()
         {
             if (stopDown != null) stopDown.weight = 0f;
+            if (shelling != null && shelling.Lens == sequenceCamera) shelling.Lens = null;
             if (fogBefore > 0f) RenderSettings.fogDensity = fogBefore;
             bool inAssault = director.Flow.Section == FlowSection.Assault;
             Playing = false;

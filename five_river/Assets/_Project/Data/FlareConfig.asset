@@ -26,3 +26,4 @@ MonoBehaviour:
   bounceStrength: 1
   bounceSoil: {r: 0.62, g: 0.5, b: 0.38, a: 1}
   bounceRangePad: 30
+  revealCloseStopsDown: 0.6

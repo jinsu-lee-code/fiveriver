@@ -23,5 +23,9 @@ namespace FiveRivers.Data
         [Range(0f, 2f)] public float bounceStrength = 1f;         // 밤 분위기에 맞춘 배율
         public Color bounceSoil = new Color(0.62f, 0.5f, 0.38f);  // 흙색 (색만 씀, 밝기는 반사율)
         public float bounceRangePad = 30f;                        // 대칭점에서 땅 위까지 거리 + 이만큼
+
+        // 주 공세 조명탄 첫 연출 컷의 가까운 장면 (2026-11-27): 조명탄 바로 아래라 땅이 하얗게 날아가지 않게, 그 순간 밤 노출에서
+        // 이만큼(스톱) 낮춘다. 노출만 바꾸고 밤 채도 · 대비는 그대로 둔다(전에는 모두 기본값으로 덮여 풀이 진한 초록이 됐다). BALANCE.md 2-5번.
+        [Range(0f, 3f)] public float revealCloseStopsDown = 0.6f;
     }
 }

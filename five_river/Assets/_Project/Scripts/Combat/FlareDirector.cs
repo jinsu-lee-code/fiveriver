@@ -12,6 +12,7 @@ namespace FiveRivers.Combat
     {
         [SerializeField] FlowDirector director;
         [SerializeField] FlareConfig config;
+        public FlareConfig Config => config;
         [SerializeField] Flare flarePrefab;
         [SerializeField] Effects effects;
         [SerializeField] Vector2 areaX = new Vector2(-15f, 15f);

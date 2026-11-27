@@ -96,6 +96,10 @@ namespace FiveRivers.Data
         [Tooltip("폭발 섬광 점광원 밝기 · 범위 · 시간")] public float blastLight = 420f;
         public float blastLightRange = 45f;
         public float blastLightSeconds = 0.22f;
+        // 2026-11-27: 연출 컷 렌즈가 폭발 몇 m 곁에 있을 때(조명탄 첫 연출) 위 섬광이 한 프레임 화면을 하얗게 날렸다
+        // (225 이상 면적 13.7%). 연출 카메라가 켜진 동안 터지는 폭발만 이 배율로 줄인다. 플레이 중 폭발은 그대로. BALANCE 2-6.
+        [Tooltip("연출 카메라 곁 폭발 섬광 밝기 배율")] [Range(0f, 1f)] public float lensBlastLightScale = 0.3f;
+        [Tooltip("연출 카메라 곁 폭발 섬광 범위 배율")] [Range(0f, 1f)] public float lensBlastRangeScale = 0.6f;
         [Tooltip("자리에 남는 연기가 피어오르는 시간 (초)")] public float smolderSeconds = 40f;
         [Tooltip("새벽: 지난밤 포탄이 떨어진 자리 가운데 이만큼에서 가는 연기가 다시 오른다")] public int dawnSmokes = 5;
         public float dawnSmokeSeconds = 90f;

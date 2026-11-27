@@ -318,6 +318,10 @@ namespace FiveRivers.Combat
             if (sound != null) sound.PlayAt("SFX_Artillery_Incoming", point + Vector3.up * 12f, 1f);
         }
 
+        // 연출 카메라 (2026-11-27): 켜져 있는 동안 터지는 폭발은 섬광을 ShellingConfig.lensBlast* 배율로 줄인다.
+        // 연출이 시작할 때 넣고 끝날 때 비운다 (FlareRevealDirector).
+        public Camera Lens { get; set; }
+
         public void StagedBlast(Vector3 point)
         {
             if (!enabled || terrain == null) return;
@@ -666,7 +670,9 @@ namespace FiveRivers.Combat
             {
                 var go = Instantiate(config.blastPrefab, point, Quaternion.Euler(0f, Rand(0f, 360f), 0f), effects.Container);
                 var flash = go.GetComponentInChildren<ShellFlash>();
-                if (flash != null) flash.Fire(config.blastLight, config.blastLightRange, config.blastLightSeconds);
+                bool lens = Lens != null && Lens.isActiveAndEnabled;   // a staged shot is watching from a few metres away
+                if (flash != null) flash.Fire(config.blastLight * (lens ? config.lensBlastLightScale : 1f),
+                    config.blastLightRange * (lens ? config.lensBlastRangeScale : 1f), config.blastLightSeconds);
                 Destroy(go, 9f);
             }
             if (effects != null && config.smolderPrefab != null && config.smolderSeconds > 0f)
