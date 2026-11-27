@@ -103286,6 +103286,7 @@ GameObject:
   - component: {fileID: 1197750683}
   - component: {fileID: 1197750684}
   - component: {fileID: 1197750685}
+  - component: {fileID: 1197750686}
   m_Layer: 0
   m_Name: '[Systems]'
   m_TagString: Untagged
@@ -103485,6 +103486,23 @@ MonoBehaviour:
   player: {fileID: 2037029270}
   health: {fileID: 2037029276}
   tank: {fileID: 1175241052}
+--- !u!114 &1197750686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197750674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15a2677cca2f424fb28ffdf8c128ae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Combat.BattleDecals
+  config: {fileID: 11400000, guid: a540c1283099b804796526431d49f644, type: 2}
+  effects: {fileID: 1197750679}
+  bulletMaterial: {fileID: 2100000, guid: 76fefdfce4dcaec4bbf77bbd6f54f2e7, type: 2}
+  scorchMaterial: {fileID: 2100000, guid: afb85dea30be88845bcf67ddea54d746, type: 2}
+  bloodMaterial: {fileID: 2100000, guid: 9e28632357c300d4085497316ff28584, type: 2}
 --- !u!1001 &1199045690
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d715bc4767da514f9866e5dad64fe28, type: 3}
+  m_Name: BattleTraceConfig
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.BattleTraceConfig
+  bulletMost: 120
+  bulletSize: {x: 0.22, y: 0.32}
+  bulletOpacity: 0.85
+  scorchMost: 12
+  rocketScorchSize: {x: 2.2, y: 3}
+  shellScorchSize: {x: 3, y: 4.2}
+  scorchOpacity: 0.8
+  bloodMost: 40
+  bloodSize: {x: 0.7, y: 1.1}
+  bloodOpacity: 0.55
+  depth: 0.25
+  range: 70

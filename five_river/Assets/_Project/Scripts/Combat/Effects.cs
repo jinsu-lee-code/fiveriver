@@ -50,9 +50,13 @@ namespace FiveRivers.Combat
             }
         }
 
+        // with the effect's rotation too (an impact faces out of the surface it struck): BattleDecals (2026-11-26)
+        public event Action<EffectKind, Vector3, Quaternion> SpawnedAt;
+
         public GameObject Spawn(EffectKind kind, Vector3 position, Quaternion rotation)
         {
             Spawned?.Invoke(kind, position);
+            SpawnedAt?.Invoke(kind, position, rotation);
             // The muzzle flashes share a visual prefab but emit distinct audio events.
             var visualKind = kind == EffectKind.TankMuzzle ? EffectKind.EnemyMuzzle : kind;
             foreach (var e in entries)
@@ -71,8 +75,11 @@ namespace FiveRivers.Combat
             return Instantiate(prefab, position, rotation, Container);
         }
 
+        public int LastClearFrame { get; private set; } = -1;
+
         public void ClearAll()
         {
+            LastClearFrame = Time.frameCount;
             M1SurfaceImpact.Clear();
             if (container == null) return;
             for (int i = container.childCount - 1; i >= 0; i--)

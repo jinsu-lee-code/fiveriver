@@ -395,6 +395,7 @@ namespace FiveRivers.Combat
         // ---- the fallen stay (2026-11-18): the fight leaves its dead on the field until the run ends ----
         public float FellAt => deathTime;
         public bool Settled { get; private set; }
+        public static event Action<EnemyAgent> BodySettled;
         public bool Fallen { get; private set; }
 
         // Once he has come to rest the pose is frozen: no animator, no foot or hand solving, no physics on the rifle.
@@ -403,6 +404,7 @@ namespace FiveRivers.Combat
             if (Settled) return;
             Settled = true;
             if (ragdoll != null) ragdoll.Freeze();
+            BodySettled?.Invoke(this); // where he lies now: the ground under him takes a stain (BattleDecals, 2026-11-26)
             if (animator != null)
             {
                 var rest = animator.GetComponent<LyingBodyRest>();
