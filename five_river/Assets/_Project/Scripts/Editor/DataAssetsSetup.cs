@@ -53,6 +53,7 @@ namespace FiveRivers.EditorTools
                 f.scoutFlareDelay = 8f; f.assaultFirstDelay = 5f; f.assaultInterval = 24f;
                 f.burnTime = 16f; f.fadeTime = 3f; f.launchHeight = 45f; f.fallSpeed = 1.6f; f.swayAmplitude = 1.5f;
                 f.lightIntensity = 1900f; f.lightRange = 110f;
+                f.bounceAlbedo = 0.22f; f.bounceStrength = 1f; f.bounceSoil = new Color(0.62f, 0.5f, 0.38f); f.bounceRangePad = 30f;
             });
             Ensure<TutorialConfig>("TutorialConfig", t =>
             {

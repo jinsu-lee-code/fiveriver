@@ -16,5 +16,12 @@ namespace FiveRivers.Data
         public float swayAmplitude;
         public float lightIntensity;
         public float lightRange;
+
+        // 조명탄 아래 땅에서 튕겨 올라오는 빛 (부족한 점 2번, 2026-11-26). 땅에 대칭으로 비춘 자리(땅 아래)의 그림자 없는 점광:
+        // 세기 = 조명탄 세기 × 흙 반사율 × 세기 배율, 색 = 조명탄 색 × 흙색. 배율 0 이면 끔. BALANCE.md 2-5번.
+        [Range(0f, 1f)] public float bounceAlbedo = 0.22f;        // 마른 흙 반사율
+        [Range(0f, 2f)] public float bounceStrength = 1f;         // 밤 분위기에 맞춘 배율
+        public Color bounceSoil = new Color(0.62f, 0.5f, 0.38f);  // 흙색 (색만 씀, 밝기는 반사율)
+        public float bounceRangePad = 30f;                        // 대칭점에서 땅 위까지 거리 + 이만큼
     }
 }

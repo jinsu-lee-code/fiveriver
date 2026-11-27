@@ -171,6 +171,7 @@
 | 타는 시간 · 꺼지는 시간 | 16초 · 3초 (어두운 구간 약 5초 → 이동 · 보충 기회) | `burnTime` · `fadeTime` |
 | 높이 · 낙하 속도 · 흔들림 | 45 m · 1.6 m/s · 1.5 m | `launchHeight` · `fallSpeed` · `swayAmplitude` |
 | 밝기 · 범위 | 1500 · 110 m (URP 점광원, 화면으로 맞춤) | `lightIntensity` · `lightRange` |
+| 땅에서 튕겨 올라오는 빛 (2026-11-26, 부족한 점 2번) | 조명탄을 땅 표면에 대칭으로 비춘 자리(땅 아래)의 그림자 없는 점광. 세기 = 조명탄 세기 × 흙 반사율 0.22 × 배율 1, 색 = 조명탄 색 × 흙색 (0.62, 0.50, 0.38), 범위 = 높이 × 2 + 30 m. 안개 산란 층은 뺌. 배율 0 이면 끔 | `bounceAlbedo` · `bounceStrength` · `bounceSoil` · `bounceRangePad` |
 
 ### 2-2. 무기 (2026-10-27 1차 값, 그레이박스 기준 · 관찰 테스트로 조정)
 | 항목 | 값 | 데이터 키 (`WeaponConfig.asset`) |
