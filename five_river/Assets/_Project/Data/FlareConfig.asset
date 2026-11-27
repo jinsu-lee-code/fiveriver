@@ -21,7 +21,7 @@ MonoBehaviour:
   fallSpeed: 1.6
   swayAmplitude: 1.5
   lightIntensity: 1900
-  lightRange: 110
+  lightRange: 90
   bounceAlbedo: 0.22
   bounceStrength: 1
   bounceSoil: {r: 0.62, g: 0.5, b: 0.38, a: 1}

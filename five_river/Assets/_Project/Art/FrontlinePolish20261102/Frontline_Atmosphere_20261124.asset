@@ -52,7 +52,7 @@ MonoBehaviour:
     m_Value: 0
   saturation:
     m_OverrideState: 1
-    m_Value: -32
+    m_Value: -60
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
     m_Value: 0.55
   lightScattering:
     m_OverrideState: 1
-    m_Value: 1.5
+    m_Value: 0.7
   lightAnisotropy:
     m_OverrideState: 1
     m_Value: 0.25
