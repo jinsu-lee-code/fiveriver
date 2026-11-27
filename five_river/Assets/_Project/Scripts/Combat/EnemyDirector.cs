@@ -457,7 +457,7 @@ namespace FiveRivers.Combat
             var victim = target.Alive && !target.Retreating && EnemyDensity.AllyMayKill(rule, living, aim.Holds(target)) ? target : Exposed();
             if (victim != null)
             {
-                victim.Kill(-1);
+                victim.Kill(-1, PlayerEye); // the squad fires from the friendly line beside the player
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
                 DebugAllyKills++;
 #endif

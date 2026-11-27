@@ -121,6 +121,7 @@ namespace FiveRivers.Combat
             if (struck)
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
+                if (target is EnemyAgent enemy) enemy.NoteHitPoint(hit.point); // the part he is struck in (2026-11-26)
                 target?.TakeDamage(config.m1Damage, view.transform.position);
                 if (hit.collider.GetComponentInParent<TutorialTarget>() != null)
                     M1SurfaceImpact.Wood(hit);

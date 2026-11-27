@@ -70,7 +70,8 @@ namespace FiveRivers.Combat
             foreach (var col in Physics.OverlapSphere(point, config.rocketBlastRadius, FiveRivers.Core.WorldQuery.All, QueryTriggerInteraction.Ignore))
             {
                 var d = col.GetComponentInParent<IDamageable>();
-                if (d != null && !(d is PlayerHealth)) d.TakeDamage(config.rocketBlastDamage, point);
+                if (d is EnemyAgent enemy) enemy.TakeBlast(config.rocketBlastDamage, point); // thrown by it (2026-11-26)
+                else if (d != null && !(d is PlayerHealth)) d.TakeDamage(config.rocketBlastDamage, point);
             }
             LeaveTrail();
             Destroy(gameObject);

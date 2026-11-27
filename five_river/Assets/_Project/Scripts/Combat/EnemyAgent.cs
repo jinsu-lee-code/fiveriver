@@ -161,6 +161,7 @@ namespace FiveRivers.Combat
         {
             agent = GetComponent<NavMeshAgent>();
             body = GetComponent<Collider>();
+            ragdoll = GetComponent<EnemyRagdoll>();
             rifle = transform.Find("Socket_Rifle/Rifle");
             if (animator != null && animator.isHuman)
             {
@@ -207,6 +208,7 @@ namespace FiveRivers.Combat
 
         void LateUpdate()
         {
+            if (deathTurning && ragdoll != null && ragdoll.HasPhysics) deathTurning = false; // the body is the physics' now
             if (deathTurning)
             {
                 if (state != State.Dead || Time.time - deathTime > DeathTurnFor) deathTurning = false;
@@ -400,6 +402,7 @@ namespace FiveRivers.Combat
         {
             if (Settled) return;
             Settled = true;
+            if (ragdoll != null) ragdoll.Freeze();
             if (animator != null)
             {
                 var rest = animator.GetComponent<LyingBodyRest>();
@@ -573,9 +576,28 @@ namespace FiveRivers.Combat
             model.localScale = s;
         }
 
+        // ---- where the killing round came from (부족한 점 3 · 6번, 2026-11-26): the fall and the ragdoll follow it ----
+        EnemyRagdoll ragdoll;
+        Vector3 hitFrom, hitPoint;
+        bool hitKnown, hitPointKnown, hitBlast;
+
+        // The rifle knows where its round struck: called just before TakeDamage
+        public void NoteHitPoint(Vector3 point) { hitPoint = point; hitPointKnown = true; }
+
+        // A rocket's blast: he is thrown (ragdoll from the start, with the blast's push)
+        public void TakeBlast(float amount, Vector3 point)
+        {
+            if (!Alive) return;
+            hitBlast = true;
+            hitPoint = point; hitPointKnown = true;
+            TakeDamage(amount, point);
+            if (Alive) hitBlast = false;
+        }
+
         public void TakeDamage(float amount, Vector3 from)
         {
             if (!Alive) return;
+            hitFrom = from; hitKnown = true;
             health -= amount;
             if (health <= 0f) Die();
             // HitReact is a standing clip: played on a man kneeling behind cover it stood him up in three frames and
@@ -588,6 +610,14 @@ namespace FiveRivers.Combat
         // 1 Death_02 1.6 s, 2 Death_03 3.2 s) so a short shot sees him reach the ground.
         public const int QuickDeath = 1;
         int forcedDeath = -1;
+        // shot by the squad from the friendly line: the round comes from there
+        public void Kill(int deathIndex, Vector3 from)
+        {
+            if (!Alive) return;
+            hitFrom = from; hitKnown = true;
+            Kill(deathIndex);
+        }
+
         public void Kill(int deathIndex)
         {
             if (!Alive) return;
@@ -617,6 +647,7 @@ namespace FiveRivers.Combat
         void CarryOn()
         {
             if (carry.sqrMagnitude < 0.0004f || Time.time - deathTime > CarryFor) return;
+            if (ragdoll != null && ragdoll.HasPhysics) { carry = Vector3.zero; return; } // the bodies took the motion over
             var from = transform.position;
             var to = from + carry * Time.deltaTime;
             // keep his height over the ground as it was (he stood on the NavMesh, a little above the slope)
@@ -647,6 +678,21 @@ namespace FiveRivers.Combat
                 else animator.SetTrigger(DieId); // a controller without these states: its own Any State transition
                 var rest = LyingBodyRest.Attach(animator); // the body comes to rest on the ground, not on the NavMesh above it
                 if (rest != null && lastKneel > 0.5f) rest.HoldKneel(); // hit kneeling: he falls from there, not from standing
+                // 2026-11-26: the struck part flinches away from the round, and once he is down the body is physics
+                // staged deaths (a chosen death clip, a body without a director, anything during a cutscene) keep their
+                // clip exactly as made: no flinch, no ragdoll (감독 조건 2026-11-26)
+                bool staged = forcedDeath >= 0 || owner == null || FiveRivers.Narrative.CutsceneRig.Running > 0;
+                if (ragdoll != null && !staged)
+                {
+                    var from = hitKnown ? hitFrom : transform.position + transform.forward * 10f + Vector3.up * 1.2f;
+                    var point = hitPointKnown ? hitPoint : (hitBlast ? hitFrom : Vector3.zero);
+                    if (!hitPointKnown && !hitBlast && animator.isHuman)
+                    {
+                        var chestBone = animator.GetBoneTransform(HumanBodyBones.Chest);
+                        point = chestBone != null ? chestBone.position : transform.position + Vector3.up * 1.2f;
+                    }
+                    ragdoll.Arm(from, point, hitBlast);
+                }
             }
             DropRifle();
             Fallen = true;
@@ -680,6 +726,9 @@ namespace FiveRivers.Combat
                 for (int i = back; i < deathOrder.Length - 1; i++) deathOrder[i] = deathOrder[i + 1];
                 deathOrder[deathOrder.Length - 1] = 0;
             }
+            // standing or kneeling, he more often goes down the way the round pushes him (front: onto his back)
+            else if (hitKnown && ragdoll != null && ragdoll.Config != null)
+                HitReaction.PreferBySide(deathOrder, 0, HitReaction.Side(transform.forward, hitFrom - transform.position), Random.value, ragdoll.Config.directionBias);
             foreach (int clip in deathOrder)
                 if (FallsClear(clip, transform.rotation)) return clip;
             foreach (float turn in DeathTurns)

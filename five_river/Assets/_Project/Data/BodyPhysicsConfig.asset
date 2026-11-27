@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7c128a6b6d8304c856f0b9f1e0a0e1, type: 3}
+  m_Name: BodyPhysicsConfig
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.BodyPhysicsConfig
+  handoverChest: 0.4
+  handoverEarliest: 0.3
+  handoverLatest: 3.4
+  coverClear: 0.35
+  inheritMaxSpeed: 2.5
+  liftMost: 0.35
+  sunkSkip: 0.12
+  spinDamping: 1.5
+  inheritMaxSpin: 8
+  maxSimulating: 6
+  physicsRange: 45
+  bulletPush: 0.7
+  blastSpeed: 2.5
+  blastRadius: 5
+  blastLift: 0.6
+  restSpeed: 0.12
+  restHold: 0.5
+  physicsMost: 4
+  friction: 0.9
+  flinchRise: 0.05
+  flinchFade: 0.25
+  flinchHead: 18
+  flinchChest: 10
+  flinchArm: 24
+  flinchLeg: 14
+  flinchHips: 8
+  directionBias: 0.65
