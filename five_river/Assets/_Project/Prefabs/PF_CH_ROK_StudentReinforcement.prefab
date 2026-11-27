@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6264210521878637105}
   - component: {fileID: 5283397547934982981}
+  - component: {fileID: 5492292196794572636}
   m_Layer: 0
   m_Name: PF_CH_ROK_StudentReinforcement
   m_TagString: Untagged
@@ -88,6 +89,21 @@ CapsuleCollider:
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
+--- !u!114 &5492292196794572636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8889836471100385725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c43c2e3e250629b428b1437a71a62d6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Narrative.FaceRig
+  config: {fileID: 11400000, guid: 0e992a4b27e641e4ab188f4fed67c480, type: 2}
+  model: 2
+  face: {fileID: 2529990280623879016}
 --- !u!1001 &6016460625236240573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -157,6 +173,10 @@ PrefabInstance:
       value: -0.11969072
       objectReference: {fileID: 0}
     - target: {fileID: -1125170043226530859, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 399c7aed5a55af54284a707e21e5974a, type: 2}
+    - target: {fileID: -1125170043226530859, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 17fa24513b2694148909f7277ebc45b9, type: 2}
@@ -194,6 +214,11 @@ PrefabInstance:
 --- !u!4 &938212709843092345 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2415072398549128252, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
+  m_PrefabInstance: {fileID: 6016460625236240573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &2529990280623879016 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1125170043226530859, guid: 8a5aa8d796746944abda077ef8cf96ea, type: 3}
   m_PrefabInstance: {fileID: 6016460625236240573}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &6121652426147221334 stripped

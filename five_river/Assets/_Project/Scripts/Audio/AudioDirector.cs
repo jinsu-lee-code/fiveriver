@@ -573,5 +573,8 @@ namespace FiveRivers.Audio
         }
 
         void StopVoice() => voice.Stop();
+
+        // 지금 나오는 대사 음성의 남은 시간(초). 음성이 없으면 0 — 립싱크(FaceRig)가 박자를 맞춘다
+        public float VoiceSecondsLeft => voice != null && voice.isPlaying && voice.clip != null ? Mathf.Max(0f, voice.clip.length - voice.time) : 0f;
     }
 }

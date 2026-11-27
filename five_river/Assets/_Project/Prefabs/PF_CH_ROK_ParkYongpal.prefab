@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2719217548968299776}
   - component: {fileID: 6587666102160445248}
   - component: {fileID: 7782134052685250570}
+  - component: {fileID: 8989040499748210343}
   m_Layer: 0
   m_Name: PF_CH_ROK_ParkYongpal
   m_TagString: Untagged
@@ -88,6 +89,22 @@ MonoBehaviour:
   suppressDistance: {x: 45, y: 85}
   suppressSpread: 25
   suppressIntervalScale: 1.4
+  holdAimAfterTarget: 4
+--- !u!114 &8989040499748210343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787157196929482154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c43c2e3e250629b428b1437a71a62d6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Narrative.FaceRig
+  config: {fileID: 11400000, guid: 0e992a4b27e641e4ab188f4fed67c480, type: 2}
+  model: 0
+  face: {fileID: 9043451088258738520}
 --- !u!1 &3615288423316816857
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +327,7 @@ PrefabInstance:
     - target: {fileID: -7744253644888300639, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: 275bdbe1cf773f1458fd604f3f4a9bd2, type: 2}
+      objectReference: {fileID: 4300000, guid: 9728e4c287942fd4793ec049b2d8a8d1, type: 2}
     - target: {fileID: -7744253644888300639, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -422,6 +439,8 @@ MonoBehaviour:
   correctShoulderedHands: 0
   correctCarryPose: 1
   correctStandingReady: 0
+  standingReadyOffset: {x: 0, y: 0, z: 0}
+  standingReadySupportGrip: {x: -0.055, y: -0.05, z: 0.14}
   refineSupportGrip: 0
   shoulderedHeadPitch: 0
   shoulderedHeadLean: 0
@@ -453,5 +472,10 @@ MonoBehaviour:
 --- !u!4 &7965902317937356050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
+  m_PrefabInstance: {fileID: 7567780816451832569}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &9043451088258738520 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7744253644888300639, guid: f6d1790ccdc63864f88dd7785b262a20, type: 3}
   m_PrefabInstance: {fileID: 7567780816451832569}
   m_PrefabAsset: {fileID: 0}

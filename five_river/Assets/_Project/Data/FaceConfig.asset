@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819d29a623c1b3e4c9f9ae38e1f5de9f, type: 3}
+  m_Name: FaceConfig
+  m_EditorClassIdentifier: FiveRivers::FiveRivers.Data.FaceConfig
+  speakers:
+  - speaker: "\uBC15\uC6A9\uD314"
+    actor: ParkYongpal
+  - speaker: "\uBD84\uB300\uC7A5"
+    actor: Ally_2
+  - speaker: "\uCD5C\uB9CC\uC218"
+    actor: Ally_1
+  - speaker: "\uD0C4\uC57D\uC218"
+    actor: Ally_3
+  - speaker: "\uC724\uD0DC\uC11D"
+    actor: "\uD559\uB3C4\uBCD1 \uC724\uD0DC\uC11D"
+  speechFill: 0.85
+  lipSync:
+    openJaw: 0.85
+    eoJaw: 0.65
+    midJaw: 0.42
+    midWide: 0.45
+    wide: 0.75
+    wideJaw: 0.15
+    round: 0.8
+    roundJaw: 0.28
+    euWide: 0.35
+    euJaw: 0.12
+    close: 1
+    codaJaw: 0.5
+    glideShare: 0.35
+    onsetShare: 0.3
+    codaShare: 0.3
+    variation: 0.12
+    syllableMin: 0.1
+    syllableMax: 0.24
+    spaceUnits: 0.3
+    commaUnits: 1.2
+    stopUnits: 1.8
+    ellipsisUnits: 2.5
+    otherUnits: 0.6
+    jawSpeed: 7
+    lipSpeed: 11
+    maxStep: 0.033333335
+  parkMouth: 1
+  regularMouth: 1
+  studentMouth: 0.45
+  blinkInterval: {x: 2, y: 6}
+  blinkLength: {x: 0.1, y: 0.15}
